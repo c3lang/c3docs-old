@@ -1,0 +1,30 @@
+site_name: C3 Documentation
+nav:
+  - About C3: 'about.md'
+  - Installing:
+    - Setup: 'setup.md'
+    - Your first project: 'firstproject.md'
+  - Documentation:
+    - Examples: 'examples.md'
+    - Modules: 'modules.md'
+    - Types: 'types.md'
+    - Errors: 'errorhandling.md'
+    - Built-in Macros: 'builtinmacros.md'
+    - Precedence: 'precedence.md'
+    - Generics: 'generics.md'
+    - Crazy ideas: 'ideas.md'
+    - Grammar: 'syntax.md'
+  - Build system:    
+    - Introduction: 'buildintro.md'
+    - Project Structure: 'project.md'
+    - Commands: 'buildcommands.md'
+  - Development:
+    - Contribute: 'contribute.md'  
+theme:
+    name: readthedocs
+    hljs_languages:
+            - yaml
+            - rust
+            - ebnf
+            - bnf
+dev_addr: 192.168.1.4:8000
