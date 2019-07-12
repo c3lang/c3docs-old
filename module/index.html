@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Modules - C3 Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Modules";
+    var mkdocs_page_input_path = "module.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> C3 Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../about/">About C3</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Installing</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../setup/">Setup</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../firstproject/">Your first project</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Documentation</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../examples/">Examples</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../modules/">Modules</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../types/">Types</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../errorhandling/">Errors</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../builtinmacros/">Built-in Macros</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../precedence/">Precedence</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../ideas/">Crazy ideas</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../syntax/">Grammar</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Build system</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../buildintro/">Introduction</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../project/">Project Structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../buildcommands/">Commands</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../contribute/">Contribute</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">C3 Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Modules</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="modules">Modules</h1>
+<p>C3 groups functions, types, variables and macros into namespaces called modules. All C3 files must start with the <code>module</code> keyword, specifying the module. A module can consist of multiple files, e.g.</p>
+<p><code>file_a.c3</code></p>
+<pre><code>module foo;
+
+/* ... */
+</code></pre>
+
+<p><code>file_b.c3</code></p>
+<pre><code>module foo;
+
+/* ... */
+</code></pre>
+
+<p><code>file_c.c3</code></p>
+<pre><code>module baz;
+
+/* ... */
+</code></pre>
+
+<p>Here <code>file_a.c3</code> and <code>file_b.c3</code> belong to the same module, <strong>foo</strong> while <code>file_c.c3</code> belongs to to <strong>bar</strong>.</p>
+<h2 id="details">Details</h2>
+<p>Some details about the C3 module system:</p>
+<ul>
+<li>Modules are not nested, there only a single level to the name.</li>
+<li>Module names must be alphanumeric lower case letters plus the underscore character: <code>_</code>.</li>
+<li>Module names are limited to 31 characters.</li>
+</ul>
+<h2 id="importing-modules">Importing modules</h2>
+<p>Importing a module uses the <code>import</code> keyword. Imports have file scope, so consequently if <code>file_a.c3</code> imports the module <code>networking</code>, then <code>file_b.c3</code> cannot use those symbols unless it also imports <code>networking</code>.</p>
+<p><code>file_a.c3</code></p>
+<pre><code>module foo;
+
+//import bar and stdio
+import bar;
+import stdio;
+
+/* ... */
+</code></pre>
+
+<p><code>file_b.c3</code></p>
+<pre><code>module foo;
+
+//import bar and networking imported, but not storage
+import bar;
+import networking;
+
+/* ... */
+</code></pre>
+
+<h3 id="named-imports">Named imports</h3>
+<p>It is often convenient to alias the module name (affecting the current file only) to a shorter alias.</p>
+<pre><code>module foo;
+
+import extended_filesystems_io as fs;
+</code></pre>
+
+<p>The code in the file can now use the <code>fs</code> instead of the longer name. However, both names remain valid in the file scope.</p>
+<h3 id="local-imports">Local imports</h3>
+<p>In many cases prefixes can become cumbersome. It is therefore also possible to use the <code>local</code> keyword to avoid the prefix completely.</p>
+<pre><code>import networking as net local;
+import filesystem local;
+
+// Equivalent
+filesystem.doSomething();
+doSomething();
+
+// Equivalent
+net.connect();
+networking.connect();
+connect();
+</code></pre>
+
+<p>In the case where a symbol would be ambiguous, for example if both <code>networking</code> and <code>filesystem</code> would have an <code>open()</code> function, then the prefix is still mandatory.</p>
+<h2 id="visibility">Visibility</h2>
+<p>All files in the same module share the same global declaration namespace. However, by default a function is not visible outside the module. To make the symbol visible outside the module, use the keyword <code>public</code>.</p>
+<pre><code>module foo;
+
+public func void init() { .. }
+
+func void open() { .. }
+</code></pre>
+
+<p>In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it isn't specified as public.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

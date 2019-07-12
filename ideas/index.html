@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Crazy ideas - C3 Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Crazy ideas";
+    var mkdocs_page_input_path = "ideas.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> C3 Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../about/">About C3</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Installing</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../setup/">Setup</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../firstproject/">Your first project</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Documentation</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../examples/">Examples</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../modules/">Modules</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../types/">Types</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../errorhandling/">Errors</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../builtinmacros/">Built-in Macros</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../precedence/">Precedence</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Crazy ideas</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#ideas">Ideas</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#unsorted">Unsorted</a></li>
+        
+            <li><a class="toctree-l4" href="#interfaces">Interfaces</a></li>
+        
+            <li><a class="toctree-l4" href="#built-in-dynamic-arrays">Built in dynamic arrays</a></li>
+        
+            <li><a class="toctree-l4" href="#built-in-maps">Built in maps</a></li>
+        
+            <li><a class="toctree-l4" href="#built-in-string-type">Built in string type</a></li>
+        
+            <li><a class="toctree-l4" href="#built-in-managed-pointers">Built in managed pointers</a></li>
+        
+            <li><a class="toctree-l4" href="#ideas-around-macros">Ideas around macros</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../syntax/">Grammar</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Build system</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../buildintro/">Introduction</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../project/">Project Structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../buildcommands/">Commands</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../contribute/">Contribute</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">C3 Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Documentation &raquo;</li>
+        
+      
+    
+    <li>Crazy ideas</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="ideas">Ideas</h1>
+<p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
+<h2 id="unsorted">Unsorted</h2>
+<h5 id="require-explicit-uninitialization">Require explicit uninitialization</h5>
+<pre><code>int a = ---;
+int a = void; // Other possible variant
+</code></pre>
+
+<h5 id="defer-sugar">Defer sugar</h5>
+<pre><code>func bool do_stuff(i32 resource_id)
+{
+    Resource* x = get_resource(resource_id) @defer(release_resource); // Inline defer
+    if (!play_around_with(x)) return false;
+    do_some_other_thing(x);
+    return foo(x);
+}
+</code></pre>
+
+<h5 id="defer-on-function-signatures">Defer on function signatures</h5>
+<pre><code>func Resource get_resource_with_release(int resource_id) @defer(release_resource);
+
+func bool do_stuff(i32 resource_id)
+{
+    Resource* x = get_resource_with_release(resource_id); // inserts an implicit defer!
+    if (!play_around_with(x)) return false;
+    do_some_other_thing(x);
+    return foo(x);
+}
+
+</code></pre>
+
+<h5 id="managed-qualifier">"Managed" qualifier</h5>
+<pre><code>// func const FILE open(...) { ... } =&gt; 
+func const managed FILE open(...) { ... }
+</code></pre>
+
+<p>And here any struct that is "managed" must have a <code>StructName.release(StructName *struct)</code> call.</p>
+<h5 id="extended-case">Extended "case"</h5>
+<p>Switch as "if-else"</p>
+<pre><code>switch (x) 
+{
+    case x &gt; 200: 
+        return 0;
+    case x &lt; 2: 
+        small_x_warning();
+    case 0:
+        ....
+    case x &gt; y &amp;&amp; a &lt; 1:
+        ...
+}
+</code></pre>
+
+<h5 id="case-as-a-range">Case as a range</h5>
+<pre><code>switch (x) 
+{
+    case 1 .. 10: 
+        ...
+    case 11 .. 100:
+        ...
+}
+</code></pre>
+
+<h5 id="easy-to-get-properties">Easy to get properties</h5>
+<ul>
+<li>Endianness</li>
+<li>Register size</li>
+<li>Query what type of add is the fastest (wrapping, trapped) for the processor (with macros to select type)</li>
+<li>Query what type of overflow the processor supports</li>
+</ul>
+<h5 id="associate-properties-to-an-enum">Associate properties to an enum</h5>
+<pre><code>type enum State [char* name, byte bit] int
+{
+    START(&quot;begin!&quot;, 0x01) = 0,
+    END(&quot;end it!&quot;, 0x10)
+}
+
+funct void test()
+{
+    printf(&quot;%s\n&quot;, State.START.name); // Prints &quot;begin!&quot;
+    printf(&quot;%d\n&quot;, State.END.bit); // Prints &quot;16&quot;
+}
+</code></pre>
+
+<h5 id="tagged-unions">Tagged unions</h5>
+<pre><code>tagged union Foo {
+    int i;
+    const char *c;
+};
+
+Foo foo;
+foo.i = 3;
+@istag(foo.i) // =&gt; true
+@istag(foo.c) // =&gt; false
+foo.c = &quot;hello&quot;;
+@istag(foo.i) // =&gt; false
+@istag(foo.c) // =&gt; true
+
+switch(@tag(foo)) 
+{
+    case Foo.i: 
+        printf(&quot;Was %d\n&quot;, foo.i);
+    case Foo.c: 
+        printf(&quot;Was %s\n&quot;, foo.c);
+}
+</code></pre>
+
+<p>Alternative syntax etc:</p>
+<pre><code>type Shape struct 
+{
+    int centerX;
+    int centerY;
+    byte kind; // Implicit enum
+    union (kind) 
+    {
+        SQUARE: { int side; }
+        RECTANGLE: { int length, height; }
+        CIRCLE: { int radius; }
+    }
+}
+</code></pre>
+
+<p>And yet another...</p>
+<pre><code>type Shape struct 
+{
+    int centerX;
+    int centerY;
+    tagged union (kind)
+    {
+        case SQUARE:
+            int side; 
+        case RECTANGLE:
+            int length;
+            int height;
+        case CIRCLE:
+            int radius;            
+    }
+    byte kind;
+}
+</code></pre>
+
+<h2 id="interfaces">Interfaces</h2>
+<pre><code>func void Foo.renderPage(Foo&amp; foo, Page&amp; info)
+{
+    /* ... */
+}
+
+type Renderer interface 
+{
+    void renderPage(Renderer&amp; renderer, Page&amp; info)
+}
+
+func void render(Renderer* renderer, Page&amp; info)
+{
+    if (rendered == null) return;
+    renderer-&gt;renderPage(info);
+}
+
+func void test()
+{
+    Foo* foo = getFoo();
+    Page&amp; page = getPage(); 
+
+    // Option 1
+    Renderer.render(foo, page);
+
+    // Option 2
+    Renderer* renderer = foo;
+    renderer.render(page);
+}
+
+// C equivalent: 
+// struct RendererVtable { 
+//     void (*renderPage)(void*, Page*); 
+// };
+// struct RendererRef { 
+//     void* ref; RendererVTable *vtable; 
+// };
+// void Renderer__render(struct RendererRef renderer, Page *info) {
+//     if (renderer.ref == null) return;
+//     renderer.vtable-&gt;renderPage(renderer.ref, info);
+// }
+// 
+// void test() {
+//     Foo *foo = getFoo();
+//     Page *page = getPage(); 
+//
+//     static RenderVTable FooRendererVTable = { &amp;Foo__renderPage };
+//     Renderer__render(struct RendererRef { foo, &amp;FooRendererVTable }, page);
+//    
+//     struct RendererRef renderer = { foo, &amp;FooRendererVTable };
+//     Renderer__render(renderer, page);
+// }
+</code></pre>
+
+<p>Possible syntax ideas:</p>
+<pre><code>func void test()
+{
+    Renderer* renderer1 = getFoo(); // Implicit
+
+    Renderer* renderer2 = Renderer(getFoo());
+
+    Renderer* renderer3 = getFoo() as Renderer;
+
+    Renderer* renderer4 = @wrap(Renderer, getFoo()); // Macro
+
+    Renderer renderer5 = getFoo(); // Look, no pointer!
+
+    Renderer@ renderer6 = getFoo(); // Special pointer type?
+
+    interface Renderer renderer7 = getFoo(); // Love long lines
+
+    @Renderer renderer8 = getFoo();
+
+    Renderer^ renderer9 = getFoo(); // Pascal    
+
+    Renderer renderer10 = interface getFoo();
+
+    Renderer renderer11 = interface(getFoo());
+
+    Renderer renderer12 = virtual { getFoo() };
+
+    virtual Renderer renderer13 = getFoo();
+
+    virtual Renderer renderer14 = getFoo();
+
+}
+
+func void render(Renderer renderer, Page&amp; info)
+{
+    renderer.renderPage(info);
+}
+
+virtual Renderer
+{
+    void renderPage(Page &amp;info);
+}
+
+func void render(virtual Renderer&amp; renderer, Page&amp; info)
+{
+    renderer.renderPage(info);
+}
+
+func void render(virtual Renderer&amp; renderer, Page&amp; info)
+{
+    renderer-&gt;renderPage(info);
+}
+
+func void render(interface Renderer&amp; renderer, Page&amp; info)
+{
+    renderer-&gt;renderPage(info);
+}
+
+
+interface Renderer*[4] renderers;
+
+interface Renderer[4] renderers;
+
+virtual Renderer[4] renderers;
+
+Renderer*[4] renderers;
+</code></pre>
+
+<h2 id="built-in-dynamic-arrays">Built in dynamic arrays</h2>
+<pre><code>// Pseudo code
+type _DynamicArray struct
+{
+    A* data;
+    usize capacity;
+    usize size;
+}
+
+/**
+ * @require array.size &gt; 0
+ */
+func A pop(_DynamicArray&amp; array)
+{
+    return array.data[--array.size];
+}
+
+/**
+ * @require array.size &gt; 0
+ */
+func A +=(_DynamicArray&amp; array, A a)
+{
+    if (capacity == size) array.increase_capacity();
+    return array.data[array.size] = a;
+}
+</code></pre>
+
+<p>We could construct this using generics, but it is much more convenient to have a syntax built in.</p>
+<p>Question: what about memory management?</p>
+<pre><code>int[+] dynamic_array; // Built-in dynamic arrays
+dynamic_array += 23;
+dynamic_array.pop();
+dynamic_array.insert(0, 11);
+dynamic_array.insert_front(12);
+io.printf(&quot;%d&quot;, dynamic_array[1]); // Prints 11
+
+// It's possible to extend dynamic arrays with functionality:
+func usize int[+].find(int[+] &amp;array, int value)
+{
+    for (usize i = 0; i &lt; dynamic_array.size; i++)
+    {
+        if (array[i] == value) return i;
+    }
+    return NOT_FOUND;
+}
+
+// This works if the function is in the same module
+// or if it's included as local
+
+dynamic_array.find(12); // =&gt; 0
+
+// If it's in another module:
+module_name.int[+].find(dynamic_array, 12);
+</code></pre>
+
+<h2 id="built-in-maps">Built in maps</h2>
+<p>Same reasoing as arrays. Question about memory management is the same.</p>
+<pre><code>int[int] map; // Built-in maps
+map[1] = 11;
+// Retrieving a value
+int i = try map[0]; // Requires a try
+
+// Retrive or use default
+int i = try map[12] else -1;
+
+// Extend a map:
+func bool int[int].remove_if_negative(int[int] &amp;map, int index)
+{
+    if (try map[index] &gt;= 0 else true) return false;    
+    map.remove(index);
+    return true;
+}
+
+// The underlying C function becomes:
+// bool module_name__map_int_int__remove_if_negative(struct _map_int_int &amp;map, int32_t index);
+</code></pre>
+
+<h2 id="built-in-string-type">Built in string type</h2>
+<p>Strings are built-in, refcounted(?) null-terminated character arrays.</p>
+<p>Take a long hard look at memory management (here too)</p>
+<pre><code>string = &quot;Hello&quot;;
+string += &quot; World&quot;;
+char* data = &amp;string; // Taking a pointer to the string, which may later be invalid.
+</code></pre>
+
+<h2 id="built-in-managed-pointers">Built in managed pointers</h2>
+<p>Taking a hint from Cyclone, Rust etc one could consider managed pointers / objects. There are several possibilities:</p>
+<ol>
+<li>Introduce something akin to move/borrow syntax with a special pointer type, eg. Foo@ x vs Foo* y and make the code track Foo@ to have unique ownership.</li>
+<li>Introduce ref-counted objects with ref-counted pointers. Again use Foo@ x vs Foo* y with the latter being unretained. This should be internal refcounting to avoid any of the issues going from retained -&gt; unretained that shared_ptr has. Consequently any struct that is RC:ed needs to be explicitly declared as such.</li>
+<li>Managed pointers: you alloc and the pointer gets a unique address that will always be invalid after use. Any overflows will be detected, but use of managed pointers is slower due to redirect and check.</li>
+</ol>
+<p>Sample code for (2)</p>
+<pre><code>type Foo struct @(refcounted) 
+{
+    int a;
+}
+
+func Bar(Foo@ a)
+{
+    printf(&quot;%d\n&quot;, sizeof(Foo)); // prints 8 due to RC
+    printf(&quot;%d\n&quot;, rc(a)); // prints 1
+    Foo@ x = a; 
+    printf(&quot;%d\n&quot;, rc(a)); // prints 2
+    x = nil;
+    printf(&quot;%d\n&quot;, rc(a)); // prints 1
+    Foo* y = a;
+    printf(&quot;%d\n&quot;, rc(a)); // prints 1
+    Foo* z = malloc(sizeof(Foo)); // Not recommended!
+    // TOOD discuss how to properly initialize a RC:ed variable.
+}
+</code></pre>
+
+<h2 id="ideas-around-macros">Ideas around macros</h2>
+<p>Just some previous thoughts and ideas I've considered. Many of those actually go against the current design.</p>
+<h3 id="compile-time-variables">Compile time variables</h3>
+<p>This is a variant of what already exists in C, but in a syntactically more friendly way.</p>
+<p>For example this would be ok:</p>
+<pre><code>macro swap(a, b) 
+{
+    $x = typeof(a);
+    static_assert(typeof(b) == $x);
+    $x temp = a;
+    a = b;
+    b = a;
+}
+</code></pre>
+
+<p>The example above is a bit contrived as in the above example we could simply have:</p>
+<pre><code>macro swap(a, b) 
+{
+    static_assert(typeof(b) == typeof(b));
+    typeof(a) temp = a;
+    a = b;
+    b = a;
+}
+</code></pre>
+
+<p>But still, it serves as an example on how to use it.</p>
+<h3 id="capturing-trailing-compound-statement">Capturing trailing compound statement</h3>
+<pre><code>public macro foreach(thelist, @body(Element *) ) 
+{ 
+    Element* iname = thelist.first;
+    while (iname != nil) 
+    {
+        @body(iname);
+        iname = iname.next;
+    }
+}
+</code></pre>
+
+<p>Or a version that is more flexible:</p>
+<pre><code>public macro foreach(thelist, @body(typeof(thelist.first)) ) 
+{ 
+    typeof(thelist.first) iname = thelist.first;
+    while (iname != nil) 
+    {
+        @body(iname);
+        iname = iname.next;
+    }
+}
+
+// Usage:
+
+foreach(list, Element *i) // &lt;- Note type declaration!
+{ 
+    i.print();
+}
+</code></pre>
+
+<p>Since type is going to appear very often, we could make a shortcut for it, like $@ as prefix meaning "typeof".</p>
+<p>We then get</p>
+<pre><code>public macro foreach(thelist, @body($@thelist.first)) 
+{ 
+    $@thelist.first iname = thelist.first;
+    while (iname != nil) 
+    {
+        @body(iname);
+        iname = iname.next;
+    }
+}
+</code></pre>
+
+<p>Possibly one could even write the code like this:</p>
+<pre><code>public macro foreach(thelist, @body($element_type) ) 
+{ 
+    $element_type iname = thelist.first;
+    while (iname != nil) {
+        @body(iname);
+        iname = iname.next;
+    }
+}
+</code></pre>
+
+<p>In this case <code>$element_type</code> works like "auto", but is also assigned the type, which then can be referred to in the signature.</p>
+<h3 id="yet-another-way-to-do-macros-d">Yet another way to do macros :D</h3>
+<p>This was an older attempt...</p>
+<p>First, we have to consider macros as always expanding where they are referenced to keep it simple.</p>
+<pre><code>macro @foo(int v) 
+{
+    v++;
+    if (v &gt; 10) return 10;
+    return v;
+}
+
+func void test()
+{
+    int a = 10;
+    @foo(a);
+}
+</code></pre>
+
+<p>This code would then be exactly equal to:</p>
+<pre><code>func void test()
+{
+    int a = 10;
+    a++;
+    if (a &gt; 10) return 10;
+}
+</code></pre>
+
+<p>Macros simply expand in place.</p>
+<p>Secondly, we can have macros returning values:</p>
+<pre><code>macro int @foo2(int v, int w) 
+{
+    v++;
+    if (v &gt; 10) return 10;
+    w += 3;
+    return 0;
+}
+
+func void test()
+{
+    int d = 0;
+    int a = 10;
+    int b = @foo(a, d);
+}
+</code></pre>
+
+<p>This expands to:</p>
+<pre><code>func void test()
+{
+    int d = 0;
+    int a = 10;
+    a++
+    int b;
+    if (a &gt; 10) 
+    {
+        b = 10;
+    } 
+    else 
+    {
+        b = 0;
+        d += 3;
+    }
+}
+</code></pre>
+
+<p>Note that I'm using a sigil to indicate the code expansion to make macros more obvious.</p>
+<p>We can allow the macro to take a body (here I'm calling the type of the body "{}")</p>
+<pre><code>macro int @foo3(int a, {} body)
+{
+    while (a &gt; 10) 
+    {
+        a--;
+        @body(); // Like a macro!
+    }
+}
+
+func void test()
+{
+    b = 20;
+    @foo3(b) {
+        print(b);
+    }
+}
+</code></pre>
+
+<p>We expand this to:</p>
+<pre><code>func void test()
+{
+    b = 20;
+    while (b &gt; 10) {
+        b--;
+        print(b);
+    }
+}
+</code></pre>
+
+<h4 id="stepwise-from-c-macros-into-c3-macros">Stepwise from C macros into C3 macros</h4>
+<pre><code>#define ADD_TO(x, y) {
+    x += y;
+}
+
+ADD_TO(x, 1)
+</code></pre>
+
+<p>The { } introduces a multiline macro that does not need explicit linebreaks.</p>
+<p>No, add the "$" symbol to introduce hygienic temporaries:</p>
+<pre><code>#define SWAP(x, y) {
+    typeof(x) $tmp = x;
+    x = y;
+    y = $tmp;
+}
+</code></pre>
+
+<p>Here $tmp will actually be replaced by <code>__&lt;macro&gt;_&lt;variable_name&gt;_&lt;instance&gt;</code> when translating to C, so <code>__SWAP_tmp_1</code>, <code>__SWAP_tmp_2</code> etc.</p>
+<p>We then introduce the syntax macros using:</p>
+<pre><code>macro swap(&amp;a, &amp;b) 
+{
+    typeof(a) $tmp = a;
+    b = a;
+    a = $tmp;
+}
+</code></pre>
+
+<p>(Note the different use of $ here as compared to previous macro ideas where $ is a compile time evaluated variable!)</p>
+<p>The use of &amp;a follows C++ standard: it simply refers to a variable OR EXPRESSION that is imported into its scope. Using the unadorned variable name as evaluated expression allows us to write this code:</p>
+<pre><code>macro max(a, b) 
+{
+    return (a &gt; b ? a : b)
+}
+</code></pre>
+
+<p>The above code is equivalent to:</p>
+<pre><code>macro max(&amp;a, &amp;b) 
+{
+    typeof(a) $tmp_a = a;
+    typeof(b) $tmp_b = b;
+    $tmp_a &gt; $tmp_b ? $tmp_a : $tmp_b
+}
+</code></pre>
+
+<p>Or in (GNU) C:</p>
+<pre><code>#define max(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+       __typeof__ (b) _b = (b); \
+     _a &gt; _b ? _a : _b; })
+</code></pre>
+
+<p>To recap:</p>
+<ol>
+<li>Add the { } format to #define for multiline defines.</li>
+<li>Add <code>$&lt;name&gt;</code> format as hygienic variable names.</li>
+<li>Add the syntax "macro" type of definition.</li>
+<li>The syntax macro makes a difference between "normal" parameters (with &amp; as prefix) and "evaluated" parameters (unadorned variables)</li>
+</ol>
+<p>Important is also to scope the macros:</p>
+<p><code>#define</code> is always defined local to a scope (unlike in C). </p>
+<p>This means that </p>
+<pre><code>#define FOO printf(&quot;foo&quot;);
+{
+   #define BAR printf(&quot;bar&quot;);
+}
+FOO // adds printf(&quot;foo&quot;);
+BAR; // Error, define not available in scope;
+</code></pre>
+
+<p>This also means that a define can be declared public to be accessed as if defined from the top of the file scope:</p>
+<pre><code>// file 1
+module foo
+public #define FOO { printf(&quot;FOO!\n&quot;); }
+
+// file 2
+import foo
+
+func void test() {
+  foo.FOO
+}
+</code></pre>
+
+<p>Only defines in the file scope that exists in the file scope may be public and used in other modules.</p>
+<h3 id="yet-another-macro-proposal-i-found">Yet another macro proposal I found</h3>
+<p>Simple macros</p>
+<pre><code>macro @foo(&amp;b)
+{
+    b++;
+}
+
+func test()
+{
+    int x = 1;
+    @foo(x); 
+}
+
+// Same as:
+func void test()
+{
+    int x = 1;
+    x++;    
+}
+
+</code></pre>
+
+<p>Macro with compile time values:</p>
+<pre><code>macro @foo($x, &amp;b)
+{
+    b += $x;
+}
+
+func void test()
+{
+    int x = 1;
+    @foo(10, x);
+}
+
+// Expands to:
+func void test()
+{
+    int x = 1;
+    x += 10;
+}
+</code></pre>
+
+<p>Macro with string capture</p>
+<pre><code>macro @foo($x, #f)
+{
+    `#f $x * $x`;
+}
+
+func void test()
+{
+    i32 x = 1;
+    @foo(4, &quot;x += &quot;);
+}
+
+// Expands to
+func void test()
+{
+    i32 x = 1;
+    x += 4 * 4; 
+}
+
+macro @foo2(#f)
+{
+    printf(&quot;%s was %d\n&quot;, #f, `#f`);
+}
+
+funct void test2()
+{
+    i32 x = 1;
+    @foo2(&quot;x&quot;);
+}
+
+// Expands to
+funct void test2()
+{
+    i32 x = 1;
+    printf(&quot;%s was %d\n&quot;, &quot;x&quot;, x);
+}
+</code></pre>
+
+<p>Macro with conditional compile time values</p>
+<pre><code>macro @foo($x, &amp;b)
+{
+    $IF ($x &gt; 3) 
+    {
+        b += $x * $x;
+    } 
+    $ELSE
+    {
+        b += $x;
+    }
+}
+
+func void test()
+{
+    i32 x = 1;
+
+    @foo(10, x);
+    @foo(2, x);
+}
+
+// Expands to
+func void test()
+{
+    i32 x = 1;
+
+    x += 100;
+    x += 2;
+}
+
+</code></pre>
+
+<p>Nested macros (don't do this, but an example)</p>
+<pre><code>macro @foo($a)
+{
+    printf(&quot;%d\n&quot;, $a);
+    $IF($a &gt; 0) 
+    {
+        @foo($a - 1);
+    }
+}
+
+func void test()
+{
+    @foo(2);
+}
+
+// Expands to
+func void test()
+{
+    printf(&quot;%d\n&quot;, 2);
+    printf(&quot;%d\n&quot;, 1);
+    printf(&quot;%d\n&quot;, 0);
+}
+</code></pre>
+
+<p>The above suggests macro sugar of loops:</p>
+<pre><code>macro @foo($a)
+{
+    $EACH(0..$a AS $x) 
+    {
+        printf(&quot;%d\n&quot;, $x);     
+    }
+}
+
+macro @foo_enum(&amp;a)
+{
+    $EACH(a AS $x)  
+    {
+        printf(&quot;%d\n&quot;, @cast(int, $x));     
+    }
+}
+
+type MyEnum enum 
+{
+    A,
+    B,
+    FOO
+}
+
+func void test()
+{
+    @foo_enum(MyEnum);
+}
+
+// Expands to
+func void test()
+{
+    printf(&quot;%d\n&quot;, @cast(int, A));
+    printf(&quot;%d\n&quot;, @cast(int, B));
+    printf(&quot;%d\n&quot;, @cast(int, FOO));
+}
+</code></pre>
+
+<p>Each may iterate over: struct members (returned as string), enums (returned as the enum value)</p>
+<p>Type group helper</p>
+<pre><code>macro @foo(int &amp;a) // Macro only valid for a is any type of signed integer
+macro @foo(integer &amp;a) // Valid for unsigned and signed integers
+macro @foo(number &amp;a) // Valid for any float or integer
+</code></pre>
+
+<p>Macros may force non local return</p>
+<pre><code>macro @foo()        
+{
+    exit 1; 
+    // other keyword? 'escape'? I think exit is good, 
+    // but clashes with function name!
+}
+
+func int test()
+{
+    @foo();
+}
+
+// expands to
+func int test()
+{
+    return 1;
+}
+</code></pre>
+
+<p>Normal return creates a statement expression</p>
+<pre><code>macro @foo(&amp;a)
+{
+    int x = a;
+    x++;
+    if (x &gt; 0) return 1;
+    return 2; 
+}
+
+func int test()
+{
+    b = 10;
+    int y = @foo(b);
+}
+
+// Expands to:
+func int test()
+{
+    b = 10;
+    int __macro_ret_1;
+    do
+    {
+        int __macro_x = b;
+        __macro_x++;
+        if (__macro_x &gt; 0) 
+        {
+            __macro_ret_1 = 1;
+            break;
+        } 
+        else 
+        {
+            __macro_ret_1 = 2;
+            break;
+        }
+    } 
+    while (0);
+    int y = __macro_ret_1;
+}
+</code></pre>
+
+<p>Bodies in macros</p>
+<pre><code>macro @foo(&amp;a, @body)
+{
+    int z = 0;
+    while (a &lt; 10) 
+    {
+        @body();
+        z++;    
+    } 
+}
+
+func void test()
+{
+    int i = 0;
+    @foo(i) 
+    {
+        i += 1;
+    }
+}
+
+// Expands to
+func void test()
+{
+    int i = 0;
+    {
+        int __macro_z = 0;
+        while (i &lt; 10) 
+        {
+            i += 1;
+            __macro_z++;
+        }
+    }
+}
+</code></pre>
+
+<p>Bodies in macros with parameters</p>
+<pre><code>macro @foo(&amp;a, @body(&amp;x, $y))
+{
+    int z = 0;
+    while (a &lt; 10) 
+    {
+        @body(z, 2);
+        z++;    
+    } 
+}
+
+func void test()
+{
+    int i = 0;
+    @foo(i) 
+    {
+        printf(&quot;%d / %d\n&quot;, x, y);
+    }
+}
+
+// Expands to
+
+func void test()
+{
+    int i = 0;
+    {
+        int __macro_z = 0;
+        while (i &lt; 10) {
+            printf(&quot;%d / %d\n&quot;, __macro_z, 2);
+            __macro_z++;
+        }
+    }
+}
+</code></pre>
+
+<p>Expression is extended to parse:</p>
+<p>MACRO_IDENT =&gt; lookup $x in current macro scope and replace it with literal. Error if not in macro.
+MACRO_REPLACEMENT =&gt; invoke lexer on code inside, after doing a replace of any <code>#</code> inside. </p>
+<p><code>$IF</code> requires that the expression can be evaluated to a constant value, similar holds for the range in <code>$EACH</code>.</p>
+<p>The general rule:
+1. An argument prefixed with <code>$</code> is always something that must be constant.
+2. An argument prefixed with <code>&amp;</code> is always a reference to an outer variable.
+3. An argument prefixed with <code>#</code> always matches a string. It will be expanded when lexed in `` statements
+4. A $ variable can be converted to a <code>#</code> variable.
+5. A <code>#</code> can be evaluated to a <code>$</code>
+6. $ and <code>#</code> cannot be assigned to, they are always constant.
+7. <code>$</code>, <code>&amp;</code> and <code>#</code> will never shadow variables from the outer scope.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../syntax/" class="btn btn-neutral float-right" title="Grammar">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../generics/" class="btn btn-neutral" title="Generics"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../generics/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../syntax/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

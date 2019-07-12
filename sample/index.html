@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Sample - C3 Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Sample";
+    var mkdocs_page_input_path = "sample.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> C3 Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../about/">About C3</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Installing</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../setup/">Setup</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../firstproject/">Your first project</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Documentation</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../examples/">Examples</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../modules/">Modules</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../types/">Types</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../errorhandling/">Errors</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../builtinmacros/">Built-in Macros</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../precedence/">Precedence</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../ideas/">Crazy ideas</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../syntax/">Grammar</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Build system</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../buildintro/">Introduction</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../project/">Project Structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../buildcommands/">Commands</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../contribute/">Contribute</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">C3 Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Sample</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="sample">Sample</h1>
+<p>Here is a bit of code manually converted to C3 from C.</p>
+<pre><code>
+type Node struct
+{
+    uint hole;
+    uint size;
+    Node* next;
+    Node* prev;
+}
+
+type Footer struct 
+{ 
+    Node &amp;header;
+}
+
+type Bin struct 
+{
+    Node&amp; head;
+}
+
+type Heap struct 
+{
+    size start;
+    size end;
+    Bin* bins[BIN_COUNT];
+}
+
+const uint offset = 8;
+
+/**
+ * @require start &gt; 0
+ */
+void Heap.init(Heap&amp; heap, usize start) 
+{
+    Node&amp; init_region = @cast(Node&amp;, start);
+    init_region.hole = 1;
+    init_region.size = HEAP_INIT_SIZE - @sizeof(Node) - @sizeof(Footer);
+
+    init_region.createFoot();
+
+    heap.bins[get_bin_index(init_region.size)].add(init_region);
+
+    heap.start = @cast(void*, start);
+    heap.end   = @cast(void*, start + HEAP_INIT_SIZE);
+}
+
+void* Heap.alloc(Heap&amp; heap, usize size) 
+{
+    uint index = get_bin_index(size);
+    Bin&amp; temp = @cast(Bin&amp;, heap.bins[index]);
+    Node* found = temp.getBestFit(size);
+
+    while (!found) 
+    {
+        temp = heap.bins[++index];
+        found = temp.getBestFit(size);
+    }
+
+    if ((found.size - size) &gt; (overhead + MIN_ALLOC_SZ)) 
+    {
+        Node&amp; split = @cast(Node*, @cast(char&amp;, found) + sizeof(Node) + sizeof(Footer)) + size);
+        split.size = found.size - size - sizeof(Node) - sizeof(Footer);
+        split.hole = 1;
+
+        split.createFoot();
+
+        uint new_idx = get_bin_index(split.size);
+
+        heap.bins[new_idx].addNode(split); 
+
+        found.size = size; 
+        found.createFoot(found); 
+    }
+
+    found.hole = 0; 
+    heap.bins[index].removeNode(found);
+
+    Node&amp; wild = heap.getWilderness(heap);
+    if (wild.size &lt; MIN_WILDERNESS) 
+    {
+        uint success = heap.expand(0x1000);
+        if (success == 0) 
+        {
+            return nil;
+        }
+    }
+    else if (wild.size &gt; MAX_WILDERNESS) 
+    {
+        heap.contract(0x1000);
+    }
+
+    found.prev = nil;
+    found.next = nil;
+    return &amp;found.next; 
+}
+
+/**
+ * @require p != nil
+ */
+func void Heap.free(Heap* heap, void *p) 
+{
+    Bin&amp; list;
+    Footer&amp; new_foot, old_foot;
+
+    Node&amp; head = @cast(Node&amp;, @cast(char&amp;, p) - offset);
+    if (head == @cast(Node&amp;, @cast(heap.start, usize)) 
+    {
+        head.hole = 1; 
+        heap.bins[get_bin_index(head.size)].addNode(head);
+        return;
+    }
+
+    Node&amp; next = @cast(Node*, @cast(char*, head.getFoot()) + sizeof(Footer));
+    Footer&amp; f = @cast(Footer*, @cast(char*, head) - sizeof(Footer));
+    Node&amp; prev = f.header;
+
+    if (prev.hole) 
+    {
+        list = heap.bins[get_bin_index(prev.size)];
+        list.removeNode(prev);
+
+        prev.size += overhead + head.size;
+        new_foot = head.getFoot(head);
+        new_foot.header = prev;
+
+        head = prev;
+    }
+
+    if (next.hole) {
+        list = heap.bins[get_bin_index(next.size)];
+        list.removeNode(next);
+
+        head.size += overhead + next.size;
+
+        old_foot = next.getFoot();
+        old_foot.header = 0;
+        next.size = 0;
+        next.hole = 0;
+
+        new_foot = head.getFoot(head);
+        new_foot.header = head;
+    }
+
+    head.hole = 1;
+    heap.bins[get_bin_index(head.size)].addNode(head);
+}
+
+func uint Heap.expand(Heap&amp; heap, usize sz) 
+{
+    return 0;
+}
+
+func void Heap.contract(Heap&amp; heap, usize sz) 
+{
+    return;
+}
+
+func uint get_bin_index(usize sz) 
+{
+    uint index = 0;
+    sz = sz &lt; 4 ? 4 : sz;
+
+    while (sz &gt;&gt;= 1) index++; 
+    index -= 2; 
+
+    if (index &gt; BIN_MAX_IDX) index = BIN_MAX_IDX; 
+    return index;
+}
+
+func void Node.createFoot(Node&amp; head) 
+{
+    Footer&amp; foot = head.getFoot();
+    foot.header = head;
+}
+
+func Foot&amp; Node.getFoot(Node&amp; node) 
+{
+    return @cast(Footer&amp;, @cast(char&amp;, node) + sizeof(Node) + node.size);
+}
+
+func Node* getWilderness(Heap&amp; heap) 
+{
+    Footer&amp; wild_foot = @cast(Footer&amp;, @cast(char&amp;, heap.end) - sizeof(Footer));
+    return wild_foot.header;
+}
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

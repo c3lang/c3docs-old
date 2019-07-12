@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Grammar - C3 Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Grammar";
+    var mkdocs_page_input_path = "syntax.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> C3 Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../about/">About C3</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Installing</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../setup/">Setup</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../firstproject/">Your first project</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Documentation</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../examples/">Examples</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../modules/">Modules</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../types/">Types</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../errorhandling/">Errors</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../builtinmacros/">Built-in Macros</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../precedence/">Precedence</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../ideas/">Crazy ideas</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Grammar</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#grammar">Grammar</a></li>
+    
+
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Build system</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../buildintro/">Introduction</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../project/">Project Structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../buildcommands/">Commands</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../contribute/">Contribute</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">C3 Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Documentation &raquo;</li>
+        
+      
+    
+    <li>Grammar</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="grammar">Grammar</h1>
+<p>The following (incomplete) grammar can be used with this: https://bottlecaps.de/rr/ui to get a railroad diagram of the grammar.</p>
+<pre><code class="bnf">source ::= module_def import_def+ top_level
+
+module_def ::= 'module' IDENT EOS
+
+import_def_ ::= 'import' IDENT ( ('as' IDENT) | 'local' )? EOS
+
+top_level ::= (array_append | global_decl)*
+
+global_decl ::= 'public'? (type_def | func_def | var_def | macro_def)
+
+array_append ::= IDENT '+=' init_value
+
+func_def ::= return_value IDENT '(' function_args ')' compound_stmt?
+
+generic_def ::= 'generic' IDENT '(' generic_arg_list ')' compound_stmt
+
+generic_arg_list ::= generic_arg (',' generic_arg)*
+
+generic_arg ::= type? IDENT
+
+macro_def ::= 'macro' IDENT '('  macro_arg_list? ')' compound_stmt
+
+macro_arg_list ::= macro_arg (',' macro_arg)*
+
+macro_arg ::= '&amp;'? IDENT
+
+var_def ::= type_qualifier IDENT ...
+
+struct_or_union ::= 'struct' | 'union'
+
+type_def ::= 'type' IDENT type_def_body
+
+type_def_body ::= enum_def | func_type_def | struct_def | error_def
+
+enum_def ::= 'enum' type attributes? '{' enum_body? '}'
+
+enum_body ::= enum_value (',' enum_value)* ','?
+
+enum_value ::= IDENT ('=' expression)?
+
+error_def ::= 'error' IDENT '{' IDENT (',' IDENT)* '}'
+
+func_type_def ::= 'func' type attributes? '(' function_args ')' EOS
+
+struct_def ::= struct_or_union attributes? struct_body
+
+struct_body ::= '{' (struct_member (',' struct_member)* )? '}'
+
+struct_member ::= (type IDENT) | (struct_or_union IDENT? struct_body)
+
+compound_stmt ::= '{' (statement | declaration)* '}'
+
+statement ::= label_stmt | compound_stmt | expr_stmt | if_stmt | switch_stmt | iter_stmt | jump_stmt
+
+jump_stmt ::= ( ('goto' IDENT) | 'continue' | 'break' | 'next' | ('return' expression?) ) EOS
+
+label_stmt ::= IDENT ':'
+
+if_stmt ::= 'if' control_expr statement (ELSE statement)?
+
+switch_stmt ::= 'switch' control_expr '{' switch_body '}'
+
+switch_body ::= case_stmt | default_stmt
+
+case_stmt ::= 'case' expression ':' case_body
+
+default_stmt ::= 'default' ':' case_body
+
+case_body ::= (statement | declaration)*
+
+control_expr ::= '(' var_def_list? expression ')'
+
+var_def_list ::= var_def (',' var_def)* EOS
+
+iter_stmt ::= while_stmt | do_stmt | for_stmt
+
+while_stmt ::= 'while' control_stml statement
+
+do_stmt ::= 'do' statement while '(' expression ')' EOS
+
+for_stmt ::= 'for' '(' var_def_list? expression? EOS expression ')' statement
+
+type ::= base_type (pointer_suffix | array_suffix)*
+
+qualified_type ::= qualifier* base_type ((qualifier* pointer_suffix) | array_suffix)*
+
+base_type ::= built_in_type | IDENT
+
+built_in_type ::= bit_types | named_types | c_types
+
+bit_types ::= unsigned_bit_types | signed_bit_types | float_bit_types
+
+unsigned_bit_types ::= 'u8' | 'u16' | 'u32' | 'u64' | 'u1'
+
+signed_bit_types ::= 'i8' | 'i16' | 'i32' | 'i64'
+
+float_bit_types ::=  'f16' | 'f32' | 'f64' | 'f128'
+
+named_types ::= signed_named_types | unsigned_named_types | float_named_types | 'void'
+
+signed_named_types ::= 'char' | 'short' | 'int' | 'long' | 'isize'
+
+unsigned_named_types ::= 'bool' | 'byte' | 'ushort' | 'uint' | 'ulong' | 'usize'
+
+float_named_types ::= 'float' | 'double' | 'quad'
+
+c_types ::= signed_c_types | unsigned_c_types | float_c_types
+
+signed_c_types ::= 'c_ichar' | 'c_ushort' | 'c_int' | 'c_long' | 'c_longlong'
+
+unsigned_c_types ::= 'c_uchar' | 'c_ushort' | 'c_uint' | 'c_ulong' | 'c_ulonglong'
+
+float_c_types ::= 'c_float' | 'c_double' | 'c_longdouble'
+
+pointer_suffix ::= '*' | '&amp;'
+
+array_suffix ::= '[' expression? ']'
+
+expr_stmt ::= expression EOS
+
+primary_expr ::= IDENT | CONSTANT | STRING_LITERL | '(' expression ')'
+
+postfix_expr ::= primary_expr postfix_op*
+
+postfix_op ::= array_op | call_op | dot_op | inc_dec_op
+
+array_op ::= '[' expression ']'
+
+call_op ::= '(' arg_expr_list? ')'
+
+dot_op ::= '.' IDENT
+
+inc_dec_op ::= '++' | '--'
+
+arg_expr_list ::= assign_expr (',' assign_expr)*
+
+unary_op ::= inc_dec_op | '&amp;' | '*' | '+' | '-' | '~' | '!'
+
+unary_expr ::= inc_dec_op* postfix_expr
+
+binary_op ::= mult_op | arith_op | assign_op | rel_op | bit_op | bool_op
+
+assign_op ::= '=' | mult_assign_op | arith_assign_op | bit_assign_op
+
+mult_assign_op ::= '*=' | '/=' | '%='
+
+arith_assign_op ::= '+=' | '-='
+
+bit_assign_op ::= '&gt;&gt;=' | '&lt;&lt;=' | '&gt;&gt;&gt;=' | '|=' | '&amp;=' | '^='
+
+arith_op ::= '+' | '-'
+
+mult_op ::= '*' | '/' | '%'
+
+bit_op ::= '|' | '&amp;' | '^' | '&gt;&gt;' | '&lt;&lt;' | '&gt;&gt;&gt;'
+
+bool_op ::= '&amp;&amp;' | '||'
+
+rel_op ::= '==' | '!=' | '&lt;' | '&gt;' | '&lt;=' | '&gt;='
+
+binary_expr ::= unary_expr (binary_op unary_expr)*
+
+expression ::= binary_expr ('?' expression ':' cond_expr)?
+
+declaration ::= qualified_type IDENT ('=' init_expr)? EOS
+
+init_expr ::= expression | struct_init
+
+struct_init ::= '{' stuct_init_list? '}'
+
+struct_init_list ::= strict_init_decl (',' struct_init_decl)*
+
+struct_init_decl ::= member_init | init_expr
+
+member_init ::=_ '.' IDENT '=' init_expr
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../buildintro/" class="btn btn-neutral float-right" title="Introduction">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../ideas/" class="btn btn-neutral" title="Crazy ideas"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../ideas/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../buildintro/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

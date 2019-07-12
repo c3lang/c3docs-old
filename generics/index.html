@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Generics - C3 Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Generics";
+    var mkdocs_page_input_path = "generics.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> C3 Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../about/">About C3</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Installing</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../setup/">Setup</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../firstproject/">Your first project</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Documentation</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../examples/">Examples</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../modules/">Modules</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../types/">Types</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../errorhandling/">Errors</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../builtinmacros/">Built-in Macros</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../precedence/">Precedence</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Generics</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#generics">Generics</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#generic-functions">Generic functions</a></li>
+        
+            <li><a class="toctree-l4" href="#generic-modules">Generic modules</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../ideas/">Crazy ideas</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../syntax/">Grammar</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Build system</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../buildintro/">Introduction</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../project/">Project Structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../buildcommands/">Commands</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../contribute/">Contribute</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">C3 Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Documentation &raquo;</li>
+        
+      
+    
+    <li>Generics</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="generics">Generics</h1>
+<p>Generic functionality is mostly provided by macros and generic modules. Bridging the gap is generic functions, that allow a limited for of overloading.</p>
+<h2 id="generic-functions">Generic functions</h2>
+<p>Generic functions is a specialized type of macros. They allow overloading using a common symbol, just like C11 _Generic:</p>
+<pre><code>generic abs(x)
+{
+    case double:
+        return fabs(x);
+    case int:
+        return abs(x);
+}
+</code></pre>
+
+<p>Unlike a regular macro, a generic function is not invoked with @. It may also be extended by other packages / files:</p>
+<pre><code>// File 1
+module foo;
+generic abs(x)
+{
+    case double:
+        return fabs(x);
+    case int:
+        return abs(x);
+}
+
+// File 2
+module bar;
+generic foo.abs(x)
+{
+    case long:
+        return absl(x);
+    case int: // Compile time error, already defined
+        return abs(x);
+}
+</code></pre>
+
+<p>It is possible to dispatch on multiple arguments:</p>
+<pre><code>module foo;
+generic add(x, y)
+{
+    case double, double:
+        return x + y;
+    case int, double:
+        return (double)x + y;
+}
+</code></pre>
+
+<p>Generics can also be used for overloading operators, although this is limited to the usual arithmetic operators.</p>
+<pre><code>generic operator_add(x, y)
+{
+    case vector3, vector3:
+        return vector_add(x, y);
+}
+</code></pre>
+
+<p>Note that generics is actually a macro expansion. Consequently this is possible:</p>
+<pre><code>generic weird_fun(x)
+{
+    case int:
+        printf(&quot;%d&quot;, x);
+    case Foo:
+        while (foo.bar &gt; 0)
+        {
+            foo.bar--;
+            printf(&quot;Hi&quot;);
+        }
+}
+
+void func test()
+{
+    Foo foo;
+    weird_fun(2); // Prints &quot;2&quot;
+    foo.bar = 4;
+    wierd_fun(foo);  // Prints &quot;HiHiHiHi&quot;
+}
+</code></pre>
+
+<h4 id="shorthand">Shorthand</h4>
+<p>There is also a shorthand for declaring generics that only match a single type – it's done by declaring the types directly in the header:</p>
+<pre><code>generic add(double x, double y)
+{
+    return x + y;
+}
+</code></pre>
+
+<h2 id="generic-modules">Generic modules</h2>
+<p>Generic modules are parameterized modules that allow functionality for arbitrary types.</p>
+<p>For generic modules, the generic parameters follows the module name:</p>
+<pre><code>module vector (A, B, C); // A, B, C are generic parameters.
+</code></pre>
+
+<p>The code inside of the module can use the generic parameters as if they were well defined symbols:</p>
+<pre><code>module foo_test (A, B);
+
+type Foo struct {
+   A a;
+}
+
+func C test(B b, Foo *foo) {
+   return a + b;
+}
+</code></pre>
+
+<p>When including a generic module, the generic parameters specified in the import, but must be aliased or imported as <code>local</code>. If <code>local</code>, more than one generic of the type may not be used.</p>
+<pre><code>import vector(double, float, int) as generic_test;
+import foo(int, int) local;
+// import foo(float, float) local; – Not allowed
+</code></pre>
+
+<p>Just like for macros, optional constraints may be added to improve compile errors:</p>
+<pre><code>/**
+ * @require c = a + b
+ */ 
+module vector (A, B, C);
+
+/* .. code * ../
+</code></pre>
+
+<pre><code>import vector(Bar, f32, i32) as gen_test;
+
+// This would give the error 
+// --&gt; Illegal arguments for generic module vector, breaks requirement 'Bar' = 'f32' + 'i32'
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../ideas/" class="btn btn-neutral float-right" title="Crazy ideas">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../precedence/" class="btn btn-neutral" title="Precedence"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../precedence/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../ideas/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

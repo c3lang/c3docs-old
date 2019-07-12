@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Examples - C3 Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Examples";
+    var mkdocs_page_input_path = "examples.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> C3 Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../about/">About C3</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Installing</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../setup/">Setup</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../firstproject/">Your first project</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Documentation</span>
+    <ul class="subnav">
+                <li class=" current">
+                    
+    <a class="current" href="./">Examples</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#if-statement">if-statement</a></li>
+    
+
+    <li class="toctree-l3"><a href="#for-loop">for-loop</a></li>
+    
+
+    <li class="toctree-l3"><a href="#while-loop">while-loop</a></li>
+    
+
+    <li class="toctree-l3"><a href="#in-block-declarations">In-block declarations</a></li>
+    
+
+    <li class="toctree-l3"><a href="#enum-switch">enum + switch</a></li>
+    
+
+    <li class="toctree-l3"><a href="#defer">defer</a></li>
+    
+
+    <li class="toctree-l3"><a href="#struct-types">struct types</a></li>
+    
+
+    <li class="toctree-l3"><a href="#function-pointers">Function pointers</a></li>
+    
+
+    <li class="toctree-l3"><a href="#error-handling">Error handling</a></li>
+    
+
+    <li class="toctree-l3"><a href="#pre-and-post-conditions">Pre and post conditions</a></li>
+    
+
+    <li class="toctree-l3"><a href="#macros">Macros</a></li>
+    
+
+    <li class="toctree-l3"><a href="#nullability-annotations">Nullability annotations</a></li>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../modules/">Modules</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../types/">Types</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../errorhandling/">Errors</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../builtinmacros/">Built-in Macros</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../precedence/">Precedence</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../ideas/">Crazy ideas</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../syntax/">Grammar</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Build system</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../buildintro/">Introduction</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../project/">Project Structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../buildcommands/">Commands</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../contribute/">Contribute</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">C3 Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Documentation &raquo;</li>
+        
+      
+    
+    <li>Examples</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h5 id="if-statement">if-statement</h5>
+<pre><code>func void if_example(int a) 
+{
+    if (a &gt; 0) 
+    {
+        // ..
+    } 
+    else 
+    {
+        // ..
+    }
+}
+</code></pre>
+
+<h5 id="for-loop">for-loop</h5>
+<pre><code>func void example_for() {
+    // the for-loop is the same as C99. 
+    for (int i = 0; i &lt; 10; i++) 
+    {
+        io.printf(&quot;%d\n&quot;, i);
+    }
+
+    // also equal
+    for (;;) 
+    {
+        // ..
+    }
+}
+</code></pre>
+
+<h5 id="while-loop">while-loop</h5>
+<pre><code>func void example_while() 
+{
+    // again exactly the same as C
+    int a = 10;
+    while (a &gt; 0) 
+    {
+        a--;
+    }
+
+    // Declaration 
+    while (Point* p = getPoint()) 
+    {
+        // ..
+    }
+}
+</code></pre>
+
+<h5 id="in-block-declarations">In-block declarations</h5>
+<p>Any control structure may declare block level variables.</p>
+<pre><code>func void example_if_while_for()
+{
+    // a is initialized only once, when entering the while statement
+    while (int a = 10; a &gt; 0) 
+    {
+        a--;
+    }
+
+    // a is initialized every time through the loop.
+    while (int a = foo()) 
+    {
+        // ...
+    }
+
+    // a is initialized once, but assigned every time through the loop.
+    while (int a = 0; a = foo()) 
+    {
+        // ...
+    }
+
+    if (int a = foo(), long b = bar(); a &gt; 1) return @cast(int, a + b);
+
+    for (int a = 0, long b = 0; a &lt; 10; a++)
+    {
+        b += foo();
+        if (b &gt; 10) break;
+    }
+}
+
+</code></pre>
+
+<h5 id="enum-switch">enum + switch</h5>
+<p>Switches have implicit break and scope. Use "next" to implicitly fallthrough or use comma:</p>
+<pre><code>type Height enum u32 
+{
+    LOW = 0,
+    MEDIUM,
+    HIGH,
+}
+
+func void demo_enum(Height h) 
+{
+    switch (h) 
+    {
+        case Height.LOW, Height.MEDIUM:
+            io.printf(&quot;Not high&quot;);
+            // Implicit break.
+        case Height.HIGH:
+            io.printf(&quot;High&quot;);
+    }
+
+    // This also works
+    switch (h) 
+    {
+        case Height.LOW, 
+        case Height.MEDIUM:
+            io.printf(&quot;Not high&quot;);
+            // Implicit break.
+        case Height.HIGH:
+            io.printf(&quot;High&quot;);
+    }
+
+    // Completely empty cases are not allowed.
+    switch (h) 
+    {
+        case Height.LOW:
+            break; // Explicit break required, since switches can't be empty.
+        case Height.MEDIUM:
+            io.printf(&quot;Medium&quot;);
+        case Height.HIGH:
+            break;
+    }
+
+    // special checking of switching on enum types
+    switch (h) 
+    {
+        case Height.LOW,
+        case Height.MEDIUM,
+        case Height.HIGH,
+            break;
+        default:    // warning: default label in switch which covers all enumeration value
+            break;
+    }
+
+    // Using &quot;next&quot; will fallthrough to the next case statement, 
+    // and each case statement starts its own scope.
+    switch (h) 
+    {
+        case Height.LOW:
+            int a = 1;
+            printf(&quot;A\n&quot;);
+            next;
+        case Height.MEDIUM,
+            int a = 2;
+            printf(&quot;B\n&quot;);
+            next;
+        case Height.HIGH,
+            // a is not defined here
+            printf(&quot;C\n&quot;);
+    }
+}
+</code></pre>
+
+<p>Enums are always namespaced.</p>
+<p>Enums also define <code>.min</code> and <code>.max</code>, returning the minimum and maximum value for the enum values. <code>.all</code> returns an array with all enums.</p>
+<pre><code>type State enum uint 
+{
+    Start,
+    Stop,
+}
+
+const uint lowest = State.min;
+const uint highest = State.max;
+
+State start = State.all[0];
+</code></pre>
+
+<h5 id="defer">defer</h5>
+<p>Defer will be invoked on scope exit.</p>
+<pre><code>func void test(int x)
+{
+    defer printf(&quot;A&quot;);
+    if (x = 1) return;
+    {
+        defer printf(&quot;B&quot;);
+        if (x == 0) return;
+    }
+    printf(&quot;!&quot;)
+}
+
+test(1); // Prints &quot;A&quot;
+test(0); // Prints &quot;BA&quot;
+test(10); // Prints &quot;!BA&quot;
+</code></pre>
+
+<p>Because it's often relevant to run different defers when having an error return there is also a way to create an error defer, by using the <code>catch</code> keyword directly after the defer.</p>
+<pre><code>func void test(int x)
+{
+    defer printf(&quot;A&quot;);
+    defer catch printf(&quot;B&quot;)
+    defer catch (error e) printf(&quot;%s&quot;, @name(e));
+    if (x = 1) return throw Error.FOO;
+    printf(&quot;!&quot;)
+}
+
+test(0); // Prints &quot;!A&quot;
+test(1); // Prints &quot;FOOBA&quot; and throws
+</code></pre>
+
+<h5 id="struct-types">struct types</h5>
+<pre><code>type Callback func int(char c);
+
+type Status enum int 
+{
+    IDLE,
+    BUSY,
+    DONE,
+}
+
+type MyData struct 
+{
+    const char* name;
+    Callback open;
+    Callback close;
+    State status;
+
+    // named sub-structs (x.other.value)
+    struct other 
+    {
+        int value;
+        int status;   // ok, no name clash with other status
+    }
+
+    // anonymous sub-structs (x.value)
+    struct 
+    {
+        int value;
+        int status;   // error, name clash with other status in MyData
+    }
+
+    // anonymous union (x.person)
+    union 
+    {
+        Person* person;
+        Company* company;
+    }
+
+    // named sub-unions (x.either.this)
+    union either 
+    {
+        int this;
+        bool  or;
+        char* that;
+    }
+}
+</code></pre>
+
+<h5 id="function-pointers">Function pointers</h5>
+<pre><code>module demo;
+
+type Callback func int(const char* text, int value);
+
+// also shows function attribute
+func int my_callback(const char* text, int value) @(unused_params) 
+{
+    return 0;
+}
+
+Callback cb = demo.my_callback;
+
+func void example_cb() 
+{
+    int result = cb(&quot;demo&quot;, 123);
+    // ..
+}
+</code></pre>
+
+<h5 id="error-handling">Error handling</h5>
+<p>Errors are sent as a result value but uses an exception-like try/catch syntax.</p>
+<pre><code>type RandomError error
+{
+    NORMAL,
+    EXCEPTIONAL
+}
+
+func int mayThrowError() throws RandomError
+{
+    if (rand() &gt; 0.5) throw RandomError.NORMAL;
+    if (rand() &gt; 0.99) throw RandomError.EXCEPTIONAL;
+    return 1;
+}
+
+func void testMayError() throws
+{
+    // all throwable sites must be annotated with &quot;try&quot;
+    try mayThrowError(); 
+}
+
+func void testWithoutError()
+{
+    try testMayError();
+
+    // Catching will catch any try above in the scope.
+    catch (error e)
+    {
+        case RandomError.NORMAL:
+            io.printf(&quot;Normal Error\n&quot;);
+        case RandomError.EXCEPTIONAL:
+            io.printf(&quot;You win!&quot;);
+        default:
+            io.printf(&quot;What is this error you're talking about?&quot;);                 
+    }
+}
+
+</code></pre>
+
+<h5 id="pre-and-post-conditions">Pre and post conditions</h5>
+<p>Pre- and postconditions are optionally compiled into asserts helping to optimize the code.</p>
+<pre><code>/**
+ * @param foo : the number of foos 
+ * @require foo &gt; 0, foo &lt; 1000
+ * @return number of foos x 10
+ * @ensure testFoo &lt; 10000, testFoo &gt; 0
+ **/
+func int testFoo(int foo)
+{
+    return foo * 10;
+}
+
+/**
+ * @param array : the array to test
+ * @param length : length of the array
+ * @require length &gt; 0
+ **/
+func int getLastElement(int? array, int length)
+{
+    return array[length - 1];
+}
+</code></pre>
+
+<h5 id="macros">Macros</h5>
+<p>Macro arguments may be immediately evaluated.</p>
+<pre><code>macro foo(a, b)
+{
+    return *a(b);
+}
+
+func int square(int x)
+{
+    return x * x;
+}
+
+func int test()
+{
+    int a = 2;
+    int b = 3;    
+    return @foo(&amp;square, 2) + a + b; // 9
+    // return @foo(square, 2) + a + b; 
+    // Error the symbol &quot;square&quot; cannot be used as an argument.
+}
+</code></pre>
+
+<p>Macro arguments may have deferred evaluation, which is basically text expansion.</p>
+<pre><code>macro foo(&amp;a, b, &amp;c)
+{
+    c = a(b) * b;
+}
+
+macro foo2(&amp;a)
+{
+    return a * a;
+}
+
+func int square(int x)
+{
+    return x * x;
+}
+
+func int test1()
+{
+    int a = 2;
+    int b = 3; 
+    foo(square, a + 1, b);
+    return b; // 27   
+}
+
+func int test2()
+{
+    return foo2(1 + 1); // 1 + 1 * 1 + 1 = 3
+}
+</code></pre>
+
+<p>Improve macro errors with preconditions:</p>
+<pre><code>/**
+ * @param x : value to square
+ * @require x * x &gt;= 0 : &quot;cannot multiply&quot;
+ **/
+macro square(x)
+{
+    return x * x;
+}
+
+func void test()
+{
+    square(&quot;hello&quot;); // Error: cannot multiply &quot;hello&quot;
+    int a = 1;
+    square(&amp;a); // Error: cannot multiply '&amp;a'
+}
+</code></pre>
+
+<h5 id="nullability-annotations">Nullability annotations</h5>
+<p>Use &amp; for nullable pointers, * for non nullable pointers.</p>
+<pre><code>func Foo* getFoo() { ... }
+func Foo&amp; getFooNotNull() { ... }
+
+func testThings()
+{
+    int i;
+    Foo* foo1 = getFoo();
+    // i = foo1.intVal;
+    // Error, reference may be null
+    Foo&amp; foo2 = getFooNotNull();
+    i = foo2.intVal;
+
+    assert(foo1);
+    i = foo1.intVal;
+}
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../modules/" class="btn btn-neutral float-right" title="Modules">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../firstproject/" class="btn btn-neutral" title="Your first project"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../firstproject/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../modules/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

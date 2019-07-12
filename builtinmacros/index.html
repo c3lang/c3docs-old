@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Built-in Macros - C3 Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Built-in Macros";
+    var mkdocs_page_input_path = "builtinmacros.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> C3 Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../about/">About C3</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Installing</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../setup/">Setup</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../firstproject/">Your first project</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Documentation</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../examples/">Examples</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../modules/">Modules</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../types/">Types</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../errorhandling/">Errors</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Built-in Macros</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#built-in-macros">Built-in macros</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#bitcast">@bitcast</a></li>
+        
+            <li><a class="toctree-l4" href="#cast">@cast</a></li>
+        
+            <li><a class="toctree-l4" href="#describe">@describe</a></li>
+        
+            <li><a class="toctree-l4" href="#elements">@elements</a></li>
+        
+            <li><a class="toctree-l4" href="#name">@name</a></li>
+        
+            <li><a class="toctree-l4" href="#offset">@offset</a></li>
+        
+            <li><a class="toctree-l4" href="#sizeof">@sizeof</a></li>
+        
+            <li><a class="toctree-l4" href="#typeof">@typeof</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../precedence/">Precedence</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../ideas/">Crazy ideas</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../syntax/">Grammar</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Build system</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../buildintro/">Introduction</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../project/">Project Structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../buildcommands/">Commands</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../contribute/">Contribute</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">C3 Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Documentation &raquo;</li>
+        
+      
+    
+    <li>Built-in Macros</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="built-in-macros">Built-in macros</h1>
+<p>There are several built-in macros to inspect the code during compile and runtime.</p>
+<ul>
+<li>@bitcast</li>
+<li>@cast</li>
+<li>@describe</li>
+<li>@elements</li>
+<li>@name</li>
+<li>@sizeof</li>
+<li>@typeof</li>
+</ul>
+<h3 id="bitcast">@bitcast</h3>
+<p>Bitcast reinterprets the contents of a variable without any conversion. Bitsize must be the same for both types.</p>
+<pre><code>float f = 12.3;
+int i = @bitcast(int, f);
+printf(&quot;%x&quot;, i); // Prints 4144cccd
+</code></pre>
+
+<h3 id="cast">@cast</h3>
+<p>Cast one type to the other using the default conversion rules. Bit extension or truncation may occur.</p>
+<pre><code>float f = 12.3;
+int i = @cast(int, f);
+printf(&quot;%d&quot;, i); // Prints 12
+</code></pre>
+
+<h3 id="describe">@describe</h3>
+<p>Creates a runtime description of a value.</p>
+<pre><code>type FooEnum enum 
+{
+    A,
+    B
+}
+
+func char[] test()
+{
+    FooEnum x = FooEnum.A;
+    return @describe(x); // Returns &quot;FooEnum.A&quot;
+}
+
+type Foo struct
+{
+    int x;
+    char[] y;
+}
+
+func char[] test_struct()
+{
+    Foo foo = { .x = 2, y = &quot;bar&quot; }
+    return @describe(x); // Returns &quot;Foo { x: 2, y: &quot;bar&quot; }&quot;
+}
+</code></pre>
+
+<h3 id="elements">@elements</h3>
+<p>Returns an array of an error set or enum set.</p>
+<pre><code>FooEnum[] values = @elements(FooEnum); 
+// Same as FooEnum[] values = { FooEnum.A, FooEnum.B };
+</code></pre>
+
+<h3 id="name">@name</h3>
+<p>Creates a runtime name of a value.</p>
+<pre><code>func char[] test()
+{
+    FooEnum x = FooEnum.B;
+    return @name(x); // Returns &quot;A&quot;
+}
+
+func char[] test_struct()
+{
+    Foo foo = { .x = 2, y = &quot;bar&quot; }
+    return @name(x); // Returns &quot;Foo&quot;
+}
+</code></pre>
+
+<h3 id="offset">@offset</h3>
+<p>Returns the byte offset in a structure, like <code>offsetof</code> in C</p>
+<pre><code>@offset(Foo, y); // =&gt; returns 4 or 8
+</code></pre>
+
+<h3 id="sizeof">@sizeof</h3>
+<p>Returns the size of a type or an expression</p>
+<pre><code>func usize size_test()
+{
+    return @sizeof(Foo); // Might compile to 16
+}
+
+func usize size_test2()
+{
+    return @sizeof(size_test()); // Usually returns 8 (the size of usize)
+}
+</code></pre>
+
+<h3 id="typeof">@typeof</h3>
+<p>Returns the type of an expression</p>
+<pre><code>@typeof(size_test()) x = size_test();
+@typeof(x) y = x + 1;
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../precedence/" class="btn btn-neutral float-right" title="Precedence">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../errorhandling/" class="btn btn-neutral" title="Errors"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../errorhandling/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../precedence/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
