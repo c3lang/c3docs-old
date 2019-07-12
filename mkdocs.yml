@@ -1,6 +1,6 @@
 site_name: C3 Documentation
 nav:
-  - About C3: 'about.md'
+  - About C3: 'index.md'
   - Installing:
     - Setup: 'setup.md'
     - Your first project: 'firstproject.md'
