@@ -4,6 +4,44 @@
 
 ## Unsorted
 
+##### Remove volatile
+
+Volatile is almost always wrong on a variable. Instead we introduce volatile sections:
+
+
+```
+int a = 0;
+for (int i = 0; i < 10; i++)
+{
+    @volatile
+    {
+        a = 1; // Never optimized.
+    }
+}
+```
+
+
+##### Remove const
+
+There is an issue with correct const handling. Not only are the qualifiers a bit hard to read. Const also lacks transitiveness. Const is not a guarantee of immutability, 
+just a way to document that the pointer does not change.
+
+Replace this with optional comments:
+
+```
+/**
+ * @param foo const
+ * @param bar
+ **/
+func void do_something(Foo* foo, Foo* bar)
+{
+    foo.x = 0; // Warning, breaks contract above.
+    foo.z.y = 0; // Warning, also breaks contract due to being transitive.
+    bar.x = 0; // This is fine.
+}
+```
+
+
 ##### Require explicit uninitialization
 
 ```

@@ -2,6 +2,18 @@
 
 As usual, types are divided into basic types and user defined types. The syntax for defining a new type is uniform: `[public] type <name> <definition>`. All types are defined on a global level. Using the `public` prefix is necessary for any type that is to be exposed outside of the current module.
 
+##### Naming
+
+All user defined types in C3 starts with upper case. So `MyStruct` or `Mystruct` would be fine, `mystruct_t` or `mystruct` would not. Since this runs into probles with C compatibility, it is possible to use attributes to change the c name of a type, as well as control whether a C typedef should be emitted for the type.
+
+```
+type Stat struct {
+    // ...
+} @(cname="stat", no_typedef)
+
+func c_int stat(const c_char* pathname, Stat* buf);
+```
+
 ## Basic types
 
 Basic types are divided into floating point types, and integer types. Integer types being either signed or unsigned.
