@@ -208,6 +208,34 @@
                 <h1 id="ideas">Ideas</h1>
 <p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
 <h2 id="unsorted">Unsorted</h2>
+<h5 id="remove-volatile">Remove volatile</h5>
+<p>Volatile is almost always wrong on a variable. Instead we introduce volatile sections:</p>
+<pre><code>int a = 0;
+for (int i = 0; i &lt; 10; i++)
+{
+    @volatile
+    {
+        a = 1; // Never optimized.
+    }
+}
+</code></pre>
+
+<h5 id="remove-const">Remove const</h5>
+<p>There is an issue with correct const handling. Not only are the qualifiers a bit hard to read. Const also lacks transitiveness. Const is not a guarantee of immutability, 
+just a way to document that the pointer does not change.</p>
+<p>Replace this with optional comments:</p>
+<pre><code>/**
+ * @param foo const
+ * @param bar
+ **/
+func void do_something(Foo* foo, Foo* bar)
+{
+    foo.x = 0; // Warning, breaks contract above.
+    foo.z.y = 0; // Warning, also breaks contract due to being transitive.
+    bar.x = 0; // This is fine.
+}
+</code></pre>
+
 <h5 id="require-explicit-uninitialization">Require explicit uninitialization</h5>
 <pre><code>int a = ---;
 int a = void; // Other possible variant
