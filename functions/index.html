@@ -99,7 +99,7 @@
         
             <li><a class="toctree-l4" href="#regular-functions">Regular functions</a></li>
         
-            <li><a class="toctree-l4" href="#type-functions">Type functions</a></li>
+            <li><a class="toctree-l4" href="#member-functions">Member functions</a></li>
         
             <li><a class="toctree-l4" href="#pre-and-post-conditions">Pre and post conditions</a></li>
         
@@ -214,7 +214,7 @@
             <div class="section">
               
                 <h1 id="functions">Functions</h1>
-<p>C3 has both regular functions and type functions. Type functions are name spaced using a type name, and allows invocations using the dot syntax.</p>
+<p>C3 has both regular functions and member functions. Member functions are name spaced using a type name, and allows invocations using the dot syntax.</p>
 <h2 id="regular-functions">Regular functions</h2>
 <p>Regular functions looks similar to C. It starts with the keyword <code>func</code>, followed by the conventional C declaration of <code>&lt;return type&gt; &lt;name&gt;(&lt;parameter list&gt;)</code>. C3 adds a <code>throws</code> declaration, that will declare that the function might return an error instead of its usual return value.</p>
 <pre><code>func void test(int times)
@@ -246,8 +246,8 @@
 }
 </code></pre>
 
-<h2 id="type-functions">Type functions</h2>
-<p>Type functions look exactly like functions, but are prefixed with the struct, union or enum name:</p>
+<h2 id="member-functions">Member functions</h2>
+<p>Member functions look exactly like functions, but are prefixed with the struct, union or enum name:</p>
 <pre><code>type Point struct 
 {
     int x;
@@ -271,7 +271,7 @@ func void example()
 }
 </code></pre>
 
-<p>If a type function does not take the type as the first parameter, then it may only be invoked qualified with the type name:</p>
+<p>If a member function does not take the type as the first parameter, then it may only be invoked qualified with the type name:</p>
 <pre><code>func Point&amp; Point.new(int x, int y) 
 {
     Point &amp;p = malloc(@sizeof(Point));
@@ -286,12 +286,29 @@ func void example2()
 }
 </code></pre>
 
-<h3 id="restrictions-on-type-functions">Restrictions on type functions</h3>
-<p>Type functions may not:</p>
+<p>Struct and unions will always take pointer, whereas enums take the enum value.</p>
+<pre><code>type State enum
+{
+    STOPPED,
+    RUNNING
+}
+
+func bool State.mayOpen(State state) 
+{
+    switch (state)
+    {
+        case State.STOPPED: return true;
+        case State.RUNNING: return false;
+    }
+}
+</code></pre>
+
+<h3 id="restrictions-on-member-functions">Restrictions on member functions</h3>
+<p>Member functions may not:</p>
 <ul>
-<li>Type functions on a struct/union may not have the same name as a member.</li>
-<li>Type functions only works on struct, union and enum types.</li>
-<li>When taking a function pointer of a type function, use the full name.</li>
+<li>Member functions on a struct/union may not have the same name as a member.</li>
+<li>Member functions only works on struct, union and enum types.</li>
+<li>When taking a function pointer of a member function, use the full name.</li>
 <li>Using sub types, overlapping function names will be shadowed.</li>
 </ul>
 <h2 id="pre-and-post-conditions">Pre and post conditions</h2>
