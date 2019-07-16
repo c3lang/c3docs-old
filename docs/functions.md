@@ -1,6 +1,6 @@
 # Functions
 
-C3 has both regular functions and type functions. Type functions are name spaced using a type name, and allows invocations using the dot syntax.
+C3 has both regular functions and member functions. Member functions are name spaced using a type name, and allows invocations using the dot syntax.
 
 ## Regular functions
 
@@ -42,9 +42,9 @@ func int test() throws SomeError, OtherError
 }
 ```
 
-## Type functions
+## Member functions
 
-Type functions look exactly like functions, but are prefixed with the struct, union or enum name:
+Member functions look exactly like functions, but are prefixed with the struct, union or enum name:
 
 ```
 type Point struct 
@@ -70,7 +70,7 @@ func void example()
 }
 ```
 
-If a type function does not take the type as the first parameter, then it may only be invoked qualified with the type name:
+If a member function does not take the type as the first parameter, then it may only be invoked qualified with the type name:
 
 ```
 func Point& Point.new(int x, int y) 
@@ -87,13 +87,33 @@ func void example2()
 }
 ```
 
-### Restrictions on type functions
+Struct and unions will always take pointer, whereas enums take the enum value.
 
-Type functions may not:
+```
+type State enum
+{
+    STOPPED,
+    RUNNING
+}
 
-- Type functions on a struct/union may not have the same name as a member.
-- Type functions only works on struct, union and enum types.
-- When taking a function pointer of a type function, use the full name.
+func bool State.mayOpen(State state) 
+{
+    switch (state)
+    {
+        case State.STOPPED: return true;
+        case State.RUNNING: return false;
+    }
+}
+```
+
+
+### Restrictions on member functions
+
+Member functions may not:
+
+- Member functions on a struct/union may not have the same name as a member.
+- Member functions only works on struct, union and enum types.
+- When taking a function pointer of a member function, use the full name.
 - Using sub types, overlapping function names will be shadowed.
 
 ## Pre and post conditions

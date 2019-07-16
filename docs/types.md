@@ -7,12 +7,17 @@ As usual, types are divided into basic types and user defined types. The syntax 
 All user defined types in C3 starts with upper case. So `MyStruct` or `Mystruct` would be fine, `mystruct_t` or `mystruct` would not. Since this runs into probles with C compatibility, it is possible to use attributes to change the c name of a type, as well as control whether a C typedef should be emitted for the type.
 
 ```
-type Stat struct {
+type Stat struct 
+{
     // ...
 } @(cname="stat", no_typedef)
 
 func c_int stat(const c_char* pathname, Stat* buf);
 ```
+
+##### Differences from C
+
+Unlike C, C3 does not use type qualifiers. Const exists, but is a storage class modifier, not a type qualifier. Instead of volatile, volatile blocks are used. In order to signal restrictions on variable usage, like const-ness [preconditions](/preconditions/) are used.
 
 ## Basic types
 
