@@ -5,35 +5,35 @@ The following (incomplete) grammar can be used with this: https://bottlecaps.de/
 ```bnf
 source ::= module_def import_def+ top_level
 
-module_def ::= 'module' IDENT EOS
+module_def ::= 'module' LIDENT EOS
 
-import_def_ ::= 'import' IDENT ( ('as' IDENT) | 'local' )? EOS
+import_def_ ::= 'import' LIDENT ( ('as' LIDENT) | 'local' )? EOS
 
 top_level ::= (array_append | global_decl)*
 
 global_decl ::= 'public'? (type_def | func_def | var_def | macro_def)
 
-array_append ::= IDENT '+=' init_value
+array_append ::= LIDENT '+=' init_value
 
-func_def ::= return_value IDENT '(' function_args ')' compound_stmt?
+func_def ::= return_value TIDENT '(' function_args ')' compound_stmt?
 
-generic_def ::= 'generic' IDENT '(' generic_arg_list ')' compound_stmt
+generic_def ::= 'generic' LIDENT '(' generic_arg_list ')' compound_stmt
 
 generic_arg_list ::= generic_arg (',' generic_arg)*
 
-generic_arg ::= type? IDENT
+generic_arg ::= type? LIDENT
 
-macro_def ::= 'macro' IDENT '('  macro_arg_list? ')' compound_stmt
+macro_def ::= 'macro' LIDENT '('  macro_arg_list? ')' compound_stmt
 
 macro_arg_list ::= macro_arg (',' macro_arg)*
 
-macro_arg ::= '&'? IDENT
+macro_arg ::= '&'? LIDENT
 
-var_def ::= type_qualifier IDENT ...
+var_def ::= type_qualifier TIDENT ...
 
 struct_or_union ::= 'struct' | 'union'
 
-type_def ::= 'type' IDENT type_def_body
+type_def ::= 'type' TIDENT type_def_body
 
 type_def_body ::= enum_def | func_type_def | struct_def | error_def
 
@@ -41,9 +41,9 @@ enum_def ::= 'enum' type attributes? '{' enum_body? '}'
 
 enum_body ::= enum_value (',' enum_value)* ','?
 
-enum_value ::= IDENT ('=' expression)?
+enum_value ::= TIDENT ('=' expression)?
 
-error_def ::= 'error' IDENT '{' IDENT (',' IDENT)* '}'
+error_def ::= 'error' TIDENT '{' TIDENT (',' TIDENT)* '}'
 
 func_type_def ::= 'func' type attributes? '(' function_args ')' EOS
 
@@ -51,15 +51,15 @@ struct_def ::= struct_or_union attributes? struct_body
 
 struct_body ::= '{' (struct_member (',' struct_member)* )? '}'
 
-struct_member ::= (type IDENT) | (struct_or_union IDENT? struct_body)
+struct_member ::= (type LIDENT) | (struct_or_union TIDENT? struct_body)
 
 compound_stmt ::= '{' (statement | declaration)* '}'
     
 statement ::= label_stmt | compound_stmt | expr_stmt | if_stmt | switch_stmt | iter_stmt | jump_stmt
 
-jump_stmt ::= ( ('goto' IDENT) | 'continue' | 'break' | 'next' | ('return' expression?) ) EOS
+jump_stmt ::= ( ('goto' TIDENT) | 'continue' | 'break' | 'next' | ('return' expression?) ) EOS
 
-label_stmt ::= IDENT ':'
+label_stmt ::= TIDENT ':'
 
 if_stmt ::= 'if' control_expr statement (ELSE statement)?
 
@@ -89,7 +89,7 @@ type ::= base_type (pointer_suffix | array_suffix)*
 
 qualified_type ::= qualifier* base_type ((qualifier* pointer_suffix) | array_suffix)*
 
-base_type ::= built_in_type | IDENT
+base_type ::= built_in_type | TIDENT
 
 built_in_type ::= bit_types | named_types | c_types
 
@@ -133,7 +133,7 @@ array_op ::= '[' expression ']'
 
 call_op ::= '(' arg_expr_list? ')'
 
-dot_op ::= '.' IDENT
+dot_op ::= '.' LIDENT
 
 inc_dec_op ::= '++' | '--'
 
@@ -167,7 +167,7 @@ binary_expr ::= unary_expr (binary_op unary_expr)*
 
 expression ::= binary_expr ('?' expression ':' cond_expr)?
 
-declaration ::= qualified_type IDENT ('=' init_expr)? EOS
+declaration ::= qualified_type LIDENT ('=' init_expr)? EOS
 
 init_expr ::= expression | struct_init
 
@@ -177,5 +177,5 @@ struct_init_list ::= strict_init_decl (',' struct_init_decl)*
 
 struct_init_decl ::= member_init | init_expr
 
-member_init ::=_ '.' IDENT '=' init_expr
+member_init ::=_ '.' LIDENT '=' init_expr
 ```

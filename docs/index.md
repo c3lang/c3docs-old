@@ -2,14 +2,14 @@
 
 C3 a systems language based on C. It intends tries to be a short step up from C rather than to replace it with a new paradigm or completely new syntax. 
 
-Note that C3 borrows heavily from the [C2 lang project](http://www.c2lang.org/) by [Bas van den Berg](https://github.com/bvdberg), but differs in its more far reaching changes to macros, generics, strings and containers.
+C3 is built on top of the [C2 lang project](http://www.c2lang.org/) by [Bas van den Berg](https://github.com/bvdberg). It goes substantially further in regards to error handling, macros, generics and strings. Although it might have some breaking changes, it can – at least currently – be considered a superset of C2.
 
 ##### Planned features
 
 - Transpile to C
 - Transpile-compile using Clang, GCC or TCC
 - Compile directly using LLVM
-- C to C3 compilation (for a subset of C)
+- C to C3 conversion (for a subset of C)
 - Module system
 - Generic modules
 - Zero overhead errors

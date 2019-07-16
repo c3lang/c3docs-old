@@ -228,7 +228,7 @@ type Status enum int
 
 type MyData struct 
 {
-    const char* name;
+    char* name;
     Callback open;
     Callback close;
     State status;
@@ -270,10 +270,10 @@ type MyData struct
 ```
 module demo;
 
-type Callback func int(const char* text, int value);
+type Callback func int(char* text, int value);
 
 // also shows function attribute
-func int my_callback(const char* text, int value) @(unused_params) 
+func int my_callback(char* text, int value) @(unused_params) 
 {
     return 0;
 }

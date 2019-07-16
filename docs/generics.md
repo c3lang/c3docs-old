@@ -4,7 +4,7 @@ Generic functionality is mostly provided by macros and generic modules. Bridging
 
 ## Generic functions
 
-Generic functions is a specialized type of macros. They allow overloading using a common symbol, just like C11 _Generic:
+Generic functions is a specialized type of macros. They allow overloading using a common symbol, just like C11's `_Generic`:
 
 ```
 generic abs(x)
