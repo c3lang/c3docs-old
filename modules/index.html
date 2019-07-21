@@ -95,6 +95,8 @@
         
             <li><a class="toctree-l4" href="#visibility">Visibility</a></li>
         
+            <li><a class="toctree-l4" href="#textual-includes">Textual includes</a></li>
+        
         </ul>
     
 
@@ -173,6 +175,10 @@
                 <li class="">
                     
     <a class="" href="../contribute/">Contribute</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../changes/">Changes</a>
                 </li>
     </ul>
 	    </li>
@@ -297,6 +303,39 @@ func void open() { .. }
 </code></pre>
 
 <p>In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it isn't specified as public.</p>
+<h2 id="textual-includes">Textual includes</h2>
+<p>It's sometimes useful to include an entire file, doing so employs the <code>@include</code> macro.</p>
+<p>File <code>Foo.c3</code></p>
+<pre><code>module foo;
+
+@include(&quot;Foo.x&quot;);
+
+func void test() 
+{
+    printf(&quot;%d&quot;, testX(2));
+}    
+</code></pre>
+
+<p>File <code>Foo.x</code></p>
+<pre><code>public func testX(int i) 
+{ 
+    return i + 1; 
+}
+</code></pre>
+
+<p>The result is as if <code>Foo.c3</code> contained the following:</p>
+<pre><code>module foo;
+
+public func testX(int i) 
+{ 
+    return i + 1; 
+}
+
+func void test() 
+{
+    printf(&quot;%d&quot;, testX(2));
+}    
+</code></pre>
               
             </div>
           </div>

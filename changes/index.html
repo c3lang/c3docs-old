@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Number conversions and promotions - C3 Documentation</title>
+  <title>Changes - C3 Documentation</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Number conversions and promotions";
-    var mkdocs_page_input_path = "conversion.md";
+    var mkdocs_page_name = "Changes";
+    var mkdocs_page_input_path = "changes.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -158,9 +158,12 @@
                     
     <a class="" href="../contribute/">Contribute</a>
                 </li>
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="../changes/">Changes</a>
+    <a class="current" href="./">Changes</a>
+    <ul class="subnav">
+            
+    </ul>
                 </li>
     </ul>
 	    </li>
@@ -186,8 +189,12 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
+        
+          <li>Development &raquo;</li>
+        
+      
     
-    <li>Number conversions and promotions</li>
+    <li>Changes</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -197,158 +204,18 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="number-conversions-and-promotions">Number conversions and promotions</h1>
-<p>C3 differs in some crucial respects when it comes to number conversions and promotions. These are the rules for C3:</p>
-<ul>
-<li>float to int conversions require a cast</li>
-<li>float to boolean conversions <em>do not</em> require a cast.</li>
-<li>int to float conversions do not require a cast</li>
-<li>bool to float converts to 0.0 / 1.0</li>
-<li>double to float conversion is allowed, but may be set to warn</li>
-<li>narrowing integer conversions require a cast</li>
-<li>widening conversions do <em>not</em> require a cast</li>
-<li>signed/unsigned int conversions work differently from C as detailed below</li>
-<li>float to bool <em>do not</em> require a cast, any non zero float value considered true</li>
-</ul>
-<p>C3 uses two's complement arithmetic for all integer math.</p>
-<h2 id="signedunsigned-int-conversions">Signed/unsigned int conversions</h2>
-<p>In C, the can be simply described as "convert to the type with the largest positive value" (aside from the promotion up to int). Consequently a signed int + unsigned int converts to unsigned int. In C3, the sign is considered more important. Consequently the conversion with mixed signed / unsigned will <em>always</em> be converted to a signed value.</p>
-<p>The rule is as follows:</p>
-<ol>
-<li>Find the largest bit size of the two operands.</li>
-<li>If either is signed: convert to a signed integer of the largest bit size.</li>
-<li>If both are unsigned: convert to an unsigned integer of the largest bit size.</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">bool</th>
-<th align="center">byte</th>
-<th align="center">ushort</th>
-<th align="center">uint</th>
-<th align="center">ulong</th>
-<th align="center">char</th>
-<th align="center">short</th>
-<th align="center">int</th>
-<th align="center">long</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">byte</td>
-<td align="center">bool</td>
-<td align="center">byte</td>
-<td align="center">ushort</td>
-<td align="center">uint</td>
-<td align="center">ulong</td>
-<td align="center">char</td>
-<td align="center">short</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">byte</td>
-<td align="center">byte</td>
-<td align="center">byte</td>
-<td align="center">ushort</td>
-<td align="center">uint</td>
-<td align="center">ulong</td>
-<td align="center">char</td>
-<td align="center">short</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">ushort</td>
-<td align="center">ushort</td>
-<td align="center">ushort</td>
-<td align="center">ushort</td>
-<td align="center">uint</td>
-<td align="center">ulong</td>
-<td align="center">short</td>
-<td align="center">short</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">uint</td>
-<td align="center">uint</td>
-<td align="center">uint</td>
-<td align="center">uint</td>
-<td align="center">uint</td>
-<td align="center">ulong</td>
-<td align="center">int</td>
-<td align="center">int</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">ulong</td>
-<td align="center">ulong</td>
-<td align="center">ulong</td>
-<td align="center">ulong</td>
-<td align="center">ulong</td>
-<td align="center">ulong</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">char</td>
-<td align="center">char</td>
-<td align="center">char</td>
-<td align="center">short</td>
-<td align="center">int</td>
-<td align="center">long</td>
-<td align="center">char</td>
-<td align="center">short</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">short</td>
-<td align="center">short</td>
-<td align="center">short</td>
-<td align="center">short</td>
-<td align="center">int</td>
-<td align="center">long</td>
-<td align="center">short</td>
-<td align="center">short</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">int</td>
-<td align="center">int</td>
-<td align="center">int</td>
-<td align="center">int</td>
-<td align="center">long</td>
-<td align="center">int</td>
-<td align="center">int</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-</tr>
-</tbody>
-</table>
+                
               
             </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../contribute/" class="btn btn-neutral" title="Contribute"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -371,6 +238,8 @@
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
+      
+        <span><a href="../contribute/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
     </span>
