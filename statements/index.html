@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Pre and post conditions - C3 Documentation</title>
+  <title>Statements - C3 Documentation</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Pre and post conditions";
-    var mkdocs_page_input_path = "preconditions.md";
+    var mkdocs_page_name = "Statements";
+    var mkdocs_page_input_path = "statements.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -96,9 +96,21 @@
                     
     <a class="" href="../functions/">Functions</a>
                 </li>
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="../statements/">Statements</a>
+    <a class="current" href="./">Statements</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#statements">Statements</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#volatile-section">Volatile section</a></li>
+        
+        </ul>
+    
+
+    </ul>
                 </li>
                 <li class="">
                     
@@ -116,21 +128,9 @@
                     
     <a class="" href="../generics/">Generics</a>
                 </li>
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Pre and post conditions</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#pre-and-post-conditions">Pre and post conditions</a></li>
-    
-
-    <li class="toctree-l3"><a href="#pre-conditions">Pre conditions</a></li>
-    
-
-    <li class="toctree-l3"><a href="#post-conditions">Post conditions</a></li>
-    
-
-    </ul>
+    <a class="" href="../preconditions/">Pre and post conditions</a>
                 </li>
                 <li class="">
                     
@@ -211,7 +211,7 @@
         
       
     
-    <li>Pre and post conditions</li>
+    <li>Statements</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -221,12 +221,27 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="pre-and-post-conditions">Pre and post conditions</h1>
-<p>Pre and post conditions are optional checks that the compiler may use for optimization and runtime checks. Note that <em>compilers are not obliged to process pre and post conditions at all</em>. However, violating either pre or post conditions is considered undefined behaviour, so a compiler may optimize as if they always hold – even if a potential bug may cause them to be violated.</p>
-<h1 id="pre-conditions">Pre conditions</h1>
-<p>Pre conditions are usually used to validate incoming arguments. Each condition must be an expression that can be evaluated to a boolean. </p>
-<h1 id="post-conditions">Post conditions</h1>
-<p>Post conditions are evaluated to make checks on the resulting state after passing through the function. There is a special post condition called "const condition", which guarentees that the memory pointed to is not altered within the scope of a function.</p>
+                <h1 id="statements">Statements</h1>
+<h2 id="volatile-section">Volatile section</h2>
+<p>Volatile sections replace volatile variables. </p>
+<pre><code>func void test()
+{
+    v = 0;
+    for (int i = 0; i &lt; 100; i++)
+    {
+        @volatile
+        {
+            v = 1; 
+        }
+    }
+}
+</code></pre>
+
+<p>Note that volatile sections may also be used as expressions:</p>
+<pre><code>// The v = 1 assignment may not be optimized away,
+// But the assignment to x can be. 
+x = @volatile(v = 1);
+</code></pre>
               
             </div>
           </div>
@@ -234,10 +249,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../ideas/" class="btn btn-neutral float-right" title="Crazy ideas">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../errorhandling/" class="btn btn-neutral float-right" title="Errors">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../generics/" class="btn btn-neutral" title="Generics"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../functions/" class="btn btn-neutral" title="Functions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -263,10 +278,10 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../generics/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../functions/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../ideas/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../errorhandling/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

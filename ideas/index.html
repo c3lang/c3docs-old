@@ -78,6 +78,10 @@
     <ul class="subnav">
                 <li class="">
                     
+    <a class="" href="../changesfromc/">Changes from C</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../examples/">Examples</a>
                 </li>
                 <li class="">
@@ -91,6 +95,10 @@
                 <li class="">
                     
     <a class="" href="../functions/">Functions</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../statements/">Statements</a>
                 </li>
                 <li class="">
                     
@@ -228,18 +236,91 @@
                 <h1 id="ideas">Ideas</h1>
 <p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
 <h2 id="unsorted">Unsorted</h2>
-<h5 id="remove-volatile">Remove volatile</h5>
-<p>Volatile is almost always wrong on a variable. Instead we introduce volatile sections:</p>
-<pre><code>int a = 0;
-for (int i = 0; i &lt; 10; i++)
+<h5 id="2s-complement">2s complement</h5>
+<p>Add to the upcoming description that C3 uses 2s complement for signed ints.</p>
+<h5 id="unsigned-conversion-to-signed">Unsigned conversion to signed</h5>
+<p>Perhaps consider signed, rather than unsigned implicit conversion. Currently <code>ulong + long</code> becomes <code>ulong + @cast(ulong, long)</code> (according to C rules). Consider changing that to <code>@cast(long, ulong) + long</code>. That is, instead of "unsigned wins", use "signed wins".</p>
+<h5 id="aliasing-in-import">Aliasing in import</h5>
+<p>It might be useful to express aliasing directly on import. Consider for example a generic library with a <code>Set</code> type.</p>
+<p>Typically we'd do like this:</p>
+<pre><code>import set(int) as intset;
+
+func void test()
 {
-    @volatile
-    {
-        a = 1; // Never optimized.
-    }
+    intset.Set* set = intset.Set.new();
+    /* ... */
 }
 </code></pre>
 
+<p>Or import it as a local variable, which is nice, but can only be done for a single set:</p>
+<pre><code>import set(int) local;
+
+func void test()
+{
+    Set* set = Set.new();
+    /* ... */
+}
+</code></pre>
+
+<p>Adding a direct alias on the set as it is imported would be nice:</p>
+<pre><code>import set(int) as intset alias Set as IntSet;
+import set(double) as doubleset alias Set as DoubleSet;
+
+func void test()
+{
+    IntSet* set = IntSet.new();
+    DoubleSet* set2 = DoubleSet.new();
+    /* ... */
+}
+</code></pre>
+
+<p>Note that the alias is always used without a prefix. If a generic module only has a single generic struct one wishes to use, it's useful to shorten this further at the cost of not being able to access any other symbols (as we cannot use the generic name as a namespace prefix).</p>
+<pre><code>import set(int) alias Set as IntSet;
+import set(double) alias Set as DoubleSet;
+</code></pre>
+
+<p>We could go even further, saying that if there is only a single generic struct inside, then we may shorten with the struct being used as a default:</p>
+<pre><code>import set(int) alias IntSet;
+import set(double) alias DoubleSet;
+</code></pre>
+
+<p>It's unclear whether this is is helpful or not. Should be discussed further.</p>
+<h5 id="tagged-any">Tagged any</h5>
+<p>A tagged pointer union type for any possible type.</p>
+<h5 id="defer-for-error">Defer for error</h5>
+<p>Introduce an error defer that is only called on error:</p>
+<pre><code>func void test() throws
+{
+    defer throw(e) 
+    {
+        printf(&quot;Had an error!\n&quot;);
+    }
+    if (rand() == 0) throw Error.TEST;    
+}
+</code></pre>
+
+<p>The code above would be functionally equivalent to:</p>
+<pre><code>func void test() throws
+{
+    if (rand() == 0) 
+    {
+        printf(&quot;Had an error!\n&quot;);
+        throw Error.TEST;    
+    }    
+}
+</code></pre>
+
+<h5 id="cone-style-arrays">Cone style arrays</h5>
+<ol>
+<li>Fixed static sized arrays do not automatically decay into pointers (that is int[3] does not decay into int*)</li>
+<li>Fixed static sized arrays are treated as structs with that many identical items, and will be passed by value</li>
+<li>Fixed static sized arrays can be converted into fat array pointers</li>
+<li><code>int[]</code> would be a fat pointer to an array.</li>
+<li>Iteration over fat array pointers are defined in the language</li>
+<li>Taking the reference of a static fixed pointer of size X yields a pointer to that fixed pointer, e.g. <code>int[4]*</code></li>
+<li>Automatic conversion from fixed to fat pointer: <code>int[4] y = { 1, 2, 3, 4 }; int[] x = y;</code></li>
+<li>Automatic conversion from dynamic array to fat pointer: <code>int[+] y = { 1, 2 }; int[] x = y</code></li>
+</ol>
 <h5 id="remove-const">Remove const</h5>
 <p>There is an issue with correct const handling. Not only are the qualifiers a bit hard to read. Const also lacks transitiveness. Const is not a guarantee of immutability, 
 just a way to document that the pointer does not change.</p>
