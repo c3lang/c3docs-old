@@ -20,7 +20,7 @@ The `->` operator is removed, access uses dot for both direct and pointer access
 
 ##### Different operator precedence
 
-Notably bit operations have higher precedence than +/-, making code like this: `a & b == c` evaluate like `(a & b) == c` instead of C's `a & (b == c)`. See the page about [precedence rules](/precedence/).
+Notably bit operations have higher precedence than +/-, making code like this: `a & b == c` evaluate like `(a & b) == c` instead of C's `a & (b == c)`. See the page about [precedence rules](precedence/).
 
 ##### Removal of the volatile type qualifier
 
