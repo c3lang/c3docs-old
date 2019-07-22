@@ -63,6 +63,8 @@
         
             <li><a class="toctree-l3" href="#planned-features">Planned features</a></li>
         
+            <li><a class="toctree-l3" href="#design-principles">Design principles</a></li>
+        
         </ul>
     
 
@@ -217,11 +219,11 @@
           <div role="main">
             <div class="section">
               
-                <h3 id="what-is-c3">What is C3?</h3>
+                <h1 id="what-is-c3">What is C3?</h1>
 <p>C3 a systems language based on C. It intends tries to be a short step up from C rather than to replace it with a new paradigm or completely new syntax. </p>
 <p>C3 is built on top of the <a href="http://www.c2lang.org/">C2 lang project</a> by <a href="https://github.com/bvdberg">Bas van den Berg</a>. It goes substantially further in regards to error handling, macros, generics and strings. Although it might have some breaking changes, it can – at least currently – be considered a superset of C2.</p>
-<p>Last updated: 2019-07-21.</p>
-<h5 id="planned-features">Planned features</h5>
+<p>Last updated: <a href="/changes/">2019-07-21</a>.</p>
+<h2 id="planned-features">Planned features</h2>
 <ul>
 <li>Transpile to C</li>
 <li>Transpile-compile using Clang, GCC or TCC</li>
@@ -233,6 +235,17 @@
 <li>Struct subtyping</li>
 <li>Built-in safe arrays</li>
 <li>High level containers and string handling</li>
+</ul>
+<h2 id="design-principles">Design principles</h2>
+<ul>
+<li>Procedural "get things done"-type of language.</li>
+<li>Try to stay close to C - only change where truly needed.</li>
+<li>Flawless C integration.</li>
+<li>Learning C3 should be easy for a C programmer.</li>
+<li>Dare violating the "close to metal" principle if the value is great.</li>
+<li>Not an object oriented language.</li>
+<li>Avoid "big ideas".</li>
+<li>Avoid the kitchen sink language trap.</li>
 </ul>
               
             </div>
@@ -282,5 +295,5 @@
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-07-22 07:49:13
+Build Date UTC : 2019-07-22 10:17:50
 -->
