@@ -126,7 +126,7 @@ As an example, the following code:
  * @param foo : the number of foos 
  * @require foo > 0, foo < 1000
  * @return number of foos x 10
- * @ensure testFoo < 10000, testFoo > 0
+ * @ensure return < 10000, return > 0
  **/
 func int testFoo(int foo)
 {
@@ -141,10 +141,10 @@ func int testFoo(int foo)
 {
     assert(foo > 0);
     assert(foo < 1000);
-    int result = foo * 10;
-    assert(result < 10000);
-    assert(result > 0);
-    return foo * 10;
+    int _return = foo * 10;
+    assert(_return < 10000);
+    assert(_return > 0);
+    return _return;
 }
 ```
 

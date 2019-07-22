@@ -4,22 +4,115 @@
 
 ## Unsorted
 
-##### Remove volatile
+##### 2s complement
 
-Volatile is almost always wrong on a variable. Instead we introduce volatile sections:
+Add to the upcoming description that C3 uses 2s complement for signed ints.
 
+##### Unsigned conversion to signed
+
+Perhaps consider signed, rather than unsigned implicit conversion. Currently `ulong + long` becomes `ulong + @cast(ulong, long)` (according to C rules). Consider changing that to `@cast(long, ulong) + long`. That is, instead of "unsigned wins", use "signed wins".
+ 
+##### Aliasing in import
+
+It might be useful to express aliasing directly on import. Consider for example a generic library with a `Set` type.
+
+Typically we'd do like this:
 
 ```
-int a = 0;
-for (int i = 0; i < 10; i++)
+import set(int) as intset;
+
+func void test()
 {
-    @volatile
-    {
-        a = 1; // Never optimized.
-    }
+    intset.Set* set = intset.Set.new();
+    /* ... */
 }
 ```
 
+Or import it as a local variable, which is nice, but can only be done for a single set:
+
+```
+import set(int) local;
+
+func void test()
+{
+    Set* set = Set.new();
+    /* ... */
+}
+```
+
+Adding a direct alias on the set as it is imported would be nice:
+
+```
+import set(int) as intset alias Set as IntSet;
+import set(double) as doubleset alias Set as DoubleSet;
+
+func void test()
+{
+    IntSet* set = IntSet.new();
+    DoubleSet* set2 = DoubleSet.new();
+    /* ... */
+}
+```
+
+Note that the alias is always used without a prefix. If a generic module only has a single generic struct one wishes to use, it's useful to shorten this further at the cost of not being able to access any other symbols (as we cannot use the generic name as a namespace prefix).
+
+```
+import set(int) alias Set as IntSet;
+import set(double) alias Set as DoubleSet;
+```
+
+We could go even further, saying that if there is only a single generic struct inside, then we may shorten with the struct being used as a default:
+
+```
+import set(int) alias IntSet;
+import set(double) alias DoubleSet;
+```
+
+It's unclear whether this is is helpful or not. Should be discussed further.
+
+##### Tagged any
+
+A tagged pointer union type for any possible type.
+
+##### Defer for error
+
+Introduce an error defer that is only called on error:
+
+```
+func void test() throws
+{
+    defer throw(e) 
+    {
+        printf("Had an error!\n");
+    }
+    if (rand() == 0) throw Error.TEST;    
+}
+```
+
+The code above would be functionally equivalent to:
+
+
+```
+func void test() throws
+{
+    if (rand() == 0) 
+    {
+        printf("Had an error!\n");
+        throw Error.TEST;    
+    }    
+}
+```
+
+##### Cone style arrays
+
+1. Fixed static sized arrays do not automatically decay into pointers (that is int[3] does not decay into int*)
+2. Fixed static sized arrays are treated as structs with that many identical items, and will be passed by value
+3. Fixed static sized arrays can be converted into fat array pointers
+4. `int[]` would be a fat pointer to an array.
+5. Iteration over fat array pointers are defined in the language
+6. Taking the reference of a static fixed pointer of size X yields a pointer to that fixed pointer, e.g. `int[4]*`
+7. Automatic conversion from fixed to fat pointer: `int[4] y = { 1, 2, 3, 4 }; int[] x = y;`
+8. Automatic conversion from dynamic array to fat pointer: `int[+] y = { 1, 2 }; int[] x = y`
 
 ##### Remove const
 
@@ -113,6 +206,7 @@ switch (x)
         ...
 }
 ```
+
 ##### Easy to get properties
 
 * Endianness

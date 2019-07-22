@@ -1,6 +1,8 @@
 # Modules
 
-C3 groups functions, types, variables and macros into namespaces called modules. All C3 files must start with the `module` keyword, specifying the module. A module can consist of multiple files, e.g.
+C3 groups functions, types, variables and macros into namespaces called modules. When doing builds, any C3 file must start with the `module` keyword, specifying the module. When compiling single files, the module is not needed and the module name is assumed to be the file name, converted to lower case, with any invalid characters replaced by underscore (`_`).
+
+A module can consist of multiple files, e.g.
 
 `file_a.c3`
 
@@ -107,3 +109,47 @@ func void open() { .. }
 ```
 
 In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it isn't specified as public.
+
+## Textual includes
+
+It's sometimes useful to include an entire file, doing so employs the `@include` macro.
+
+File `Foo.c3`
+```
+module foo;
+
+@include("Foo.x");
+
+func void test() 
+{
+    printf("%d", testX(2));
+}    
+```
+
+File `Foo.x`
+```
+public func testX(int i) 
+{ 
+    return i + 1; 
+}
+```
+
+The result is as if `Foo.c3` contained the following:
+
+```
+module foo;
+
+public func testX(int i) 
+{ 
+    return i + 1; 
+}
+
+func void test() 
+{
+    printf("%d", testX(2));
+}    
+```
+
+The include may use an absolute or relative path, the relative path is always relative to the source file in which the include appears.
+
+

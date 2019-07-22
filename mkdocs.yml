@@ -5,10 +5,12 @@ nav:
     - Setup: 'setup.md'
     - Your first project: 'firstproject.md'
   - Documentation:
+    - Changes from C: 'changesfromc.md'
     - Examples: 'examples.md'
     - Modules: 'modules.md'
     - Types: 'types.md'
     - Functions: 'functions.md'
+    - Statements: 'statements.md'
     - Errors: 'errorhandling.md'
     - Built-in Macros: 'builtinmacros.md'
     - Precedence: 'precedence.md'
@@ -24,6 +26,7 @@ nav:
     - Commands: 'buildcommands.md'
   - Development:
     - Contribute: 'contribute.md'  
+    - Changes: 'changes.md'
 theme:
     name: readthedocs
     hljs_languages:
