@@ -55,4 +55,19 @@ func void test()
 }
 ```
 
+##### Removal of the const type qualifier
 
+The const qualifier is only retained for actual constant variables. C3 uses a special type of [post condition](../preconditions) for functions to indicate that they do not alter in parameters.
+
+```
+/**
+ * This function ensures that foo is not changed in the function, nor is bar.x altered.
+ * @ensure const(foo), const(bar.x)
+ **/
+func void test(Foo& foo, Bar& bar)
+{
+    bar.y = foo.x;
+    // bar.x = foo.x - compile time error!
+    // foo.x = bar.y - compile time error!
+}
+```

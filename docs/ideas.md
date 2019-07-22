@@ -2,11 +2,149 @@
 
 **WARNING** Unfinished ideas / brain dumps
 
+## Managed pointers
+
+Managed pointers are introduced using the pointer `@` after the type, e.g. `Foo@ f`.
+
+A manage value will need to implement the member function `release` and `retain`. What these functions actually does is up to the implementation. For example, we may have a struct that use these functions to handle a reference count. Managed pointers will then allow automatic reference counting:
+
+```
+Foo@ f = Foo.alloc();
+Foo@ b = f; // Converted to: f.retain(); b = f;
+f = nil; // Converted to: f.release(); f = nil;
+```
+
+Any managed variable that goes out of the scope will automatically invoke `release`, as if the pointer was set to `nil`.
+
+```
+{
+    Foo@ b = Foo.alloc();
+} // Automatic invocation of b.release();
+```
+
+In order to return a managed pointer that can be used as a temporary, it's often convenient to mark the return value as managed.
+
+```
+func Foo@ createFoo()
+{
+    return Foo.alloc();
+}
+
+createFoo(); // Implicitly introduces a deferred release.
+```
+
+If we assign a managed pointer to a variable, the release/retain is elided
+
+```
+// The following becomes f1 = createFoo() - no deferred release or retains.
+Foo@ f1 = createFoo(); 
+```
+
+It's possible to manually manage a managed pointer:
+
+```
+Foo* f2 = createFoo().retain();
+f2.release(); // Required to prevent leaks.
+```
+
+A managed pointer may safely assigned to a regular pointer as long as it's not retained outside of the scope.
+
+```
+{
+    Foo* f3 = createFoo(); 
+    printf("%d", f3.someValue);
+    // Safe, since f3 isn't actually used after the scope.
+}
+
+Foo* unsafeFoo;
+{
+    unsafeFoo = createFoo();
+}
+// <- access to unsafeFoo at this point will likely break things.
+```
+
+
+## Arrays
+
+Developing the Cone proposal a bit:
+
+### Fixed Arrays
+
+`<type>[<size>]` e.g. `int[4]`. These are treated as values and will be copied if given as parameter. Unlike C, the number is part of its type.
+
+Taking a pointer to a fixed array will create a pointer to a fixed array, e.g. `int[4]*`.
+
+### Fat array pointers
+
+`<type>[]` e.g. `int[]`. This is a pointer to an array and it is possible to convert any fixed array to a fat array pointer. 
+    
+```
+int[4] a = { 1, 2, 3, 4};
+int[] b = a; // Implicit conversion is always ok.
+int[4] c = @cast(int[4], b); // Will copy the value of b into c.
+int[4]* d = @cast(int[4]*, b); // Equivalent to d = &a
+b.len; // Returns 4
+int* e = b; // Equivalent to e = &a
+e = d; // implicit conversion ok.
+d = e; // ERROR! Not allowed
+d = @cast(int[4]*, e); // Fine
+```
+
+##### Conversion list
+
+|  | int[4] | int[] | int[4]* | int* |
+|:-:|:-:|:-:|:-:|:-:|
+| int[4] | assign | cast | - | - |
+| int[] | assign | assign | - | - |
+| int[4]* | - | - | assign | cast |
+| int* | - | assign | assign | assign |
+
+##### Internals
+
+Internally the layout of a fat array pointer is guaranteed to be `struct { <type>* ptrToArray; usize arraySize; }`.
+
+There is a built in struct `__ArrayType_C3` which has the exact data layout of the fat array pointers. It is defined to be
+
+```
+struct __ArrayType_C3 
+{ 
+    void* ptrToArray;
+    usize arraySize;
+}
+```
+
+### Dynamic arrays
+
+Dynamic arrays are provided as a library and they are usually ref counted:
+
+```
+import array(int) alias IntArray;
+
+IntArray@ a = IntArray.new();
+a += 23; // Append last
+a.pop(); // Remove last
+a.insert(1, 11); // Insert at position
+a.insert_front(12); // Insert at 0
+a.pop_front(); // Remove first.
+a.last(); // Return last
+```
+
+Thanks to generic overloading this is also possible:
+
+```
+a += 23;
+a[2] = 11;
+a[2] // Prints 11.
+```
+
 ## Unsorted
 
-##### 2s complement
+##### Abandon C2 syntax partly
 
-Add to the upcoming description that C3 uses 2s complement for signed ints.
+Change:
+
+`type Foo enum { ... }` => `enum Foo { ... }`
+`int globalVariable = 0` => `var int globalVariable = 0` (or global int?)
 
 ##### Unsigned conversion to signed
 
@@ -114,26 +252,6 @@ func void test() throws
 7. Automatic conversion from fixed to fat pointer: `int[4] y = { 1, 2, 3, 4 }; int[] x = y;`
 8. Automatic conversion from dynamic array to fat pointer: `int[+] y = { 1, 2 }; int[] x = y`
 
-##### Remove const
-
-There is an issue with correct const handling. Not only are the qualifiers a bit hard to read. Const also lacks transitiveness. Const is not a guarantee of immutability, 
-just a way to document that the pointer does not change.
-
-Replace this with optional comments:
-
-```
-/**
- * @param foo const
- * @param bar
- **/
-func void do_something(Foo* foo, Foo* bar)
-{
-    foo.x = 0; // Warning, breaks contract above.
-    foo.z.y = 0; // Warning, also breaks contract due to being transitive.
-    bar.x = 0; // This is fine.
-}
-```
-
 
 ##### Require explicit uninitialization
 
@@ -141,41 +259,6 @@ func void do_something(Foo* foo, Foo* bar)
 int a = ---;
 int a = void; // Other possible variant
 ```
-
-##### Defer sugar
-
-```
-func bool do_stuff(i32 resource_id)
-{
-    Resource* x = get_resource(resource_id) @defer(release_resource); // Inline defer
-    if (!play_around_with(x)) return false;
-    do_some_other_thing(x);
-    return foo(x);
-}
-```
-
-##### Defer on function signatures
-```
-func Resource get_resource_with_release(int resource_id) @defer(release_resource);
-
-func bool do_stuff(i32 resource_id)
-{
-    Resource* x = get_resource_with_release(resource_id); // inserts an implicit defer!
-    if (!play_around_with(x)) return false;
-    do_some_other_thing(x);
-    return foo(x);
-}
-
-```
-
-##### "Managed" qualifier
-
-```
-// func const FILE open(...) { ... } => 
-func const managed FILE open(...) { ... }
-```
-
-And here any struct that is "managed" must have a `StructName.release(StructName *struct)` call.
 
 ##### Extended "case"
 
@@ -418,67 +501,6 @@ virtual Renderer[4] renderers;
 Renderer*[4] renderers;
 ```
 
-
-## Built in dynamic arrays
-
-```
-// Pseudo code
-type _DynamicArray struct
-{
-    A* data;
-    usize capacity;
-    usize size;
-}
-
-/**
- * @require array.size > 0
- */
-func A pop(_DynamicArray& array)
-{
-    return array.data[--array.size];
-}
-
-/**
- * @require array.size > 0
- */
-func A +=(_DynamicArray& array, A a)
-{
-    if (capacity == size) array.increase_capacity();
-    return array.data[array.size] = a;
-}
-```
-
-We could construct this using generics, but it is much more convenient to have a syntax built in.
-
-Question: what about memory management?
-
-```
-int[+] dynamic_array; // Built-in dynamic arrays
-dynamic_array += 23;
-dynamic_array.pop();
-dynamic_array.insert(0, 11);
-dynamic_array.insert_front(12);
-io.printf("%d", dynamic_array[1]); // Prints 11
-
-// It's possible to extend dynamic arrays with functionality:
-func usize int[+].find(int[+] &array, int value)
-{
-    for (usize i = 0; i < dynamic_array.size; i++)
-    {
-        if (array[i] == value) return i;
-    }
-    return NOT_FOUND;
-}
-
-// This works if the function is in the same module
-// or if it's included as local
-
-dynamic_array.find(12); // => 0
-
-// If it's in another module:
-module_name.int[+].find(dynamic_array, 12);
-```
-
 ## Built in maps
 
 Same reasoing as arrays. Question about memory management is the same.
@@ -524,28 +546,6 @@ Taking a hint from Cyclone, Rust etc one could consider managed pointers / objec
 2. Introduce ref-counted objects with ref-counted pointers. Again use Foo@ x vs Foo* y with the latter being unretained. This should be internal refcounting to avoid any of the issues going from retained -> unretained that shared_ptr has. Consequently any struct that is RC:ed needs to be explicitly declared as such.
 3. Managed pointers: you alloc and the pointer gets a unique address that will always be invalid after use. Any overflows will be detected, but use of managed pointers is slower due to redirect and check.
 
-Sample code for (2)
-
-```
-type Foo struct @(refcounted) 
-{
-    int a;
-}
-
-func Bar(Foo@ a)
-{
-    printf("%d\n", sizeof(Foo)); // prints 8 due to RC
-    printf("%d\n", rc(a)); // prints 1
-    Foo@ x = a; 
-    printf("%d\n", rc(a)); // prints 2
-    x = nil;
-    printf("%d\n", rc(a)); // prints 1
-    Foo* y = a;
-    printf("%d\n", rc(a)); // prints 1
-    Foo* z = malloc(sizeof(Foo)); // Not recommended!
-    // TOOD discuss how to properly initialize a RC:ed variable.
-}
-```
 
 ## Ideas around macros
 

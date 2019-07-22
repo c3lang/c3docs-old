@@ -53,13 +53,25 @@ generic add(x, y)
 }
 ```
 
-Generics can also be used for overloading operators, although this is limited to the usual arithmetic operators.
+Generics can also be used for overloading operators:
 
 ```
 generic operator_add(x, y)
 {
     case vector3, vector3:
         return vector_add(x, y);
+}
+
+generic operator_index(x, y)
+{
+    case DynArray, int:
+        return x.get(y); // Enables foo[12]
+}
+
+generic operator_index_assign(x, y, z)
+{
+    case DynArray, int:
+        return x.set(y, z); // Enables foo[12] = 2
 }
 ```
 
