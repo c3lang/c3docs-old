@@ -242,7 +242,7 @@
 <h5 id="member-access-using-even-for-pointers">Member access using <code>.</code> even for pointers</h5>
 <p>The <code>-&gt;</code> operator is removed, access uses dot for both direct and pointer access. Note that this is just single access: to access a pointer of a pointer (e.g. <code>int**</code>) an explicit dereference would be needed.</p>
 <h5 id="different-operator-precedence">Different operator precedence</h5>
-<p>Notably bit operations have higher precedence than +/-, making code like this: <code>a &amp; b == c</code> evaluate like <code>(a &amp; b) == c</code> instead of C's <code>a &amp; (b == c)</code>. See the page about <a href="precedence/">precedence rules</a>.</p>
+<p>Notably bit operations have higher precedence than +/-, making code like this: <code>a &amp; b == c</code> evaluate like <code>(a &amp; b) == c</code> instead of C's <code>a &amp; (b == c)</code>. See the page about <a href="../precedence">precedence rules</a>.</p>
 <h5 id="removal-of-the-volatile-type-qualifier">Removal of the volatile type qualifier</h5>
 <p>The volatile type qualifier is replaced by volatile sections. A volatile section is guaranteed to not be optimized away.</p>
 <pre><code>\\ C volatile
