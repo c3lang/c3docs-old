@@ -120,6 +120,10 @@
                     
     <a class="" href="../preconditions/">Pre and post conditions</a>
                 </li>
+                <li class="">
+                    
+    <a class="" href="../library/">Library</a>
+                </li>
                 <li class=" current">
                     
     <a class="current" href="./">Crazy ideas</a>
@@ -129,11 +133,13 @@
     
         <ul>
         
+            <li><a class="toctree-l4" href="#managed-pointers">Managed pointers</a></li>
+        
+            <li><a class="toctree-l4" href="#arrays">Arrays</a></li>
+        
             <li><a class="toctree-l4" href="#unsorted">Unsorted</a></li>
         
             <li><a class="toctree-l4" href="#interfaces">Interfaces</a></li>
-        
-            <li><a class="toctree-l4" href="#built-in-dynamic-arrays">Built in dynamic arrays</a></li>
         
             <li><a class="toctree-l4" href="#built-in-maps">Built in maps</a></li>
         
@@ -235,9 +241,147 @@
               
                 <h1 id="ideas">Ideas</h1>
 <p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
+<h2 id="managed-pointers">Managed pointers</h2>
+<p>Managed pointers are introduced using the pointer <code>@</code> after the type, e.g. <code>Foo@ f</code>.</p>
+<p>A manage value will need to implement the member function <code>release</code> and <code>retain</code>. What these functions actually does is up to the implementation. For example, we may have a struct that use these functions to handle a reference count. Managed pointers will then allow automatic reference counting:</p>
+<pre><code>Foo@ f = Foo.alloc();
+Foo@ b = f; // Converted to: f.retain(); b = f;
+f = nil; // Converted to: f.release(); f = nil;
+</code></pre>
+
+<p>Any managed variable that goes out of the scope will automatically invoke <code>release</code>, as if the pointer was set to <code>nil</code>.</p>
+<pre><code>{
+    Foo@ b = Foo.alloc();
+} // Automatic invocation of b.release();
+</code></pre>
+
+<p>In order to return a managed pointer that can be used as a temporary, it's often convenient to mark the return value as managed.</p>
+<pre><code>func Foo@ createFoo()
+{
+    return Foo.alloc();
+}
+
+createFoo(); // Implicitly introduces a deferred release.
+</code></pre>
+
+<p>If we assign a managed pointer to a variable, the release/retain is elided</p>
+<pre><code>// The following becomes f1 = createFoo() - no deferred release or retains.
+Foo@ f1 = createFoo(); 
+</code></pre>
+
+<p>It's possible to manually manage a managed pointer:</p>
+<pre><code>Foo* f2 = createFoo().retain();
+f2.release(); // Required to prevent leaks.
+</code></pre>
+
+<p>A managed pointer may safely assigned to a regular pointer as long as it's not retained outside of the scope.</p>
+<pre><code>{
+    Foo* f3 = createFoo(); 
+    printf(&quot;%d&quot;, f3.someValue);
+    // Safe, since f3 isn't actually used after the scope.
+}
+
+Foo* unsafeFoo;
+{
+    unsafeFoo = createFoo();
+}
+// &lt;- access to unsafeFoo at this point will likely break things.
+</code></pre>
+
+<h2 id="arrays">Arrays</h2>
+<p>Developing the Cone proposal a bit:</p>
+<h3 id="fixed-arrays">Fixed Arrays</h3>
+<p><code>&lt;type&gt;[&lt;size&gt;]</code> e.g. <code>int[4]</code>. These are treated as values and will be copied if given as parameter. Unlike C, the number is part of its type.</p>
+<p>Taking a pointer to a fixed array will create a pointer to a fixed array, e.g. <code>int[4]*</code>.</p>
+<h3 id="fat-array-pointers">Fat array pointers</h3>
+<p><code>&lt;type&gt;[]</code> e.g. <code>int[]</code>. This is a pointer to an array and it is possible to convert any fixed array to a fat array pointer. </p>
+<pre><code>int[4] a = { 1, 2, 3, 4};
+int[] b = a; // Implicit conversion is always ok.
+int[4] c = @cast(int[4], b); // Will copy the value of b into c.
+int[4]* d = @cast(int[4]*, b); // Equivalent to d = &amp;a
+b.len; // Returns 4
+int* e = b; // Equivalent to e = &amp;a
+e = d; // implicit conversion ok.
+d = e; // ERROR! Not allowed
+d = @cast(int[4]*, e); // Fine
+</code></pre>
+
+<h5 id="conversion-list">Conversion list</h5>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">int[4]</th>
+<th align="center">int[]</th>
+<th align="center">int[4]*</th>
+<th align="center">int*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">int[4]</td>
+<td align="center">assign</td>
+<td align="center">cast</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="center">int[]</td>
+<td align="center">assign</td>
+<td align="center">assign</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+<tr>
+<td align="center">int[4]*</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">assign</td>
+<td align="center">cast</td>
+</tr>
+<tr>
+<td align="center">int*</td>
+<td align="center">-</td>
+<td align="center">assign</td>
+<td align="center">assign</td>
+<td align="center">assign</td>
+</tr>
+</tbody>
+</table>
+<h5 id="internals">Internals</h5>
+<p>Internally the layout of a fat array pointer is guaranteed to be <code>struct { &lt;type&gt;* ptrToArray; usize arraySize; }</code>.</p>
+<p>There is a built in struct <code>__ArrayType_C3</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
+<pre><code>struct __ArrayType_C3 
+{ 
+    void* ptrToArray;
+    usize arraySize;
+}
+</code></pre>
+
+<h3 id="dynamic-arrays">Dynamic arrays</h3>
+<p>Dynamic arrays are provided as a library and they are usually ref counted:</p>
+<pre><code>import array(int) alias IntArray;
+
+IntArray@ a = IntArray.new();
+a += 23; // Append last
+a.pop(); // Remove last
+a.insert(1, 11); // Insert at position
+a.insert_front(12); // Insert at 0
+a.pop_front(); // Remove first.
+a.last(); // Return last
+</code></pre>
+
+<p>Thanks to generic overloading this is also possible:</p>
+<pre><code>a += 23;
+a[2] = 11;
+a[2] // Prints 11.
+</code></pre>
+
 <h2 id="unsorted">Unsorted</h2>
-<h5 id="2s-complement">2s complement</h5>
-<p>Add to the upcoming description that C3 uses 2s complement for signed ints.</p>
+<h5 id="abandon-c2-syntax-partly">Abandon C2 syntax partly</h5>
+<p>Change:</p>
+<p><code>type Foo enum { ... }</code> =&gt; <code>enum Foo { ... }</code>
+<code>int globalVariable = 0</code> =&gt; <code>var int globalVariable = 0</code> (or global int?)</p>
 <h5 id="unsigned-conversion-to-signed">Unsigned conversion to signed</h5>
 <p>Perhaps consider signed, rather than unsigned implicit conversion. Currently <code>ulong + long</code> becomes <code>ulong + @cast(ulong, long)</code> (according to C rules). Consider changing that to <code>@cast(long, ulong) + long</code>. That is, instead of "unsigned wins", use "signed wins".</p>
 <h5 id="aliasing-in-import">Aliasing in import</h5>
@@ -321,56 +465,11 @@ import set(double) alias DoubleSet;
 <li>Automatic conversion from fixed to fat pointer: <code>int[4] y = { 1, 2, 3, 4 }; int[] x = y;</code></li>
 <li>Automatic conversion from dynamic array to fat pointer: <code>int[+] y = { 1, 2 }; int[] x = y</code></li>
 </ol>
-<h5 id="remove-const">Remove const</h5>
-<p>There is an issue with correct const handling. Not only are the qualifiers a bit hard to read. Const also lacks transitiveness. Const is not a guarantee of immutability, 
-just a way to document that the pointer does not change.</p>
-<p>Replace this with optional comments:</p>
-<pre><code>/**
- * @param foo const
- * @param bar
- **/
-func void do_something(Foo* foo, Foo* bar)
-{
-    foo.x = 0; // Warning, breaks contract above.
-    foo.z.y = 0; // Warning, also breaks contract due to being transitive.
-    bar.x = 0; // This is fine.
-}
-</code></pre>
-
 <h5 id="require-explicit-uninitialization">Require explicit uninitialization</h5>
 <pre><code>int a = ---;
 int a = void; // Other possible variant
 </code></pre>
 
-<h5 id="defer-sugar">Defer sugar</h5>
-<pre><code>func bool do_stuff(i32 resource_id)
-{
-    Resource* x = get_resource(resource_id) @defer(release_resource); // Inline defer
-    if (!play_around_with(x)) return false;
-    do_some_other_thing(x);
-    return foo(x);
-}
-</code></pre>
-
-<h5 id="defer-on-function-signatures">Defer on function signatures</h5>
-<pre><code>func Resource get_resource_with_release(int resource_id) @defer(release_resource);
-
-func bool do_stuff(i32 resource_id)
-{
-    Resource* x = get_resource_with_release(resource_id); // inserts an implicit defer!
-    if (!play_around_with(x)) return false;
-    do_some_other_thing(x);
-    return foo(x);
-}
-
-</code></pre>
-
-<h5 id="managed-qualifier">"Managed" qualifier</h5>
-<pre><code>// func const FILE open(...) { ... } =&gt; 
-func const managed FILE open(...) { ... }
-</code></pre>
-
-<p>And here any struct that is "managed" must have a <code>StructName.release(StructName *struct)</code> call.</p>
 <h5 id="extended-case">Extended "case"</h5>
 <p>Switch as "if-else"</p>
 <pre><code>switch (x) 
@@ -596,61 +695,6 @@ virtual Renderer[4] renderers;
 Renderer*[4] renderers;
 </code></pre>
 
-<h2 id="built-in-dynamic-arrays">Built in dynamic arrays</h2>
-<pre><code>// Pseudo code
-type _DynamicArray struct
-{
-    A* data;
-    usize capacity;
-    usize size;
-}
-
-/**
- * @require array.size &gt; 0
- */
-func A pop(_DynamicArray&amp; array)
-{
-    return array.data[--array.size];
-}
-
-/**
- * @require array.size &gt; 0
- */
-func A +=(_DynamicArray&amp; array, A a)
-{
-    if (capacity == size) array.increase_capacity();
-    return array.data[array.size] = a;
-}
-</code></pre>
-
-<p>We could construct this using generics, but it is much more convenient to have a syntax built in.</p>
-<p>Question: what about memory management?</p>
-<pre><code>int[+] dynamic_array; // Built-in dynamic arrays
-dynamic_array += 23;
-dynamic_array.pop();
-dynamic_array.insert(0, 11);
-dynamic_array.insert_front(12);
-io.printf(&quot;%d&quot;, dynamic_array[1]); // Prints 11
-
-// It's possible to extend dynamic arrays with functionality:
-func usize int[+].find(int[+] &amp;array, int value)
-{
-    for (usize i = 0; i &lt; dynamic_array.size; i++)
-    {
-        if (array[i] == value) return i;
-    }
-    return NOT_FOUND;
-}
-
-// This works if the function is in the same module
-// or if it's included as local
-
-dynamic_array.find(12); // =&gt; 0
-
-// If it's in another module:
-module_name.int[+].find(dynamic_array, 12);
-</code></pre>
-
 <h2 id="built-in-maps">Built in maps</h2>
 <p>Same reasoing as arrays. Question about memory management is the same.</p>
 <pre><code>int[int] map; // Built-in maps
@@ -688,27 +732,6 @@ char* data = &amp;string; // Taking a pointer to the string, which may later be 
 <li>Introduce ref-counted objects with ref-counted pointers. Again use Foo@ x vs Foo* y with the latter being unretained. This should be internal refcounting to avoid any of the issues going from retained -&gt; unretained that shared_ptr has. Consequently any struct that is RC:ed needs to be explicitly declared as such.</li>
 <li>Managed pointers: you alloc and the pointer gets a unique address that will always be invalid after use. Any overflows will be detected, but use of managed pointers is slower due to redirect and check.</li>
 </ol>
-<p>Sample code for (2)</p>
-<pre><code>type Foo struct @(refcounted) 
-{
-    int a;
-}
-
-func Bar(Foo@ a)
-{
-    printf(&quot;%d\n&quot;, sizeof(Foo)); // prints 8 due to RC
-    printf(&quot;%d\n&quot;, rc(a)); // prints 1
-    Foo@ x = a; 
-    printf(&quot;%d\n&quot;, rc(a)); // prints 2
-    x = nil;
-    printf(&quot;%d\n&quot;, rc(a)); // prints 1
-    Foo* y = a;
-    printf(&quot;%d\n&quot;, rc(a)); // prints 1
-    Foo* z = malloc(sizeof(Foo)); // Not recommended!
-    // TOOD discuss how to properly initialize a RC:ed variable.
-}
-</code></pre>
-
 <h2 id="ideas-around-macros">Ideas around macros</h2>
 <p>Just some previous thoughts and ideas I've considered. Many of those actually go against the current design.</p>
 <h3 id="compile-time-variables">Compile time variables</h3>
@@ -1301,7 +1324,7 @@ MACRO_REPLACEMENT =&gt; invoke lexer on code inside, after doing a replace of an
         <a href="../naming/" class="btn btn-neutral float-right" title="Naming rules">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../preconditions/" class="btn btn-neutral" title="Pre and post conditions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../library/" class="btn btn-neutral" title="Library"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -1327,7 +1350,7 @@ MACRO_REPLACEMENT =&gt; invoke lexer on code inside, after doing a replace of an
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../preconditions/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../library/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../naming/" style="color: #fcfcfc">Next &raquo;</a></span>

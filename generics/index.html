@@ -136,6 +136,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../library/">Library</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../ideas/">Crazy ideas</a>
                 </li>
                 <li class="">
@@ -269,11 +273,23 @@ generic add(x, y)
 }
 </code></pre>
 
-<p>Generics can also be used for overloading operators, although this is limited to the usual arithmetic operators.</p>
+<p>Generics can also be used for overloading operators:</p>
 <pre><code>generic operator_add(x, y)
 {
     case vector3, vector3:
         return vector_add(x, y);
+}
+
+generic operator_index(x, y)
+{
+    case DynArray, int:
+        return x.get(y); // Enables foo[12]
+}
+
+generic operator_index_assign(x, y, z)
+{
+    case DynArray, int:
+        return x.set(y, z); // Enables foo[12] = 2
 }
 </code></pre>
 

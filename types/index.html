@@ -150,6 +150,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../library/">Library</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../ideas/">Crazy ideas</a>
                 </li>
                 <li class="">
@@ -250,7 +254,7 @@ func c_int stat(const c_char* pathname, Stat* buf);
 </code></pre>
 
 <h5 id="differences-from-c">Differences from C</h5>
-<p>Unlike C, C3 does not use type qualifiers. Const exists, but is a storage class modifier, not a type qualifier. Instead of volatile, volatile blocks are used. In order to signal restrictions on variable usage, like const-ness <a href="/preconditions/">preconditions</a> are used.</p>
+<p>Unlike C, C3 does not use type qualifiers. Const exists, but is a storage class modifier, not a type qualifier. Instead of volatile, volatile blocks are used. In order to signal restrictions on variable usage, like const-ness <a href="../preconditions/">preconditions</a> are used.</p>
 <h2 id="basic-types">Basic types</h2>
 <p>Basic types are divided into floating point types, and integer types. Integer types being either signed or unsigned.</p>
 <h5 id="integer-types">Integer types</h5>
@@ -333,6 +337,8 @@ func c_int stat(const c_char* pathname, Stat* buf);
 </tbody>
 </table>
 <p>*<code>isize</code> and <code>usize</code> are pointer sized.</p>
+<h5 id="integer-arithmetics">Integer arithmetics</h5>
+<p>All signed integer arithmetics uses 2's complement.</p>
 <h5 id="integer-constants">Integer constants</h5>
 <p>Integer constants are 1293832 or -918212. Unlike C the "type" of an integer constant is a special compile time int. All constant operations, for example <code>9283 &lt;&lt; 2</code> will be resolved at compile time. An compile time error will result if the constant is too large to fit whatever variable it is assigned or compared to.</p>
 <p>Integers may be written in decimal, but also</p>

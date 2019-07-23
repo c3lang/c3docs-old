@@ -97,6 +97,8 @@
         
             <li><a class="toctree-l4" href="#removal-of-the-volatile-type-qualifier">Removal of the volatile type qualifier</a></li>
         
+            <li><a class="toctree-l4" href="#removal-of-the-const-type-qualifier">Removal of the const type qualifier</a></li>
+        
         </ul>
     
 
@@ -141,6 +143,10 @@
                 <li class="">
                     
     <a class="" href="../preconditions/">Pre and post conditions</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../library/">Library</a>
                 </li>
                 <li class="">
                     
@@ -270,6 +276,20 @@ func void test()
             v = 1; 
         }
     }
+}
+</code></pre>
+
+<h5 id="removal-of-the-const-type-qualifier">Removal of the const type qualifier</h5>
+<p>The const qualifier is only retained for actual constant variables. C3 uses a special type of <a href="../preconditions">post condition</a> for functions to indicate that they do not alter in parameters.</p>
+<pre><code>/**
+ * This function ensures that foo is not changed in the function, nor is bar.x altered.
+ * @ensure const(foo), const(bar.x)
+ **/
+func void test(Foo&amp; foo, Bar&amp; bar)
+{
+    bar.y = foo.x;
+    // bar.x = foo.x - compile time error!
+    // foo.x = bar.y - compile time error!
 }
 </code></pre>
               

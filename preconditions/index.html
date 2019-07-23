@@ -130,7 +130,14 @@
     <li class="toctree-l3"><a href="#post-conditions">Post conditions</a></li>
     
 
+    <li class="toctree-l3"><a href="#pre-conditions-for-macros">Pre conditions for macros</a></li>
+    
+
     </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../library/">Library</a>
                 </li>
                 <li class="">
                     
@@ -224,9 +231,40 @@
                 <h1 id="pre-and-post-conditions">Pre and post conditions</h1>
 <p>Pre and post conditions are optional checks that the compiler may use for optimization and runtime checks. Note that <em>compilers are not obliged to process pre and post conditions at all</em>. However, violating either pre or post conditions is considered undefined behaviour, so a compiler may optimize as if they always hold – even if a potential bug may cause them to be violated.</p>
 <h1 id="pre-conditions">Pre conditions</h1>
-<p>Pre conditions are usually used to validate incoming arguments. Each condition must be an expression that can be evaluated to a boolean. </p>
+<p>Pre conditions are usually used to validate incoming arguments. Each condition must be an expression that can be evaluated to a boolean. A pre condition use the <code>@require</code> annotation.</p>
+<pre><code>/**
+ * @require foo &gt; 0, foo &lt; 1000
+ **/
+func int testFoo(int foo)
+{
+    return foo * 10;
+}
+</code></pre>
+
 <h1 id="post-conditions">Post conditions</h1>
-<p>Post conditions are evaluated to make checks on the resulting state after passing through the function. There is a special post condition called "const condition", which guarentees that the memory pointed to is not altered within the scope of a function.</p>
+<p>Post conditions are evaluated to make checks on the resulting state after passing through the function. There is a special post condition called "const condition" in the format <code>const(&lt;parameter&gt;)</code>, which guarentees that the memory pointed to is not altered within the scope of a function. The post condition uses the <code>@ensure</code> annotation. <code>return</code> is used to mark the return value from the function.</p>
+<pre><code>/**
+ * @ensure const(foo), return &gt; foo.x;
+ **/
+func uint checkFoo(Foo&amp; foo)
+{
+    uint y = abs(foo.x) + 1;
+    // If we had row: foo.x = 0, then this would be a compile time error.
+    return y * abs(foo.x);
+}
+</code></pre>
+
+<h1 id="pre-conditions-for-macros">Pre conditions for macros</h1>
+<p>Macros have an additional class of pre conditions, that are used to confirm that the values actually will work inside the macro body. This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the <code>@ensure-parse</code> annotation, or together with the <code>@ensure</code> annotations, surrounded by <code>parse()</code>. </p>
+<pre><code>/**
+ * @ensure-parse resource.open()
+ * @ensure resource != nil, parse(void *x = resource.open())
+ **/
+macro openResource(resource)
+{
+    return resource.open();
+}
+</code></pre>
               
             </div>
           </div>
@@ -234,7 +272,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../ideas/" class="btn btn-neutral float-right" title="Crazy ideas">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../library/" class="btn btn-neutral float-right" title="Library">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../generics/" class="btn btn-neutral" title="Generics"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -266,7 +304,7 @@
         <span><a href="../generics/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../ideas/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../library/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
