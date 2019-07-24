@@ -242,19 +242,19 @@
             <div class="section">
               
                 <h1 id="types">Types</h1>
-<p>As usual, types are divided into basic types and user defined types. The syntax for defining a new type is uniform: <code>[public] type &lt;name&gt; &lt;definition&gt;</code>. All types are defined on a global level. Using the <code>public</code> prefix is necessary for any type that is to be exposed outside of the current module.</p>
+<p>As usual, types are divided into basic types and user defined types (enum, union, struct, error, aliases). All types are defined on a global level. Using the <code>public</code> prefix is necessary for any type that is to be exposed outside of the current module.</p>
 <h5 id="naming">Naming</h5>
 <p>All user defined types in C3 starts with upper case. So <code>MyStruct</code> or <code>Mystruct</code> would be fine, <code>mystruct_t</code> or <code>mystruct</code> would not. Since this runs into probles with C compatibility, it is possible to use attributes to change the c name of a type, as well as control whether a C typedef should be emitted for the type.</p>
-<pre><code>type Stat struct 
+<pre><code>struct Stat @(cname=&quot;stat&quot;, no_typedef)
 {
     // ...
-} @(cname=&quot;stat&quot;, no_typedef)
+} 
 
 func c_int stat(const c_char* pathname, Stat* buf);
 </code></pre>
 
 <h5 id="differences-from-c">Differences from C</h5>
-<p>Unlike C, C3 does not use type qualifiers. Const exists, but is a storage class modifier, not a type qualifier. Instead of volatile, volatile blocks are used. In order to signal restrictions on variable usage, like const-ness <a href="../preconditions/">preconditions</a> are used.</p>
+<p>Unlike C, C3 does not use type qualifiers. <code>const</code> exists, but is a storage class modifier, not a type qualifier. Instead of <code>volatile</code>, volatile blocks are used. In order to signal restrictions on variable usage, like const-ness <a href="../preconditions/">preconditions</a> are used.</p>
 <h2 id="basic-types">Basic types</h2>
 <p>Basic types are divided into floating point types, and integer types. Integer types being either signed or unsigned.</p>
 <h5 id="integer-types">Integer types</h5>
@@ -453,7 +453,7 @@ func c_int stat(const c_char* pathname, Stat* buf);
 <p>Arrays are indicated by <code>[]</code> after the type. Unlike C, the <code>[]</code>. <code>Foo[]</code> would be an array of unspecified length containing <code>Foo</code> structs.</p>
 <h2 id="enum">Enum</h2>
 <p>Enum (enumerated) types use the following syntax:</p>
-<pre><code>type State enum int 
+<pre><code>enum State : int 
 {
     PENDING = 0,
     RUNNING,
@@ -477,7 +477,7 @@ cb(10, false);
 
 <h2 id="struct-types">Struct types</h2>
 <p>Structs are always named:</p>
-<pre><code>type Person struct 
+<pre><code>struct Person  
 {
     char age;
     char* name;
@@ -500,7 +500,7 @@ io.printf(&quot;%s is %d years old.&quot;, pPtr.age, pPtr.name);
 <p>(One might wonder whether it's possible to take a <code>Person&amp;&amp;</code> and use dot access. – It's not, only one level of deref is done)</p>
 <h2 id="struct-subtyping">Struct subtyping</h2>
 <p>C3 allows creating struct subtypes:</p>
-<pre><code>type ImportantPerson struct
+<pre><code>struct ImportantPerson 
 {
     inline Person person;
     char* title;
@@ -522,7 +522,7 @@ printPerson(important_person); // Only the first part of the struct is copied.
 <p><code>inline</code> is not strictly needed. It allows a struct or union to be both addressed by name and directly as an anonymous struct/union. (See below)</p>
 <h2 id="union-types">Union types</h2>
 <p>Union types are defined just like structs.</p>
-<pre><code>type Integral union 
+<pre><code>union Integral  
 {
     byte as_byte;
     short as_short;
@@ -545,7 +545,8 @@ io.printf(&quot;%d&quot;, i.as_byte);
 <p>Note that unions only take up as much space as their largest member, so <code>sizeof(Integral)</code> is equivalent to <code>sizeof(long)</code>.</p>
 <h2 id="anonymous-sub-structs-unions">Anonymous sub-structs / unions</h2>
 <p>Just like in later versions of C, anonymous sub-structs / unions are allowed.</p>
-<pre><code>type Person struct {
+<pre><code>struct Person  
+{
     char age;
     char* name;
     union 

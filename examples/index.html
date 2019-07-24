@@ -335,7 +335,7 @@
 
 <h5 id="enum-switch">enum + switch</h5>
 <p>Switches have implicit break and scope. Use "next" to implicitly fallthrough or use comma:</p>
-<pre><code>type Height enum u32 
+<pre><code>enum Height : uint 
 {
     LOW = 0,
     MEDIUM,
@@ -407,7 +407,7 @@ func void demo_enum(Height h)
 
 <p>Enums are always namespaced.</p>
 <p>Enums also define <code>.min</code> and <code>.max</code>, returning the minimum and maximum value for the enum values. <code>.all</code> returns an array with all enums.</p>
-<pre><code>type State enum uint 
+<pre><code>enum State : uint 
 {
     Start,
     Stop,
@@ -454,14 +454,14 @@ test(1); // Prints &quot;FOOBA&quot; and throws
 <h5 id="struct-types">struct types</h5>
 <pre><code>type Callback func int(char c);
 
-type Status enum int 
+enum Status : int
 {
     IDLE,
     BUSY,
     DONE,
 }
 
-type MyData struct 
+struct MyData
 {
     char* name;
     Callback open;
@@ -521,7 +521,7 @@ func void example_cb()
 
 <h5 id="error-handling">Error handling</h5>
 <p>Errors are sent as a result value but uses an exception-like try/catch syntax.</p>
-<pre><code>type RandomError error
+<pre><code>error RandomError
 {
     NORMAL,
     EXCEPTIONAL

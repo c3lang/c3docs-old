@@ -378,10 +378,9 @@ a[2] // Prints 11.
 </code></pre>
 
 <h2 id="unsorted">Unsorted</h2>
-<h5 id="abandon-c2-syntax-partly">Abandon C2 syntax partly</h5>
-<p>Change:</p>
-<p><code>type Foo enum { ... }</code> =&gt; <code>enum Foo { ... }</code>
-<code>int globalVariable = 0</code> =&gt; <code>var int globalVariable = 0</code> (or global int?)</p>
+<h5 id="varargs">Varargs</h5>
+<p>Use typed varargs? E.g. <code>void foo(int x, float... foo)</code> where the type of foo becomes <code>float[]</code></p>
+<p>Change main to <code>void main(char*[] args)</code>?</p>
 <h5 id="unsigned-conversion-to-signed">Unsigned conversion to signed</h5>
 <p>Perhaps consider signed, rather than unsigned implicit conversion. Currently <code>ulong + long</code> becomes <code>ulong + @cast(ulong, long)</code> (according to C rules). Consider changing that to <code>@cast(long, ulong) + long</code>. That is, instead of "unsigned wins", use "signed wins".</p>
 <h5 id="aliasing-in-import">Aliasing in import</h5>
@@ -503,7 +502,7 @@ int a = void; // Other possible variant
 <li>Query what type of overflow the processor supports</li>
 </ul>
 <h5 id="associate-properties-to-an-enum">Associate properties to an enum</h5>
-<pre><code>type enum State [char* name, byte bit] int
+<pre><code>enum State [char* name, byte bit] int
 {
     START(&quot;begin!&quot;, 0x01) = 0,
     END(&quot;end it!&quot;, 0x10)
@@ -540,7 +539,7 @@ switch(@tag(foo))
 </code></pre>
 
 <p>Alternative syntax etc:</p>
-<pre><code>type Shape struct 
+<pre><code>struct Shape
 {
     int centerX;
     int centerY;
@@ -555,7 +554,7 @@ switch(@tag(foo))
 </code></pre>
 
 <p>And yet another...</p>
-<pre><code>type Shape struct 
+<pre><code>struct Shape
 {
     int centerX;
     int centerY;
@@ -579,7 +578,7 @@ switch(@tag(foo))
     /* ... */
 }
 
-type Renderer interface 
+interface Renderer
 {
     void renderPage(Renderer&amp; renderer, Page&amp; info)
 }
@@ -1144,7 +1143,7 @@ macro @foo_enum(&amp;a)
     }
 }
 
-type MyEnum enum 
+enum MyEnum
 {
     A,
     B,

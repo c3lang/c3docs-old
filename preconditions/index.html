@@ -129,6 +129,14 @@
 
     <li class="toctree-l3"><a href="#post-conditions">Post conditions</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l4" href="#const-in-detail">Const in detail</a></li>
+        
+            <li><a class="toctree-l4" href="#pure-in-detail">Pure in detail</a></li>
+        
+        </ul>
+    
 
     <li class="toctree-l3"><a href="#pre-conditions-for-macros">Pre conditions for macros</a></li>
     
@@ -242,9 +250,12 @@ func int testFoo(int foo)
 </code></pre>
 
 <h1 id="post-conditions">Post conditions</h1>
-<p>Post conditions are evaluated to make checks on the resulting state after passing through the function. There is a special post condition called "const condition" in the format <code>const(&lt;parameter&gt;)</code>, which guarentees that the memory pointed to is not altered within the scope of a function. The post condition uses the <code>@ensure</code> annotation. <code>return</code> is used to mark the return value from the function.</p>
+<p>Post conditions are evaluated to make checks on the resulting state after passing through the function. There are two special post conditions: <code>const</code> and <code>pure</code>.</p>
+<p>The post condition uses the <code>@ensure</code> annotation. Where <code>return</code> is used to mark the return value from the function. </p>
+<p>For <code>const</code> and <code>pure</code>, they can either be given as separate annotations: <code>@pure</code> and <code>@const &lt;parameter&gt;, ...</code>, or inside an <code>@ensure</code> using the format <code>const(&lt;parameter&gt;)</code> and <code>pure(&lt;function name&gt;)</code>. A parameter marked <code>const</code> guarentees that the memory pointed to is not altered within the scope of a function. <code>pure</code> guarantees that the function does not read or write to any global variables.</p>
 <pre><code>/**
  * @ensure const(foo), return &gt; foo.x;
+ * @pure
  **/
 func uint checkFoo(Foo&amp; foo)
 {
@@ -254,6 +265,90 @@ func uint checkFoo(Foo&amp; foo)
 }
 </code></pre>
 
+<h3 id="const-in-detail">Const in detail</h3>
+<p>The <code>const</code> annotation allows a program to make assumtions in regards of how the function treats the parameter. This can then be used by a compiler make optimizations for any caller of the function.</p>
+<p>However, it should be noted that the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:</p>
+<pre><code>func void badFunc(int&amp; i)
+{
+    *i = 2;
+}
+
+/**
+ * @ensure const(i)
+ */
+func void lyingFunc(int&amp; i)
+{
+    badFunc(i); // The compiler might not check this!
+}
+
+func void test()
+{
+    int a = 1;
+    lyingFunc(&amp;a);
+    printf(&quot;%d&quot;, a); // Might print 1!
+}
+</code></pre>
+
+<p>However, compilers will usually detect this:</p>
+<pre><code>
+/**
+ * @ensure const(i)
+ */
+func void badFunc(int&amp; i)
+{
+    *i = 2; // &lt;- Compiler error: violating post condition const(i)
+}
+</code></pre>
+
+<h3 id="pure-in-detail">Pure in detail</h3>
+<p>The <code>pure</code> annotation allows a program to make assumtions in regards of how the function treats global variables. Unlike for <code>const</code>, a pure function is not allowed to call a function which is known to be impure.</p>
+<p>However, just like for <code>const</code> the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:</p>
+<pre><code>int i = 0;
+
+type SecretFunc func void();
+
+func void badFunc()
+{
+    i = 2;
+}
+
+SecretFunc foo = nil;
+
+/**
+ * @pure
+ */
+func void lyingFunc()
+{
+    SecretFunc(); // The compiler cannot reason about this!
+}
+
+func void test()
+{
+    foo = &amp;badFunc;
+    i = 1;
+    lyingFunc();
+    printf(&quot;%d&quot;, a); // Might print 1!
+}
+</code></pre>
+
+<p>However, compilers will usually detect this:</p>
+<pre><code>int i = 0;
+
+func void badFunc()
+{
+    i = 2;
+}
+
+/**
+ * @pure
+ */
+func void lyingFunc()
+{
+    badFunc(); // Error! Calling an impure function
+}
+</code></pre>
+
+<p>Consequently circumventing "pure" annotations is undefined behaviour.</p>
 <h1 id="pre-conditions-for-macros">Pre conditions for macros</h1>
 <p>Macros have an additional class of pre conditions, that are used to confirm that the values actually will work inside the macro body. This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the <code>@ensure-parse</code> annotation, or together with the <code>@ensure</code> annotations, surrounded by <code>parse()</code>. </p>
 <pre><code>/**

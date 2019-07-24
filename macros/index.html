@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Macros - C3 Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Macros";
+    var mkdocs_page_input_path = "macros.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> C3 Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">About C3</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Installing</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../setup/">Setup</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../firstproject/">Your first project</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Documentation</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../changesfromc/">Changes from C</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../examples/">Examples</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../modules/">Modules</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../types/">Types</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../functions/">Functions</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../statements/">Statements</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../errorhandling/">Errors</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../builtinmacros/">Built-in Macros</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../precedence/">Precedence</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../preconditions/">Pre and post conditions</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../library/">Library</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../ideas/">Crazy ideas</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../naming/">Naming rules</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../syntax/">Grammar</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../sample/">More code examples</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Build system</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../buildintro/">Introduction</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../project/">Project Structure</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../buildcommands/">Commands</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Development</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../contribute/">Contribute</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../changes/">Changes</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">C3 Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Macros</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="macros">Macros</h1>
+<p><strong>!!!THIS IS JUST AN EXPERIMENTAL DRAFT!!!</strong></p>
+<p>A macro is defined using <code>macro @&lt;name&gt;(&lt;parameters&gt;)</code>. All user defined macros use the @ symbol.</p>
+<p>The parameters have different sigils: <code>$</code> means compile time evaluated (captured variable, symbol or expression). <code>#</code> means full string capture. Any parameters without sigils are passed by <em>value</em>, as if it was a normal function parameter.</p>
+<p>A basic swap:</p>
+<pre><code>/**
+ * @ensure parse($a = $b), parse($b = $a)
+ */
+macro @swap($a, $b)
+{
+    typeof($a) temp = $a;
+    $a = $b;
+    $b = temp;
+}
+</code></pre>
+
+<p>This expands on usage like this:</p>
+<pre><code>func void test()
+{
+    int a = 10;
+    int b = 20;
+    @swap(a, b);
+}
+// Equivalent to:
+func void test()
+{
+    int a = 10;
+    int b = 20;
+    {
+        int __temp = a;
+        a = b;
+        b = __temp;
+    }
+}
+</code></pre>
+
+<p>Note the necessary <code>$</code>. Here is an incorrect swap and what it would expand to:</p>
+<pre><code>macro @badswap(a, b)
+{
+    typeof(a) temp = a;
+    a = b;
+    b = temp;
+}
+
+func void test()
+{
+    int a = 10;
+    int b = 20;
+    @badswap(a, b);
+}
+// Equivalent to:
+func void test()
+{
+    int a = 10;
+    int b = 20;
+    {
+        int __a = a;
+        int __b = b;
+        int __temp = __a;
+        __a = __b;
+        __b = __temp;
+    }
+}
+</code></pre>
+
+<h2 id="capturing-a-macro-body">Capturing a macro body</h2>
+<p>We may add a trailing parameter in the format: <code>: @&lt;param name&gt;(arg1, arg2, ...)</code> it then captures any trailing compound statement.</p>
+<pre><code>/**
+ * @ensure parse(int i = a.len), parse(value1 = a[i]), parse(value2 = 2 * value1)
+ */
+macro @foreach(a : @body(value1, value2) )
+{
+    for (int i = 0; i &lt; a.len; i++)
+    {
+        @body(a[i], a[i] * 2);
+    }
+}
+
+func void test()
+{
+    int[] a = { 1, 2, 3 };
+    @foreach(a : int value, int mult)
+    {
+        printf(&quot;Value: %d, x2: %d\n&quot;, value, mult);
+    }
+}
+// Expands to code similar to:
+func void test()
+{
+    int[] a = { 1, 2, 3 };
+    {
+        int[] __a = a;
+        for (int __i = 0; i &lt; __a.len; i++)
+        {
+            typeof(__a[__i]) __value1 = __a[__i];
+            typeof(__a[__i] * 2) __value2 = __a[__i] * 2;
+            printf(&quot;Value: %d, x2: %d\n&quot;, __value1, __value2);
+        }
+    }
+}
+</code></pre>
+
+<h2 id="macros-returning-values">Macros returning values</h2>
+<p>A macro may return a value, it is then considered an expression rather than a statement:</p>
+<pre><code>macro square(x)
+{
+    return x * x;
+}
+
+int getTheSquare(int x)
+{
+    return square(x);
+}
+
+double getTheSquare2(double x)
+{
+    return square(x);
+}
+</code></pre>
+
+<h2 id="calling-macros">Calling macros</h2>
+<p>It's perfectly fine for a macro to invoke another macro or itself.</p>
+<pre><code>macro @square(x) { return x * x }
+
+macro @squarePlusOne(x)
+{
+    return @square(x) + 1; // Expands to &quot;return x * x + 1;&quot;
+}
+</code></pre>
+
+<p>Obviously this can cause infinite recursion, so the actual recursion depth is limited to what the build setting <code>macro-recursion-depth</code> is set to.</p>
+<h2 id="macro-directives">Macro directives</h2>
+<p>Inside of a macro, we can use the compile time statements $IF, $ELSE‚ $EACH and $SWITCH. Macros may also recursively be invoked.</p>
+<h3 id="if-and-else">$IF and $ELSE</h3>
+<p><code>$IF (&lt;const expr&gt;)</code> takes a compile time constant value and evaluates it to true or false.</p>
+<pre><code>macro @foo($X, $y)
+{
+    $IF ($x &gt; 3)
+    {
+        $y += $x * $x;
+    } 
+    $ELSE
+    {
+        $y += $x;
+    }
+}
+
+const int FOO = 10;
+
+func void test()
+{
+    int a = 5;
+    int b = 4;
+    @foo(1, a); // Allowed, expands to a += 1;
+    // @foo(b, a); // Error: b is not a compile time constant.
+    @foo(FOO, a); // Allowed, expands to a += FOO * FOO;
+}
+</code></pre>
+
+<h3 id="loops-using-each">Loops using $EACH</h3>
+<p><code>$EACH (&lt;range&gt; AS &lt;variable&gt;) { ... }</code> allows compile time recursion. <code>$EACH</code> may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.</p>
+<p>Looping over ranges:</p>
+<pre><code>macro @foo($A)
+{
+    $EACH (0..$A AS $x) 
+    {
+        printf(&quot;%d\n&quot;, $x);     
+    }
+}
+
+func void test()
+{
+    @foo(2);
+    // Expands to -&gt;
+    // printf(&quot;%d\n&quot;, 0);     
+    // printf(&quot;%d\n&quot;, 1);         
+}
+</code></pre>
+
+<p>Looping over enums:</p>
+<pre><code>macro @foo_enum($THE_ENUM)
+{
+    $EACH($THE_ENUM AS $x)  
+    {
+        printf(&quot;%d\n&quot;, @cast(int, $x));     
+    }
+}
+
+enum MyEnum
+{
+    A,
+    B,
+}
+
+func void test()
+{
+    @foo_enum(MyEnum);
+    // Expands to -&gt;
+    // printf(&quot;%d\n&quot;, @cast(int, MyEnum.A));
+    // printf(&quot;%d\n&quot;, @cast(int, MyEnum.B));    
+}
+</code></pre>
+
+<h3 id="switching-on-type-with-switch">Switching on type with $SWITCH</h3>
+<p>It's possible to switch on type, similar to generic functions, but used internal to the macro:</p>
+<pre><code>macro foo(a, b)
+{
+    $SWITCH(a, b)
+    {
+        $CASE int, int: 
+            return a * b;
+    }
+    return a + b;
+}
+</code></pre>
+
+<h2 id="macro-text-interpolation">Macro text interpolation</h2>
+<p>For certain cases, pure text interpolation might be needed. The sigil <code>#</code> is used to indicate a stringified capture. Within a macro, any text within <code>``</code> is evaluated as text.</p>
+<pre><code>macro @foo($x, #f)
+{
+    `#f $x * $x`;
+}
+
+func void test()
+{
+    int x = 1;
+    @foo(4, x += );
+    // Expands to -&gt;
+    // x += 4 * 4;
+}
+</code></pre>
+
+<p>Another example, showing the difference between <code>#var</code> and <code>`#var`</code>:</p>
+<pre><code>macro @foo2(#f)
+{
+    printf(&quot;%s was %d\n&quot;, #f, `#f`);
+}
+
+funct void test2()
+{
+    int x = 1;
+    @foo2(x);
+    // Expands to -&gt;
+    // printf(&quot;%s was %d\n&quot;, &quot;x&quot;, x);
+}
+</code></pre>
+
+<h3 id="compile-time-string-functions">Compile time string functions</h3>
+<p>In order to facilitate certain types of macros, the following macros are built in:</p>
+<ul>
+<li><code>@strToUpper(#f)</code> Convert string to upper case.</li>
+<li><code>@strToLower(#f)</code> Convert string to lower case.</li>
+<li><code>@strToVarName(#f, #space)</code> Convert string to camel case from a space-based name scheme.</li>
+<li><code>@strToTypeName(#f, #space)</code> Convert string to title case from a space-based name scheme.</li>
+<li><code>@strFromName(#f, #space)</code> Convert title case or lower camel case to a space based scheme.</li>
+<li><code>@strReplace(#str, #pattern, #replacement, #count)</code> Replace a string with another.</li>
+<li><code>@subString(#str, #start, #length)</code> Return a substring of a compile time string.</li>
+<li><code>@strFind(#str, #stringToFind)</code> Find a substring in a compile time string.</li>
+<li><code>@strHash(#str)</code> Return the FNV1a hash of a string.</li>
+<li><code>@strLen(#str)</code> Return a compile time length of a string.</li>
+<li><code>@stringify(#str)</code> Escapes a string so it becomes a valid string.</li>
+</ul>
+<h2 id="escape-macros">Escape macros</h2>
+<p>A usual macro will generate its own scope, so that break, return, continue and goto only stays valid inside of its own "scope". A <code>return</code> from inside a macro does not normally escape the scope into which it's called:</p>
+<pre><code>macro @foo() { return; }
+
+func void test()
+{
+    @foo(); // Doesn't do anything.
+    printf(&quot;Test\n&quot;);
+}
+</code></pre>
+
+<p>However, there is a way to make a macro break out of the outer scope, and that is to add a <code>!</code> to the macro name. Such a macro may escape its boundaries.</p>
+<pre><code>macro @foo!() 
+{ 
+    return; 
+}
+
+func void test()
+{
+    @foo!(); // The function returns here.
+    printf(&quot;Test\n&quot;); // Never printed!
+}
+</code></pre>
+
+<p>This is not limited to return: <code>break</code>, <code>continue</code> and even <code>goto</code> is allowed.</p>
+<pre><code>macro @goto!($f) 
+{ 
+     goto $f;
+}
+
+func void test()
+{
+    @goto!(test)
+
+    printf(&quot;Foo!\n&quot;)    
+    return;
+
+    test:
+    printf(&quot;Bar!\n&quot;)
+}
+</code></pre>
+
+<p>The above code will print "Bar!"</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

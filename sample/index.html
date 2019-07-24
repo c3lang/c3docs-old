@@ -222,7 +222,7 @@
                 <h1 id="sample">Sample</h1>
 <p>Here is a bit of code manually converted to C3 from C.</p>
 <pre><code>
-type Node struct
+struct Node
 {
     uint hole;
     uint size;
@@ -230,24 +230,24 @@ type Node struct
     Node* prev;
 }
 
-type Footer struct 
+struct Footer
 { 
     Node &amp;header;
 }
 
-type Bin struct 
+struct Bin  
 {
     Node&amp; head;
 }
 
-type Heap struct 
+struct Heap  
 {
     size start;
     size end;
     Bin* bins[BIN_COUNT];
 }
 
-const uint offset = 8;
+const uint OFFSET = 8;
 
 /**
  * @require start &gt; 0
@@ -324,7 +324,7 @@ func void Heap.free(Heap* heap, void *p)
     Bin&amp; list;
     Footer&amp; new_foot, old_foot;
 
-    Node&amp; head = @cast(Node&amp;, @cast(char&amp;, p) - offset);
+    Node&amp; head = @cast(Node&amp;, @cast(char&amp;, p) - OFFSET);
     if (head == @cast(Node&amp;, @cast(heap.start, usize)) 
     {
         head.hole = 1; 

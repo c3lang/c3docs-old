@@ -269,6 +269,8 @@ export = [&quot;api&quot;]
 <p>List of warnings to enable during compilation.</p>
 <h4 id="lib">lib</h4>
 <p>List of libraries to use when compiling the target.</p>
+<h4 id="macro-recursion-depth">macro-recursion-depth</h4>
+<p>Set the depth for recursion of macros. Typically set to a value around 10,000.</p>
 <h2 id="using-environment-variables">Using environment variables</h2>
 <p>In addition to constants any values starting with "$" will be assumed to be environment variables.</p>
 <p>For example "$HOME" would on unix systems return the home directory. For strings that start with $ but <em>should not</em> be interpreted as an environment variable. For example, the string <code>"\$HOME"</code> would be interpreted as the plain string "$HOME"</p>

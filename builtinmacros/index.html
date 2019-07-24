@@ -266,7 +266,7 @@ printf(&quot;%d&quot;, i); // Prints 12
 
 <h3 id="describe">@describe</h3>
 <p>Creates a runtime description of a value.</p>
-<pre><code>type FooEnum enum 
+<pre><code>enum FooEnum
 {
     A,
     B
@@ -278,7 +278,7 @@ func char[] test()
     return @describe(x); // Returns &quot;FooEnum.A&quot;
 }
 
-type Foo struct
+struct Foo
 {
     int x;
     char[] y;

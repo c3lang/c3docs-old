@@ -164,11 +164,13 @@
     
         <ul>
         
-            <li><a class="toctree-l4" href="#compiling-files-directly">Compiling files directly</a></li>
+            <li><a class="toctree-l4" href="#compile">compile</a></li>
+        
+            <li><a class="toctree-l4" href="#compile-run">compile-run</a></li>
         
             <li><a class="toctree-l4" href="#common-additional-parameters">Common additional parameters</a></li>
         
-            <li><a class="toctree-l4" href="#new">new</a></li>
+            <li><a class="toctree-l4" href="#init">init</a></li>
         
             <li><a class="toctree-l4" href="#build">build</a></li>
         
@@ -176,7 +178,7 @@
         
             <li><a class="toctree-l4" href="#run">run</a></li>
         
-            <li><a class="toctree-l4" href="#run-clean">run-clean</a></li>
+            <li><a class="toctree-l4" href="#clean-run">clean-run</a></li>
         
             <li><a class="toctree-l4" href="#dist">dist</a></li>
         
@@ -244,20 +246,30 @@
             <div class="section">
               
                 <h1 id="build-commands">Build Commands</h1>
-<h2 id="compiling-files-directly">Compiling files directly</h2>
+<p>When starting out, with C3 it's natural to use <code>compile</code> and <code>compile-run</code> to try things out. For larger projects, the built-in build system is instead recommended.</p>
+<h2 id="compile">compile</h2>
 <p>The default for c3c is compiling stand-alone files to output a binary.</p>
-<p><code>c3c &lt;file1&gt; &lt;file2&gt; &lt;file3&gt;</code></p>
+<p><code>c3c compile &lt;file1&gt; &lt;file2&gt; &lt;file3&gt;</code></p>
+<h2 id="compile-run">compile-run</h2>
+<p>The same as <code>compile</code> but then also runs the executable.</p>
 <h2 id="common-additional-parameters">Common additional parameters</h2>
 <p>Additional parameters:
-- <code>-lib &lt;path&gt;</code> add a library to search.
-- <code>-output &lt;path&gt;</code> override the output directory.
-- <code>-path &lt;path&gt;</code> execute as if standing at <path></p>
-<h2 id="new">new</h2>
-<p><code>c3c -new &lt;project_name&gt; [optional path]</code>.</p>
+- <code>--lib &lt;path&gt;</code> add a library to search.
+- <code>--output &lt;path&gt;</code> override the output directory.
+- <code>--path &lt;path&gt;</code> execute as if standing at <path></p>
+<h2 id="init">init</h2>
+<p><code>c3c init &lt;project_name&gt; [optional path]</code>.</p>
 <p>Create a new project structure in the current directory.</p>
+<p>Use the <code>--template</code> to select a template. The following are built in:</p>
+<ul>
+<li><code>default</code> - the default template, produces an executable.</li>
+<li><code>lib</code> - template for producing a library.</li>
+<li><code>staticlib</code> - template for producing a static library.</li>
+</ul>
+<p>It is also possible to give the path to a custom template.</p>
 <p>Additional parameters:
-- <code>-template &lt;path&gt;</code> indicate an alternative template to use.</p>
-<p><code>c3c -new hello_world</code> will create the following structure:</p>
+- <code>--template &lt;path&gt;</code> indicate an alternative template to use. </p>
+<p><code>c3c init hello_world</code> will create the following structure:</p>
 <pre><code>$ tree .
 .
 └── hello_world
@@ -280,14 +292,15 @@
 
 <h2 id="build">build</h2>
 <p><code>build [target]</code></p>
-<p>Build the project in the current path. It doesn't matter where in the project structure you are.</p>
+<p>Build the project in the current path. It doesn't matter where in the project structure you are. </p>
+<p>The built in templates define two targets: <code>debug</code> (which is the default) and <code>release</code>.</p>
 <h2 id="clean">clean</h2>
 <p><code>clean</code></p>
 <h2 id="run">run</h2>
 <p><code>run [target]</code></p>
 <p>Build the target (if needed) and run the executable.</p>
-<h2 id="run-clean">run-clean</h2>
-<p><code>run-clean [target]</code></p>
+<h2 id="clean-run">clean-run</h2>
+<p><code>clean-run [target]</code></p>
 <p>Clean, build and run the target.</p>
 <h2 id="dist">dist</h2>
 <p><code>dist [target]</code></p>
