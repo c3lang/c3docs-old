@@ -34,7 +34,7 @@ printf("%d", i); // Prints 12
 Creates a runtime description of a value.
 
 ```
-type FooEnum enum 
+enum FooEnum
 {
     A,
     B
@@ -46,7 +46,7 @@ func char[] test()
     return @describe(x); // Returns "FooEnum.A"
 }
 
-type Foo struct
+struct Foo
 {
     int x;
     char[] y;

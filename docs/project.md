@@ -58,6 +58,9 @@ List of warnings to enable during compilation.
 
 List of libraries to use when compiling the target.
 
+#### macro-recursion-depth
+
+Set the depth for recursion of macros. Typically set to a value around 10,000.
 
 ## Using environment variables
 

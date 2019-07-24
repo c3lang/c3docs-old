@@ -126,7 +126,7 @@ The code inside of the module can use the generic parameters as if they were wel
 ```
 module foo_test (A, B);
 
-type Foo struct {
+struct Foo {
    A a;
 }
 

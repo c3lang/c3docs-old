@@ -90,7 +90,7 @@ func void example_if_while_for()
 Switches have implicit break and scope. Use "next" to implicitly fallthrough or use comma:
 
 ```
-type Height enum u32 
+enum Height : uint 
 {
     LOW = 0,
     MEDIUM,
@@ -165,7 +165,7 @@ Enums are always namespaced.
 Enums also define `.min` and `.max`, returning the minimum and maximum value for the enum values. `.all` returns an array with all enums.
 
 ```
-type State enum uint 
+enum State : uint 
 {
     Start,
     Stop,
@@ -219,14 +219,14 @@ test(1); // Prints "FOOBA" and throws
 ```
 type Callback func int(char c);
 
-type Status enum int 
+enum Status : int
 {
     IDLE,
     BUSY,
     DONE,
 }
 
-type MyData struct 
+struct MyData
 {
     char* name;
     Callback open;
@@ -290,7 +290,7 @@ func void example_cb()
 #####Error handling
 Errors are sent as a result value but uses an exception-like try/catch syntax.
 ```
-type RandomError error
+error RandomError
 {
     NORMAL,
     EXCEPTIONAL

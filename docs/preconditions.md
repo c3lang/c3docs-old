@@ -18,12 +18,16 @@ func int testFoo(int foo)
 
 # Post conditions
 
-Post conditions are evaluated to make checks on the resulting state after passing through the function. There is a special post condition called "const condition" in the format `const(<parameter>)`, which guarentees that the memory pointed to is not altered within the scope of a function. The post condition uses the `@ensure` annotation. `return` is used to mark the return value from the function.
+Post conditions are evaluated to make checks on the resulting state after passing through the function. There are two special post conditions: `const` and `pure`.
 
+The post condition uses the `@ensure` annotation. Where `return` is used to mark the return value from the function. 
 
+For `const` and `pure`, they can either be given as separate annotations: `@pure` and `@const <parameter>, ...`, or inside an `@ensure` using the format `const(<parameter>)` and `pure(<function name>)`. A parameter marked `const` guarentees that the memory pointed to is not altered within the scope of a function. `pure` guarantees that the function does not read or write to any global variables.
+    
 ```
 /**
  * @ensure const(foo), return > foo.x;
+ * @pure
  **/
 func uint checkFoo(Foo& foo)
 {
@@ -32,6 +36,103 @@ func uint checkFoo(Foo& foo)
     return y * abs(foo.x);
 }
 ```
+
+### Const in detail
+
+The `const` annotation allows a program to make assumtions in regards of how the function treats the parameter. This can then be used by a compiler make optimizations for any caller of the function.
+
+However, it should be noted that the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:
+
+```
+func void badFunc(int& i)
+{
+    *i = 2;
+}
+
+/**
+ * @ensure const(i)
+ */
+func void lyingFunc(int& i)
+{
+    badFunc(i); // The compiler might not check this!
+}
+
+func void test()
+{
+    int a = 1;
+    lyingFunc(&a);
+    printf("%d", a); // Might print 1!
+}
+```
+
+However, compilers will usually detect this:
+```
+
+/**
+ * @ensure const(i)
+ */
+func void badFunc(int& i)
+{
+    *i = 2; // <- Compiler error: violating post condition const(i)
+}
+```
+
+### Pure in detail
+
+The `pure` annotation allows a program to make assumtions in regards of how the function treats global variables. Unlike for `const`, a pure function is not allowed to call a function which is known to be impure.
+
+However, just like for `const` the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:
+
+```
+int i = 0;
+
+type SecretFunc func void();
+
+func void badFunc()
+{
+    i = 2;
+}
+
+SecretFunc foo = nil;
+
+/**
+ * @pure
+ */
+func void lyingFunc()
+{
+    SecretFunc(); // The compiler cannot reason about this!
+}
+
+func void test()
+{
+    foo = &badFunc;
+    i = 1;
+    lyingFunc();
+    printf("%d", a); // Might print 1!
+}
+```
+
+However, compilers will usually detect this:
+
+```
+int i = 0;
+
+func void badFunc()
+{
+    i = 2;
+}
+
+/**
+ * @pure
+ */
+func void lyingFunc()
+{
+    badFunc(); // Error! Calling an impure function
+}
+```
+
+Consequently circumventing "pure" annotations is undefined behaviour.
+
 
 # Pre conditions for macros
 

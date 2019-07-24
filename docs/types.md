@@ -1,23 +1,23 @@
 # Types
 
-As usual, types are divided into basic types and user defined types. The syntax for defining a new type is uniform: `[public] type <name> <definition>`. All types are defined on a global level. Using the `public` prefix is necessary for any type that is to be exposed outside of the current module.
+As usual, types are divided into basic types and user defined types (enum, union, struct, error, aliases). All types are defined on a global level. Using the `public` prefix is necessary for any type that is to be exposed outside of the current module.
 
 ##### Naming
 
 All user defined types in C3 starts with upper case. So `MyStruct` or `Mystruct` would be fine, `mystruct_t` or `mystruct` would not. Since this runs into probles with C compatibility, it is possible to use attributes to change the c name of a type, as well as control whether a C typedef should be emitted for the type.
 
 ```
-type Stat struct 
+struct Stat @(cname="stat", no_typedef)
 {
     // ...
-} @(cname="stat", no_typedef)
+} 
 
 func c_int stat(const c_char* pathname, Stat* buf);
 ```
 
 ##### Differences from C
 
-Unlike C, C3 does not use type qualifiers. Const exists, but is a storage class modifier, not a type qualifier. Instead of volatile, volatile blocks are used. In order to signal restrictions on variable usage, like const-ness [preconditions](../preconditions/) are used.
+Unlike C, C3 does not use type qualifiers. `const` exists, but is a storage class modifier, not a type qualifier. Instead of `volatile`, volatile blocks are used. In order to signal restrictions on variable usage, like const-ness [preconditions](../preconditions/) are used.
 
 ## Basic types
 
@@ -107,7 +107,7 @@ Arrays are indicated by `[]` after the type. Unlike C, the `[]`. `Foo[]` would b
 Enum (enumerated) types use the following syntax:
 
 ```
-type State enum int 
+enum State : int 
 {
     PENDING = 0,
     RUNNING,
@@ -141,7 +141,7 @@ cb(10, false);
 Structs are always named:
 
 ```
-type Person struct 
+struct Person  
 {
     char age;
     char* name;
@@ -170,7 +170,7 @@ io.printf("%s is %d years old.", pPtr.age, pPtr.name);
 C3 allows creating struct subtypes:
 
 ```
-type ImportantPerson struct
+struct ImportantPerson 
 {
     inline Person person;
     char* title;
@@ -196,7 +196,7 @@ printPerson(important_person); // Only the first part of the struct is copied.
 Union types are defined just like structs.
 
 ```
-type Integral union 
+union Integral  
 {
     byte as_byte;
     short as_short;
@@ -225,7 +225,8 @@ Note that unions only take up as much space as their largest member, so `sizeof(
 Just like in later versions of C, anonymous sub-structs / unions are allowed.
 
 ```
-type Person struct {
+struct Person  
+{
     char age;
     char* name;
     union 

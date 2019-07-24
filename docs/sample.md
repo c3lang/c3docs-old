@@ -4,7 +4,7 @@ Here is a bit of code manually converted to C3 from C.
 
 ```
 
-type Node struct
+struct Node
 {
     uint hole;
     uint size;
@@ -12,24 +12,24 @@ type Node struct
     Node* prev;
 }
 
-type Footer struct 
+struct Footer
 { 
     Node &header;
 }
 
-type Bin struct 
+struct Bin  
 {
     Node& head;
 }
 
-type Heap struct 
+struct Heap  
 {
     size start;
     size end;
     Bin* bins[BIN_COUNT];
 }
 
-const uint offset = 8;
+const uint OFFSET = 8;
 
 /**
  * @require start > 0
@@ -106,7 +106,7 @@ func void Heap.free(Heap* heap, void *p)
     Bin& list;
     Footer& new_foot, old_foot;
 
-    Node& head = @cast(Node&, @cast(char&, p) - offset);
+    Node& head = @cast(Node&, @cast(char&, p) - OFFSET);
     if (head == @cast(Node&, @cast(heap.start, usize)) 
     {
         head.hole = 1; 

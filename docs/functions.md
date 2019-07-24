@@ -47,7 +47,7 @@ func int test() throws SomeError, OtherError
 Member functions look exactly like functions, but are prefixed with the struct, union or enum name:
 
 ```
-type Point struct 
+struct Point
 {
     int x;
     int y;
@@ -90,7 +90,7 @@ func void example2()
 Struct and unions will always take pointer, whereas enums take the enum value.
 
 ```
-type State enum
+enum State
 {
     STOPPED,
     RUNNING

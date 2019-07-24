@@ -9,25 +9,25 @@ As a basic rule, all identifiers are limited to a-z, A-Z, 0-9 and `_`. The initi
 All user defined types must start with A-Z after any optional initial `_` and include at least 1 lower case letter. `Bar`, `_T_i12` and `TTi` are all valid names. `_1`, `bAR` and `BAR` are not. For C-compatibility it's possible to alias the type to a C name using the attribute "cname".
 
 ```
-type Foo struct @(cname = "foo")
+struct Foo @(cname = "foo")
 {
     int x;
     Bar bar;
 }
 
-type Bar union
+union Bar 
 {
     int i;
     double d;
 }
 
-type Baz enum
+enum Baz 
 {
     VALUE_1,
     VALUE_2
 }
 
-type Err error
+error Err 
 {
     OOPS,
     LOTS_OF_OOPS
@@ -61,13 +61,13 @@ const int A_VALUE = 12;
 Enum and error values follow the same naming standard as global constants.
 
 ```
-type Baz enum
+enum Baz 
 {
     VALUE_1,
     VALUE_2
 }
 
-type Err error
+error Err 
 {
     OOPS,
     LOTS_OF_OOPS

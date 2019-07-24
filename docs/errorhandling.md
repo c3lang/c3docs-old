@@ -42,7 +42,7 @@ catch (error err)
 
 ##### Defining an error set
 ```
-type FileError error
+error FileError
 {
     FILE_NOT_FOUND,
     FILE_CANNOT_OPEN,

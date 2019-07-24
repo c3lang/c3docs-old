@@ -2,6 +2,7 @@
 
 **WARNING** Unfinished ideas / brain dumps
 
+
 ## Managed pointers
 
 Managed pointers are introduced using the pointer `@` after the type, e.g. `Foo@ f`.
@@ -139,12 +140,11 @@ a[2] // Prints 11.
 
 ## Unsorted
 
-##### Abandon C2 syntax partly
+##### Varargs
 
-Change:
+Use typed varargs? E.g. `void foo(int x, float... foo)` where the type of foo becomes `float[]`
 
-`type Foo enum { ... }` => `enum Foo { ... }`
-`int globalVariable = 0` => `var int globalVariable = 0` (or global int?)
+Change main to `void main(char*[] args)`?
 
 ##### Unsigned conversion to signed
 
@@ -300,7 +300,7 @@ switch (x)
 ##### Associate properties to an enum
 
 ```
-type enum State [char* name, byte bit] int
+enum State [char* name, byte bit] int
 {
     START("begin!", 0x01) = 0,
     END("end it!", 0x10)
@@ -341,7 +341,7 @@ switch(@tag(foo))
 Alternative syntax etc:
 
 ```
-type Shape struct 
+struct Shape
 {
     int centerX;
     int centerY;
@@ -358,7 +358,7 @@ type Shape struct
 And yet another...
 
 ```
-type Shape struct 
+struct Shape
 {
     int centerX;
     int centerY;
@@ -384,7 +384,7 @@ func void Foo.renderPage(Foo& foo, Page& info)
     /* ... */
 }
 
-type Renderer interface 
+interface Renderer
 {
     void renderPage(Renderer& renderer, Page& info)
 }
@@ -1031,7 +1031,7 @@ macro @foo_enum(&a)
     }
 }
 
-type MyEnum enum 
+enum MyEnum
 {
     A,
     B,

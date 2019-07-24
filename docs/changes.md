@@ -1,6 +1,14 @@
 # Change log
 
-Current revision made 2019-07-23.
+Current revision made 2019-07-24.
+
+##### Revision 2019-07-24
+
+- Idea: typed varargs.
+- Added "pure" [post condition](../preconditions)
+- Updated c3c commands.
+- Removed the `type` keyword for defining union/struct/enum/error.
+
 
 ##### Revision 2019-07-23
 

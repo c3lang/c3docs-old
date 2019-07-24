@@ -1,28 +1,42 @@
 # Build Commands
 
-## Compiling files directly
+When starting out, with C3 it's natural to use `compile` and `compile-run` to try things out. For larger projects, the built-in build system is instead recommended.
+
+## compile
 
 The default for c3c is compiling stand-alone files to output a binary.
 
-`c3c <file1> <file2> <file3>`
+`c3c compile <file1> <file2> <file3>`
+
+## compile-run
+
+The same as `compile` but then also runs the executable.
 
 ## Common additional parameters
 
 Additional parameters:
-- `-lib <path>` add a library to search.
-- `-output <path>` override the output directory.
-- `-path <path>` execute as if standing at <path>
+- `--lib <path>` add a library to search.
+- `--output <path>` override the output directory.
+- `--path <path>` execute as if standing at <path>
     
-## new
+## init
 
-`c3c -new <project_name> [optional path]`.
+`c3c init <project_name> [optional path]`.
 
 Create a new project structure in the current directory.
 
-Additional parameters:
-- `-template <path>` indicate an alternative template to use.
+Use the `--template` to select a template. The following are built in:
 
-`c3c -new hello_world` will create the following structure:
+- `default` - the default template, produces an executable.
+- `lib` - template for producing a library.
+- `staticlib` - template for producing a static library.
+
+It is also possible to give the path to a custom template.
+
+Additional parameters:
+- `--template <path>` indicate an alternative template to use. 
+
+`c3c init hello_world` will create the following structure:
 
 ```
 $ tree .
@@ -48,7 +62,9 @@ $ tree .
 
 `build [target]`
 
-Build the project in the current path. It doesn't matter where in the project structure you are.
+Build the project in the current path. It doesn't matter where in the project structure you are. 
+
+The built in templates define two targets: `debug` (which is the default) and `release`.
 
 ## clean
 
@@ -60,9 +76,9 @@ Build the project in the current path. It doesn't matter where in the project st
 
 Build the target (if needed) and run the executable.
 
-## run-clean
+## clean-run
 
-`run-clean [target]`
+`clean-run [target]`
 
 Clean, build and run the target.
 
