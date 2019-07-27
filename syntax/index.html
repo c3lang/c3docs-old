@@ -132,12 +132,24 @@
                     
     <a class="" href="../naming/">Naming rules</a>
                 </li>
+                <li class="">
+                    
+    <a class="" href="../comments/">Comments & Docs</a>
+                </li>
                 <li class=" current">
                     
     <a class="current" href="./">Grammar</a>
     <ul class="subnav">
             
-    <li class="toctree-l3"><a href="#grammar">Grammar</a></li>
+    <li class="toctree-l3"><a href="#syntax">Syntax</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#keywords">Keywords</a></li>
+        
+            <li><a class="toctree-l4" href="#railroad-grammar">Railroad grammar</a></li>
+        
+        </ul>
     
 
     </ul>
@@ -219,43 +231,59 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="grammar">Grammar</h1>
+                <h1 id="syntax">Syntax</h1>
+<h2 id="keywords">Keywords</h2>
+<p>The following are 69 reserved keywords used by C3:</p>
+<p>as, asm, break, case, cast, catch, const, continue,
+default, defer, do, else, enum, error, false, for, func,
+generic, goto, if, import, local, macro, module, nil,
+public, return, struct, switch, throw, throws, true, 
+try, typedef, union, until, void, volatile, while,
+f32, f64, float, double, 
+i8, i16, i32, i64, u8, u16, u32, u64, 
+char, byte, short, ushort, int, uint, long, ulong, isize, usize,
+c_short, c_ushort, c_int, c_uint, c_long, c_ulong, c_longlong, 
+c_ulonglong, c_longdouble</p>
+<p>In addition to those, the following 12 are reserved but currently not used:
+f16, f128, f256, half, quad, i128, i256, u128, u256, type, var, alias</p>
+<p>For macros the following 9 identifiers are reserved as keywords:
+@param, @throws, @return, @ensure, @require, @pure, @const, @reqparse, @deprecated</p>
+<h2 id="railroad-grammar">Railroad grammar</h2>
 <p>The following (incomplete) grammar can be used with this: https://bottlecaps.de/rr/ui to get a railroad diagram of the grammar.</p>
-<pre><code class="bnf">source ::= module_def import_def+ top_level
+<pre><code class="bnf">
+source ::= module_def? import_def+ top_level
 
-module_def ::= 'module' LIDENT EOS
+module_def ::= 'module' VIDENT EOS
 
-import_def_ ::= 'import' LIDENT ( ('as' LIDENT) | 'local' )? EOS
+import_def_ ::= 'import' VIDENT ( ('as' VIDENT) | 'local' )? EOS
 
 top_level ::= (array_append | global_decl)*
 
 global_decl ::= 'public'? (type_def | func_def | var_def | macro_def)
 
-array_append ::= LIDENT '+=' init_value
+array_append ::= VIDENT '+=' init_value
 
 func_def ::= return_value TIDENT '(' function_args ')' compound_stmt?
 
-generic_def ::= 'generic' LIDENT '(' generic_arg_list ')' compound_stmt
+generic_def ::= 'generic' VIDENT '(' generic_arg_list ')' compound_stmt
 
 generic_arg_list ::= generic_arg (',' generic_arg)*
 
-generic_arg ::= type? LIDENT
+generic_arg ::= type? VIDENT
 
-macro_def ::= 'macro' LIDENT '('  macro_arg_list? ')' compound_stmt
+macro_def ::= 'macro' VIDENT '('  macro_arg_list? ')' compound_stmt
 
 macro_arg_list ::= macro_arg (',' macro_arg)*
 
-macro_arg ::= '&amp;'? LIDENT
+macro_arg ::= '&amp;'? VIDENT
 
 var_def ::= type_qualifier TIDENT ...
 
 struct_or_union ::= 'struct' | 'union'
 
-type_def ::= 'type' TIDENT type_def_body
+type_def ::= enum_def | func_type_def | struct_def | error_def
 
-type_def_body ::= enum_def | func_type_def | struct_def | error_def
-
-enum_def ::= 'enum' type attributes? '{' enum_body? '}'
+enum_def ::= 'enum' TIDENT enum_def type attributes? '{' enum_body? '}'
 
 enum_body ::= enum_value (',' enum_value)* ','?
 
@@ -265,11 +293,11 @@ error_def ::= 'error' TIDENT '{' TIDENT (',' TIDENT)* '}'
 
 func_type_def ::= 'func' type attributes? '(' function_args ')' EOS
 
-struct_def ::= struct_or_union attributes? struct_body
+struct_def ::= struct_or_union TIDENT attributes? struct_body
 
 struct_body ::= '{' (struct_member (',' struct_member)* )? '}'
 
-struct_member ::= (type LIDENT) | (struct_or_union TIDENT? struct_body)
+struct_member ::= (type VIDENT) | (struct_or_union TIDENT? struct_body)
 
 compound_stmt ::= '{' (statement | declaration)* '}'
 
@@ -351,7 +379,7 @@ array_op ::= '[' expression ']'
 
 call_op ::= '(' arg_expr_list? ')'
 
-dot_op ::= '.' LIDENT
+dot_op ::= '.' VIDENT
 
 inc_dec_op ::= '++' | '--'
 
@@ -385,7 +413,7 @@ binary_expr ::= unary_expr (binary_op unary_expr)*
 
 expression ::= binary_expr ('?' expression ':' cond_expr)?
 
-declaration ::= qualified_type LIDENT ('=' init_expr)? EOS
+declaration ::= qualified_type VIDENT ('=' init_expr)? EOS
 
 init_expr ::= expression | struct_init
 
@@ -395,7 +423,7 @@ struct_init_list ::= strict_init_decl (',' struct_init_decl)*
 
 struct_init_decl ::= member_init | init_expr
 
-member_init ::=_ '.' LIDENT '=' init_expr
+member_init ::=_ '.' VIDENT '=' init_expr
 </code></pre>
               
             </div>
@@ -407,7 +435,7 @@ member_init ::=_ '.' LIDENT '=' init_expr
         <a href="../sample/" class="btn btn-neutral float-right" title="More code examples">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../naming/" class="btn btn-neutral" title="Naming rules"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../comments/" class="btn btn-neutral" title="Comments & Docs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -433,7 +461,7 @@ member_init ::=_ '.' LIDENT '=' init_expr
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../naming/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../comments/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../sample/" style="color: #fcfcfc">Next &raquo;</a></span>

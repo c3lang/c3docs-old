@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Errors - C3 Documentation</title>
+  <title>Comments & Docs - C3 Documentation</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Errors";
-    var mkdocs_page_input_path = "errorhandling.md";
+    var mkdocs_page_name = "Comments & Docs";
+    var mkdocs_page_input_path = "comments.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -100,21 +100,9 @@
                     
     <a class="" href="../statements/">Statements</a>
                 </li>
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Errors</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#error-handling">Error Handling</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l4" href="#error-returns">Error returns</a></li>
-        
-        </ul>
-    
-
-    </ul>
+    <a class="" href="../errorhandling/">Errors</a>
                 </li>
                 <li class="">
                     
@@ -144,9 +132,21 @@
                     
     <a class="" href="../naming/">Naming rules</a>
                 </li>
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="../comments/">Comments & Docs</a>
+    <a class="current" href="./">Comments & Docs</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#comments-and-docs">Comments and docs</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#documentation">Documentation</a></li>
+        
+        </ul>
+    
+
+    </ul>
                 </li>
                 <li class="">
                     
@@ -219,7 +219,7 @@
         
       
     
-    <li>Errors</li>
+    <li>Comments & Docs</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -229,134 +229,81 @@
           <div role="main">
             <div class="section">
               
-                <h2 id="error-handling">Error Handling</h2>
-<p>Unlike usual exception handling, errors in C3 build on normal returns. A function declaring errors using the <code>throws</code> keyword essentially returns a union containing either the return value or an 64 bit integer. A register or a flag is used to determine if the result is an error or a normal result.</p>
-<p>Because there is no stack unwinding, error handling is completely deterministic and has no additional runtime cost.</p>
-<p>The call of a function which returns an error <em>must</em> be preceeded by the keyword <code>try</code>. </p>
-<h3 id="error-returns">Error returns</h3>
-<p>From C, a function throwing an error value appears simply as a union:</p>
-<p>C3 code:</p>
-<pre><code>func int getValue() throws
-</code></pre>
-
-<p>Corresponding C code:</p>
-<pre><code class="c">struct Result { char error; union { int res; uint64_t err_code; }; };
-struct Result getValue();
-</code></pre>
-
-<p>It is possible to extract the error code and also store it, to retrieve it later:</p>
-<pre><code>try openFile(&quot;foo.txt&quot;);
-catch (error err)
+                <h1 id="comments-and-docs">Comments and docs</h1>
+<p>C3 uses three distinct comment types:</p>
+<ol>
+<li>The normal <code>//</code> line comment, which is terminated at the end of the line.</li>
+<li>The classic <code>/* ... */</code> C style comment.</li>
+<li>Documentation comments <code>/** ... **/</code> the text within these comments will be parsed as documentation and optional contracts on the following code.</li>
+<li>Nested comments <code>/+ ... +/</code>. Like C style comments, but they are allowed to nest.</li>
+</ol>
+<h2 id="documentation">Documentation</h2>
+<p>Documentation comments start with <code>/**</code> and must be terminated using <code>*/</code>. Note that any number of <code>*</code> may follow <code>/**</code> and any number of stars may preceed <code>*/</code>. Any space and <code>*</code> in the beginning of each line will be ignored.</p>
+<p>Here is an example:</p>
+<pre><code>/**
+ * Here are som docs.
+ * @param foo The number of foos.
+ * @required foo &gt; 4 
+ * @deprecated
+ * @mycustom 2
+ **/
+void bar(int foo)
 {
-    // Might print &quot;Error was FILE_NOT_FOUND&quot;
-    printf(&quot;Error was %s\n&quot;, @name(err)); 
-
-    // Might print &quot;Error was FileError.FILE_NOT_FOUND&quot;
-    printf(&quot;Error was %s\n&quot;, @describe(err)); 
-
-    // Might print &quot;Error code: 931938210&quot;
-    printf(&quot;Error code: %ull\n&quot;, @cast(ulong, err)); 
+    printf(&quot;%d&quot;, foo);
 }
 </code></pre>
 
-<h4 id="some-simple-examples">Some simple examples.</h4>
-<h5 id="defining-an-error-set">Defining an error set</h5>
-<pre><code>error FileError
-{
-    FILE_NOT_FOUND,
-    FILE_CANNOT_OPEN,
-    PATH_DOES_NOT_EXIST,    
-}
-</code></pre>
-
-<h5 id="throwing-an-error">Throwing an error</h5>
-<pre><code>func void findFile() throws
-{
-    if (File.doesFileExist(&quot;foo.txt&quot;)) throw FileError.FILE_NOT_FOUND;
-    /* ... */
-}
-</code></pre>
-
-<h5 id="declaring-a-function-as-throwing-a-specific-set-of-errors">Declaring a function as throwing a specific set of errors</h5>
-<pre><code>func void findFile() throws FileError
-{
-    /* ... */
-}
-</code></pre>
-
-<h5 id="declaring-a-function-to-throw-a-union-of-errors">Declaring a function to throw a union of errors</h5>
-<pre><code>func void findAndParseFile() throws FileError, ParseError
-{
-    /* ... */
-}
-</code></pre>
-
-<h5 id="calling-a-function-that-throws">Calling a function that throws</h5>
-<pre><code>func void findFileAndTest() throws
-{
-    try findFile();
-}
-</code></pre>
-
-<h5 id="catching-errors">Catching errors</h5>
-<pre><code>func void findFileAndNoExcept()
-{
-    try findFile();
-
-    catch (error err)
-    {
-        printf(&quot;An error occurred!\n&quot;);
-        return;
-    }
-}
-</code></pre>
-
-<h5 id="catching-error-subsets">Catching error subsets</h5>
-<pre><code>func void findFileAndParse2() throws ParseError
-{
-    try findFileAndParse();
-
-    catch (FileError err)
-    {
-        printf(&quot;Error loading the file!\n&quot;);
-        return;
-    }
-
-    // No catch for the ParseError, so it escapes.
-}
-</code></pre>
-
-<h5 id="scoped-error-catching">Scoped error catching</h5>
-<pre><code>func void testErrorScopes()
-{
-    {
-        try findFileAndParse();
-
-        catch (FileError err)
-        {
-            try sendAlarm(&quot;Error loading the file&quot;);
-            catch (error err)
-            {
-                printf(&quot;Failed to send the alarm&quot;);
-            }
-            return;
-        }        
-    }
-
-    try someOtherCall();
-    catch (error err)
-    {
-        printf(&quot;Some other error\n&quot;);
-    }
-}
-</code></pre>
-
-<h5 id="default-values">Default values</h5>
-<pre><code>func int testDefault()
-{
-    return try getIntNumberOrFail() else -1;
-}
-</code></pre>
+<p>In the example above, the following is parsed as description: <em>"Here are the docs."</em>, then there is a description associated with the <code>foo</code> parameter: <em>"The number of foos"</em>.</p>
+<p>On top of that there are two annotations for the compiler: <code>@required foo &gt; 4</code> which tells the compiler and a user of the function that a precondition is that <code>foo</code> must be greater than 4. It is also marked as @deprecated, which can be used to display warnings.</p>
+<p>Finally a custom annotation, "@mycustom" is added. The compiler is free to silently ignore such annotations, but can optionally emit warnings for them, it is otherwise ignored.</p>
+<h3 id="available-annotations">Available annotations</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th align="right">format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@param</td>
+<td align="right"><code>@param &lt;param&gt; &lt;description&gt;</code></td>
+</tr>
+<tr>
+<td>@return</td>
+<td align="right"><code>@return &lt;description&gt;</code></td>
+</tr>
+<tr>
+<td>@throws</td>
+<td align="right"><code>@throws &lt;description&gt;</code></td>
+</tr>
+<tr>
+<td>@deprecated</td>
+<td align="right"><code>@deprecated &lt;optional description&gt;</code></td>
+</tr>
+<tr>
+<td>@require</td>
+<td align="right"><code>@require &lt;expr1&gt;, &lt;expr2&gt;, ...</code></td>
+</tr>
+<tr>
+<td>@ensure</td>
+<td align="right"><code>@ensure &lt;expre1&gt;, &lt;expr2&gt;, ...</code></td>
+</tr>
+<tr>
+<td>@const</td>
+<td align="right"><code>@const &lt;param1&gt;, &lt;param2&gt;, ...</code></td>
+</tr>
+<tr>
+<td>@pure</td>
+<td align="right"><code>@pure</code></td>
+</tr>
+<tr>
+<td>@reqparse</td>
+<td align="right"><code>@reqparse &lt;expr1&gt;, &lt;expr2&gt;, ...</code></td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="../preconditions">pre and post conditions</a> for information regarding <code>@require</code>, <code>@ensure</code>, <code>@const</code>, <code>@pure</code>, <code>@reqparse</code>.</p>
               
             </div>
           </div>
@@ -364,10 +311,10 @@ catch (error err)
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../builtinmacros/" class="btn btn-neutral float-right" title="Built-in Macros">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../syntax/" class="btn btn-neutral float-right" title="Grammar">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../statements/" class="btn btn-neutral" title="Statements"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../naming/" class="btn btn-neutral" title="Naming rules"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -393,10 +340,10 @@ catch (error err)
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../statements/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../naming/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../builtinmacros/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../syntax/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
