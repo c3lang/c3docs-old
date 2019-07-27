@@ -136,12 +136,12 @@ Consequently circumventing "pure" annotations is undefined behaviour.
 
 # Pre conditions for macros
 
-Macros have an additional class of pre conditions, that are used to confirm that the values actually will work inside the macro body. This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the `@ensure-parse` annotation, or together with the `@ensure` annotations, surrounded by `parse()`. 
+Macros have an additional class of pre conditions, that are used to confirm that the values actually will work inside the macro body. This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the `@reqparse` annotation, or together with the `@require` annotations, surrounded by `parse()`. 
 
 ```
 /**
- * @ensure-parse resource.open()
- * @ensure resource != nil, parse(void *x = resource.open())
+ * @reqparse resource.open()
+ * @require resource != nil, parse(void *x = resource.open())
  **/
 macro openResource(resource)
 {

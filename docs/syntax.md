@@ -1,43 +1,66 @@
 
-# Grammar
+# Syntax
+
+## Keywords
+
+The following are 69 reserved keywords used by C3:
+
+as, asm, break, case, cast, catch, const, continue,
+default, defer, do, else, enum, error, false, for, func,
+generic, goto, if, import, local, macro, module, nil,
+public, return, struct, switch, throw, throws, true, 
+try, typedef, union, until, void, volatile, while,
+f32, f64, float, double, 
+i8, i16, i32, i64, u8, u16, u32, u64, 
+char, byte, short, ushort, int, uint, long, ulong, isize, usize,
+c_short, c_ushort, c_int, c_uint, c_long, c_ulong, c_longlong, 
+c_ulonglong, c_longdouble
+
+
+In addition to those, the following 12 are reserved but currently not used:
+f16, f128, f256, half, quad, i128, i256, u128, u256, type, var, alias
+ 
+For macros the following 9 identifiers are reserved as keywords:
+@param, @throws, @return, @ensure, @require, @pure, @const, @reqparse, @deprecated
+
+## Railroad grammar
 
 The following (incomplete) grammar can be used with this: https://bottlecaps.de/rr/ui to get a railroad diagram of the grammar.
 ```bnf
-source ::= module_def import_def+ top_level
 
-module_def ::= 'module' LIDENT EOS
+source ::= module_def? import_def+ top_level
 
-import_def_ ::= 'import' LIDENT ( ('as' LIDENT) | 'local' )? EOS
+module_def ::= 'module' VIDENT EOS
+
+import_def_ ::= 'import' VIDENT ( ('as' VIDENT) | 'local' )? EOS
 
 top_level ::= (array_append | global_decl)*
 
 global_decl ::= 'public'? (type_def | func_def | var_def | macro_def)
 
-array_append ::= LIDENT '+=' init_value
+array_append ::= VIDENT '+=' init_value
 
 func_def ::= return_value TIDENT '(' function_args ')' compound_stmt?
 
-generic_def ::= 'generic' LIDENT '(' generic_arg_list ')' compound_stmt
+generic_def ::= 'generic' VIDENT '(' generic_arg_list ')' compound_stmt
 
 generic_arg_list ::= generic_arg (',' generic_arg)*
 
-generic_arg ::= type? LIDENT
+generic_arg ::= type? VIDENT
 
-macro_def ::= 'macro' LIDENT '('  macro_arg_list? ')' compound_stmt
+macro_def ::= 'macro' VIDENT '('  macro_arg_list? ')' compound_stmt
 
 macro_arg_list ::= macro_arg (',' macro_arg)*
 
-macro_arg ::= '&'? LIDENT
+macro_arg ::= '&'? VIDENT
 
 var_def ::= type_qualifier TIDENT ...
 
 struct_or_union ::= 'struct' | 'union'
 
-type_def ::= 'type' TIDENT type_def_body
+type_def ::= enum_def | func_type_def | struct_def | error_def
 
-type_def_body ::= enum_def | func_type_def | struct_def | error_def
-
-enum_def ::= 'enum' type attributes? '{' enum_body? '}'
+enum_def ::= 'enum' TIDENT enum_def type attributes? '{' enum_body? '}'
 
 enum_body ::= enum_value (',' enum_value)* ','?
 
@@ -47,11 +70,11 @@ error_def ::= 'error' TIDENT '{' TIDENT (',' TIDENT)* '}'
 
 func_type_def ::= 'func' type attributes? '(' function_args ')' EOS
 
-struct_def ::= struct_or_union attributes? struct_body
+struct_def ::= struct_or_union TIDENT attributes? struct_body
 
 struct_body ::= '{' (struct_member (',' struct_member)* )? '}'
 
-struct_member ::= (type LIDENT) | (struct_or_union TIDENT? struct_body)
+struct_member ::= (type VIDENT) | (struct_or_union TIDENT? struct_body)
 
 compound_stmt ::= '{' (statement | declaration)* '}'
     
@@ -133,7 +156,7 @@ array_op ::= '[' expression ']'
 
 call_op ::= '(' arg_expr_list? ')'
 
-dot_op ::= '.' LIDENT
+dot_op ::= '.' VIDENT
 
 inc_dec_op ::= '++' | '--'
 
@@ -167,7 +190,7 @@ binary_expr ::= unary_expr (binary_op unary_expr)*
 
 expression ::= binary_expr ('?' expression ':' cond_expr)?
 
-declaration ::= qualified_type LIDENT ('=' init_expr)? EOS
+declaration ::= qualified_type VIDENT ('=' init_expr)? EOS
 
 init_expr ::= expression | struct_init
 
@@ -177,5 +200,5 @@ struct_init_list ::= strict_init_decl (',' struct_init_decl)*
 
 struct_init_decl ::= member_init | init_expr
 
-member_init ::=_ '.' LIDENT '=' init_expr
+member_init ::=_ '.' VIDENT '=' init_expr
 ```

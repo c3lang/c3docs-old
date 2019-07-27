@@ -1,6 +1,12 @@
 # Change log
 
-Current revision made 2019-07-24.
+Current revision made 2019-07-27.
+
+##### Revision 2019-07-27
+
+- Updated grammar with keywords.
+- Added the [docs & comments](../comments) page.
+- Updated the [pre and post conditions](../preconditions).
 
 ##### Revision 2019-07-24
 
@@ -8,7 +14,6 @@ Current revision made 2019-07-24.
 - Added "pure" [post condition](../preconditions)
 - Updated c3c commands.
 - Removed the `type` keyword for defining union/struct/enum/error.
-
 
 ##### Revision 2019-07-23
 
