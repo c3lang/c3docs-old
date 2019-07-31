@@ -72,6 +72,7 @@ func void test()
     // Mixing named and defaults leaving out initial values:
     testNamed(,,false, times = 1);
 }
+```
 
 #### Varargs **- NEW!**
 
