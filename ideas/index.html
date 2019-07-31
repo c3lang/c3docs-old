@@ -133,11 +133,19 @@
     
         <ul>
         
+            <li><a class="toctree-l4" href="#c-interop">C interop</a></li>
+        
             <li><a class="toctree-l4" href="#managed-pointers">Managed pointers</a></li>
         
             <li><a class="toctree-l4" href="#arrays">Arrays</a></li>
         
+            <li><a class="toctree-l4" href="#raw-dynamic-safe-arrays-new">Raw dynamic, safe arrays - NEW!</a></li>
+        
+            <li><a class="toctree-l4" href="#raw-dynamic-safe-strings-new">Raw dynamic, safe strings - NEW!</a></li>
+        
             <li><a class="toctree-l4" href="#unsorted">Unsorted</a></li>
+        
+            <li><a class="toctree-l4" href="#halloc-new">Halloc - NEW!</a></li>
         
             <li><a class="toctree-l4" href="#interfaces">Interfaces</a></li>
         
@@ -161,6 +169,10 @@
                 <li class="">
                     
     <a class="" href="../comments/">Comments & Docs</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../cinterop/">C Interop</a>
                 </li>
                 <li class="">
                     
@@ -245,6 +257,23 @@
               
                 <h1 id="ideas">Ideas</h1>
 <p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
+<h2 id="c-interop">C interop</h2>
+<p>Steps:</p>
+<ol>
+<li>Add group header in the builds: [c-libs]</li>
+<li>Add the search paths: cpath = ["/xxx/foo/<strong>", "/bar/headers/</strong>"]</li>
+<li>Add each library: [[lib]]</li>
+</ol>
+<pre><code>[c-libs]
+    cpath = [&quot;/xxx/foo/**&quot;, &quot;/bar/headers/**&quot;]
+    [[lib]]
+        module = &quot;windows&quot;
+        header = &quot;windows.h&quot;
+    [[lib]]
+        module = &quot;stdlib&quot;
+        header = &quot;stdlib.h&quot;
+</code></pre>
+
 <h2 id="managed-pointers">Managed pointers</h2>
 <p>Managed pointers are introduced using the pointer <code>@</code> after the type, e.g. <code>Foo@ f</code>.</p>
 <p>A manage value will need to implement the member function <code>release</code> and <code>retain</code>. What these functions actually does is up to the implementation. For example, we may have a struct that use these functions to handle a reference count. Managed pointers will then allow automatic reference counting:</p>
@@ -362,6 +391,20 @@ d = @cast(int[4]*, e); // Fine
 }
 </code></pre>
 
+<h2 id="raw-dynamic-safe-arrays-new">Raw dynamic, safe arrays <strong>- NEW!</strong></h2>
+<ol>
+<li>Works just like a pointer</li>
+<li>Not safe to keep reference to if made dynamic.</li>
+<li>Requires special method to dispose of and to allocate</li>
+<li>Knows its size.</li>
+</ol>
+<h2 id="raw-dynamic-safe-strings-new">Raw dynamic, safe strings <strong>- NEW!</strong></h2>
+<ol>
+<li>Works just like a pointer.</li>
+<li>Not safe to keep reference if made dynamic</li>
+<li>Requires special method to dispose of and to allocate</li>
+<li>Knows its size.</li>
+</ol>
 <h3 id="dynamic-arrays">Dynamic arrays</h3>
 <p>Dynamic arrays are provided as a library and they are usually ref counted:</p>
 <pre><code>import array(int) alias IntArray;
@@ -382,6 +425,8 @@ a[2] // Prints 11.
 </code></pre>
 
 <h2 id="unsorted">Unsorted</h2>
+<h2 id="halloc-new">Halloc <strong>- NEW!</strong></h2>
+<p>Hierarchal memory allocation http://swapped.cc/#!/halloc support it?</p>
 <h5 id="varargs">Varargs</h5>
 <p>Use typed varargs? E.g. <code>void foo(int x, float... foo)</code> where the type of foo becomes <code>float[]</code></p>
 <p>Change main to <code>void main(char*[] args)</code>?</p>
@@ -584,7 +629,7 @@ switch(@tag(foo))
 
 interface Renderer
 {
-    void renderPage(Renderer&amp; renderer, Page&amp; info)
+    void renderPage(Renderer&amp; renderer, Page&amp; info);
 }
 
 func void render(Renderer* renderer, Page&amp; info)

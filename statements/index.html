@@ -150,6 +150,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../cinterop/">C Interop</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../syntax/">Grammar</a>
                 </li>
                 <li class="">
@@ -231,13 +235,13 @@
               
                 <h1 id="statements">Statements</h1>
 <h2 id="volatile-section">Volatile section</h2>
-<p>Volatile sections replace volatile variables. </p>
+<p>Volatile sections replace volatile type qualifiers on variable types.</p>
 <pre><code>func void test()
 {
     v = 0;
     for (int i = 0; i &lt; 100; i++)
     {
-        @volatile
+        volatile
         {
             v = 1; 
         }
@@ -248,7 +252,7 @@
 <p>Note that volatile sections may also be used as expressions:</p>
 <pre><code>// The v = 1 assignment may not be optimized away,
 // But the assignment to x can be. 
-x = @volatile(v = 1);
+x = volatile(v = 1);
 </code></pre>
               
             </div>
