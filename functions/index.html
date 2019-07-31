@@ -103,6 +103,10 @@
         
             <li><a class="toctree-l4" href="#regular-functions">Regular functions</a></li>
         
+            <li><a class="toctree-l4" href="#member-functions">Member functions</a></li>
+        
+            <li><a class="toctree-l4" href="#pre-and-post-conditions">Pre and post conditions</a></li>
+        
         </ul>
     
 
@@ -295,148 +299,130 @@ func void test()
     // Mixing named and defaults leaving out initial values:
     testNamed(,,false, times = 1);
 }
-
-#### Varargs **- NEW!**
-
-There are two types of varargs: the usual C-style untyped varargs and typed varargs. Untyped varargs will always send arguments as-is, whereas typed arguments will do normal conversions.
-
-
 </code></pre>
 
-<p>func void varargsUntyped(string foo, ...)
+<h4 id="varargs-new">Varargs <strong>- NEW!</strong></h4>
+<p>There are two types of varargs: the usual C-style untyped varargs and typed varargs. Untyped varargs will always send arguments as-is, whereas typed arguments will do normal conversions.</p>
+<pre><code>func void varargsUntyped(string foo, ...)
 {
-    /<em> ... </em>/
-}</p>
-<p>func void varargsTyped(string bar, int... ints)
+    /* ... */
+}
+
+func void varargsTyped(string bar, int... ints)
 {
-    /<em> ... </em>/
-}</p>
-<p>func void test()
+    /* ... */
+}
+
+func void test()
 {
-    varargsUntyped("Hello", 2, 1.0, cast(byte, 1), "Test");
-    varargsTyped("Test", 2, cast(byte, 1));
+    varargsUntyped(&quot;Hello&quot;, 2, 1.0, cast(byte, 1), &quot;Test&quot;);
+    varargsTyped(&quot;Test&quot;, 2, cast(byte, 1));
     // The second parameter will be converted to an int implicitly.
-}</p>
-<pre><code>
-### Using throws
-
-The throws parameter may return a generic throws clause – in this case the error type is unknown.
-
-The below example might throw errors from both the `SomeError` error domain as well as the `OtherError` error domain.
-
+}
 </code></pre>
 
-<p>func int test() throws
+<h3 id="using-throws">Using throws</h3>
+<p>The throws parameter may return a generic throws clause – in this case the error type is unknown.</p>
+<p>The below example might throw errors from both the <code>SomeError</code> error domain as well as the <code>OtherError</code> error domain.</p>
+<pre><code>func int test() throws
 {
     if (random_value() &gt; 0.2) throw SomeError.BAD_JOSS_ERROR;
     if (random_value() &gt; 0.5) throw OtherError.BAD_LUCK_ERROR;
     return 0;
-}</p>
-<pre><code>
-The errors can be explicitly documented, by listing the error domains, separated by `,`
-
+}
 </code></pre>
 
-<p>func int test() throws SomeError, OtherError
+<p>The errors can be explicitly documented, by listing the error domains, separated by <code>,</code></p>
+<pre><code>func int test() throws SomeError, OtherError
 {
     if (random_value() &gt; 0.2) throw SomeError.BAD_JOSS_ERROR;
     if (random_value() &gt; 0.5) throw OtherError.BAD_LUCK_ERROR;
     return 0;
-}</p>
-<pre><code>
-## Member functions
-
-Member functions look exactly like functions, but are prefixed with the struct, union or enum name:
-
+}
 </code></pre>
 
-<p>struct Point
+<h2 id="member-functions">Member functions</h2>
+<p>Member functions look exactly like functions, but are prefixed with the struct, union or enum name:</p>
+<pre><code>struct Point
 {
     int x;
     int y;
-}</p>
-<p>func void Point.add(Point&amp; p, int x) 
+}
+
+func void Point.add(Point&amp; p, int x) 
 {
     p.x = x;
-}</p>
-<p>func void example() 
+}
+
+func void example() 
 {
-    Point p = { 1, 2 }</p>
-<pre><code>// with struct-functions
-p.add(10);
+    Point p = { 1, 2 }
 
-// Also callable as:
-Point.add(&amp;p, 10);
-</code></pre>
-<p>}</p>
-<pre><code>
-If a member function does not take the type as the first parameter, then it may only be invoked qualified with the type name:
+    // with struct-functions
+    p.add(10);
 
+    // Also callable as:
+    Point.add(&amp;p, 10);
+}
 </code></pre>
 
-<p>func Point&amp; Point.new(int x, int y) 
+<p>If a member function does not take the type as the first parameter, then it may only be invoked qualified with the type name:</p>
+<pre><code>func Point&amp; Point.new(int x, int y) 
 {
     Point &amp;p = malloc(@sizeof(Point));
     p.x = x;
     p.y = y;
     return p;
-}</p>
-<p>func void example2() 
+}
+
+func void example2() 
 {
     Point &amp;p = Point.new(1, 2);
-}</p>
-<pre><code>
-Struct and unions will always take pointer, whereas enums take the enum value.
-
+}
 </code></pre>
 
-<p>enum State
+<p>Struct and unions will always take pointer, whereas enums take the enum value.</p>
+<pre><code>enum State
 {
     STOPPED,
     RUNNING
-}</p>
-<p>func bool State.mayOpen(State state) 
+}
+
+func bool State.mayOpen(State state) 
 {
     switch (state)
     {
         case State.STOPPED: return true;
         case State.RUNNING: return false;
     }
-}</p>
-<pre><code>
-
-### Restrictions on member functions
-
-Member functions may not:
-
-- Member functions on a struct/union may not have the same name as a member.
-- Member functions only works on struct, union and enum types.
-- When taking a function pointer of a member function, use the full name.
-- Using sub types, overlapping function names will be shadowed.
-
-## Pre and post conditions
-
-C3's error handling is not intended to use errors to signal invalid data or to check invariants and post conditions. Instead C3's approach is to add annotations to the function, that conditionally will be compiled into asserts.
-
-As an example, the following code:
+}
 </code></pre>
 
-<p>/<strong>
+<h3 id="restrictions-on-member-functions">Restrictions on member functions</h3>
+<p>Member functions may not:</p>
+<ul>
+<li>Member functions on a struct/union may not have the same name as a member.</li>
+<li>Member functions only works on struct, union and enum types.</li>
+<li>When taking a function pointer of a member function, use the full name.</li>
+<li>Using sub types, overlapping function names will be shadowed.</li>
+</ul>
+<h2 id="pre-and-post-conditions">Pre and post conditions</h2>
+<p>C3's error handling is not intended to use errors to signal invalid data or to check invariants and post conditions. Instead C3's approach is to add annotations to the function, that conditionally will be compiled into asserts.</p>
+<p>As an example, the following code:</p>
+<pre><code>/**
  * @param foo : the number of foos 
  * @require foo &gt; 0, foo &lt; 1000
  * @return number of foos x 10
  * @ensure return &lt; 10000, return &gt; 0
- </strong>/
+ **/
 func int testFoo(int foo)
 {
     return foo * 10;
-}</p>
-<pre><code>
-Will in debug builds be compiled into something like this:
-
+}
 </code></pre>
 
-<p>func int testFoo(int foo)
+<p>Will in debug builds be compiled into something like this:</p>
+<pre><code>func int testFoo(int foo)
 {
     assert(foo &gt; 0);
     assert(foo &lt; 1000);
@@ -444,27 +430,24 @@ Will in debug builds be compiled into something like this:
     assert(_return &lt; 10000);
     assert(_return &gt; 0);
     return _return;
-}</p>
-<pre><code>
-The compiler is allowed to use the pre and post conditions for optimizations. For example this:
-
+}
 </code></pre>
 
-<p>func int testExample(int bar)
+<p>The compiler is allowed to use the pre and post conditions for optimizations. For example this:</p>
+<pre><code>func int testExample(int bar)
 {
     if (testFoo(bar) == 0) return -1;
     return 1;
-}</p>
-<pre><code>
-May be optimized to:
-
+}
 </code></pre>
 
-<p>func int testExample(int bar)
+<p>May be optimized to:</p>
+<pre><code>func int testExample(int bar)
 {
     return 1;
 }
-```</p>
+</code></pre>
+
 <p>In this case the compiler can look at the post condition of <code>result &gt; 0</code> to determine that <code>testFoo(foo) == 0</code> must always be false.</p>
 <p>Looking closely at this code, we not that nothing guarantees that <code>bar</code> is not violating the preconditions. In debug builds this will usually be checked in runtime, but a sufficiently smart compiler will warn about the lack of checks on <code>bar</code>. Execution of code violating pre and post conditions has undefined behaviour.</p>
               
