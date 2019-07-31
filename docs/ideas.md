@@ -2,7 +2,25 @@
 
 **WARNING** Unfinished ideas / brain dumps
 
+## C interop
 
+Steps:
+
+1. Add group header in the builds: [c-libs]
+2. Add the search paths: cpath = ["/xxx/foo/**", "/bar/headers/**"]
+3. Add each library: [[lib]]
+
+```
+[c-libs]
+    cpath = ["/xxx/foo/**", "/bar/headers/**"]
+    [[lib]]
+        module = "windows"
+        header = "windows.h"
+    [[lib]]
+        module = "stdlib"
+        header = "stdlib.h"
+```
+    
 ## Managed pointers
 
 Managed pointers are introduced using the pointer `@` after the type, e.g. `Foo@ f`.
@@ -114,6 +132,20 @@ struct __ArrayType_C3
 }
 ```
 
+## Raw dynamic, safe arrays **- NEW!**
+
+1. Works just like a pointer
+2. Not safe to keep reference to if made dynamic.
+3. Requires special method to dispose of and to allocate
+4. Knows its size.
+
+## Raw dynamic, safe strings **- NEW!**
+
+1. Works just like a pointer.
+2. Not safe to keep reference if made dynamic
+3. Requires special method to dispose of and to allocate
+4. Knows its size.
+
 ### Dynamic arrays
 
 Dynamic arrays are provided as a library and they are usually ref counted:
@@ -139,6 +171,10 @@ a[2] // Prints 11.
 ```
 
 ## Unsorted
+
+## Halloc **- NEW!**
+
+Hierarchal memory allocation http://swapped.cc/#!/halloc support it?
 
 ##### Varargs
 
@@ -386,7 +422,7 @@ func void Foo.renderPage(Foo& foo, Page& info)
 
 interface Renderer
 {
-    void renderPage(Renderer& renderer, Page& info)
+    void renderPage(Renderer& renderer, Page& info);
 }
 
 func void render(Renderer* renderer, Page& info)

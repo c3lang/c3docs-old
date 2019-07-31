@@ -2,9 +2,31 @@
 
 **!!!THIS IS JUST AN EXPERIMENTAL DRAFT!!!**
 
+Macros is a form of compile time evaluation. There are compile time variables (prefixed with `$`) and compile time template code (macros).
+
+## Compile time evaluation
+
+The C3 compiler always does a first pass through the code reading all definitions and resolving compile time variables. Compile time variables with the `$` prefix are resolved *in order*.
+
+```
+module foo;
+
+
+$a = 32;
+func foo()
+{
+    printf("$a = " #$a); // Compiles to printf("$a = " "32") 
+}
+$a = 64;
+func foo2()
+{
+    printf("$a = " #$a); // Compiles to printf("$a = " "64") 
+}
+
 A macro is defined using `macro @<name>(<parameters>)`. All user defined macros use the @ symbol.
 
 The parameters have different sigils: `$` means compile time evaluated (captured variable, symbol or expression). `#` means full string capture. Any parameters without sigils are passed by *value*, as if it was a normal function parameter.
+
 
 A basic swap:
 

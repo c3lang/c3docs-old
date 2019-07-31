@@ -80,8 +80,6 @@ For C compatibility the following types are also defined:
 | Name         | c type             |
 | ------------ | ------------------:|
 | c_char       | char               |
-| c_ichar      | signed char        |
-| c_uchar      | unsigned char      |
 | c_short      | short int          |
 | c_ushort     | unsigned short int |
 | c_int        | int                |

@@ -16,6 +16,87 @@ func void test(int times)
 }
 ```
 
+### Function arguments **- NEW!**
+
+C3 allows use of default arguments as well as named arguments.
+
+```
+func int testWithDefault(int foo = 1)
+{
+    return foo;
+}
+
+func void test()
+{
+    testWithDefault();
+    testWithDefault(100);
+}
+```
+
+Named arguments
+
+```
+func void testNamed(int times, double data)
+{
+    for (int i = 0; i < times; i++)
+    {
+        printf("Hello %d\n", i + data);
+    }
+}
+
+func void test()
+{
+    testNamed(data = 3.0, times = 1)
+    testNamed(3, 4.0);
+}
+```
+
+Named arguments with defaults:
+
+```
+func void testNamedDefault(int times = 1, double data = 3.0, bool dummy = false)
+{
+    for (int i = 0; i < times; i++)
+    {
+        printf("Hello %d\n", i + data);
+    }
+}
+
+func void test()
+{
+    testNamed(data = 3.0)
+    
+    // Mixing named and defaults:
+    testNamed(3, dummy = false);
+    
+    // Mixing named and defaults leaving out initial values:
+    testNamed(,,false, times = 1);
+}
+
+#### Varargs **- NEW!**
+
+There are two types of varargs: the usual C-style untyped varargs and typed varargs. Untyped varargs will always send arguments as-is, whereas typed arguments will do normal conversions.
+
+
+```
+func void varargsUntyped(string foo, ...)
+{
+    /* ... */
+}
+
+func void varargsTyped(string bar, int... ints)
+{
+    /* ... */
+}
+
+func void test()
+{
+    varargsUntyped("Hello", 2, 1.0, cast(byte, 1), "Test");
+    varargsTyped("Test", 2, cast(byte, 1));
+    // The second parameter will be converted to an int implicitly.
+}
+```
+
 ### Using throws
 
 The throws parameter may return a generic throws clause – in this case the error type is unknown.

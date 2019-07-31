@@ -1,6 +1,18 @@
 # Change log
 
-Current revision made 2019-07-27.
+Current revision made 2019-07-30.
+
+##### Revision 2019-07-30
+
+- Added default and named arguments to the [functions page](../functions).
+- Added varargs to the [functions page](../functions).
+- Added idea about hierarchal memory.
+- Added idea of raw dynamic safe arrays & strings.
+- Volatile sections are no longer prefixed by '@'
+- Added idea regarding c3 interop
+- Added [page about c interop](../cinterop).
+- Removed `c_ichar` and `c_uchar` types as they are redundant.
+- Updates to keywords on the [grammar page]()../syntax).
 
 ##### Revision 2019-07-27
 

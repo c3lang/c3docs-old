@@ -3,7 +3,7 @@
 
 ## Keywords
 
-The following are 69 reserved keywords used by C3:
+The following are 72 reserved keywords used by C3:
 
 as, asm, break, case, cast, catch, const, continue,
 default, defer, do, else, enum, error, false, for, func,
@@ -11,8 +11,8 @@ generic, goto, if, import, local, macro, module, nil,
 public, return, struct, switch, throw, throws, true, 
 try, typedef, union, until, void, volatile, while,
 f32, f64, float, double, 
-i8, i16, i32, i64, u8, u16, u32, u64, 
-char, byte, short, ushort, int, uint, long, ulong, isize, usize,
+u1, i8, i16, i32, i64, u8, u16, u32, u64, 
+char, bool, byte, short, ushort, int, uint, long, ulong, isize, usize,
 c_short, c_ushort, c_int, c_uint, c_long, c_ulong, c_longlong, 
 c_ulonglong, c_longdouble
 
@@ -20,45 +20,84 @@ c_ulonglong, c_longdouble
 In addition to those, the following 12 are reserved but currently not used:
 f16, f128, f256, half, quad, i128, i256, u128, u256, type, var, alias
  
-For macros the following 9 identifiers are reserved as keywords:
+For macros the the following 9 `@` identifiers are reserved as keywords:
 @param, @throws, @return, @ensure, @require, @pure, @const, @reqparse, @deprecated
 
 ## Railroad grammar
 
-The following (incomplete) grammar can be used with this: https://bottlecaps.de/rr/ui to get a railroad diagram of the grammar.
+The following (broken) grammar can be used with this: https://bottlecaps.de/rr/ui to get a railroad diagram of the grammar.
 ```bnf
 
-source ::= module_def? import_def+ top_level
+compilation_unit ::= module? import* top_level_decl*
 
-module_def ::= 'module' VIDENT EOS
+module ::= 'module' IDENT ';'
 
-import_def_ ::= 'import' VIDENT ( ('as' VIDENT) | 'local' )? EOS
+import ::= 'import' IDENT ('as' IDENT)? 'local'? ';'
 
-top_level ::= (array_append | global_decl)*
+top_level_decl ::= func_decl
+                 | struct_decl 
+                 | union_decl
+                 | enum_decl 
+                 | error_decl 
+                 | macro_decl 
+                 | const_decl 
+                 | var_decl
+                 | type_decl
+                 | macro_var_decl
+                 | docs
+                 | generic_decl
 
-global_decl ::= 'public'? (type_def | func_def | var_def | macro_def)
+error_decl ::= 'error' IDENT '{' IDENT (',' IDENT)* ','? '}'
 
-array_append ::= VIDENT '+=' init_value
+enum_decl ::= 'enum' IDENT (':' type)? '{' enum_member (',' enum_member)* ','? '}' 
+enum_member ::= IDENT ('=' expr)?
 
-func_def ::= return_value TIDENT '(' function_args ')' compound_stmt?
+const_decl ::= 'const' type IDENT '=' expr ';'
+var_decl ::= type IDENT '=' expr ';'
+type_decl ::= 'typedef' type 'as' IDENT ';'
+            | 'typedef' 'func' type IDENT '(' function_args ')' 'as' IDENT ';'
 
-generic_def ::= 'generic' VIDENT '(' generic_arg_list ')' compound_stmt
+func_decl ::= 'func' type IDENT '(' function_args ')' (compound_stmt | ';')
+
+generic_decl ::= 'generic' IDENT '(' generic_arg_list ')' compound_stmt
 
 generic_arg_list ::= generic_arg (',' generic_arg)*
+generic_arg ::= type? IDENT
 
-generic_arg ::= type? VIDENT
+base_type ::= built_in_type 
+            | IDENT
 
-macro_def ::= 'macro' VIDENT '('  macro_arg_list? ')' compound_stmt
+built_in_type ::= bit_types 
+                | named_types 
+                | c_types
+
+bit_types ::= 'u1'
+            | 'u8' | 'u16' | 'u32' | 'u64' | 'u128' | 'u256'
+            | 'i8' | 'i16' | 'i32' | 'i64' | 'i128' | 'i256'
+            | 'f16' | 'f32' | 'f64' | 'f128'
+
+named_types ::= 'void' | 'bool' 
+              | 'byte' | 'ushort' | 'uint' | 'ulong' | 'usize'
+              | 'char' | 'short' | 'int' | 'long' | 'isize'
+              | 'float' | 'double' | 'quad'
+
+c_types ::= 'c_char' | 'c_short' | 'c_int' | 'c_long' | 'c_longlong'
+          | 'c_uchar' | 'c_ushort' | 'c_uint' | 'c_ulong' | 'c_ulonglong'
+          | 'c_float' | 'c_double' | 'c_longdouble'
+
+type ::= base_type ('[' expr? ']' | '*' | '?' | '@')*
+
+macro_decl ::= 'macro' AT_IDENT '('  macro_arg_list? ')' compound_stmt
 
 macro_arg_list ::= macro_arg (',' macro_arg)*
 
-macro_arg ::= '&'? VIDENT
+macro_arg ::= DOLLAR_IDENT | IDENT | HASH_IDENT
 
-var_def ::= type_qualifier TIDENT ...
+
+---> The rest is todo
+
 
 struct_or_union ::= 'struct' | 'union'
-
-type_def ::= enum_def | func_type_def | struct_def | error_def
 
 enum_def ::= 'enum' TIDENT enum_def type attributes? '{' enum_body? '}'
 

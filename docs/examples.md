@@ -288,6 +288,7 @@ func void example_cb()
 ```
 
 #####Error handling
+
 Errors are sent as a result value but uses an exception-like try/catch syntax.
 ```
 error RandomError
