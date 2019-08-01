@@ -448,6 +448,8 @@ func void test()
 }
 </code></pre>
 
+<p>An important thing to note is that the content of the <code>$each</code> body must be a complete statement.
+It's not possible to compile partial statements.</p>
 <h3 id="switching-on-type-with-switch">Switching on type with $switch</h3>
 <p>It's possible to switch on type, similar to generic functions, but used internal to the macro:</p>
 <pre><code>macro foo(a, b)
@@ -556,8 +558,8 @@ This is deliberate – macros expanding at the top level are much harder to
 reason about since they should be able to define new types or change the
 meaning of the code that follows.</p>
 <p>Still, the usefulness of top level macros is great, which is why C3 offers 
-three pieces of functionality for the top level: conditional compilation,
-global compile time varibles and decorators.</p>
+four pieces of functionality for the top level: conditional compilation,
+global compile time varibles, decorators and incremental arrays.</p>
 <h3 id="conditional-compilation">Conditional compilation</h3>
 <p>Conditional compilation is done with $if and $else, which works just like
 inside of functions.</p>
@@ -588,7 +590,8 @@ const $b = @foo(); // $b = 2
 
 <h3 id="decorators">Decorators</h3>
 <p>Decorators are attributes placed on functions, types and variables. 
-They may take a type as argument, much like a function.</p>
+They may take a type as argument, much like a function. It's possible
+iterate over all decorated symbols of a particular type.</p>
 <pre><code>decorator func @myvar(int i = 0);
 decorator struct, union, enum @foo;
 
@@ -644,24 +647,59 @@ func void test()
 }
 </code></pre>
 
-<p>Compile time iteration over all decorated objects are possible, which
-can be useful:</p>
-<p>decorator struct @special;</p>
-<p>struct TestA @special { int i; }
-struct TestB { float f; }
-struct TestC @special { float f; }</p>
-<p>macro @specialStructs()
+<h3 id="incremental-arrays">Incremental arrays</h3>
+<p>Incremental arrays allows compile time arrays to be constructed piecemeal within a single source file. An incremental array uses the <code>[+]</code> ending, but will be considered to be a fixed size array for all other purposes.
+Append to an incremental array using <code>+=</code> which done during compile time.</p>
+<pre><code>int[+] a = { 1 };
+
+a += 1;
+
+/* ... other code .. */
+
+a += 2;
+
+// Equivalent to the declaration int[3] a = { 1, 1, 2 };
+</code></pre>
+
+<p>This can be especially useful in conjuction with <code>$each</code>:</p>
+<pre><code>enum MyEnum { A, B }
+
+macro @foo_enum($theEnum)
 {
-    return res = {
-        $each(@special as $x)
-        {
-            @name($x),
-        }
-    };
-}</p>
-<p>const string[] SPECIAL_STRUCTS = @specialStructs();
-// SPECIAL_STRUCTS = { "TestA", "TestB", }
-```</p>
+    string[+] arr = {};
+    $each($theEnum AS $x)  
+    {
+        arr += @name($x);     
+    }
+}
+
+// allMyEnum will contain { &quot;A&quot;, &quot;B&quot; }
+const string[] allMyEnum = @foo_enum(MyEnum);
+</code></pre>
+
+<p>Here is a similar example but for decorators:</p>
+<pre><code>decorator struct @special;
+
+struct TestA @special { int i; }
+struct TestB { float f; }
+struct TestC @special { float f; }
+
+macro @specialStructs()
+{
+    string[+] res = {};
+    $each(@special as $x)
+    {
+        res += @name($x);
+    }
+    // The above expands to:
+    // res += &quot;TestA&quot;;
+    // res += &quot;TestC&quot;;    
+    return res;
+}
+
+// SPECIAL_STRUCTS = { &quot;TestA&quot;, &quot;TestB&quot; }
+const string[] SPECIAL_STRUCTS = @specialStructs();
+</code></pre>
               
             </div>
           </div>
