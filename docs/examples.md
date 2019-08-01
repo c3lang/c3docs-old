@@ -431,7 +431,7 @@ func void test()
 
 ##### Nullability annotations
 
-Use & for nullable pointers, * for non nullable pointers.
+Use * for nullable pointers, & for non nullable pointers.
 
 ```
 func Foo* getFoo() { ... }

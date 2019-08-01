@@ -8,20 +8,7 @@ Macros is a form of compile time evaluation. There are compile time variables (p
 
 The C3 compiler always does a first pass through the code reading all definitions and resolving compile time variables. Compile time variables with the `$` prefix are resolved *in order*.
 
-```
-module foo;
-
-
-$a = 32;
-func foo()
-{
-    printf("$a = " #$a); // Compiles to printf("$a = " "32") 
-}
-$a = 64;
-func foo2()
-{
-    printf("$a = " #$a); // Compiles to printf("$a = " "64") 
-}
+## Macro declarations
 
 A macro is defined using `macro @<name>(<parameters>)`. All user defined macros use the @ symbol.
 
@@ -101,7 +88,8 @@ We may add a trailing parameter in the format: `: @<param name>(arg1, arg2, ...)
 
 ```
 /**
- * @ensure parse(int i = a.len), parse(value1 = a[i]), parse(value2 = 2 * value1)
+ * @ensure parse(int i = a.len), parse(value1 = a[i])
+ * @ensure parse(value2 = 2 * value1)
  */
 macro @foreach(a : @body(value1, value2) )
 {
@@ -174,20 +162,20 @@ Obviously this can cause infinite recursion, so the actual recursion depth is li
 
 ## Macro directives
 
-Inside of a macro, we can use the compile time statements $IF, $ELSE‚ $EACH and $SWITCH. Macros may also recursively be invoked.
+Inside of a macro, we can use the compile time statements `$if`, `$else`‚ `$each` and `$switch`. Macros may also be recursively invoked.
 
-### $IF and $ELSE
+### $if, $else and $elif
 
-`$IF (<const expr>)` takes a compile time constant value and evaluates it to true or false.
+`$if (<const expr>)` takes a compile time constant value and evaluates it to true or false.
 
 ```
 macro @foo($X, $y)
 {
-    $IF ($x > 3)
+    $if ($x > 3)
     {
         $y += $x * $x;
     } 
-    $ELSE
+    $else
     {
         $y += $x;
     }
@@ -205,16 +193,42 @@ func void test()
 }
 ```
 
-### Loops using $EACH
+There is an alternative form of `$if`/`$else`/`$elif` using `:` and terminated
+with `$endif`. These have by convention no indentation.
 
-`$EACH (<range> AS <variable>) { ... }` allows compile time recursion. `$EACH` may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.
+This is mostly useful for top level use where indentation might not be desired.
+
+```
+macro @foo($X, $y)
+{
+
+$if ($x > 3):
+
+    $y += $x * $x;
+
+$elif ($x < 100):
+    
+    $y += -$x;
+
+$else:
+        
+    $y += $x;
+
+$endif;
+
+}
+```  
+
+### Loops using $each
+
+`$each (<range> as <variable>) { ... }` allows compile time recursion. `$each` may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.
 
 
 Looping over ranges:
 ```
 macro @foo($A)
 {
-    $EACH (0..$A AS $x) 
+    $each (0..$A as $x) 
     {
         printf("%d\n", $x);     
     }
@@ -233,7 +247,7 @@ Looping over enums:
 ```
 macro @foo_enum($THE_ENUM)
 {
-    $EACH($THE_ENUM AS $x)  
+    $each($THE_ENUM AS $x)  
     {
         printf("%d\n", @cast(int, $x));     
     }
@@ -254,16 +268,19 @@ func void test()
 }
 ```
 
-### Switching on type with $SWITCH
+An important thing to note is that the content of the `$each` body must be a complete statement.
+It's not possible to compile partial statements.
+
+### Switching on type with $switch
 
 It's possible to switch on type, similar to generic functions, but used internal to the macro:
 
 ```
 macro foo(a, b)
 {
-    $SWITCH(a, b)
+    $switch(a, b)
     {
-        $CASE int, int: 
+        $case int, int: 
             return a * b;
     }
     return a + b;
@@ -372,3 +389,178 @@ func void test()
 ```
 
 The above code will print "Bar!"
+
+## Conditional macros at the top level
+
+A limitation with the macros is that they are only used *within* functions. 
+This is deliberate – macros expanding at the top level are much harder to 
+reason about since they should be able to define new types or change the
+meaning of the code that follows.
+
+Still, the usefulness of top level macros is great, which is why C3 offers 
+four pieces of functionality for the top level: conditional compilation,
+global compile time varibles, decorators and incremental arrays.
+
+
+### Conditional compilation
+
+Conditional compilation is done with $if and $else, which works just like
+inside of functions.
+
+```
+$if (@defined($os) && $os == 'WIN32')
+
+func void doSomethingWin32Specific()
+{
+    /* .... */
+}
+
+$endif
+```
+
+### Global compile time variables
+
+Variables on the top level work like compile time variables in macros – with the exception
+that they must always be declared constant. They are always evaluated in order, which 
+has to be taken into account when used in conjunction with @defined.
+
+Consider this code:
+
+```
+macro @foo()
+{
+    $if (@defined($a)) return $a + 1;
+    return 1;
+}
+const $z = @foo(); // $z = 1
+const $a = @foo(); // $a = 1
+const $b = @foo(); // $b = 2
+```
+
+### Decorators
+
+Decorators are attributes placed on functions, types and variables. 
+They may take a type as argument, much like a function. It's possible
+iterate over all decorated symbols of a particular type.
+
+
+```
+decorator func @myvar(int i = 0);
+decorator struct, union, enum @foo;
+
+func void test() @myvar(2)
+{
+    /** ... */
+}
+
+struct Test @foo
+{
+    int i;
+}
+```
+
+What's useful about decorators is that they can be accessed during compile
+time:
+
+```
+macro @fooCheck($a)
+{
+    $if (@defined($a.@foo))
+    {
+        return "Was fooed";
+    }
+    return "Ok";
+}
+
+struct TestA
+{
+    int i;
+}
+
+struct TestB @Foo
+{
+    float f;
+}
+
+func void test()
+{
+    printf("Check TestA: " @fooCheck(TestA) "\n");    
+    printf("Check TestB: " @fooCheck(TestB) "\n");
+    // Prints:
+    // Check TestA: Ok
+    // Check TestB: Was fooed
+}
+```
+
+It's also possible to get hold of the values:
+
+```
+decorator func @myvar(int i = 0);
+func void test() @myvar(200) { ... }
+
+func void test()
+{
+    printf("%d", test.@myvar.i); // Prints 200
+}
+```
+
+### Incremental arrays
+
+Incremental arrays allows compile time arrays to be constructed piecemeal within a single source file. An incremental array uses the `[+]` ending, but will be considered to be a fixed size array for all other purposes.
+Append to an incremental array using `+=` which done during compile time.
+
+```
+int[+] a = { 1 };
+
+a += 1;
+
+/* ... other code .. */
+
+a += 2;
+
+// Equivalent to the declaration int[3] a = { 1, 1, 2 };
+```
+
+This can be especially useful in conjuction with `$each`:
+
+```
+enum MyEnum { A, B }
+
+macro @foo_enum($theEnum)
+{
+    string[+] arr = {};
+    $each($theEnum AS $x)  
+    {
+        arr += @name($x);     
+    }
+}
+
+// allMyEnum will contain { "A", "B" }
+const string[] allMyEnum = @foo_enum(MyEnum);
+```
+
+Here is a similar example but for decorators:
+
+```
+decorator struct @special;
+
+struct TestA @special { int i; }
+struct TestB { float f; }
+struct TestC @special { float f; }
+
+macro @specialStructs()
+{
+    string[+] res = {};
+    $each(@special as $x)
+    {
+        res += @name($x);
+    }
+    // The above expands to:
+    // res += "TestA";
+    // res += "TestC";    
+    return res;
+}
+
+// SPECIAL_STRUCTS = { "TestA", "TestB" }
+const string[] SPECIAL_STRUCTS = @specialStructs();
+```
