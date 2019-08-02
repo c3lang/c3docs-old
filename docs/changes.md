@@ -1,6 +1,15 @@
 # Change log
 
-Current revision made 2019-07-30.
+Current revision made 2019-08-02.
+
+
+##### Revision 2019-08-02
+
+- Added error example.
+- Added generics example.
+- Added method function example.
+- Added idea implicit method functions
+- Expanded the types page somewhat.
 
 ##### Revision 2019-07-30
 

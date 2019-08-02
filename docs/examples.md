@@ -429,6 +429,31 @@ func void test()
 }
 ```
 
+##### Method functions
+
+It's possible to namespace functions with a union, struct or enum type to enable "dot syntax" calls:
+
+```
+struct Foo
+{
+    int i;
+}
+
+func void Foo.next(Foo* this)
+{
+    if (this) this.i++;
+}
+
+func void test()
+{
+    Foo foo = { 2 };
+    foo.next();
+    foo.next();
+    // Prints 4
+    printf("%d", foo.i); 
+}
+```
+
 ##### Nullability annotations
 
 Use * for nullable pointers, & for non nullable pointers.
@@ -451,3 +476,84 @@ func testThings()
 }
 ```
 
+##### Error handling
+
+```
+import stdio as io;
+
+func void printFile(string filename)
+{
+    string file = try io.load_file(filename);
+    
+    printf("Loaded %s and got:\n%s", filename, file);
+
+    catch (error err)
+    {
+        case FileError.FILE_NOT_FOUND:
+            printf("I could not find the file %s\n", filename);
+        default:
+            printf("Could not load %s: '%s'", filename, @describe(err));
+    }
+}
+```
+
+##### Generic modules
+
+Generic modules are imported with their parameters set.
+
+```
+module stack($A)
+
+struct Stack
+{
+    $A[] elems;
+}
+
+func Stack.init(Stack& this)
+{
+    this.elems = nil;
+}
+
+func void Stack.push(Stack& this, $A element)
+{
+    this.elems.add(element);
+}
+
+func $A Stack.pop(Stack& this)
+{
+    assert(this.elems.size > 0);
+    this.elems.removeLast();
+}
+
+func bool Stack.empty(Stack &this)
+{
+    return this.elems.size == 0;
+}
+```
+
+Testing it out:
+
+```
+import stack(int), Stack as IntStack;
+import stack(double), Stack as DoubleStack;
+
+func void test()
+{
+    IntStack stack;
+    stack.init();
+    stack.push(1);
+    stack.push(2);
+    // Prints pop: 2
+    printf("pop: %d\n", stack.pop())
+    // Prints pop: 1
+    printf("pop: %d\n", stack.pop())
+    
+    DoubleStack dstack;
+    dstack.init();
+    dstack.push(2.3);
+    dstack.push(3.141);
+    dstack.push(1.1235)
+    // Prints pop: 1.1235
+    printf("pop: %f\n", dstack.pop())
+}
+```

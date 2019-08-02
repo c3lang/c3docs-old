@@ -98,7 +98,7 @@ Pointers mirror C: `Foo*` is a pointer to a `Foo`, while `Foo**` is a pointer to
 
 ### Array types
 
-Arrays are indicated by `[]` after the type. Unlike C, the `[]`. `Foo[]` would be an array of unspecified length containing `Foo` structs.
+Arrays are indicated by `[]` after the type, optionally with the size given, e.g. `int[4]`. Unlike C, the "empty" array (without size), is a fat pointer array that may be queried about its size.
 
 ## Enum
 
@@ -113,6 +113,20 @@ enum State : int
 }
 ```
 Enum constants are namespaces by default, just like C++'s class enums. So accessing the enums above would for example use `State.PENDING` rather than `PENDING`.
+
+## Error
+
+Error types are similar to enums, and are used for error returns.
+
+```
+error IOError
+{
+    FILE_CLOSED
+    FILE_EOF_REACHED
+}
+```
+
+Just like enums, the errors are namespaced. Read more about the error types on the page about [error handling](../errorhandling).
 
 ## Alias and function types
 

@@ -3,9 +3,10 @@
 
 ## Keywords
 
-The following are 72 reserved keywords used by C3:
+The following are 73 reserved keywords used by C3:
 
 as, asm, break, case, cast, catch, const, continue,
+decorator,
 default, defer, do, else, enum, error, false, for, func,
 generic, goto, if, import, local, macro, module, nil,
 public, return, struct, switch, throw, throws, true, 

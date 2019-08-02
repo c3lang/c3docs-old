@@ -16,7 +16,7 @@ func void test(int times)
 }
 ```
 
-### Function arguments **- NEW!**
+### Function arguments
 
 C3 allows use of default arguments as well as named arguments.
 
@@ -74,7 +74,7 @@ func void test()
 }
 ```
 
-#### Varargs **- NEW!**
+#### Varargs
 
 There are two types of varargs: the usual C-style untyped varargs and typed varargs. Untyped varargs will always send arguments as-is, whereas typed arguments will do normal conversions.
 

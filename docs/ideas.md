@@ -2,6 +2,20 @@
 
 **WARNING** Unfinished ideas / brain dumps
 
+## Implicit "this" in method functions
+
+```
+struct Foo
+{
+    int i;
+}
+
+func Foo.next(Foo&)
+{
+    i++;
+}
+```
+
 ## C interop
 
 Steps:

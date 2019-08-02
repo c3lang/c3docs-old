@@ -6,7 +6,7 @@ Macros is a form of compile time evaluation. There are compile time variables (p
 
 ## Compile time evaluation
 
-The C3 compiler always does a first pass through the code reading all definitions and resolving compile time variables. Compile time variables with the `$` prefix are resolved *in order*.
+The C3 compiler always does a first pass through the code reading all definitions and resolving compile time variables. Compile time variables with the `$` prefix are resolved *in order of declaration*.
 
 ## Macro declarations
 
@@ -247,9 +247,9 @@ Looping over enums:
 ```
 macro @foo_enum($THE_ENUM)
 {
-    $each($THE_ENUM AS $x)  
+    $each($THE_ENUM as $x)  
     {
-        printf("%d\n", @cast(int, $x));     
+        printf("%d\n", cast(int, $x));     
     }
 }
 
@@ -263,8 +263,8 @@ func void test()
 {
     @foo_enum(MyEnum);
     // Expands to ->
-    // printf("%d\n", @cast(int, MyEnum.A));
-    // printf("%d\n", @cast(int, MyEnum.B));    
+    // printf("%d\n", cast(int, MyEnum.A));
+    // printf("%d\n", cast(int, MyEnum.B));    
 }
 ```
 
