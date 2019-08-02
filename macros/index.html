@@ -221,7 +221,7 @@
 <p><strong>!!!THIS IS JUST AN EXPERIMENTAL DRAFT!!!</strong></p>
 <p>Macros is a form of compile time evaluation. There are compile time variables (prefixed with <code>$</code>) and compile time template code (macros).</p>
 <h2 id="compile-time-evaluation">Compile time evaluation</h2>
-<p>The C3 compiler always does a first pass through the code reading all definitions and resolving compile time variables. Compile time variables with the <code>$</code> prefix are resolved <em>in order</em>.</p>
+<p>The C3 compiler always does a first pass through the code reading all definitions and resolving compile time variables. Compile time variables with the <code>$</code> prefix are resolved <em>in order of declaration</em>.</p>
 <h2 id="macro-declarations">Macro declarations</h2>
 <p>A macro is defined using <code>macro @&lt;name&gt;(&lt;parameters&gt;)</code>. All user defined macros use the @ symbol.</p>
 <p>The parameters have different sigils: <code>$</code> means compile time evaluated (captured variable, symbol or expression). <code>#</code> means full string capture. Any parameters without sigils are passed by <em>value</em>, as if it was a normal function parameter.</p>
@@ -427,9 +427,9 @@ func void test()
 <p>Looping over enums:</p>
 <pre><code>macro @foo_enum($THE_ENUM)
 {
-    $each($THE_ENUM AS $x)  
+    $each($THE_ENUM as $x)  
     {
-        printf(&quot;%d\n&quot;, @cast(int, $x));     
+        printf(&quot;%d\n&quot;, cast(int, $x));     
     }
 }
 
@@ -443,8 +443,8 @@ func void test()
 {
     @foo_enum(MyEnum);
     // Expands to -&gt;
-    // printf(&quot;%d\n&quot;, @cast(int, MyEnum.A));
-    // printf(&quot;%d\n&quot;, @cast(int, MyEnum.B));    
+    // printf(&quot;%d\n&quot;, cast(int, MyEnum.A));
+    // printf(&quot;%d\n&quot;, cast(int, MyEnum.B));    
 }
 </code></pre>
 

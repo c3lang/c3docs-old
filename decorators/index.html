@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Changes - C3 Documentation</title>
+  <title>Decorators - C3 Documentation</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Changes";
-    var mkdocs_page_input_path = "changes.md";
+    var mkdocs_page_name = "Decorators";
+    var mkdocs_page_input_path = "decorators.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -178,33 +178,9 @@
                     
     <a class="" href="../contribute/">Contribute</a>
                 </li>
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Changes</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#change-log">Change log</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l4" href="#revision-2019-08-02">Revision 2019-08-02</a></li>
-        
-            <li><a class="toctree-l4" href="#revision-2019-07-30">Revision 2019-07-30</a></li>
-        
-            <li><a class="toctree-l4" href="#revision-2019-07-27">Revision 2019-07-27</a></li>
-        
-            <li><a class="toctree-l4" href="#revision-2019-07-24">Revision 2019-07-24</a></li>
-        
-            <li><a class="toctree-l4" href="#revision-2019-07-23">Revision 2019-07-23</a></li>
-        
-            <li><a class="toctree-l4" href="#revision-2019-07-22">Revision 2019-07-22</a></li>
-        
-            <li><a class="toctree-l4" href="#revision-2019-07-21">Revision 2019-07-21</a></li>
-        
-        </ul>
-    
-
-    </ul>
+    <a class="" href="../changes/">Changes</a>
                 </li>
     </ul>
 	    </li>
@@ -230,12 +206,8 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
-        
-          <li>Development &raquo;</li>
-        
-      
     
-    <li>Changes</li>
+    <li>Decorators</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -245,84 +217,141 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="change-log">Change log</h1>
-<p>Current revision made 2019-08-02.</p>
-<h5 id="revision-2019-08-02">Revision 2019-08-02</h5>
-<ul>
-<li>Added error example.</li>
-<li>Added generics example.</li>
-<li>Added method function example.</li>
-<li>Added idea implicit method functions</li>
-<li>Expanded the types page somewhat.</li>
-</ul>
-<h5 id="revision-2019-07-30">Revision 2019-07-30</h5>
-<ul>
-<li>Added default and named arguments to the <a href="../functions">functions page</a>.</li>
-<li>Added varargs to the <a href="../functions">functions page</a>.</li>
-<li>Added idea about hierarchal memory.</li>
-<li>Added idea of raw dynamic safe arrays &amp; strings.</li>
-<li>Volatile sections are no longer prefixed by '@'</li>
-<li>Added idea regarding c3 interop</li>
-<li>Added <a href="../cinterop">page about c interop</a>.</li>
-<li>Removed <code>c_ichar</code> and <code>c_uchar</code> types as they are redundant.</li>
-<li>Updates to keywords on the <a href="">grammar page</a>../syntax).</li>
-</ul>
-<h5 id="revision-2019-07-27">Revision 2019-07-27</h5>
-<ul>
-<li>Updated grammar with keywords.</li>
-<li>Added the <a href="../comments">docs &amp; comments</a> page.</li>
-<li>Updated the <a href="../preconditions">pre and post conditions</a>.</li>
-</ul>
-<h5 id="revision-2019-07-24">Revision 2019-07-24</h5>
-<ul>
-<li>Idea: typed varargs.</li>
-<li>Added "pure" <a href="../preconditions">post condition</a></li>
-<li>Updated c3c commands.</li>
-<li>Removed the <code>type</code> keyword for defining union/struct/enum/error.</li>
-</ul>
-<h5 id="revision-2019-07-23">Revision 2019-07-23</h5>
-<ul>
-<li>Added to <a href="../generics">generic functions</a> examples for [] and []=</li>
-<li>Developed ideas about vectors in the <a href="../ideas">idea section</a>.</li>
-<li>Defined 2's complement for signed integers. </li>
-<li>Idea: Managed pointers.</li>
-<li>Updated <a href="../naming">naming rules</a> for types.</li>
-<li>Added more <a href="../naming">naming rules</a> + examples of them.</li>
-<li>Removed "defer on function signatures" from ideas.</li>
-<li>Removed "managed qualifier" from ideas.</li>
-<li>Removed "defer sugar" from ideas.</li>
-<li>Removed "built in dynamic arrays" from ideas.</li>
-<li>Added <a href="../library">library</a> section.</li>
-<li>Added more about <a href="../preconditions">pre and post conditions</a>.</li>
-</ul>
-<h5 id="revision-2019-07-22">Revision 2019-07-22</h5>
-<ul>
-<li>Added "Design Principles" to the index page.</li>
-</ul>
-<h5 id="revision-2019-07-21">Revision 2019-07-21</h5>
-<ul>
-<li>"return" rather than function name is used in post conditions. See <a href="../functions#pre-and-post-conditions">Functions</a></li>
-<li>Added "@include" macro for textual includes. See <a href="../modules#textual-includes">Modules</a>.</li>
-<li>Files to without <code>module</code> for single file compilations is now ok as a special case. See <a href="../modules">Modules</a></li>
-<li>Added cone style array idea to the <a href="../ideas">idea section</a>.</li>
-<li>Added idea about defer on error to the <a href="../ideas">idea section</a>.</li>
-<li>Added idea for aliasing generic structs in the import to the <a href="../ideas">idea section</a>.</li>
-<li>Added idea for changing automatic signed &lt;-&gt; unsigned conversion to the <a href="../ideas">idea section</a>.</li>
-<li>Added <a href="../changesfromc">Changes from C</a> and <a href="../statements">Statements</a> sections.</li>
-<li>Removal of <code>volatile</code>. See <a href="../changesfromc">Changes from C</a> and <a href="../statements">Statements</a></li>
-<li>Removal of <code>const</code> See <a href="../changesfromc">Changes from C</a></li>
-</ul>
+                <h1 id="decorators">Decorators</h1>
+<p>Decorations are compile time annotations on functions, types, global constants and variables. Similar to Java annotations, a decoration may also take arguments. A decorator can also represent a bundle of decorators.</p>
+<h2 id="new-decorators">New decorators</h2>
+<p>The basic syntax for creating a new decorator is <code>decorator &lt;declaration type&gt; @&lt;name&gt;</code>. The type category is one of <code>var</code>, <code>const</code>, <code>func</code>, <code>union</code>, <code>struct</code>, <code>enum</code>, <code>typedef</code> and <code>error</code>.</p>
+<p>For example:</p>
+<pre><code>decorator func @mydecorator;
+
+func void foo() @mydecorator
+{ ...  }
+</code></pre>
+
+<h3 id="multi-type-decorators">Multi type decorators</h3>
+<p>It's possible to make a decorator match more than a single declaration type, by separating them using comma:</p>
+<pre><code>decorator func, enum, struct @foodecorator;
+
+func void foo() @foodecorator
+{ 
+    /* ... */  
+}
+
+struct Bar @foodecorator
+{ 
+    int i;
+}
+</code></pre>
+
+<h3 id="arguments">Arguments</h3>
+<p>A decorator may take a number of arguments, similar to a function. All such arguments must be compile time constants.</p>
+<pre><code>decorator func @intdec(int i)
+
+void foo() @intdec(2)
+{ ... }
+</code></pre>
+
+<p>Just like for function calls, the arguments may have defaults, use named arguments etc. However, varargs are not allowed.</p>
+<pre><code>decorator func @dec(int d, int i = 0, float f = 1.0)
+
+void foo() @dec(2)
+{ ... }
+
+void bar() @dec(7, f = 3.0)
+{ ... }
+</code></pre>
+
+<h2 id="compile-time-decorator-access">Compile time decorator access</h2>
+<p>What's useful about decorators is that they can be accessed during compile
+time:</p>
+<pre><code>macro @fooCheck($a)
+{
+    $if (@defined($a.@foo))
+    {
+        return &quot;Was fooed&quot;;
+    }
+    return &quot;Ok&quot;;
+}
+
+struct TestA
+{
+    int i;
+}
+
+struct TestB @Foo
+{
+    float f;
+}
+
+func void test()
+{
+    printf(&quot;Check TestA: &quot; @fooCheck(TestA) &quot;\n&quot;);    
+    printf(&quot;Check TestB: &quot; @fooCheck(TestB) &quot;\n&quot;);
+    // Prints:
+    // Check TestA: Ok
+    // Check TestB: Was fooed
+}
+</code></pre>
+
+<p>The values may be recovered:</p>
+<p>It's also possible to get hold of the values:</p>
+<pre><code>decorator func @myvar(int i = 0);
+
+func void test() @myvar(200) 
+{ 
+    /* ... */
+}
+
+func void test()
+{
+    printf(&quot;%d&quot;, test.@myvar.i); // Prints 200
+}
+</code></pre>
+
+<h2 id="bundled-decorators">Bundled decorators</h2>
+<p>It's also possible to create bundles of decorators, that simply contain other decorators. Unlike a normal decorator, a decorator bundle is a simple alias, so it has no real compile time information.</p>
+<pre><code>decorator func @foodec;
+decorator func @bardec(int i = 0);
+
+decorator @mixdec alias @foodec, @bardec(3);
+
+// As if we had added @foodec, @bardec(3)
+func void test() @mixdec
+{
+    /* ... */
+}
+</code></pre>
+
+<p>A decorator bundle might also be completely empty.</p>
+<h2 id="iterating-over-decorators">Iterating over decorators</h2>
+<p>Within a macro it's possible to iterate in compile time over all non-alias decorators 
+using <code>$each</code>.</p>
+<pre><code>decorator struct @special;
+
+struct TestA @special { int i; }
+struct TestB { float f; }
+struct TestC @special { float f; }
+
+macro @specialStructs()
+{
+    string[+] res = {};
+    $each(@special as $x)
+    {
+        res += @name($x);
+    }
+    // The above expands to:
+    // res += &quot;TestA&quot;;
+    // res += &quot;TestC&quot;;    
+    return res;
+}
+
+// SPECIAL_STRUCTS = { &quot;TestA&quot;, &quot;TestB&quot; }
+const string[] SPECIAL_STRUCTS = @specialStructs();
+</code></pre>
               
             </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="../contribute/" class="btn btn-neutral" title="Contribute"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
@@ -345,8 +374,6 @@
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
-      
-        <span><a href="../contribute/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
     </span>

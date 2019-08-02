@@ -118,7 +118,16 @@
     <li class="toctree-l3"><a href="#macros">Macros</a></li>
     
 
+    <li class="toctree-l3"><a href="#method-functions">Method functions</a></li>
+    
+
     <li class="toctree-l3"><a href="#nullability-annotations">Nullability annotations</a></li>
+    
+
+    <li class="toctree-l3"><a href="#error-handling_1">Error handling</a></li>
+    
+
+    <li class="toctree-l3"><a href="#generic-modules">Generic modules</a></li>
     
 
     </ul>
@@ -660,6 +669,28 @@ func void test()
 }
 </code></pre>
 
+<h5 id="method-functions">Method functions</h5>
+<p>It's possible to namespace functions with a union, struct or enum type to enable "dot syntax" calls:</p>
+<pre><code>struct Foo
+{
+    int i;
+}
+
+func void Foo.next(Foo* this)
+{
+    if (this) this.i++;
+}
+
+func void test()
+{
+    Foo foo = { 2 };
+    foo.next();
+    foo.next();
+    // Prints 4
+    printf(&quot;%d&quot;, foo.i); 
+}
+</code></pre>
+
 <h5 id="nullability-annotations">Nullability annotations</h5>
 <p>Use * for nullable pointers, &amp; for non nullable pointers.</p>
 <pre><code>func Foo* getFoo() { ... }
@@ -676,6 +707,81 @@ func testThings()
 
     assert(foo1);
     i = foo1.intVal;
+}
+</code></pre>
+
+<h5 id="error-handling_1">Error handling</h5>
+<pre><code>import stdio as io;
+
+func void printFile(string filename)
+{
+    string file = try io.load_file(filename);
+
+    printf(&quot;Loaded %s and got:\n%s&quot;, filename, file);
+
+    catch (error err)
+    {
+        case FileError.FILE_NOT_FOUND:
+            printf(&quot;I could not find the file %s\n&quot;, filename);
+        default:
+            printf(&quot;Could not load %s: '%s'&quot;, filename, @describe(err));
+    }
+}
+</code></pre>
+
+<h5 id="generic-modules">Generic modules</h5>
+<p>Generic modules are imported with their parameters set.</p>
+<pre><code>module stack($A)
+
+struct Stack
+{
+    $A[] elems;
+}
+
+func Stack.init(Stack&amp; this)
+{
+    this.elems = nil;
+}
+
+func void Stack.push(Stack&amp; this, $A element)
+{
+    this.elems.add(element);
+}
+
+func $A Stack.pop(Stack&amp; this)
+{
+    assert(this.elems.size &gt; 0);
+    this.elems.removeLast();
+}
+
+func bool Stack.empty(Stack &amp;this)
+{
+    return this.elems.size == 0;
+}
+</code></pre>
+
+<p>Testing it out:</p>
+<pre><code>import stack(int), Stack as IntStack;
+import stack(double), Stack as DoubleStack;
+
+func void test()
+{
+    IntStack stack;
+    stack.init();
+    stack.push(1);
+    stack.push(2);
+    // Prints pop: 2
+    printf(&quot;pop: %d\n&quot;, stack.pop())
+    // Prints pop: 1
+    printf(&quot;pop: %d\n&quot;, stack.pop())
+
+    DoubleStack dstack;
+    dstack.init();
+    dstack.push(2.3);
+    dstack.push(3.141);
+    dstack.push(1.1235)
+    // Prints pop: 1.1235
+    printf(&quot;pop: %f\n&quot;, dstack.pop())
 }
 </code></pre>
               

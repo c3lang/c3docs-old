@@ -133,6 +133,8 @@
     
         <ul>
         
+            <li><a class="toctree-l4" href="#implicit-this-in-method-functions">Implicit "this" in method functions</a></li>
+        
             <li><a class="toctree-l4" href="#c-interop">C interop</a></li>
         
             <li><a class="toctree-l4" href="#managed-pointers">Managed pointers</a></li>
@@ -257,6 +259,18 @@
               
                 <h1 id="ideas">Ideas</h1>
 <p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
+<h2 id="implicit-this-in-method-functions">Implicit "this" in method functions</h2>
+<pre><code>struct Foo
+{
+    int i;
+}
+
+func Foo.next(Foo&amp;)
+{
+    i++;
+}
+</code></pre>
+
 <h2 id="c-interop">C interop</h2>
 <p>Steps:</p>
 <ol>

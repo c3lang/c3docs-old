@@ -105,6 +105,8 @@
         
             <li><a class="toctree-l4" href="#enum">Enum</a></li>
         
+            <li><a class="toctree-l4" href="#error">Error</a></li>
+        
             <li><a class="toctree-l4" href="#alias-and-function-types">Alias and function types</a></li>
         
             <li><a class="toctree-l4" href="#struct-types">Struct types</a></li>
@@ -450,7 +452,7 @@ func c_int stat(const c_char* pathname, Stat* buf);
 <h3 id="pointer-types">Pointer types</h3>
 <p>Pointers mirror C: <code>Foo*</code> is a pointer to a <code>Foo</code>, while <code>Foo**</code> is a pointer to a pointer of Foo.</p>
 <h3 id="array-types">Array types</h3>
-<p>Arrays are indicated by <code>[]</code> after the type. Unlike C, the <code>[]</code>. <code>Foo[]</code> would be an array of unspecified length containing <code>Foo</code> structs.</p>
+<p>Arrays are indicated by <code>[]</code> after the type, optionally with the size given, e.g. <code>int[4]</code>. Unlike C, the "empty" array (without size), is a fat pointer array that may be queried about its size.</p>
 <h2 id="enum">Enum</h2>
 <p>Enum (enumerated) types use the following syntax:</p>
 <pre><code>enum State : int 
@@ -462,6 +464,16 @@ func c_int stat(const c_char* pathname, Stat* buf);
 </code></pre>
 
 <p>Enum constants are namespaces by default, just like C++'s class enums. So accessing the enums above would for example use <code>State.PENDING</code> rather than <code>PENDING</code>.</p>
+<h2 id="error">Error</h2>
+<p>Error types are similar to enums, and are used for error returns.</p>
+<pre><code>error IOError
+{
+    FILE_CLOSED
+    FILE_EOF_REACHED
+}
+</code></pre>
+
+<p>Just like enums, the errors are namespaced. Read more about the error types on the page about <a href="../errorhandling">error handling</a>.</p>
 <h2 id="alias-and-function-types">Alias and function types</h2>
 <p>Alias types are used to give an alias to a different type, like:</p>
 <pre><code>type CharPtr char*;
