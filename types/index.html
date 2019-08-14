@@ -117,6 +117,8 @@
         
             <li><a class="toctree-l4" href="#anonymous-sub-structs-unions">Anonymous sub-structs / unions</a></li>
         
+            <li><a class="toctree-l4" href="#conversion-to-symbol-to-type-and-back-with-type">Conversion to symbol to type and back with type</a></li>
+        
         </ul>
     
 
@@ -165,6 +167,10 @@
                 <li class="">
                     
     <a class="" href="../comments/">Comments & Docs</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../attributes/">Attributes</a>
                 </li>
                 <li class="">
                     
@@ -476,14 +482,14 @@ func c_int stat(const c_char* pathname, Stat* buf);
 <p>Just like enums, the errors are namespaced. Read more about the error types on the page about <a href="../errorhandling">error handling</a>.</p>
 <h2 id="alias-and-function-types">Alias and function types</h2>
 <p>Alias types are used to give an alias to a different type, like:</p>
-<pre><code>type CharPtr char*;
-type Numbers int[10];
+<pre><code>typedef char* as CharPtr;
+typedef int[10] as Numbers;
 </code></pre>
 
 <p>Function pointers <em>must</em> be aliased in C3. The syntax is simpler than that of C:</p>
-<p><code>public type Callback func void(int a, bool b);</code></p>
+<p><code>public typedef func void(int a, bool b) as Callback;</code></p>
 <p>This defines an alias to function pointer type of a function that returns nothing and requires two arguments: an int and a bool. Here is a sample usage:</p>
-<pre><code>Callback cb = my_callback
+<pre><code>Callback cb = my_callback;
 cb(10, false);
 </code></pre>
 
@@ -572,6 +578,19 @@ io.printf(&quot;%d&quot;, i.as_byte);
         Callback cb;
     }
 }
+</code></pre>
+
+<h2 id="conversion-to-symbol-to-type-and-back-with-type">Conversion to symbol to type and back with <code>type</code></h2>
+<p>Macros and compile time constants may occasionally contain type <em>symbols</em>. To convert back and forth, the <code>type</code> operator is used.</p>
+<pre><code>macro @test($i)
+{
+    $if ($i &lt; 2) return type(int);
+    return type(double);
+}
+
+$foo = type(int*);
+type($foo) i = nil;
+type(@test(4)) = 100;
 </code></pre>
               
             </div>

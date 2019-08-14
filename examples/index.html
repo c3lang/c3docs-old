@@ -186,6 +186,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../attributes/">Attributes</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../cinterop/">C Interop</a>
                 </li>
                 <li class="">
@@ -622,12 +626,12 @@ func int test()
 </code></pre>
 
 <p>Macro arguments may have deferred evaluation, which is basically text expansion.</p>
-<pre><code>macro foo(&amp;a, b, &amp;c)
+<pre><code>macro foo($a, b, $c)
 {
     c = a(b) * b;
 }
 
-macro foo2(&amp;a)
+macro foo2($a)
 {
     return a * a;
 }
@@ -715,13 +719,13 @@ func testThings()
 
 func void printFile(string filename)
 {
-    string file = try io.load_file(filename);
+    string file = try io::load_file(filename);
 
-    printf(&quot;Loaded %s and got:\n%s&quot;, filename, file);
+    io::printf(&quot;Loaded %s and got:\n%s&quot;, filename, file);
 
     catch (error err)
     {
-        case FileError.FILE_NOT_FOUND:
+        case io::FileError.FILE_NOT_FOUND:
             printf(&quot;I could not find the file %s\n&quot;, filename);
         default:
             printf(&quot;Could not load %s: '%s'&quot;, filename, @describe(err));
@@ -731,11 +735,11 @@ func void printFile(string filename)
 
 <h5 id="generic-modules">Generic modules</h5>
 <p>Generic modules are imported with their parameters set.</p>
-<pre><code>module stack($A)
+<pre><code>module stack($a)
 
 struct Stack
 {
-    $A[] elems;
+    type($a)[] elems;
 }
 
 func Stack.init(Stack&amp; this)
@@ -743,7 +747,7 @@ func Stack.init(Stack&amp; this)
     this.elems = nil;
 }
 
-func void Stack.push(Stack&amp; this, $A element)
+func void Stack.push(Stack&amp; this, type($a) element)
 {
     this.elems.add(element);
 }
@@ -761,8 +765,8 @@ func bool Stack.empty(Stack &amp;this)
 </code></pre>
 
 <p>Testing it out:</p>
-<pre><code>import stack(int), Stack as IntStack;
-import stack(double), Stack as DoubleStack;
+<pre><code>import stack(int) : Stack as IntStack;
+import stack(double) : Stack as DoubleStack;
 
 func void test()
 {

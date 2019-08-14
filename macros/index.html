@@ -138,6 +138,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../attributes/">Attributes</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../cinterop/">C Interop</a>
                 </li>
                 <li class="">
@@ -218,18 +222,19 @@
             <div class="section">
               
                 <h1 id="macros">Macros</h1>
-<p><strong>!!!THIS IS JUST AN EXPERIMENTAL DRAFT!!!</strong></p>
-<p>Macros is a form of compile time evaluation. There are compile time variables (prefixed with <code>$</code>) and compile time template code (macros).</p>
-<h2 id="compile-time-evaluation">Compile time evaluation</h2>
-<p>The C3 compiler always does a first pass through the code reading all definitions and resolving compile time variables. Compile time variables with the <code>$</code> prefix are resolved <em>in order of declaration</em>.</p>
+<p><strong>May be subject to later revision</strong></p>
+<p>The macro capabilities of C3 reaches across several constructs: macros (prefixed with <code>@</code>), <a href="../generics/#generic-functions">generic functions</a>, <a href="../generics/#generic-modules">generic modules</a>, compile time variables (prefixed with <code>$e</code>), macro compile time execution (using <code>$if</code>, <code>$each</code>, <code>$switch</code>), attributes and incremental structs, enums and arrays.</p>
+<h2 id="top-level-evaluation">Top level evaluation</h2>
+<p>Script languages, and also upcoming languages like <em>Jai</em>, usually have unbounded top level evaluation. The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. </p>
+<p>In C3, top level compile time evaluation is limited to <code>$if</code> and <code>$switch</code> constructs. This makes the code easier to read by sacrificing flexibility. However, the incremental structs, enums and arrays provided by the compiler offers a way to build compile time structures without the necessity for full meta programming capabilities.</p>
 <h2 id="macro-declarations">Macro declarations</h2>
 <p>A macro is defined using <code>macro @&lt;name&gt;(&lt;parameters&gt;)</code>. All user defined macros use the @ symbol.</p>
-<p>The parameters have different sigils: <code>$</code> means compile time evaluated (captured variable, symbol or expression). <code>#</code> means full string capture. Any parameters without sigils are passed by <em>value</em>, as if it was a normal function parameter.</p>
+<p>The parameters have different sigils: <code>$</code> means compile time evaluated (captured variable, symbol or expression). Any parameters without sigils are passed by <em>value</em>, as if it was a normal function parameter.</p>
 <p>A basic swap:</p>
 <pre><code>/**
  * @ensure parse($a = $b), parse($b = $a)
  */
-macro @swap($a, $b)
+macro void @swap($a, $b)
 {
     typeof($a) temp = $a;
     $a = $b;
@@ -258,7 +263,7 @@ func void test()
 </code></pre>
 
 <p>Note the necessary <code>$</code>. Here is an incorrect swap and what it would expand to:</p>
-<pre><code>macro @badswap(a, b)
+<pre><code>macro void @badswap(a, b)
 {
     typeof(a) temp = a;
     a = b;
@@ -287,27 +292,32 @@ func void test()
 </code></pre>
 
 <h2 id="capturing-a-macro-body">Capturing a macro body</h2>
-<p>We may add a trailing parameter in the format: <code>: @&lt;param name&gt;(arg1, arg2, ...)</code> it then captures any trailing compound statement.</p>
+<p>It is often useful for a macro to take a trailing compound statement as an argument. In C++ the pattern is usually expressed with a lambda, but in C3 this is completely inlined.</p>
+<p>For macros we add a trailing parameter in the format: <code>: var1, var2, ...</code>. Each declaration is an argument that macro will provide.</p>
+<p>Here's an example to illustrate it the use:</p>
 <pre><code>/**
- * @ensure parse(int i = a.len), parse(value1 = a[i])
- * @ensure parse(value2 = 2 * value1)
+ * A macro looping through a list of values, executing the body once
+ * every pass.
+ *
+ * @ensure parse(int i = a.len), parse(value2 = a[i])
  */
-macro @foreach(a : @body(value1, value2) )
+macro @foreach(a : value1, value2)
 {
     for (int i = 0; i &lt; a.len; i++)
     {
-        @body(a[i], a[i] * 2);
+        yield(i, a[i]);
     }
 }
 
 func void test()
 {
-    int[] a = { 1, 2, 3 };
-    @foreach(a : int value, int mult)
+    double[] a = { 1.0, 2.0, 3.0 };
+    @foreach(a : int index, double value)
     {
-        printf(&quot;Value: %d, x2: %d\n&quot;, value, mult);
+        printf(&quot;a[%d] = %f\n&quot;, index, value);
     }
 }
+
 // Expands to code similar to:
 func void test()
 {
@@ -316,8 +326,6 @@ func void test()
         int[] __a = a;
         for (int __i = 0; i &lt; __a.len; i++)
         {
-            typeof(__a[__i]) __value1 = __a[__i];
-            typeof(__a[__i] * 2) __value2 = __a[__i] * 2;
             printf(&quot;Value: %d, x2: %d\n&quot;, __value1, __value2);
         }
     }
@@ -326,7 +334,7 @@ func void test()
 
 <h2 id="macros-returning-values">Macros returning values</h2>
 <p>A macro may return a value, it is then considered an expression rather than a statement:</p>
-<pre><code>macro square(x)
+<pre><code>macro auto square(auto x)
 {
     return x * x;
 }
@@ -352,9 +360,9 @@ macro @squarePlusOne(x)
 }
 </code></pre>
 
-<p>Obviously this can cause infinite recursion, so the actual recursion depth is limited to what the build setting <code>macro-recursion-depth</code> is set to.</p>
+<p>The maximum recursion depth is limited to the <code>macro-recursion-depth</code> build setting.</p>
 <h2 id="macro-directives">Macro directives</h2>
-<p>Inside of a macro, we can use the compile time statements <code>$if</code>, <code>$else</code>‚ <code>$each</code> and <code>$switch</code>. Macros may also be recursively invoked.</p>
+<p>Inside of a macro, we can use the compile time statements <code>$if</code>, <code>$each</code> and <code>$switch</code>. Macros may also be recursively invoked. As previously mentioned, <code>$if</code> and <code>$switch</code> may also be invoked on the top level.</p>
 <h3 id="if-else-and-elif">$if, $else and $elif</h3>
 <p><code>$if (&lt;const expr&gt;)</code> takes a compile time constant value and evaluates it to true or false.</p>
 <pre><code>macro @foo($X, $y)
@@ -407,9 +415,9 @@ $endif;
 <h3 id="loops-using-each">Loops using $each</h3>
 <p><code>$each (&lt;range&gt; as &lt;variable&gt;) { ... }</code> allows compile time recursion. <code>$each</code> may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.</p>
 <p>Looping over ranges:</p>
-<pre><code>macro @foo($A)
+<pre><code>macro @foo($a)
 {
-    $each (0..$A as $x) 
+    $each (0..$a as $x) 
     {
         printf(&quot;%d\n&quot;, $x);     
     }
@@ -425,9 +433,9 @@ func void test()
 </code></pre>
 
 <p>Looping over enums:</p>
-<pre><code>macro @foo_enum($THE_ENUM)
+<pre><code>macro @foo_enum($some_enum)
 {
-    $each($THE_ENUM as $x)  
+    $each($some_enum as $x)  
     {
         printf(&quot;%d\n&quot;, cast(int, $x));     
     }
@@ -452,7 +460,7 @@ func void test()
 It's not possible to compile partial statements.</p>
 <h3 id="switching-on-type-with-switch">Switching on type with $switch</h3>
 <p>It's possible to switch on type, similar to generic functions, but used internal to the macro:</p>
-<pre><code>macro foo(a, b)
+<pre><code>macro void foo(a, b)
 {
     $switch(a, b)
     {
@@ -463,55 +471,9 @@ It's not possible to compile partial statements.</p>
 }
 </code></pre>
 
-<h2 id="macro-text-interpolation">Macro text interpolation</h2>
-<p>For certain cases, pure text interpolation might be needed. The sigil <code>#</code> is used to indicate a stringified capture. Within a macro, any text within <code>``</code> is evaluated as text.</p>
-<pre><code>macro @foo($x, #f)
-{
-    `#f $x * $x`;
-}
-
-func void test()
-{
-    int x = 1;
-    @foo(4, x += );
-    // Expands to -&gt;
-    // x += 4 * 4;
-}
-</code></pre>
-
-<p>Another example, showing the difference between <code>#var</code> and <code>`#var`</code>:</p>
-<pre><code>macro @foo2(#f)
-{
-    printf(&quot;%s was %d\n&quot;, #f, `#f`);
-}
-
-funct void test2()
-{
-    int x = 1;
-    @foo2(x);
-    // Expands to -&gt;
-    // printf(&quot;%s was %d\n&quot;, &quot;x&quot;, x);
-}
-</code></pre>
-
-<h3 id="compile-time-string-functions">Compile time string functions</h3>
-<p>In order to facilitate certain types of macros, the following macros are built in:</p>
-<ul>
-<li><code>@strToUpper(#f)</code> Convert string to upper case.</li>
-<li><code>@strToLower(#f)</code> Convert string to lower case.</li>
-<li><code>@strToVarName(#f, #space)</code> Convert string to camel case from a space-based name scheme.</li>
-<li><code>@strToTypeName(#f, #space)</code> Convert string to title case from a space-based name scheme.</li>
-<li><code>@strFromName(#f, #space)</code> Convert title case or lower camel case to a space based scheme.</li>
-<li><code>@strReplace(#str, #pattern, #replacement, #count)</code> Replace a string with another.</li>
-<li><code>@subString(#str, #start, #length)</code> Return a substring of a compile time string.</li>
-<li><code>@strFind(#str, #stringToFind)</code> Find a substring in a compile time string.</li>
-<li><code>@strHash(#str)</code> Return the FNV1a hash of a string.</li>
-<li><code>@strLen(#str)</code> Return a compile time length of a string.</li>
-<li><code>@stringify(#str)</code> Escapes a string so it becomes a valid string.</li>
-</ul>
 <h2 id="escape-macros">Escape macros</h2>
-<p>A usual macro will generate its own scope, so that break, return, continue and goto only stays valid inside of its own "scope". A <code>return</code> from inside a macro does not normally escape the scope into which it's called:</p>
-<pre><code>macro @foo() { return; }
+<p>Usually macro will generate its own scope, so that break, return, continue and goto only stays valid inside of the macro's "scope". A <code>return</code> from inside a macro does not normally escape the scope into which it's called:</p>
+<pre><code>macro void @foo() { return; }
 
 func void test()
 {
@@ -520,8 +482,8 @@ func void test()
 }
 </code></pre>
 
-<p>However, there is a way to make a macro break out of the outer scope, and that is to add a <code>!</code> to the macro name. Such a macro may escape its boundaries.</p>
-<pre><code>macro @foo!() 
+<p>However, sometimes macros are needed that does not create its own scope, allowing return, break etc work as if it was part of the included scope. Escape macros does exactly that. An escape macro adds a "!" to the macro name. Note that this becomes part of the macro name.</p>
+<pre><code>macro void @foo!() 
 { 
     return; 
 }
@@ -559,7 +521,7 @@ reason about since they should be able to define new types or change the
 meaning of the code that follows.</p>
 <p>Still, the usefulness of top level macros is great, which is why C3 offers 
 four pieces of functionality for the top level: conditional compilation,
-global compile time varibles, decorators and incremental arrays.</p>
+global compile time varibles, attributes and incremental arrays.</p>
 <h3 id="conditional-compilation">Conditional compilation</h3>
 <p>Conditional compilation is done with $if and $else, which works just like
 inside of functions.</p>
@@ -588,12 +550,12 @@ const $a = @foo(); // $a = 1
 const $b = @foo(); // $b = 2
 </code></pre>
 
-<h3 id="decorators">Decorators</h3>
-<p>Decorators are attributes placed on functions, types and variables. 
+<h3 id="attributes">Attributes</h3>
+<p>Attributes are tags placed on functions, types and variables. 
 They may take a type as argument, much like a function. It's possible
-iterate over all decorated symbols of a particular type.</p>
-<pre><code>decorator func @myvar(int i = 0);
-decorator struct, union, enum @foo;
+iterate over all the objects that have an attribute of a particular type.</p>
+<pre><code>attribute func @myvar(int i = 0);
+attribute struct, union, enum @foo;
 
 func void test() @myvar(2)
 {
@@ -606,7 +568,7 @@ struct Test @foo
 }
 </code></pre>
 
-<p>What's useful about decorators is that they can be accessed during compile
+<p>What's useful about attributes is that they can be accessed during compile
 time:</p>
 <pre><code>macro @fooCheck($a)
 {
@@ -638,7 +600,7 @@ func void test()
 </code></pre>
 
 <p>It's also possible to get hold of the values:</p>
-<pre><code>decorator func @myvar(int i = 0);
+<pre><code>attribute func @myvar(int i = 0);
 func void test() @myvar(200) { ... }
 
 func void test()
@@ -664,7 +626,7 @@ a += 2;
 <p>This can be especially useful in conjuction with <code>$each</code>:</p>
 <pre><code>enum MyEnum { A, B }
 
-macro @foo_enum($theEnum)
+macro type @foo_enum($theEnum)
 {
     string[+] arr = {};
     $each($theEnum AS $x)  
@@ -677,14 +639,14 @@ macro @foo_enum($theEnum)
 const string[] allMyEnum = @foo_enum(MyEnum);
 </code></pre>
 
-<p>Here is a similar example but for decorators:</p>
-<pre><code>decorator struct @special;
+<p>Here is a similar example but for attributes:</p>
+<pre><code>attribute struct @special;
 
 struct TestA @special { int i; }
 struct TestB { float f; }
 struct TestC @special { float f; }
 
-macro @specialStructs()
+macro void @specialStructs()
 {
     string[+] res = {};
     $each(@special as $x)

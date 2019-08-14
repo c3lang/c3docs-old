@@ -133,6 +133,10 @@
     
         <ul>
         
+            <li><a class="toctree-l4" href="#twocc-fourcc-and-eightcc-codes">TwoCC FourCC and EightCC codes</a></li>
+        
+            <li><a class="toctree-l4" href="#macro-text-interpolation">Macro text interpolation</a></li>
+        
             <li><a class="toctree-l4" href="#implicit-this-in-method-functions">Implicit "this" in method functions</a></li>
         
             <li><a class="toctree-l4" href="#c-interop">C interop</a></li>
@@ -141,9 +145,9 @@
         
             <li><a class="toctree-l4" href="#arrays">Arrays</a></li>
         
-            <li><a class="toctree-l4" href="#raw-dynamic-safe-arrays-new">Raw dynamic, safe arrays - NEW!</a></li>
+            <li><a class="toctree-l4" href="#raw-dynamic-safe-arrays">Raw dynamic, safe arrays</a></li>
         
-            <li><a class="toctree-l4" href="#raw-dynamic-safe-strings-new">Raw dynamic, safe strings - NEW!</a></li>
+            <li><a class="toctree-l4" href="#raw-dynamic-safe-strings">Raw dynamic, safe strings</a></li>
         
             <li><a class="toctree-l4" href="#unsorted">Unsorted</a></li>
         
@@ -171,6 +175,10 @@
                 <li class="">
                     
     <a class="" href="../comments/">Comments & Docs</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../attributes/">Attributes</a>
                 </li>
                 <li class="">
                     
@@ -259,6 +267,59 @@
               
                 <h1 id="ideas">Ideas</h1>
 <p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
+<h2 id="twocc-fourcc-and-eightcc-codes">TwoCC FourCC and EightCC codes</h2>
+<p>Allow 2, 4 and 8 bit numbers be declared using a list of char.</p>
+<pre><code>ushort foo = 'HI';
+uint bar = 'HELO';
+ulong baz = 'WHAZAAAP';
+</code></pre>
+
+<h2 id="macro-text-interpolation">Macro text interpolation</h2>
+<p>For certain cases, pure text interpolation might be needed. Within macros, any text within <code>``</code> can be evaluated and parsed.</p>
+<pre><code>macro void @foo($x, #f)
+{
+    `#f $x * $x`;
+}
+
+func void test()
+{
+    int x = 1;
+    @foo(4, &quot;x +=&quot;);
+    // Expands to -&gt;
+    // x += 4 * 4;
+}
+</code></pre>
+
+<p>Another example, showing the difference between <code>#var</code> and <code>`#var`</code>:</p>
+<pre><code>macro void @foo2(#f)
+{
+    printf(&quot;%s was %d\n&quot;, #f, `#f`);
+}
+
+funct void test2()
+{
+    int x = 1;
+    @foo2(x);
+    // Expands to -&gt;
+    // printf(&quot;%s was %d\n&quot;, &quot;x&quot;, x);
+}
+</code></pre>
+
+<h3 id="compile-time-string-functions">Compile time string functions</h3>
+<p>In order to facilitate certain types of macros, the following macros are built in:</p>
+<ul>
+<li><code>@strToUpper(#f)</code> Convert string to upper case.</li>
+<li><code>@strToLower(#f)</code> Convert string to lower case.</li>
+<li><code>@strToVarName(#f, #space)</code> Convert string to camel case from a space-based name scheme.</li>
+<li><code>@strToTypeName(#f, #space)</code> Convert string to title case from a space-based name scheme.</li>
+<li><code>@strFromName(#f, #space)</code> Convert title case or lower camel case to a space based scheme.</li>
+<li><code>@strReplace(#str, #pattern, #replacement, #count)</code> Replace a string with another.</li>
+<li><code>@subString(#str, #start, #length)</code> Return a substring of a compile time string.</li>
+<li><code>@strFind(#str, #stringToFind)</code> Find a substring in a compile time string.</li>
+<li><code>@strHash(#str)</code> Return the FNV1a hash of a string.</li>
+<li><code>@strLen(#str)</code> Return a compile time length of a string.</li>
+<li><code>@stringify(#str)</code> Escapes a string so it becomes a valid string.</li>
+</ul>
 <h2 id="implicit-this-in-method-functions">Implicit "this" in method functions</h2>
 <pre><code>struct Foo
 {
@@ -405,14 +466,14 @@ d = @cast(int[4]*, e); // Fine
 }
 </code></pre>
 
-<h2 id="raw-dynamic-safe-arrays-new">Raw dynamic, safe arrays <strong>- NEW!</strong></h2>
+<h2 id="raw-dynamic-safe-arrays">Raw dynamic, safe arrays</h2>
 <ol>
 <li>Works just like a pointer</li>
 <li>Not safe to keep reference to if made dynamic.</li>
 <li>Requires special method to dispose of and to allocate</li>
 <li>Knows its size.</li>
 </ol>
-<h2 id="raw-dynamic-safe-strings-new">Raw dynamic, safe strings <strong>- NEW!</strong></h2>
+<h2 id="raw-dynamic-safe-strings">Raw dynamic, safe strings</h2>
 <ol>
 <li>Works just like a pointer.</li>
 <li>Not safe to keep reference if made dynamic</li>
@@ -493,29 +554,6 @@ import set(double) alias DoubleSet;
 <p>It's unclear whether this is is helpful or not. Should be discussed further.</p>
 <h5 id="tagged-any">Tagged any</h5>
 <p>A tagged pointer union type for any possible type.</p>
-<h5 id="defer-for-error">Defer for error</h5>
-<p>Introduce an error defer that is only called on error:</p>
-<pre><code>func void test() throws
-{
-    defer throw(e) 
-    {
-        printf(&quot;Had an error!\n&quot;);
-    }
-    if (rand() == 0) throw Error.TEST;    
-}
-</code></pre>
-
-<p>The code above would be functionally equivalent to:</p>
-<pre><code>func void test() throws
-{
-    if (rand() == 0) 
-    {
-        printf(&quot;Had an error!\n&quot;);
-        throw Error.TEST;    
-    }    
-}
-</code></pre>
-
 <h5 id="cone-style-arrays">Cone style arrays</h5>
 <ol>
 <li>Fixed static sized arrays do not automatically decay into pointers (that is int[3] does not decay into int*)</li>

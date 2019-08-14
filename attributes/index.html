@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Decorators - C3 Documentation</title>
+  <title>Attributes - C3 Documentation</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Decorators";
-    var mkdocs_page_input_path = "decorators.md";
+    var mkdocs_page_name = "Attributes";
+    var mkdocs_page_input_path = "attributes.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -136,6 +136,30 @@
                     
     <a class="" href="../comments/">Comments & Docs</a>
                 </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Attributes</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#attributes">Attributes</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#built-in-attributes">Built in attributes</a></li>
+        
+            <li><a class="toctree-l4" href="#new-attributes">New attributes</a></li>
+        
+            <li><a class="toctree-l4" href="#compile-time-attribute-access">Compile time attribute access</a></li>
+        
+            <li><a class="toctree-l4" href="#bundled-attributes">Bundled attributes</a></li>
+        
+            <li><a class="toctree-l4" href="#iterating-over-attributes">Iterating over attributes</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
                 <li class="">
                     
     <a class="" href="../cinterop/">C Interop</a>
@@ -206,8 +230,12 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
+        
+          <li>Documentation &raquo;</li>
+        
+      
     
-    <li>Decorators</li>
+    <li>Attributes</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -217,42 +245,56 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="decorators">Decorators</h1>
-<p>Decorations are compile time annotations on functions, types, global constants and variables. Similar to Java annotations, a decoration may also take arguments. A decorator can also represent a bundle of decorators.</p>
-<h2 id="new-decorators">New decorators</h2>
-<p>The basic syntax for creating a new decorator is <code>decorator &lt;declaration type&gt; @&lt;name&gt;</code>. The type category is one of <code>var</code>, <code>const</code>, <code>func</code>, <code>union</code>, <code>struct</code>, <code>enum</code>, <code>typedef</code> and <code>error</code>.</p>
+                <h1 id="attributes">Attributes</h1>
+<p>Attributes are compile time annotations on functions, types, global constants and variables. Similar to Java annotations, a decoration may also take arguments. A attribute can also represent a bundle of attributes.</p>
+<h2 id="built-in-attributes">Built in attributes</h2>
+<h3 id="packed-struct-union-enum"><code>packed</code> (struct, union, enum)</h3>
+<p>If used on a struct or enum: packs the type, including any components to minimum size. On an enum, it uses the smallest representation containing all its values.</p>
+<h3 id="sectionname-var-func"><code>section(name)</code> (var, func)</h3>
+<p>Declares that a global variable or function should appear in a specific section.</p>
+<h3 id="inline-func"><code>inline</code> (func)</h3>
+<p>Declares a function to always be inlined.</p>
+<h3 id="alignedalignment-struct-union-var-func"><code>aligned(alignment)</code> (struct, union, var, func)</h3>
+<p>This attribute sets the minimum alignment for a field or a variable.</p>
+<h3 id="weak-func-var"><code>weak</code> (func, var)</h3>
+<p>Emits a weak symbol rather than a global. </p>
+<h3 id="opaque-struct-union-enum"><code>opaque</code> (struct, union, enum)</h3>
+<p>Prevents the union or struct from being statically allocated by other modules. In the case of enums,
+prevents the enum from being converted to a value.</p>
+<h2 id="new-attributes">New attributes</h2>
+<p>The basic syntax for creating a new attribute is <code>attribute &lt;declaration type&gt; @&lt;name&gt;</code>. The type category is one of <code>var</code>, <code>const</code>, <code>func</code>, <code>union</code>, <code>struct</code>, <code>enum</code>, <code>typedef</code> and <code>error</code>.</p>
 <p>For example:</p>
-<pre><code>decorator func @mydecorator;
+<pre><code>attribute func @myattribute;
 
-func void foo() @mydecorator
+func void foo() @myattribute
 { ...  }
 </code></pre>
 
-<h3 id="multi-type-decorators">Multi type decorators</h3>
-<p>It's possible to make a decorator match more than a single declaration type, by separating them using comma:</p>
-<pre><code>decorator func, enum, struct @foodecorator;
+<h3 id="multi-type-attributes">Multi type attributes</h3>
+<p>It's possible to make an attribute match more than a single declaration type, by separating them using comma:</p>
+<pre><code>attribute func, enum, struct @fooattribute;
 
-func void foo() @foodecorator
+func void foo() @fooattribute
 { 
     /* ... */  
 }
 
-struct Bar @foodecorator
+struct Bar @fooattribute
 { 
     int i;
 }
 </code></pre>
 
 <h3 id="arguments">Arguments</h3>
-<p>A decorator may take a number of arguments, similar to a function. All such arguments must be compile time constants.</p>
-<pre><code>decorator func @intdec(int i)
+<p>An attribute may take a number of arguments, similar to a function. All such arguments must be compile time constants.</p>
+<pre><code>attribute func @intdec(int i)
 
 void foo() @intdec(2)
 { ... }
 </code></pre>
 
 <p>Just like for function calls, the arguments may have defaults, use named arguments etc. However, varargs are not allowed.</p>
-<pre><code>decorator func @dec(int d, int i = 0, float f = 1.0)
+<pre><code>attribute func @dec(int d, int i = 0, float f = 1.0)
 
 void foo() @dec(2)
 { ... }
@@ -261,8 +303,8 @@ void bar() @dec(7, f = 3.0)
 { ... }
 </code></pre>
 
-<h2 id="compile-time-decorator-access">Compile time decorator access</h2>
-<p>What's useful about decorators is that they can be accessed during compile
+<h2 id="compile-time-attribute-access">Compile time attribute access</h2>
+<p>What's useful about attributes is that they can be accessed during compile
 time:</p>
 <pre><code>macro @fooCheck($a)
 {
@@ -295,7 +337,7 @@ func void test()
 
 <p>The values may be recovered:</p>
 <p>It's also possible to get hold of the values:</p>
-<pre><code>decorator func @myvar(int i = 0);
+<pre><code>attribute func @myvar(int i = 0);
 
 func void test() @myvar(200) 
 { 
@@ -308,12 +350,12 @@ func void test()
 }
 </code></pre>
 
-<h2 id="bundled-decorators">Bundled decorators</h2>
-<p>It's also possible to create bundles of decorators, that simply contain other decorators. Unlike a normal decorator, a decorator bundle is a simple alias, so it has no real compile time information.</p>
-<pre><code>decorator func @foodec;
-decorator func @bardec(int i = 0);
+<h2 id="bundled-attributes">Bundled attributes</h2>
+<p>It's also possible to create bundles of attributes, that simply contain other attributes. Unlike a normal attribute, an attribute bundle is a simple alias, so it has no real compile time information.</p>
+<pre><code>attribute func @foodec;
+attribute func @bardec(int i = 0);
 
-decorator @mixdec alias @foodec, @bardec(3);
+attribute @mixdec alias @foodec, @bardec(3);
 
 // As if we had added @foodec, @bardec(3)
 func void test() @mixdec
@@ -322,11 +364,11 @@ func void test() @mixdec
 }
 </code></pre>
 
-<p>A decorator bundle might also be completely empty.</p>
-<h2 id="iterating-over-decorators">Iterating over decorators</h2>
-<p>Within a macro it's possible to iterate in compile time over all non-alias decorators 
+<p>A attribute bundle might also be completely empty.</p>
+<h2 id="iterating-over-attributes">Iterating over attributes</h2>
+<p>Within a macro it's possible to iterate in compile time over all non-alias attributes 
 using <code>$each</code>.</p>
-<pre><code>decorator struct @special;
+<pre><code>attribute struct @special;
 
 struct TestA @special { int i; }
 struct TestB { float f; }
@@ -353,6 +395,15 @@ const string[] SPECIAL_STRUCTS = @specialStructs();
           </div>
           <footer>
   
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../cinterop/" class="btn btn-neutral float-right" title="C Interop">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../comments/" class="btn btn-neutral" title="Comments & Docs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
 
   <hr/>
 
@@ -375,6 +426,10 @@ const string[] SPECIAL_STRUCTS = @specialStructs();
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
+        <span><a href="../comments/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../cinterop/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
