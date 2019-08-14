@@ -71,3 +71,5 @@ func void test(Foo& foo, Bar& bar)
     // foo.x = bar.y - compile time error!
 }
 ```
+
+

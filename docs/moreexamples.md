@@ -7,7 +7,7 @@ import stdio as io;
 
 func void main()
 {
-    printf("Hello world!\n");
+    io::printf("Hello world!\n");
 }
 ```
 

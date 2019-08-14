@@ -85,12 +85,12 @@ import networking as net local;
 import filesystem local;
 
 // Equivalent
-filesystem.doSomething();
+filesystem::doSomething();
 doSomething();
 
 // Equivalent
-net.connect();
-networking.connect();
+net::connect();
+networking::connect();
 connect();
 ```
 

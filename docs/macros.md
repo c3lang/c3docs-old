@@ -1,18 +1,20 @@
 # Macros
 
-**!!!THIS IS JUST AN EXPERIMENTAL DRAFT!!!**
+**May be subject to later revision**
 
-Macros is a form of compile time evaluation. There are compile time variables (prefixed with `$`) and compile time template code (macros).
+The macro capabilities of C3 reaches across several constructs: macros (prefixed with `@`), [generic functions](../generics/#generic-functions), [generic modules](../generics/#generic-modules), compile time variables (prefixed with `$e`), macro compile time execution (using `$if`, `$each`, `$switch`), attributes and incremental structs, enums and arrays.
 
-## Compile time evaluation
+## Top level evaluation
 
-The C3 compiler always does a first pass through the code reading all definitions and resolving compile time variables. Compile time variables with the `$` prefix are resolved *in order of declaration*.
+Script languages, and also upcoming languages like *Jai*, usually have unbounded top level evaluation. The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. 
+
+In C3, top level compile time evaluation is limited to `$if` and `$switch` constructs. This makes the code easier to read by sacrificing flexibility. However, the incremental structs, enums and arrays provided by the compiler offers a way to build compile time structures without the necessity for full meta programming capabilities.
 
 ## Macro declarations
 
 A macro is defined using `macro @<name>(<parameters>)`. All user defined macros use the @ symbol.
 
-The parameters have different sigils: `$` means compile time evaluated (captured variable, symbol or expression). `#` means full string capture. Any parameters without sigils are passed by *value*, as if it was a normal function parameter.
+The parameters have different sigils: `$` means compile time evaluated (captured variable, symbol or expression). Any parameters without sigils are passed by *value*, as if it was a normal function parameter.
 
 
 A basic swap:
@@ -21,7 +23,7 @@ A basic swap:
 /**
  * @ensure parse($a = $b), parse($b = $a)
  */
-macro @swap($a, $b)
+macro void @swap($a, $b)
 {
     typeof($a) temp = $a;
     $a = $b;
@@ -54,7 +56,7 @@ func void test()
 Note the necessary `$`. Here is an incorrect swap and what it would expand to:
 
 ```
-macro @badswap(a, b)
+macro void @badswap(a, b)
 {
     typeof(a) temp = a;
     a = b;
@@ -84,29 +86,36 @@ func void test()
 
 ## Capturing a macro body
 
-We may add a trailing parameter in the format: `: @<param name>(arg1, arg2, ...)` it then captures any trailing compound statement.
+It is often useful for a macro to take a trailing compound statement as an argument. In C++ the pattern is usually expressed with a lambda, but in C3 this is completely inlined.
+
+For macros we add a trailing parameter in the format: `: var1, var2, ...`. Each declaration is an argument that macro will provide.
+
+Here's an example to illustrate it the use:
 
 ```
 /**
- * @ensure parse(int i = a.len), parse(value1 = a[i])
- * @ensure parse(value2 = 2 * value1)
+ * A macro looping through a list of values, executing the body once
+ * every pass.
+ *
+ * @ensure parse(int i = a.len), parse(value2 = a[i])
  */
-macro @foreach(a : @body(value1, value2) )
+macro @foreach(a : value1, value2)
 {
     for (int i = 0; i < a.len; i++)
     {
-        @body(a[i], a[i] * 2);
+        yield(i, a[i]);
     }
 }
 
 func void test()
 {
-    int[] a = { 1, 2, 3 };
-    @foreach(a : int value, int mult)
+    double[] a = { 1.0, 2.0, 3.0 };
+    @foreach(a : int index, double value)
     {
-        printf("Value: %d, x2: %d\n", value, mult);
+        printf("a[%d] = %f\n", index, value);
     }
 }
+
 // Expands to code similar to:
 func void test()
 {
@@ -115,20 +124,19 @@ func void test()
         int[] __a = a;
         for (int __i = 0; i < __a.len; i++)
         {
-            typeof(__a[__i]) __value1 = __a[__i];
-            typeof(__a[__i] * 2) __value2 = __a[__i] * 2;
             printf("Value: %d, x2: %d\n", __value1, __value2);
         }
     }
 }
 ```
 
+
 ## Macros returning values
 
 A macro may return a value, it is then considered an expression rather than a statement:
 
 ```
-macro square(x)
+macro auto square(auto x)
 {
     return x * x;
 }
@@ -157,12 +165,12 @@ macro @squarePlusOne(x)
 }
 ```
 
-Obviously this can cause infinite recursion, so the actual recursion depth is limited to what the build setting `macro-recursion-depth` is set to.
+The maximum recursion depth is limited to the `macro-recursion-depth` build setting.
 
 
 ## Macro directives
 
-Inside of a macro, we can use the compile time statements `$if`, `$else`‚ `$each` and `$switch`. Macros may also be recursively invoked.
+Inside of a macro, we can use the compile time statements `$if`, `$each` and `$switch`. Macros may also be recursively invoked. As previously mentioned, `$if` and `$switch` may also be invoked on the top level.
 
 ### $if, $else and $elif
 
@@ -226,9 +234,9 @@ $endif;
 
 Looping over ranges:
 ```
-macro @foo($A)
+macro @foo($a)
 {
-    $each (0..$A as $x) 
+    $each (0..$a as $x) 
     {
         printf("%d\n", $x);     
     }
@@ -245,9 +253,9 @@ func void test()
 
 Looping over enums:
 ```
-macro @foo_enum($THE_ENUM)
+macro @foo_enum($some_enum)
 {
-    $each($THE_ENUM as $x)  
+    $each($some_enum as $x)  
     {
         printf("%d\n", cast(int, $x));     
     }
@@ -276,7 +284,7 @@ It's not possible to compile partial statements.
 It's possible to switch on type, similar to generic functions, but used internal to the macro:
 
 ```
-macro foo(a, b)
+macro void foo(a, b)
 {
     $switch(a, b)
     {
@@ -287,64 +295,12 @@ macro foo(a, b)
 }
 ```
 
-## Macro text interpolation
-
-For certain cases, pure text interpolation might be needed. The sigil `#` is used to indicate a stringified capture. Within a macro, any text within ``` `` ``` is evaluated as text.
-
-```
-macro @foo($x, #f)
-{
-    `#f $x * $x`;
-}
-
-func void test()
-{
-    int x = 1;
-    @foo(4, x += );
-    // Expands to ->
-    // x += 4 * 4;
-}
-```
-
-Another example, showing the difference between `#var` and ``` `#var` ```:
-
-```
-macro @foo2(#f)
-{
-    printf("%s was %d\n", #f, `#f`);
-}
-
-funct void test2()
-{
-    int x = 1;
-    @foo2(x);
-    // Expands to ->
-    // printf("%s was %d\n", "x", x);
-}
-```
-
-### Compile time string functions
-
-In order to facilitate certain types of macros, the following macros are built in:
-
-- `@strToUpper(#f)` Convert string to upper case.
-- `@strToLower(#f)` Convert string to lower case.
-- `@strToVarName(#f, #space)` Convert string to camel case from a space-based name scheme.
-- `@strToTypeName(#f, #space)` Convert string to title case from a space-based name scheme.
-- `@strFromName(#f, #space)` Convert title case or lower camel case to a space based scheme.
-- `@strReplace(#str, #pattern, #replacement, #count)` Replace a string with another.
-- `@subString(#str, #start, #length)` Return a substring of a compile time string.
-- `@strFind(#str, #stringToFind)` Find a substring in a compile time string.
-- `@strHash(#str)` Return the FNV1a hash of a string.
-- `@strLen(#str)` Return a compile time length of a string.
-- `@stringify(#str)` Escapes a string so it becomes a valid string.
-
 ## Escape macros
 
-A usual macro will generate its own scope, so that break, return, continue and goto only stays valid inside of its own "scope". A `return` from inside a macro does not normally escape the scope into which it's called:
+Usually macro will generate its own scope, so that break, return, continue and goto only stays valid inside of the macro's "scope". A `return` from inside a macro does not normally escape the scope into which it's called:
 
 ```
-macro @foo() { return; }
+macro void @foo() { return; }
 
 func void test()
 {
@@ -353,10 +309,11 @@ func void test()
 }
 ```
 
-However, there is a way to make a macro break out of the outer scope, and that is to add a `!` to the macro name. Such a macro may escape its boundaries.
+However, sometimes macros are needed that does not create its own scope, allowing return, break etc work as if it was part of the included scope. Escape macros does exactly that. An escape macro adds a "!" to the macro name. Note that this becomes part of the macro name.
+
 
 ```
-macro @foo!() 
+macro void @foo!() 
 { 
     return; 
 }
@@ -399,7 +356,7 @@ meaning of the code that follows.
 
 Still, the usefulness of top level macros is great, which is why C3 offers 
 four pieces of functionality for the top level: conditional compilation,
-global compile time varibles, decorators and incremental arrays.
+global compile time varibles, attributes and incremental arrays.
 
 
 ### Conditional compilation
@@ -437,16 +394,16 @@ const $a = @foo(); // $a = 1
 const $b = @foo(); // $b = 2
 ```
 
-### Decorators
+### Attributes
 
-Decorators are attributes placed on functions, types and variables. 
+Attributes are tags placed on functions, types and variables. 
 They may take a type as argument, much like a function. It's possible
-iterate over all decorated symbols of a particular type.
+iterate over all the objects that have an attribute of a particular type.
 
 
 ```
-decorator func @myvar(int i = 0);
-decorator struct, union, enum @foo;
+attribute func @myvar(int i = 0);
+attribute struct, union, enum @foo;
 
 func void test() @myvar(2)
 {
@@ -459,7 +416,7 @@ struct Test @foo
 }
 ```
 
-What's useful about decorators is that they can be accessed during compile
+What's useful about attributes is that they can be accessed during compile
 time:
 
 ```
@@ -495,7 +452,7 @@ func void test()
 It's also possible to get hold of the values:
 
 ```
-decorator func @myvar(int i = 0);
+attribute func @myvar(int i = 0);
 func void test() @myvar(200) { ... }
 
 func void test()
@@ -526,7 +483,7 @@ This can be especially useful in conjuction with `$each`:
 ```
 enum MyEnum { A, B }
 
-macro @foo_enum($theEnum)
+macro type @foo_enum($theEnum)
 {
     string[+] arr = {};
     $each($theEnum AS $x)  
@@ -539,16 +496,16 @@ macro @foo_enum($theEnum)
 const string[] allMyEnum = @foo_enum(MyEnum);
 ```
 
-Here is a similar example but for decorators:
+Here is a similar example but for attributes:
 
 ```
-decorator struct @special;
+attribute struct @special;
 
 struct TestA @special { int i; }
 struct TestB { float f; }
 struct TestC @special { float f; }
 
-macro @specialStructs()
+macro void @specialStructs()
 {
     string[+] res = {};
     $each(@special as $x)

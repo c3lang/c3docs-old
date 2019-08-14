@@ -133,18 +133,18 @@ Just like enums, the errors are namespaced. Read more about the error types on t
 Alias types are used to give an alias to a different type, like:
 
 ```
-type CharPtr char*;
-type Numbers int[10];
+typedef char* as CharPtr;
+typedef int[10] as Numbers;
 ```
 
 Function pointers _must_ be aliased in C3. The syntax is simpler than that of C:
 
-`public type Callback func void(int a, bool b);`
+`public typedef func void(int a, bool b) as Callback;`
 
 This defines an alias to function pointer type of a function that returns nothing and requires two arguments: an int and a bool. Here is a sample usage:
 
 ```
-Callback cb = my_callback
+Callback cb = my_callback;
 cb(10, false);
 ```
 
@@ -252,4 +252,20 @@ struct Person
         Callback cb;
     }
 }
+```
+
+## Conversion to symbol to type and back with `type`
+
+Macros and compile time constants may occasionally contain type *symbols*. To convert back and forth, the `type` operator is used.
+
+```
+macro @test($i)
+{
+    $if ($i < 2) return type(int);
+    return type(double);
+}
+
+$foo = type(int*);
+type($foo) i = nil;
+type(@test(4)) = 100;
 ```

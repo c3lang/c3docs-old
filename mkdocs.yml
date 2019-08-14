@@ -20,6 +20,7 @@ nav:
     - Crazy ideas: 'ideas.md'
     - Naming rules: 'naming.md'
     - Comments & Docs: 'comments.md'
+    - Attributes: 'attributes.md'
     - C Interop: 'cinterop.md'
     - Grammar: 'syntax.md'
     - More code examples: 'sample.md'

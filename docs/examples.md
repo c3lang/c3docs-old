@@ -381,12 +381,12 @@ func int test()
 
 Macro arguments may have deferred evaluation, which is basically text expansion.
 ```
-macro foo(&a, b, &c)
+macro foo($a, b, $c)
 {
     c = a(b) * b;
 }
 
-macro foo2(&a)
+macro foo2($a)
 {
     return a * a;
 }
@@ -483,13 +483,13 @@ import stdio as io;
 
 func void printFile(string filename)
 {
-    string file = try io.load_file(filename);
+    string file = try io::load_file(filename);
     
-    printf("Loaded %s and got:\n%s", filename, file);
+    io::printf("Loaded %s and got:\n%s", filename, file);
 
     catch (error err)
     {
-        case FileError.FILE_NOT_FOUND:
+        case io::FileError.FILE_NOT_FOUND:
             printf("I could not find the file %s\n", filename);
         default:
             printf("Could not load %s: '%s'", filename, @describe(err));
@@ -502,11 +502,11 @@ func void printFile(string filename)
 Generic modules are imported with their parameters set.
 
 ```
-module stack($A)
+module stack($a)
 
 struct Stack
 {
-    $A[] elems;
+    type($a)[] elems;
 }
 
 func Stack.init(Stack& this)
@@ -514,7 +514,7 @@ func Stack.init(Stack& this)
     this.elems = nil;
 }
 
-func void Stack.push(Stack& this, $A element)
+func void Stack.push(Stack& this, type($a) element)
 {
     this.elems.add(element);
 }
@@ -534,8 +534,8 @@ func bool Stack.empty(Stack &this)
 Testing it out:
 
 ```
-import stack(int), Stack as IntStack;
-import stack(double), Stack as DoubleStack;
+import stack(int) : Stack as IntStack;
+import stack(double) : Stack as DoubleStack;
 
 func void test()
 {

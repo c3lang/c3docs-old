@@ -1,7 +1,16 @@
 # Change log
 
-Current revision made 2019-08-02.
+Current revision made 2019-08-14.
 
+##### Revision 2019-08-14
+
+- Namespace separator changed to `::` instead of `.` to simplify parsing. 
+- Added FourCC, Macro text interpolation to ideas.
+- Added Yacc grammar (incomplete)
+- Added "attribute" keyword. 
+- Changed type alias declaration to use `typedef ... as ...`. 
+- Introduced `type` operator. 
+- Added section about attributes.
 
 ##### Revision 2019-08-02
 

@@ -2,6 +2,72 @@
 
 **WARNING** Unfinished ideas / brain dumps
 
+
+
+## TwoCC FourCC and EightCC codes
+
+Allow 2, 4 and 8 bit numbers be declared using a list of char.
+
+```
+ushort foo = 'HI';
+uint bar = 'HELO';
+ulong baz = 'WHAZAAAP';
+```
+
+## Macro text interpolation
+
+For certain cases, pure text interpolation might be needed. Within macros, any text within ``` `` ``` can be evaluated and parsed.
+
+```
+macro void @foo($x, #f)
+{
+    `#f $x * $x`;
+}
+
+func void test()
+{
+    int x = 1;
+    @foo(4, "x +=");
+    // Expands to ->
+    // x += 4 * 4;
+}
+```
+
+Another example, showing the difference between `#var` and ``` `#var` ```:
+
+```
+macro void @foo2(#f)
+{
+    printf("%s was %d\n", #f, `#f`);
+}
+
+funct void test2()
+{
+    int x = 1;
+    @foo2(x);
+    // Expands to ->
+    // printf("%s was %d\n", "x", x);
+}
+```
+
+### Compile time string functions
+
+In order to facilitate certain types of macros, the following macros are built in:
+
+- `@strToUpper(#f)` Convert string to upper case.
+- `@strToLower(#f)` Convert string to lower case.
+- `@strToVarName(#f, #space)` Convert string to camel case from a space-based name scheme.
+- `@strToTypeName(#f, #space)` Convert string to title case from a space-based name scheme.
+- `@strFromName(#f, #space)` Convert title case or lower camel case to a space based scheme.
+- `@strReplace(#str, #pattern, #replacement, #count)` Replace a string with another.
+- `@subString(#str, #start, #length)` Return a substring of a compile time string.
+- `@strFind(#str, #stringToFind)` Find a substring in a compile time string.
+- `@strHash(#str)` Return the FNV1a hash of a string.
+- `@strLen(#str)` Return a compile time length of a string.
+- `@stringify(#str)` Escapes a string so it becomes a valid string.
+
+
+   
 ## Implicit "this" in method functions
 
 ```
@@ -146,14 +212,14 @@ struct __ArrayType_C3
 }
 ```
 
-## Raw dynamic, safe arrays **- NEW!**
+## Raw dynamic, safe arrays
 
 1. Works just like a pointer
 2. Not safe to keep reference to if made dynamic.
 3. Requires special method to dispose of and to allocate
 4. Knows its size.
 
-## Raw dynamic, safe strings **- NEW!**
+## Raw dynamic, safe strings 
 
 1. Works just like a pointer.
 2. Not safe to keep reference if made dynamic
@@ -262,34 +328,6 @@ It's unclear whether this is is helpful or not. Should be discussed further.
 
 A tagged pointer union type for any possible type.
 
-##### Defer for error
-
-Introduce an error defer that is only called on error:
-
-```
-func void test() throws
-{
-    defer throw(e) 
-    {
-        printf("Had an error!\n");
-    }
-    if (rand() == 0) throw Error.TEST;    
-}
-```
-
-The code above would be functionally equivalent to:
-
-
-```
-func void test() throws
-{
-    if (rand() == 0) 
-    {
-        printf("Had an error!\n");
-        throw Error.TEST;    
-    }    
-}
-```
 
 ##### Cone style arrays
 
