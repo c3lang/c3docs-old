@@ -31,7 +31,7 @@ generic abs(x)
 
 // File 2
 module bar;
-generic foo.abs(x)
+generic foo::abs(x)
 {
     case long:
         return absl(x);

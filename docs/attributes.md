@@ -20,6 +20,10 @@ Declares a function to always be inlined.
 
 This attribute sets the minimum alignment for a field or a variable.
 
+### `noreturn` (func)
+
+Declares that the function will never return.
+
 ### `weak` (func, var)
 
 Emits a weak symbol rather than a global. 

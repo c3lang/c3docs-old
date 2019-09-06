@@ -2,7 +2,145 @@
 
 **WARNING** Unfinished ideas / brain dumps
 
+## Revised module idea
 
+Rethink the whole concept like this:
+
+1. Imports are removed - completely.
+2. Automatic resolution is made from libraries according to the build file.
+3. Two level namepace.
+4. Structs, enums, error and unions lives in the top namespace.
+5. Functions lives in the lower namespace, which is at file level.
+6. Ambiguous names require qualifiers
+7. Current module shadows other modules by default (no qualifier needed).
+8. Top modules are implicitly created by folder.
+9. Sub module is implicitly created by file name.
+
+Example:
+
+
+```
+// File /foo/bar.c3
+struct Bar
+{ ... }
+
+struct Foo
+{ ... }
+
+struct FooBar
+{ ... }
+
+func void testSomething() { ... }
+
+func void testSomethingElse() { ... }
+```
+
+```
+// File /foo/baz.c3
+func void testModule() 
+{
+    bar::testSomething(); // qualifier is required
+    Bar bar;              // qualifier not required
+    bar.x = 1;
+}
+```
+
+```
+// File /fooa/xyz.c3
+struct FooBar
+{ ... }
+```
+
+
+```
+// File /foob/test.c3
+struct Foo
+{ ... }
+
+func void testModule() 
+{
+    Bar bar;            // Not ambiguous, fine to use.
+    Foo foo;            // Automatically uses own module Foo
+    bar::FooBar fooBar; // Ambiguous, so name is needed.    
+}
+```
+
+Note the lack of `import` and `module`.
+
+However, this breaks generic modules. So some further elaboration is needed. 
+
+
+### Fully qualified names
+
+Two level namespaces are used in the uncommon case when sub namespaces are identical:
+
+
+```
+// File: /foo/foo.c3
+struct Foo
+{ int a; }
+```
+
+```
+// File: /bar/foo.c3
+struct Foo
+{ double b; }
+```
+
+```
+// File: /baz/tes.c3
+func void testFoo() 
+{
+    foo::foo::Foo foo1;
+    foo1.a = 1;
+    bar::foo::Foo foo2;    
+    foo2.b = 1.0;
+}
+```
+
+### Sharing sub namespace
+
+It's sometimes useful to spread code over several files while sharing the same sub namespace. This is done by placing the files in a sub directory.
+
+```
+// File: /foo/bar/file1.c3
+func void aTest() { ... }
+```
+
+```
+// File: /foo/bar/file2.c3
+func void aTest2() 
+{ 
+    aTest(); // Same namespace!
+}
+```
+
+```
+// File: /foo/baz.c3
+func void aTest3() 
+{ 
+    // Calls from outside see them as the same namespace:
+    bar::aTest();
+    bar::aTest2();
+}
+```
+
+
+## Binary include
+
+The ability to include a binary file during compile time.
+
+```
+byte[] file = @binary_include("foo.dat");
+```
+
+## Compile time run-include
+
+The ability to run a piece of code at compile time and include the result in the code.
+
+```
+@run_include("foo.sh", $some_param, "-x", $another_param);
+```
 
 ## TwoCC FourCC and EightCC codes
 
@@ -252,15 +390,9 @@ a[2] // Prints 11.
 
 ## Unsorted
 
-## Halloc **- NEW!**
+## Halloc
 
 Hierarchal memory allocation http://swapped.cc/#!/halloc support it?
-
-##### Varargs
-
-Use typed varargs? E.g. `void foo(int x, float... foo)` where the type of foo becomes `float[]`
-
-Change main to `void main(char*[] args)`?
 
 ##### Unsigned conversion to signed
 
@@ -441,6 +573,35 @@ struct Shape
         CIRCLE: { int radius; }
     }
 }
+```
+
+And another...
+
+```
+struct Shape
+{
+    int centerX;
+    int centerY;
+    byte kind; // Implicit enum
+    union (kind) 
+    {
+        struct square 
+        {
+            int side;
+        }    
+        struct rectangle 
+        {
+            int length;
+            int height;
+        }
+        struct circle
+        {
+            int radius;
+        }
+    }
+}
+
+
 ```
 
 And yet another...

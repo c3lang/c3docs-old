@@ -1,6 +1,11 @@
 # Change log
 
-Current revision made 2019-08-14.
+Current revision made 2019-09-07.
+
+##### Revision 2019-08-14
+
+- Compile time run-include and include ideas.
+- New module system idea.
 
 ##### Revision 2019-08-14
 
