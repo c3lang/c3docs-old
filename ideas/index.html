@@ -133,6 +133,12 @@
     
         <ul>
         
+            <li><a class="toctree-l4" href="#revised-module-idea">Revised module idea</a></li>
+        
+            <li><a class="toctree-l4" href="#binary-include">Binary include</a></li>
+        
+            <li><a class="toctree-l4" href="#compile-time-run-include">Compile time run-include</a></li>
+        
             <li><a class="toctree-l4" href="#twocc-fourcc-and-eightcc-codes">TwoCC FourCC and EightCC codes</a></li>
         
             <li><a class="toctree-l4" href="#macro-text-interpolation">Macro text interpolation</a></li>
@@ -151,7 +157,7 @@
         
             <li><a class="toctree-l4" href="#unsorted">Unsorted</a></li>
         
-            <li><a class="toctree-l4" href="#halloc-new">Halloc - NEW!</a></li>
+            <li><a class="toctree-l4" href="#halloc">Halloc</a></li>
         
             <li><a class="toctree-l4" href="#interfaces">Interfaces</a></li>
         
@@ -267,6 +273,117 @@
               
                 <h1 id="ideas">Ideas</h1>
 <p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
+<h2 id="revised-module-idea">Revised module idea</h2>
+<p>Rethink the whole concept like this:</p>
+<ol>
+<li>Imports are removed - completely.</li>
+<li>Automatic resolution is made from libraries according to the build file.</li>
+<li>Two level namepace.</li>
+<li>Structs, enums, error and unions lives in the top namespace.</li>
+<li>Functions lives in the lower namespace, which is at file level.</li>
+<li>Ambiguous names require qualifiers</li>
+<li>Current module shadows other modules by default (no qualifier needed).</li>
+<li>Top modules are implicitly created by folder.</li>
+<li>Sub module is implicitly created by file name.</li>
+</ol>
+<p>Example:</p>
+<pre><code>// File /foo/bar.c3
+struct Bar
+{ ... }
+
+struct Foo
+{ ... }
+
+struct FooBar
+{ ... }
+
+func void testSomething() { ... }
+
+func void testSomethingElse() { ... }
+</code></pre>
+
+<pre><code>// File /foo/baz.c3
+func void testModule() 
+{
+    bar::testSomething(); // qualifier is required
+    Bar bar;              // qualifier not required
+    bar.x = 1;
+}
+</code></pre>
+
+<pre><code>// File /fooa/xyz.c3
+struct FooBar
+{ ... }
+</code></pre>
+
+<pre><code>// File /foob/test.c3
+struct Foo
+{ ... }
+
+func void testModule() 
+{
+    Bar bar;            // Not ambiguous, fine to use.
+    Foo foo;            // Automatically uses own module Foo
+    bar::FooBar fooBar; // Ambiguous, so name is needed.    
+}
+</code></pre>
+
+<p>Note the lack of <code>import</code> and <code>module</code>.</p>
+<p>However, this breaks generic modules. So some further elaboration is needed. </p>
+<h3 id="fully-qualified-names">Fully qualified names</h3>
+<p>Two level namespaces are used in the uncommon case when sub namespaces are identical:</p>
+<pre><code>// File: /foo/foo.c3
+struct Foo
+{ int a; }
+</code></pre>
+
+<pre><code>// File: /bar/foo.c3
+struct Foo
+{ double b; }
+</code></pre>
+
+<pre><code>// File: /baz/tes.c3
+func void testFoo() 
+{
+    foo::foo::Foo foo1;
+    foo1.a = 1;
+    bar::foo::Foo foo2;    
+    foo2.b = 1.0;
+}
+</code></pre>
+
+<h3 id="sharing-sub-namespace">Sharing sub namespace</h3>
+<p>It's sometimes useful to spread code over several files while sharing the same sub namespace. This is done by placing the files in a sub directory.</p>
+<pre><code>// File: /foo/bar/file1.c3
+func void aTest() { ... }
+</code></pre>
+
+<pre><code>// File: /foo/bar/file2.c3
+func void aTest2() 
+{ 
+    aTest(); // Same namespace!
+}
+</code></pre>
+
+<pre><code>// File: /foo/baz.c3
+func void aTest3() 
+{ 
+    // Calls from outside see them as the same namespace:
+    bar::aTest();
+    bar::aTest2();
+}
+</code></pre>
+
+<h2 id="binary-include">Binary include</h2>
+<p>The ability to include a binary file during compile time.</p>
+<pre><code>byte[] file = @binary_include(&quot;foo.dat&quot;);
+</code></pre>
+
+<h2 id="compile-time-run-include">Compile time run-include</h2>
+<p>The ability to run a piece of code at compile time and include the result in the code.</p>
+<pre><code>@run_include(&quot;foo.sh&quot;, $some_param, &quot;-x&quot;, $another_param);
+</code></pre>
+
 <h2 id="twocc-fourcc-and-eightcc-codes">TwoCC FourCC and EightCC codes</h2>
 <p>Allow 2, 4 and 8 bit numbers be declared using a list of char.</p>
 <pre><code>ushort foo = 'HI';
@@ -500,11 +617,8 @@ a[2] // Prints 11.
 </code></pre>
 
 <h2 id="unsorted">Unsorted</h2>
-<h2 id="halloc-new">Halloc <strong>- NEW!</strong></h2>
+<h2 id="halloc">Halloc</h2>
 <p>Hierarchal memory allocation http://swapped.cc/#!/halloc support it?</p>
-<h5 id="varargs">Varargs</h5>
-<p>Use typed varargs? E.g. <code>void foo(int x, float... foo)</code> where the type of foo becomes <code>float[]</code></p>
-<p>Change main to <code>void main(char*[] args)</code>?</p>
 <h5 id="unsigned-conversion-to-signed">Unsigned conversion to signed</h5>
 <p>Perhaps consider signed, rather than unsigned implicit conversion. Currently <code>ulong + long</code> becomes <code>ulong + @cast(ulong, long)</code> (according to C rules). Consider changing that to <code>@cast(long, ulong) + long</code>. That is, instead of "unsigned wins", use "signed wins".</p>
 <h5 id="aliasing-in-import">Aliasing in import</h5>
@@ -652,6 +766,33 @@ switch(@tag(foo))
         CIRCLE: { int radius; }
     }
 }
+</code></pre>
+
+<p>And another...</p>
+<pre><code>struct Shape
+{
+    int centerX;
+    int centerY;
+    byte kind; // Implicit enum
+    union (kind) 
+    {
+        struct square 
+        {
+            int side;
+        }    
+        struct rectangle 
+        {
+            int length;
+            int height;
+        }
+        struct circle
+        {
+            int radius;
+        }
+    }
+}
+
+
 </code></pre>
 
 <p>And yet another...</p>
