@@ -14,12 +14,12 @@ struct Node
 
 struct Footer
 { 
-    Node &header;
+    Node *header;
 }
 
 struct Bin  
 {
-    Node& head;
+    Node* head;
 }
 
 struct Heap  
@@ -32,11 +32,11 @@ struct Heap
 const uint OFFSET = 8;
 
 /**
- * @require start > 0
+ * @require heap != nil, start > 0
  */
-void Heap.init(Heap& heap, usize start) 
+void Heap.init(Heap* heap, usize start) 
 {
-    Node& init_region = @cast(Node&, start);
+    Node* init_region = @cast(Node*, start);
     init_region.hole = 1;
     init_region.size = HEAP_INIT_SIZE - @sizeof(Node) - @sizeof(Footer);
 
@@ -48,10 +48,10 @@ void Heap.init(Heap& heap, usize start)
     heap.end   = @cast(void*, start + HEAP_INIT_SIZE);
 }
 
-void* Heap.alloc(Heap& heap, usize size) 
+void* Heap.alloc(Heap* heap, usize size) 
 {
     uint index = get_bin_index(size);
-    Bin& temp = @cast(Bin&, heap.bins[index]);
+    Bin* temp = @cast(Bin*, heap.bins[index]);
     Node* found = temp.getBestFit(size);
 
     while (!found) 
@@ -62,7 +62,7 @@ void* Heap.alloc(Heap& heap, usize size)
 
     if ((found.size - size) > (overhead + MIN_ALLOC_SZ)) 
     {
-        Node& split = @cast(Node*, @cast(char&, found) + sizeof(Node) + sizeof(Footer)) + size);
+        Node* split = @cast(Node*, @cast(char*, found) + sizeof(Node) + sizeof(Footer)) + size);
         split.size = found.size - size - sizeof(Node) - sizeof(Footer);
         split.hole = 1;
    
@@ -79,7 +79,7 @@ void* Heap.alloc(Heap& heap, usize size)
     found.hole = 0; 
     heap.bins[index].removeNode(found);
     
-    Node& wild = heap.getWilderness(heap);
+    Node* wild = heap.getWilderness(heap);
     if (wild.size < MIN_WILDERNESS) 
     {
         uint success = heap.expand(0x1000);
@@ -103,20 +103,20 @@ void* Heap.alloc(Heap& heap, usize size)
  */
 func void Heap.free(Heap* heap, void *p) 
 {
-    Bin& list;
+    Bin* list;
     Footer& new_foot, old_foot;
 
-    Node& head = @cast(Node&, @cast(char&, p) - OFFSET);
-    if (head == @cast(Node&, @cast(heap.start, usize)) 
+    Node* head = @cast(Node*, @cast(char*, p) - OFFSET);
+    if (head == @cast(Node*, @cast(heap.start, usize)) 
     {
         head.hole = 1; 
         heap.bins[get_bin_index(head.size)].addNode(head);
         return;
     }
 
-    Node& next = @cast(Node*, @cast(char*, head.getFoot()) + sizeof(Footer));
-    Footer& f = @cast(Footer*, @cast(char*, head) - sizeof(Footer));
-    Node& prev = f.header;
+    Node* next = @cast(Node*, @cast(char*, head.getFoot()) + sizeof(Footer));
+    Footer* f = @cast(Footer*, @cast(char*, head) - sizeof(Footer));
+    Node* prev = f.header;
     
     if (prev.hole) 
     {
@@ -149,12 +149,12 @@ func void Heap.free(Heap* heap, void *p)
     heap.bins[get_bin_index(head.size)].addNode(head);
 }
 
-func uint Heap.expand(Heap& heap, usize sz) 
+func uint Heap.expand(Heap* heap, usize sz) 
 {
     return 0;
 }
 
-func void Heap.contract(Heap& heap, usize sz) 
+func void Heap.contract(Heap* heap, usize sz) 
 {
     return;
 }
@@ -171,20 +171,20 @@ func uint get_bin_index(usize sz)
     return index;
 }
 
-func void Node.createFoot(Node& head) 
+func void Node.createFoot(Node* head) 
 {
-    Footer& foot = head.getFoot();
+    Footer* foot = head.getFoot();
     foot.header = head;
 }
 
-func Foot& Node.getFoot(Node& node) 
+func Footer* Node.getFoot(Node* node) 
 {
-    return @cast(Footer&, @cast(char&, node) + sizeof(Node) + node.size);
+    return @cast(Footer*, @cast(char*, node) + sizeof(Node) + node.size);
 }
 
-func Node* getWilderness(Heap& heap) 
+func Node* getWilderness(Heap* heap) 
 {
-    Footer& wild_foot = @cast(Footer&, @cast(char&, heap.end) - sizeof(Footer));
+    Footer* wild_foot = @cast(Footer*, @cast(char*, heap.end) - sizeof(Footer));
     return wild_foot.header;
 }
 ```

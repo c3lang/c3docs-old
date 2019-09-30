@@ -169,13 +169,13 @@ p.name = "John Doe";
 
 io.printf("%s is %d years old.", p.age, p.name);
 
-Person& pPtr = &p;
+Person* pPtr = &p;
 pPtr.age = 20; // Ok!
 
 io.printf("%s is %d years old.", pPtr.age, pPtr.name);
 ```
 
-(One might wonder whether it's possible to take a `Person&&` and use dot access. – It's not, only one level of deref is done)
+(One might wonder whether it's possible to take a `Person**` and use dot access. – It's not, only one level of deref is done)
 
 ## Struct subtyping
 

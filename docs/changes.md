@@ -1,6 +1,11 @@
 # Change log
 
-Current revision made 2019-09-07.
+Current revision made 2019-09-30.
+
+##### Revision 2019-09-30
+
+- Removed references (non nullable pointers)
+- Removed idea with aliasing in import
 
 ##### Revision 2019-08-14
 

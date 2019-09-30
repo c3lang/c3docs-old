@@ -26,10 +26,10 @@ For `const` and `pure`, they can either be given as separate annotations: `@pure
     
 ```
 /**
- * @ensure const(foo), return > foo.x;
+ * @ensure foo != nil, const(foo), return > foo.x;
  * @pure
  **/
-func uint checkFoo(Foo& foo)
+func uint checkFoo(Foo* foo)
 {
     uint y = abs(foo.x) + 1;
     // If we had row: foo.x = 0, then this would be a compile time error.
@@ -44,7 +44,7 @@ The `const` annotation allows a program to make assumtions in regards of how the
 However, it should be noted that the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:
 
 ```
-func void badFunc(int& i)
+func void badFunc(int* i)
 {
     *i = 2;
 }
@@ -52,7 +52,7 @@ func void badFunc(int& i)
 /**
  * @ensure const(i)
  */
-func void lyingFunc(int& i)
+func void lyingFunc(int* i)
 {
     badFunc(i); // The compiler might not check this!
 }
@@ -71,7 +71,7 @@ However, compilers will usually detect this:
 /**
  * @ensure const(i)
  */
-func void badFunc(int& i)
+func void badFunc(int* i)
 {
     *i = 2; // <- Compiler error: violating post condition const(i)
 }

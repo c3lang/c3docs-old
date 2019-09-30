@@ -28,7 +28,7 @@ func long fib(long n)
 import http_server local;
 import net local;
 
-func void httpHandler(HttpContext& context) throws HTTPError
+func void httpHandler(HttpContext* context) throws HTTPError
 {
     context.response.contentType = "text/plain";
     context.response.printf("Hello world!\n");

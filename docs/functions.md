@@ -135,7 +135,7 @@ struct Point
     int y;
 }
 
-func void Point.add(Point& p, int x) 
+func void Point.add(Point* p, int x) 
 {
     p.x = x;
 }
@@ -155,9 +155,9 @@ func void example()
 If a member function does not take the type as the first parameter, then it may only be invoked qualified with the type name:
 
 ```
-func Point& Point.new(int x, int y) 
+func Point* Point.new(int x, int y) 
 {
-    Point &p = malloc(@sizeof(Point));
+    Point* p = malloc(@sizeof(Point));
     p.x = x;
     p.y = y;
     return p;
@@ -165,7 +165,7 @@ func Point& Point.new(int x, int y)
 
 func void example2() 
 {
-    Point &p = Point.new(1, 2);
+    Point* p = Point.new(1, 2);
 }
 ```
 

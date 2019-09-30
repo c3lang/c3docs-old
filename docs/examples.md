@@ -454,27 +454,6 @@ func void test()
 }
 ```
 
-##### Nullability annotations
-
-Use * for nullable pointers, & for non nullable pointers.
-
-```
-func Foo* getFoo() { ... }
-func Foo& getFooNotNull() { ... }
-
-func testThings()
-{
-    int i;
-    Foo* foo1 = getFoo();
-    // i = foo1.intVal;
-    // Error, reference may be null
-    Foo& foo2 = getFooNotNull();
-    i = foo2.intVal;
-    
-    assert(foo1);
-    i = foo1.intVal;
-}
-```
 
 ##### Error handling
 
@@ -509,23 +488,23 @@ struct Stack
     type($a)[] elems;
 }
 
-func Stack.init(Stack& this)
+func Stack.init(Stack* this)
 {
     this.elems = nil;
 }
 
-func void Stack.push(Stack& this, type($a) element)
+func void Stack.push(Stack* this, type($a) element)
 {
     this.elems.add(element);
 }
 
-func $A Stack.pop(Stack& this)
+func $A Stack.pop(Stack* this)
 {
     assert(this.elems.size > 0);
     this.elems.removeLast();
 }
 
-func bool Stack.empty(Stack &this)
+func bool Stack.empty(Stack* this)
 {
     return this.elems.size == 0;
 }

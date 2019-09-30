@@ -214,7 +214,7 @@ struct Foo
     int i;
 }
 
-func Foo.next(Foo&)
+func Foo.next(Foo*)
 {
     i++;
 }
@@ -371,7 +371,7 @@ Dynamic arrays are provided as a library and they are usually ref counted:
 ```
 import array(int) alias IntArray;
 
-IntArray@ a = IntArray.new();
+IntArray* a = IntArray.new();
 a += 23; // Append last
 a.pop(); // Remove last
 a.insert(1, 11); // Insert at position
@@ -398,63 +398,6 @@ Hierarchal memory allocation http://swapped.cc/#!/halloc support it?
 
 Perhaps consider signed, rather than unsigned implicit conversion. Currently `ulong + long` becomes `ulong + @cast(ulong, long)` (according to C rules). Consider changing that to `@cast(long, ulong) + long`. That is, instead of "unsigned wins", use "signed wins".
  
-##### Aliasing in import
-
-It might be useful to express aliasing directly on import. Consider for example a generic library with a `Set` type.
-
-Typically we'd do like this:
-
-```
-import set(int) as intset;
-
-func void test()
-{
-    intset.Set* set = intset.Set.new();
-    /* ... */
-}
-```
-
-Or import it as a local variable, which is nice, but can only be done for a single set:
-
-```
-import set(int) local;
-
-func void test()
-{
-    Set* set = Set.new();
-    /* ... */
-}
-```
-
-Adding a direct alias on the set as it is imported would be nice:
-
-```
-import set(int) as intset alias Set as IntSet;
-import set(double) as doubleset alias Set as DoubleSet;
-
-func void test()
-{
-    IntSet* set = IntSet.new();
-    DoubleSet* set2 = DoubleSet.new();
-    /* ... */
-}
-```
-
-Note that the alias is always used without a prefix. If a generic module only has a single generic struct one wishes to use, it's useful to shorten this further at the cost of not being able to access any other symbols (as we cannot use the generic name as a namespace prefix).
-
-```
-import set(int) alias Set as IntSet;
-import set(double) alias Set as DoubleSet;
-```
-
-We could go even further, saying that if there is only a single generic struct inside, then we may shorten with the struct being used as a default:
-
-```
-import set(int) alias IntSet;
-import set(double) alias DoubleSet;
-```
-
-It's unclear whether this is is helpful or not. Should be discussed further.
 
 ##### Tagged any
 
@@ -628,26 +571,26 @@ struct Shape
 ## Interfaces
 
 ```
-func void Foo.renderPage(Foo& foo, Page& info)
+func void Foo.renderPage(Foo* foo, Page* info)
 {
     /* ... */
 }
 
 interface Renderer
 {
-    void renderPage(Renderer& renderer, Page& info);
+    void renderPage(Renderer* renderer, Page* info);
 }
 
-func void render(Renderer* renderer, Page& info)
+func void render(Renderer* renderer, Page* info)
 {
-    if (rendered == null) return;
+    if (!rendered) return;
     renderer->renderPage(info);
 }
 
 func void test()
 {
     Foo* foo = getFoo();
-    Page& page = getPage(); 
+    Page* page = getPage(); 
     
     // Option 1
     Renderer.render(foo, page);
@@ -715,27 +658,27 @@ func void test()
     
 }
 
-func void render(Renderer renderer, Page& info)
+func void render(Renderer renderer, Page* info)
 {
     renderer.renderPage(info);
 }
 
 virtual Renderer
 {
-    void renderPage(Page &info);
+    void renderPage(Page* info);
 }
 
-func void render(virtual Renderer& renderer, Page& info)
+func void render(virtual Renderer* renderer, Page* info)
 {
     renderer.renderPage(info);
 }
 
-func void render(virtual Renderer& renderer, Page& info)
+func void render(virtual Renderer* renderer, Page* info)
 {
     renderer->renderPage(info);
 }
 
-func void render(interface Renderer& renderer, Page& info)
+func void render(interface Renderer* renderer, Page* info)
 {
     renderer->renderPage(info);
 }
@@ -764,7 +707,7 @@ int i = try map[0]; // Requires a try
 int i = try map[12] else -1;
 
 // Extend a map:
-func bool int[int].remove_if_negative(int[int] &map, int index)
+func bool int[int].remove_if_negative(int[int] *map, int index)
 {
     if (try map[index] >= 0 else true) return false;    
     map.remove(index);
@@ -772,7 +715,7 @@ func bool int[int].remove_if_negative(int[int] &map, int index)
 }
 
 // The underlying C function becomes:
-// bool module_name__map_int_int__remove_if_negative(struct _map_int_int &map, int32_t index);
+// bool module_name__map_int_int__remove_if_negative(struct _map_int_int *map, int32_t index);
 ```
 
 ## Built in string type
@@ -1307,9 +1250,9 @@ Each may iterate over: struct members (returned as string), enums (returned as t
 Type group helper
 
 ```
-macro @foo(int &a) // Macro only valid for a is any type of signed integer
-macro @foo(integer &a) // Valid for unsigned and signed integers
-macro @foo(number &a) // Valid for any float or integer
+macro @foo(int& a) // Macro only valid for a is any type of signed integer
+macro @foo(integer& a) // Valid for unsigned and signed integers
+macro @foo(number& a) // Valid for any float or integer
 ```
 	
 Macros may force non local return
