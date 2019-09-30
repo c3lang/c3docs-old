@@ -243,7 +243,7 @@ func void main()
 <pre><code>import http_server local;
 import net local;
 
-func void httpHandler(HttpContext&amp; context) throws HTTPError
+func void httpHandler(HttpContext* context) throws HTTPError
 {
     context.response.contentType = &quot;text/plain&quot;;
     context.response.printf(&quot;Hello world!\n&quot;);

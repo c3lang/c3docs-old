@@ -121,9 +121,6 @@
     <li class="toctree-l3"><a href="#method-functions">Method functions</a></li>
     
 
-    <li class="toctree-l3"><a href="#nullability-annotations">Nullability annotations</a></li>
-    
-
     <li class="toctree-l3"><a href="#error-handling_1">Error handling</a></li>
     
 
@@ -695,25 +692,6 @@ func void test()
 }
 </code></pre>
 
-<h5 id="nullability-annotations">Nullability annotations</h5>
-<p>Use * for nullable pointers, &amp; for non nullable pointers.</p>
-<pre><code>func Foo* getFoo() { ... }
-func Foo&amp; getFooNotNull() { ... }
-
-func testThings()
-{
-    int i;
-    Foo* foo1 = getFoo();
-    // i = foo1.intVal;
-    // Error, reference may be null
-    Foo&amp; foo2 = getFooNotNull();
-    i = foo2.intVal;
-
-    assert(foo1);
-    i = foo1.intVal;
-}
-</code></pre>
-
 <h5 id="error-handling_1">Error handling</h5>
 <pre><code>import stdio as io;
 
@@ -742,23 +720,23 @@ struct Stack
     type($a)[] elems;
 }
 
-func Stack.init(Stack&amp; this)
+func Stack.init(Stack* this)
 {
     this.elems = nil;
 }
 
-func void Stack.push(Stack&amp; this, type($a) element)
+func void Stack.push(Stack* this, type($a) element)
 {
     this.elems.add(element);
 }
 
-func $A Stack.pop(Stack&amp; this)
+func $A Stack.pop(Stack* this)
 {
     assert(this.elems.size &gt; 0);
     this.elems.removeLast();
 }
 
-func bool Stack.empty(Stack &amp;this)
+func bool Stack.empty(Stack* this)
 {
     return this.elems.size == 0;
 }

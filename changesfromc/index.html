@@ -297,7 +297,7 @@ func void test()
  * This function ensures that foo is not changed in the function, nor is bar.x altered.
  * @ensure const(foo), const(bar.x)
  **/
-func void test(Foo&amp; foo, Bar&amp; bar)
+func void test(Foo* foo, Bar* bar)
 {
     bar.y = foo.x;
     // bar.x = foo.x - compile time error!

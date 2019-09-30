@@ -509,13 +509,13 @@ p.name = &quot;John Doe&quot;;
 
 io.printf(&quot;%s is %d years old.&quot;, p.age, p.name);
 
-Person&amp; pPtr = &amp;p;
+Person* pPtr = &amp;p;
 pPtr.age = 20; // Ok!
 
 io.printf(&quot;%s is %d years old.&quot;, pPtr.age, pPtr.name);
 </code></pre>
 
-<p>(One might wonder whether it's possible to take a <code>Person&amp;&amp;</code> and use dot access. – It's not, only one level of deref is done)</p>
+<p>(One might wonder whether it's possible to take a <code>Person**</code> and use dot access. – It's not, only one level of deref is done)</p>
 <h2 id="struct-subtyping">Struct subtyping</h2>
 <p>C3 allows creating struct subtypes:</p>
 <pre><code>struct ImportantPerson 

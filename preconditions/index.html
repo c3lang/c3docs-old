@@ -266,10 +266,10 @@ func int testFoo(int foo)
 <p>The post condition uses the <code>@ensure</code> annotation. Where <code>return</code> is used to mark the return value from the function. </p>
 <p>For <code>const</code> and <code>pure</code>, they can either be given as separate annotations: <code>@pure</code> and <code>@const &lt;parameter&gt;, ...</code>, or inside an <code>@ensure</code> using the format <code>const(&lt;parameter&gt;)</code> and <code>pure(&lt;function name&gt;)</code>. A parameter marked <code>const</code> guarentees that the memory pointed to is not altered within the scope of a function. <code>pure</code> guarantees that the function does not read or write to any global variables.</p>
 <pre><code>/**
- * @ensure const(foo), return &gt; foo.x;
+ * @ensure foo != nil, const(foo), return &gt; foo.x;
  * @pure
  **/
-func uint checkFoo(Foo&amp; foo)
+func uint checkFoo(Foo* foo)
 {
     uint y = abs(foo.x) + 1;
     // If we had row: foo.x = 0, then this would be a compile time error.
@@ -280,7 +280,7 @@ func uint checkFoo(Foo&amp; foo)
 <h3 id="const-in-detail">Const in detail</h3>
 <p>The <code>const</code> annotation allows a program to make assumtions in regards of how the function treats the parameter. This can then be used by a compiler make optimizations for any caller of the function.</p>
 <p>However, it should be noted that the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:</p>
-<pre><code>func void badFunc(int&amp; i)
+<pre><code>func void badFunc(int* i)
 {
     *i = 2;
 }
@@ -288,7 +288,7 @@ func uint checkFoo(Foo&amp; foo)
 /**
  * @ensure const(i)
  */
-func void lyingFunc(int&amp; i)
+func void lyingFunc(int* i)
 {
     badFunc(i); // The compiler might not check this!
 }
@@ -306,7 +306,7 @@ func void test()
 /**
  * @ensure const(i)
  */
-func void badFunc(int&amp; i)
+func void badFunc(int* i)
 {
     *i = 2; // &lt;- Compiler error: violating post condition const(i)
 }

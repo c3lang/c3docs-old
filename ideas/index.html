@@ -443,7 +443,7 @@ funct void test2()
     int i;
 }
 
-func Foo.next(Foo&amp;)
+func Foo.next(Foo*)
 {
     i++;
 }
@@ -601,7 +601,7 @@ d = @cast(int[4]*, e); // Fine
 <p>Dynamic arrays are provided as a library and they are usually ref counted:</p>
 <pre><code>import array(int) alias IntArray;
 
-IntArray@ a = IntArray.new();
+IntArray* a = IntArray.new();
 a += 23; // Append last
 a.pop(); // Remove last
 a.insert(1, 11); // Insert at position
@@ -621,51 +621,6 @@ a[2] // Prints 11.
 <p>Hierarchal memory allocation http://swapped.cc/#!/halloc support it?</p>
 <h5 id="unsigned-conversion-to-signed">Unsigned conversion to signed</h5>
 <p>Perhaps consider signed, rather than unsigned implicit conversion. Currently <code>ulong + long</code> becomes <code>ulong + @cast(ulong, long)</code> (according to C rules). Consider changing that to <code>@cast(long, ulong) + long</code>. That is, instead of "unsigned wins", use "signed wins".</p>
-<h5 id="aliasing-in-import">Aliasing in import</h5>
-<p>It might be useful to express aliasing directly on import. Consider for example a generic library with a <code>Set</code> type.</p>
-<p>Typically we'd do like this:</p>
-<pre><code>import set(int) as intset;
-
-func void test()
-{
-    intset.Set* set = intset.Set.new();
-    /* ... */
-}
-</code></pre>
-
-<p>Or import it as a local variable, which is nice, but can only be done for a single set:</p>
-<pre><code>import set(int) local;
-
-func void test()
-{
-    Set* set = Set.new();
-    /* ... */
-}
-</code></pre>
-
-<p>Adding a direct alias on the set as it is imported would be nice:</p>
-<pre><code>import set(int) as intset alias Set as IntSet;
-import set(double) as doubleset alias Set as DoubleSet;
-
-func void test()
-{
-    IntSet* set = IntSet.new();
-    DoubleSet* set2 = DoubleSet.new();
-    /* ... */
-}
-</code></pre>
-
-<p>Note that the alias is always used without a prefix. If a generic module only has a single generic struct one wishes to use, it's useful to shorten this further at the cost of not being able to access any other symbols (as we cannot use the generic name as a namespace prefix).</p>
-<pre><code>import set(int) alias Set as IntSet;
-import set(double) alias Set as DoubleSet;
-</code></pre>
-
-<p>We could go even further, saying that if there is only a single generic struct inside, then we may shorten with the struct being used as a default:</p>
-<pre><code>import set(int) alias IntSet;
-import set(double) alias DoubleSet;
-</code></pre>
-
-<p>It's unclear whether this is is helpful or not. Should be discussed further.</p>
 <h5 id="tagged-any">Tagged any</h5>
 <p>A tagged pointer union type for any possible type.</p>
 <h5 id="cone-style-arrays">Cone style arrays</h5>
@@ -815,26 +770,26 @@ switch(@tag(foo))
 </code></pre>
 
 <h2 id="interfaces">Interfaces</h2>
-<pre><code>func void Foo.renderPage(Foo&amp; foo, Page&amp; info)
+<pre><code>func void Foo.renderPage(Foo* foo, Page* info)
 {
     /* ... */
 }
 
 interface Renderer
 {
-    void renderPage(Renderer&amp; renderer, Page&amp; info);
+    void renderPage(Renderer* renderer, Page* info);
 }
 
-func void render(Renderer* renderer, Page&amp; info)
+func void render(Renderer* renderer, Page* info)
 {
-    if (rendered == null) return;
+    if (!rendered) return;
     renderer-&gt;renderPage(info);
 }
 
 func void test()
 {
     Foo* foo = getFoo();
-    Page&amp; page = getPage(); 
+    Page* page = getPage(); 
 
     // Option 1
     Renderer.render(foo, page);
@@ -901,27 +856,27 @@ func void test()
 
 }
 
-func void render(Renderer renderer, Page&amp; info)
+func void render(Renderer renderer, Page* info)
 {
     renderer.renderPage(info);
 }
 
 virtual Renderer
 {
-    void renderPage(Page &amp;info);
+    void renderPage(Page* info);
 }
 
-func void render(virtual Renderer&amp; renderer, Page&amp; info)
+func void render(virtual Renderer* renderer, Page* info)
 {
     renderer.renderPage(info);
 }
 
-func void render(virtual Renderer&amp; renderer, Page&amp; info)
+func void render(virtual Renderer* renderer, Page* info)
 {
     renderer-&gt;renderPage(info);
 }
 
-func void render(interface Renderer&amp; renderer, Page&amp; info)
+func void render(interface Renderer* renderer, Page* info)
 {
     renderer-&gt;renderPage(info);
 }
@@ -947,7 +902,7 @@ int i = try map[0]; // Requires a try
 int i = try map[12] else -1;
 
 // Extend a map:
-func bool int[int].remove_if_negative(int[int] &amp;map, int index)
+func bool int[int].remove_if_negative(int[int] *map, int index)
 {
     if (try map[index] &gt;= 0 else true) return false;    
     map.remove(index);
@@ -955,7 +910,7 @@ func bool int[int].remove_if_negative(int[int] &amp;map, int index)
 }
 
 // The underlying C function becomes:
-// bool module_name__map_int_int__remove_if_negative(struct _map_int_int &amp;map, int32_t index);
+// bool module_name__map_int_int__remove_if_negative(struct _map_int_int *map, int32_t index);
 </code></pre>
 
 <h2 id="built-in-string-type">Built in string type</h2>
@@ -1408,9 +1363,9 @@ func void test()
 
 <p>Each may iterate over: struct members (returned as string), enums (returned as the enum value)</p>
 <p>Type group helper</p>
-<pre><code>macro @foo(int &amp;a) // Macro only valid for a is any type of signed integer
-macro @foo(integer &amp;a) // Valid for unsigned and signed integers
-macro @foo(number &amp;a) // Valid for any float or integer
+<pre><code>macro @foo(int&amp; a) // Macro only valid for a is any type of signed integer
+macro @foo(integer&amp; a) // Valid for unsigned and signed integers
+macro @foo(number&amp; a) // Valid for any float or integer
 </code></pre>
 
 <p>Macros may force non local return</p>
