@@ -6,7 +6,7 @@ Arrays has a central role in programming. C3 offers 3 types of arrays:
 
 `<type>[<size>]` e.g. `int[4]`. These are treated as values and will be copied if given as parameter. Unlike C, the number is part of its type. Taking a pointer to a fixed array will create a pointer to a fixed array, e.g. `int[4]*`. 
 
-Unlike C, fixed arrays do not decay into pointers, instead an int[4]* may be implicitly converted into an int*.
+Unlike C, fixed arrays do not decay into pointers, instead an `int[4]*` may be implicitly converted into an `int*`.
 
 ```
 // C
@@ -63,12 +63,18 @@ a = b;
 
 #### Built-in functions on variable arrays
 
-**pop()** removes the last element
-**last()** retrieves the last element
-**remove(index)** removes an element in the array
-**capacity** return the capacity of the array
-**size** return the size of the array
-**resize(size)** resize the array to the given size
+###### pop()
+Removes the last element.
+###### last()
+Retrieves the last element.
+###### remove(index)
+Removes an element in the array in O(n) time.
+###### capacity
+Return the capacity of the array.
+###### size
+return the size of the array.
+###### resize(size)
+Resize the array to the given size.
 
 ## Slices
 
@@ -102,9 +108,35 @@ b = e; // Implicit conversion ok
 | int[4]* | - | cast | cast | assign | cast |
 | int* | - | assign | assign | assign | assign |
 
+Note that all casts above are inherently unsafe and will only work if the type cast is indeed compatible.
+
+For example:
+
+```
+int[4] a;
+int[4]* b = &a;
+int* c = b;
+// Safe cast:
+int[4]* d = @cast(int[4]*, c); 
+// Faulty code with undefined behaviour:
+int[] e = @cast(int[]*, c); 
+```
+
+```
+int[] a = @malloc(int[]);
+a += 11;
+a += 12;
+a += 13;
+// Safe (2 is less than the dynamic size of a)
+int[2]* b = @cast(int[2]*, a);
+// Faulty code with undefined behaviour
+// (4 is greater than the dynamic size of a)
+int[4]* c = @cast(int[4]*, a);
+```
+
 #### Internals
 
-Internally the layout of a slize is guaranteed to be `struct { <type>* ptrToArray; usize arraySize; }`.
+Internally the layout of a slice is guaranteed to be `struct { <type>* ptrToArray; usize arraySize; }`.
 
 There is a built in struct `__ArrayType_C3` which has the exact data layout of the fat array pointers. It is defined to be
 
