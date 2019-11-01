@@ -259,7 +259,7 @@
 <p>Arrays has a central role in programming. C3 offers 3 types of arrays:</p>
 <h2 id="fixed-arrays">Fixed arrays</h2>
 <p><code>&lt;type&gt;[&lt;size&gt;]</code> e.g. <code>int[4]</code>. These are treated as values and will be copied if given as parameter. Unlike C, the number is part of its type. Taking a pointer to a fixed array will create a pointer to a fixed array, e.g. <code>int[4]*</code>. </p>
-<p>Unlike C, fixed arrays do not decay into pointers, instead an int[4]<em> may be implicitly converted into an int</em>.</p>
+<p>Unlike C, fixed arrays do not decay into pointers, instead an <code>int[4]*</code> may be implicitly converted into an <code>int*</code>.</p>
 <pre><code>// C
 int foo(int *a) { ... }
 
