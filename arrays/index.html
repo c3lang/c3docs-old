@@ -304,12 +304,12 @@ a = b;
 </code></pre>
 
 <h4 id="built-in-functions-on-variable-arrays">Built-in functions on variable arrays</h4>
-<p><strong>pop()</strong> removes the last element
-<strong>last()</strong> retrieves the last element
-<strong>remove(index)</strong> removes an element in the array
-<strong>capacity</strong> return the capacity of the array
-<strong>size</strong> return the size of the array
-<strong>resize(size)</strong> resize the array to the given size</p>
+<p><strong>pop()</strong> removes the last element.
+<strong>last()</strong> retrieves the last element.
+<strong>remove(index)</strong> removes an element in the array in O(n) time.
+<strong>capacity</strong> return the capacity of the array.
+<strong>size</strong> return the size of the array.
+<strong>resize(size)</strong> resize the array to the given size.</p>
 <h2 id="slices">Slices</h2>
 <p>The final type is the slice <code>&lt;type&gt;[:]</code>  e.g. <code>int[:]</code>. A slice is a view into either a fixed or variable array. Internally it is represented as a struct containing a pointer and a size. Both fixed and variable arrays may be converted into slices, and slices may be implicitly converted to pointers:</p>
 <pre><code>int[4] a = { 1, 2, 3, 4};
@@ -385,6 +385,28 @@ b = e; // Implicit conversion ok
 </tr>
 </tbody>
 </table>
+<p>Note that all casts above are inherently unsafe and will only work if the type cast is indeed compatible.</p>
+<p>For example:</p>
+<pre><code>int[4] a;
+int[4]* b = &amp;a;
+int* c = b;
+// Safe cast:
+int[4]* d = @cast(int[4]*, c); 
+// Faulty code with undefined behaviour:
+int[] e = @cast(int[]*, c); 
+</code></pre>
+
+<pre><code>int[] a = @malloc(int[]);
+a += 11;
+a += 12;
+a += 13;
+// Safe (2 is less than the dynamic size of a)
+int[2]* b = @cast(int[2]*, a);
+// Faulty code with undefined behaviour
+// (4 is greater than the dynamic size of a)
+int[4]* c = @cast(int[4]*, a);
+</code></pre>
+
 <h4 id="internals">Internals</h4>
 <p>Internally the layout of a slize is guaranteed to be <code>struct { &lt;type&gt;* ptrToArray; usize arraySize; }</code>.</p>
 <p>There is a built in struct <code>__ArrayType_C3</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
