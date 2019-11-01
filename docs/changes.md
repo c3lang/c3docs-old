@@ -1,6 +1,18 @@
 # Change log
 
-Current revision made 2019-09-30.
+Current revision made 2019-11-01.
+
+##### Revision 2019-11-01
+- Updated "changes from C" with the lack of array decays.
+- Added FourCC to the language 
+- Added name alias to ideas
+- Added align asserts to ideas
+- Added built in tests to ideas
+- Added [arrays page](../arrays)
+- Added function blocks to [statements page](../statements).
+- Added [expressions page](../expressions).
+- Added [variables page](../variables).
+- Moved managed pointers from idea to the [variables page](../variables).
 
 ##### Revision 2019-09-30
 

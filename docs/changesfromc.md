@@ -72,4 +72,15 @@ func void test(Foo* foo, Bar* bar)
 }
 ```
 
+##### Fixed arrays do not decay and have copy sematics
 
+C3 has three different array types. Variable arrays and slices decay to pointers, but fixed arrays are value objects and do not decay.
+
+```
+int[3] a = { 1, 2, 3 };
+int[4]* b = &a; // No conversion
+int* c = a; // ERROR
+int* d = &a; // Valid implicit conversion
+int* e = b; // Valid implicit conversion
+int[3] f = a; // Copy by value!
+```

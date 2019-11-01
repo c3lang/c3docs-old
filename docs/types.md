@@ -57,6 +57,17 @@ Integers may be written in decimal, but also
 
 Furthermore, underscore `_` may be used to add space between digits to improve readability e.g. `0xFFFF_1234_4511_0000`, `123_000_101_100`
 
+##### TwoCC, FourCC and EightCC
+
+[FourCC](https://en.wikipedia.org/wiki/FourCC) codes are often used to identify binary format types. C3 adds direct support for 4 character codes, but also 2 and 8 characters:
+
+- 2 character strings, e.g. `'C3'`, would convert to an ushort or short.
+- 4 character strings, e.g. `'TEST'`, converts to an uint or int. 
+- 8 character strings, e.g. `'FOOBAR11'` converts to an ulong or long.
+ 
+Conversion is always done so that the character string has the correct ordering in memory. This means that the same characters may have different integer values on different architectures due to endianess.
+
+
 ##### Floating point types
 
 | Name         | alias | bit size |
@@ -98,7 +109,7 @@ Pointers mirror C: `Foo*` is a pointer to a `Foo`, while `Foo**` is a pointer to
 
 ### Array types
 
-Arrays are indicated by `[]` after the type, optionally with the size given, e.g. `int[4]`. Unlike C, the "empty" array (without size), is a fat pointer array that may be queried about its size.
+Arrays are indicated by `[]` after the type, optionally with the size given, e.g. `int[4]`. Unlike C, the "empty" array (without size), is a variable array that may be queried about its size. There is also array slices with using the `[:]` suffix. See the chapter on [arrays](../arrays).
 
 ## Enum
 
@@ -254,6 +265,13 @@ struct Person
 }
 ```
 
+
+## Tagged unions
+
+In C, using structs with an enum value to indicate type is common practice. C3 also offers tagged unions, which is formalizing this within the language:
+
+TBD: Exact syntax (see the [ideas](../ideas) page)
+
 ## Conversion to symbol to type and back with `type`
 
 Macros and compile time constants may occasionally contain type *symbols*. To convert back and forth, the `type` operator is used.
@@ -269,3 +287,5 @@ $foo = type(int*);
 type($foo) i = nil;
 type(@test(4)) = 100;
 ```
+
+

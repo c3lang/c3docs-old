@@ -2,6 +2,18 @@
 
 **WARNING** Unfinished ideas / brain dumps
 
+## Tests built in
+
+Unit tests built in as an integral part of the language like D.
+
+## Allow variable alias
+
+Possibility to alias a variable name.
+
+## Attribute to ensure alignment
+
+`@assertalign` works as GCCs warn_if_not_aligned. On non packed structs, this will prevent compilation if padding is inserted in front of the member. On a packed struct, it will prevent compilation if it is not aligned.
+
 ## Revised module idea
 
 Rethink the whole concept like this:
@@ -142,15 +154,7 @@ The ability to run a piece of code at compile time and include the result in the
 @run_include("foo.sh", $some_param, "-x", $another_param);
 ```
 
-## TwoCC FourCC and EightCC codes
 
-Allow 2, 4 and 8 bit numbers be declared using a list of char.
-
-```
-ushort foo = 'HI';
-uint bar = 'HELO';
-ulong baz = 'WHAZAAAP';
-```
 
 ## Macro text interpolation
 
@@ -238,155 +242,8 @@ Steps:
         module = "stdlib"
         header = "stdlib.h"
 ```
-    
-## Managed pointers
-
-Managed pointers are introduced using the pointer `@` after the type, e.g. `Foo@ f`.
-
-A manage value will need to implement the member function `release` and `retain`. What these functions actually does is up to the implementation. For example, we may have a struct that use these functions to handle a reference count. Managed pointers will then allow automatic reference counting:
-
-```
-Foo@ f = Foo.alloc();
-Foo@ b = f; // Converted to: f.retain(); b = f;
-f = nil; // Converted to: f.release(); f = nil;
-```
-
-Any managed variable that goes out of the scope will automatically invoke `release`, as if the pointer was set to `nil`.
-
-```
-{
-    Foo@ b = Foo.alloc();
-} // Automatic invocation of b.release();
-```
-
-In order to return a managed pointer that can be used as a temporary, it's often convenient to mark the return value as managed.
-
-```
-func Foo@ createFoo()
-{
-    return Foo.alloc();
-}
-
-createFoo(); // Implicitly introduces a deferred release.
-```
-
-If we assign a managed pointer to a variable, the release/retain is elided
-
-```
-// The following becomes f1 = createFoo() - no deferred release or retains.
-Foo@ f1 = createFoo(); 
-```
-
-It's possible to manually manage a managed pointer:
-
-```
-Foo* f2 = createFoo().retain();
-f2.release(); // Required to prevent leaks.
-```
-
-A managed pointer may safely assigned to a regular pointer as long as it's not retained outside of the scope.
-
-```
-{
-    Foo* f3 = createFoo(); 
-    printf("%d", f3.someValue);
-    // Safe, since f3 isn't actually used after the scope.
-}
-
-Foo* unsafeFoo;
-{
-    unsafeFoo = createFoo();
-}
-// <- access to unsafeFoo at this point will likely break things.
-```
 
 
-## Arrays
-
-Developing the Cone proposal a bit:
-
-### Fixed Arrays
-
-`<type>[<size>]` e.g. `int[4]`. These are treated as values and will be copied if given as parameter. Unlike C, the number is part of its type.
-
-Taking a pointer to a fixed array will create a pointer to a fixed array, e.g. `int[4]*`.
-
-### Fat array pointers
-
-`<type>[]` e.g. `int[]`. This is a pointer to an array and it is possible to convert any fixed array to a fat array pointer. 
-    
-```
-int[4] a = { 1, 2, 3, 4};
-int[] b = a; // Implicit conversion is always ok.
-int[4] c = @cast(int[4], b); // Will copy the value of b into c.
-int[4]* d = @cast(int[4]*, b); // Equivalent to d = &a
-b.len; // Returns 4
-int* e = b; // Equivalent to e = &a
-e = d; // implicit conversion ok.
-d = e; // ERROR! Not allowed
-d = @cast(int[4]*, e); // Fine
-```
-
-##### Conversion list
-
-|  | int[4] | int[] | int[4]* | int* |
-|:-:|:-:|:-:|:-:|:-:|
-| int[4] | assign | cast | - | - |
-| int[] | assign | assign | - | - |
-| int[4]* | - | - | assign | cast |
-| int* | - | assign | assign | assign |
-
-##### Internals
-
-Internally the layout of a fat array pointer is guaranteed to be `struct { <type>* ptrToArray; usize arraySize; }`.
-
-There is a built in struct `__ArrayType_C3` which has the exact data layout of the fat array pointers. It is defined to be
-
-```
-struct __ArrayType_C3 
-{ 
-    void* ptrToArray;
-    usize arraySize;
-}
-```
-
-## Raw dynamic, safe arrays
-
-1. Works just like a pointer
-2. Not safe to keep reference to if made dynamic.
-3. Requires special method to dispose of and to allocate
-4. Knows its size.
-
-## Raw dynamic, safe strings 
-
-1. Works just like a pointer.
-2. Not safe to keep reference if made dynamic
-3. Requires special method to dispose of and to allocate
-4. Knows its size.
-
-### Dynamic arrays
-
-Dynamic arrays are provided as a library and they are usually ref counted:
-
-```
-import array(int) alias IntArray;
-
-IntArray* a = IntArray.new();
-a += 23; // Append last
-a.pop(); // Remove last
-a.insert(1, 11); // Insert at position
-a.insert_front(12); // Insert at 0
-a.pop_front(); // Remove first.
-a.last(); // Return last
-```
-
-Thanks to generic overloading this is also possible:
-
-```
-a += 23;
-a[2] = 11;
-a[2] // Prints 11.
-```
 
 ## Unsorted
 
@@ -402,18 +259,6 @@ Perhaps consider signed, rather than unsigned implicit conversion. Currently `ul
 ##### Tagged any
 
 A tagged pointer union type for any possible type.
-
-
-##### Cone style arrays
-
-1. Fixed static sized arrays do not automatically decay into pointers (that is int[3] does not decay into int*)
-2. Fixed static sized arrays are treated as structs with that many identical items, and will be passed by value
-3. Fixed static sized arrays can be converted into fat array pointers
-4. `int[]` would be a fat pointer to an array.
-5. Iteration over fat array pointers are defined in the language
-6. Taking the reference of a static fixed pointer of size X yields a pointer to that fixed pointer, e.g. `int[4]*`
-7. Automatic conversion from fixed to fat pointer: `int[4] y = { 1, 2, 3, 4 }; int[] x = y;`
-8. Automatic conversion from dynamic array to fat pointer: `int[+] y = { 1, 2 }; int[] x = y`
 
 
 ##### Require explicit uninitialization
