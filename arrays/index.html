@@ -304,12 +304,18 @@ a = b;
 </code></pre>
 
 <h4 id="built-in-functions-on-variable-arrays">Built-in functions on variable arrays</h4>
-<p><strong>pop()</strong> removes the last element.
-<strong>last()</strong> retrieves the last element.
-<strong>remove(index)</strong> removes an element in the array in O(n) time.
-<strong>capacity</strong> return the capacity of the array.
-<strong>size</strong> return the size of the array.
-<strong>resize(size)</strong> resize the array to the given size.</p>
+<h6 id="pop">pop()</h6>
+<p>Removes the last element.</p>
+<h6 id="last">last()</h6>
+<p>Retrieves the last element.</p>
+<h6 id="removeindex">remove(index)</h6>
+<p>Removes an element in the array in O(n) time.</p>
+<h6 id="capacity">capacity</h6>
+<p>Return the capacity of the array.</p>
+<h6 id="size">size</h6>
+<p>return the size of the array.</p>
+<h6 id="resizesize">resize(size)</h6>
+<p>Resize the array to the given size.</p>
 <h2 id="slices">Slices</h2>
 <p>The final type is the slice <code>&lt;type&gt;[:]</code>  e.g. <code>int[:]</code>. A slice is a view into either a fixed or variable array. Internally it is represented as a struct containing a pointer and a size. Both fixed and variable arrays may be converted into slices, and slices may be implicitly converted to pointers:</p>
 <pre><code>int[4] a = { 1, 2, 3, 4};
