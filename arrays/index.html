@@ -414,7 +414,7 @@ int[4]* c = @cast(int[4]*, a);
 </code></pre>
 
 <h4 id="internals">Internals</h4>
-<p>Internally the layout of a slize is guaranteed to be <code>struct { &lt;type&gt;* ptrToArray; usize arraySize; }</code>.</p>
+<p>Internally the layout of a slice is guaranteed to be <code>struct { &lt;type&gt;* ptrToArray; usize arraySize; }</code>.</p>
 <p>There is a built in struct <code>__ArrayType_C3</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
 <pre><code>struct __ArrayType_C3 
 { 
