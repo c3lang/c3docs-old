@@ -99,6 +99,8 @@
         
             <li><a class="toctree-l4" href="#removal-of-the-const-type-qualifier">Removal of the const type qualifier</a></li>
         
+            <li><a class="toctree-l4" href="#fixed-arrays-do-not-decay-and-have-copy-sematics">Fixed arrays do not decay and have copy sematics</a></li>
+        
         </ul>
     
 
@@ -118,11 +120,23 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../arrays/">Arrays</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../functions/">Functions</a>
                 </li>
                 <li class="">
                     
     <a class="" href="../statements/">Statements</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../expressions/">Expressions</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../variables/">Variables</a>
                 </li>
                 <li class="">
                     
@@ -303,6 +317,16 @@ func void test(Foo* foo, Bar* bar)
     // bar.x = foo.x - compile time error!
     // foo.x = bar.y - compile time error!
 }
+</code></pre>
+
+<h5 id="fixed-arrays-do-not-decay-and-have-copy-sematics">Fixed arrays do not decay and have copy sematics</h5>
+<p>C3 has three different array types. Variable arrays and slices decay to pointers, but fixed arrays are value objects and do not decay.</p>
+<pre><code>int[3] a = { 1, 2, 3 };
+int[4]* b = &amp;a; // No conversion
+int* c = a; // ERROR
+int* d = &amp;a; // Valid implicit conversion
+int* e = b; // Valid implicit conversion
+int[3] f = a; // Copy by value!
 </code></pre>
               
             </div>

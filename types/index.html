@@ -117,6 +117,8 @@
         
             <li><a class="toctree-l4" href="#anonymous-sub-structs-unions">Anonymous sub-structs / unions</a></li>
         
+            <li><a class="toctree-l4" href="#tagged-unions">Tagged unions</a></li>
+        
             <li><a class="toctree-l4" href="#conversion-to-symbol-to-type-and-back-with-type">Conversion to symbol to type and back with type</a></li>
         
         </ul>
@@ -126,11 +128,23 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../arrays/">Arrays</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../functions/">Functions</a>
                 </li>
                 <li class="">
                     
     <a class="" href="../statements/">Statements</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../expressions/">Expressions</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../variables/">Variables</a>
                 </li>
                 <li class="">
                     
@@ -364,6 +378,14 @@ func c_int stat(const c_char* pathname, Stat* buf);
 <li>in hexadecimal with the prefix 0x e.g. <code>0xdeadbeef</code> <code>0x7f7f7f</code></li>
 </ul>
 <p>Furthermore, underscore <code>_</code> may be used to add space between digits to improve readability e.g. <code>0xFFFF_1234_4511_0000</code>, <code>123_000_101_100</code></p>
+<h5 id="twocc-fourcc-and-eightcc">TwoCC, FourCC and EightCC</h5>
+<p><a href="https://en.wikipedia.org/wiki/FourCC">FourCC</a> codes are often used to identify binary format types. C3 adds direct support for 4 character codes, but also 2 and 8 characters:</p>
+<ul>
+<li>2 character strings, e.g. <code>'C3'</code>, would convert to an ushort or short.</li>
+<li>4 character strings, e.g. <code>'TEST'</code>, converts to an uint or int. </li>
+<li>8 character strings, e.g. <code>'FOOBAR11'</code> converts to an ulong or long.</li>
+</ul>
+<p>Conversion is always done so that the character string has the correct ordering in memory. This means that the same characters may have different integer values on different architectures due to endianess.</p>
 <h5 id="floating-point-types">Floating point types</h5>
 <table>
 <thead>
@@ -458,7 +480,7 @@ func c_int stat(const c_char* pathname, Stat* buf);
 <h3 id="pointer-types">Pointer types</h3>
 <p>Pointers mirror C: <code>Foo*</code> is a pointer to a <code>Foo</code>, while <code>Foo**</code> is a pointer to a pointer of Foo.</p>
 <h3 id="array-types">Array types</h3>
-<p>Arrays are indicated by <code>[]</code> after the type, optionally with the size given, e.g. <code>int[4]</code>. Unlike C, the "empty" array (without size), is a fat pointer array that may be queried about its size.</p>
+<p>Arrays are indicated by <code>[]</code> after the type, optionally with the size given, e.g. <code>int[4]</code>. Unlike C, the "empty" array (without size), is a variable array that may be queried about its size. There is also array slices with using the <code>[:]</code> suffix. See the chapter on <a href="../arrays">arrays</a>.</p>
 <h2 id="enum">Enum</h2>
 <p>Enum (enumerated) types use the following syntax:</p>
 <pre><code>enum State : int 
@@ -580,6 +602,9 @@ io.printf(&quot;%d&quot;, i.as_byte);
 }
 </code></pre>
 
+<h2 id="tagged-unions">Tagged unions</h2>
+<p>In C, using structs with an enum value to indicate type is common practice. C3 also offers tagged unions, which is formalizing this within the language:</p>
+<p>TBD: Exact syntax (see the <a href="../ideas">ideas</a> page)</p>
 <h2 id="conversion-to-symbol-to-type-and-back-with-type">Conversion to symbol to type and back with <code>type</code></h2>
 <p>Macros and compile time constants may occasionally contain type <em>symbols</em>. To convert back and forth, the <code>type</code> operator is used.</p>
 <pre><code>macro @test($i)
@@ -599,7 +624,7 @@ type(@test(4)) = 100;
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../functions/" class="btn btn-neutral float-right" title="Functions">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../arrays/" class="btn btn-neutral float-right" title="Arrays">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../modules/" class="btn btn-neutral" title="Modules"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -631,7 +656,7 @@ type(@test(4)) = 100;
         <span><a href="../modules/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../functions/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../arrays/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

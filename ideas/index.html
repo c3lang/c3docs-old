@@ -94,11 +94,23 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../arrays/">Arrays</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../functions/">Functions</a>
                 </li>
                 <li class="">
                     
     <a class="" href="../statements/">Statements</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../expressions/">Expressions</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../variables/">Variables</a>
                 </li>
                 <li class="">
                     
@@ -133,27 +145,23 @@
     
         <ul>
         
+            <li><a class="toctree-l4" href="#tests-built-in">Tests built in</a></li>
+        
+            <li><a class="toctree-l4" href="#allow-variable-alias">Allow variable alias</a></li>
+        
+            <li><a class="toctree-l4" href="#attribute-to-ensure-alignment">Attribute to ensure alignment</a></li>
+        
             <li><a class="toctree-l4" href="#revised-module-idea">Revised module idea</a></li>
         
             <li><a class="toctree-l4" href="#binary-include">Binary include</a></li>
         
             <li><a class="toctree-l4" href="#compile-time-run-include">Compile time run-include</a></li>
         
-            <li><a class="toctree-l4" href="#twocc-fourcc-and-eightcc-codes">TwoCC FourCC and EightCC codes</a></li>
-        
             <li><a class="toctree-l4" href="#macro-text-interpolation">Macro text interpolation</a></li>
         
             <li><a class="toctree-l4" href="#implicit-this-in-method-functions">Implicit "this" in method functions</a></li>
         
             <li><a class="toctree-l4" href="#c-interop">C interop</a></li>
-        
-            <li><a class="toctree-l4" href="#managed-pointers">Managed pointers</a></li>
-        
-            <li><a class="toctree-l4" href="#arrays">Arrays</a></li>
-        
-            <li><a class="toctree-l4" href="#raw-dynamic-safe-arrays">Raw dynamic, safe arrays</a></li>
-        
-            <li><a class="toctree-l4" href="#raw-dynamic-safe-strings">Raw dynamic, safe strings</a></li>
         
             <li><a class="toctree-l4" href="#unsorted">Unsorted</a></li>
         
@@ -273,6 +281,12 @@
               
                 <h1 id="ideas">Ideas</h1>
 <p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
+<h2 id="tests-built-in">Tests built in</h2>
+<p>Unit tests built in as an integral part of the language like D.</p>
+<h2 id="allow-variable-alias">Allow variable alias</h2>
+<p>Possibility to alias a variable name.</p>
+<h2 id="attribute-to-ensure-alignment">Attribute to ensure alignment</h2>
+<p><code>@assertalign</code> works as GCCs warn_if_not_aligned. On non packed structs, this will prevent compilation if padding is inserted in front of the member. On a packed struct, it will prevent compilation if it is not aligned.</p>
 <h2 id="revised-module-idea">Revised module idea</h2>
 <p>Rethink the whole concept like this:</p>
 <ol>
@@ -384,13 +398,6 @@ func void aTest3()
 <pre><code>@run_include(&quot;foo.sh&quot;, $some_param, &quot;-x&quot;, $another_param);
 </code></pre>
 
-<h2 id="twocc-fourcc-and-eightcc-codes">TwoCC FourCC and EightCC codes</h2>
-<p>Allow 2, 4 and 8 bit numbers be declared using a list of char.</p>
-<pre><code>ushort foo = 'HI';
-uint bar = 'HELO';
-ulong baz = 'WHAZAAAP';
-</code></pre>
-
 <h2 id="macro-text-interpolation">Macro text interpolation</h2>
 <p>For certain cases, pure text interpolation might be needed. Within macros, any text within <code>``</code> can be evaluated and parsed.</p>
 <pre><code>macro void @foo($x, #f)
@@ -466,156 +473,6 @@ func Foo.next(Foo*)
         header = &quot;stdlib.h&quot;
 </code></pre>
 
-<h2 id="managed-pointers">Managed pointers</h2>
-<p>Managed pointers are introduced using the pointer <code>@</code> after the type, e.g. <code>Foo@ f</code>.</p>
-<p>A manage value will need to implement the member function <code>release</code> and <code>retain</code>. What these functions actually does is up to the implementation. For example, we may have a struct that use these functions to handle a reference count. Managed pointers will then allow automatic reference counting:</p>
-<pre><code>Foo@ f = Foo.alloc();
-Foo@ b = f; // Converted to: f.retain(); b = f;
-f = nil; // Converted to: f.release(); f = nil;
-</code></pre>
-
-<p>Any managed variable that goes out of the scope will automatically invoke <code>release</code>, as if the pointer was set to <code>nil</code>.</p>
-<pre><code>{
-    Foo@ b = Foo.alloc();
-} // Automatic invocation of b.release();
-</code></pre>
-
-<p>In order to return a managed pointer that can be used as a temporary, it's often convenient to mark the return value as managed.</p>
-<pre><code>func Foo@ createFoo()
-{
-    return Foo.alloc();
-}
-
-createFoo(); // Implicitly introduces a deferred release.
-</code></pre>
-
-<p>If we assign a managed pointer to a variable, the release/retain is elided</p>
-<pre><code>// The following becomes f1 = createFoo() - no deferred release or retains.
-Foo@ f1 = createFoo(); 
-</code></pre>
-
-<p>It's possible to manually manage a managed pointer:</p>
-<pre><code>Foo* f2 = createFoo().retain();
-f2.release(); // Required to prevent leaks.
-</code></pre>
-
-<p>A managed pointer may safely assigned to a regular pointer as long as it's not retained outside of the scope.</p>
-<pre><code>{
-    Foo* f3 = createFoo(); 
-    printf(&quot;%d&quot;, f3.someValue);
-    // Safe, since f3 isn't actually used after the scope.
-}
-
-Foo* unsafeFoo;
-{
-    unsafeFoo = createFoo();
-}
-// &lt;- access to unsafeFoo at this point will likely break things.
-</code></pre>
-
-<h2 id="arrays">Arrays</h2>
-<p>Developing the Cone proposal a bit:</p>
-<h3 id="fixed-arrays">Fixed Arrays</h3>
-<p><code>&lt;type&gt;[&lt;size&gt;]</code> e.g. <code>int[4]</code>. These are treated as values and will be copied if given as parameter. Unlike C, the number is part of its type.</p>
-<p>Taking a pointer to a fixed array will create a pointer to a fixed array, e.g. <code>int[4]*</code>.</p>
-<h3 id="fat-array-pointers">Fat array pointers</h3>
-<p><code>&lt;type&gt;[]</code> e.g. <code>int[]</code>. This is a pointer to an array and it is possible to convert any fixed array to a fat array pointer. </p>
-<pre><code>int[4] a = { 1, 2, 3, 4};
-int[] b = a; // Implicit conversion is always ok.
-int[4] c = @cast(int[4], b); // Will copy the value of b into c.
-int[4]* d = @cast(int[4]*, b); // Equivalent to d = &amp;a
-b.len; // Returns 4
-int* e = b; // Equivalent to e = &amp;a
-e = d; // implicit conversion ok.
-d = e; // ERROR! Not allowed
-d = @cast(int[4]*, e); // Fine
-</code></pre>
-
-<h5 id="conversion-list">Conversion list</h5>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">int[4]</th>
-<th align="center">int[]</th>
-<th align="center">int[4]*</th>
-<th align="center">int*</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">int[4]</td>
-<td align="center">assign</td>
-<td align="center">cast</td>
-<td align="center">-</td>
-<td align="center">-</td>
-</tr>
-<tr>
-<td align="center">int[]</td>
-<td align="center">assign</td>
-<td align="center">assign</td>
-<td align="center">-</td>
-<td align="center">-</td>
-</tr>
-<tr>
-<td align="center">int[4]*</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">assign</td>
-<td align="center">cast</td>
-</tr>
-<tr>
-<td align="center">int*</td>
-<td align="center">-</td>
-<td align="center">assign</td>
-<td align="center">assign</td>
-<td align="center">assign</td>
-</tr>
-</tbody>
-</table>
-<h5 id="internals">Internals</h5>
-<p>Internally the layout of a fat array pointer is guaranteed to be <code>struct { &lt;type&gt;* ptrToArray; usize arraySize; }</code>.</p>
-<p>There is a built in struct <code>__ArrayType_C3</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
-<pre><code>struct __ArrayType_C3 
-{ 
-    void* ptrToArray;
-    usize arraySize;
-}
-</code></pre>
-
-<h2 id="raw-dynamic-safe-arrays">Raw dynamic, safe arrays</h2>
-<ol>
-<li>Works just like a pointer</li>
-<li>Not safe to keep reference to if made dynamic.</li>
-<li>Requires special method to dispose of and to allocate</li>
-<li>Knows its size.</li>
-</ol>
-<h2 id="raw-dynamic-safe-strings">Raw dynamic, safe strings</h2>
-<ol>
-<li>Works just like a pointer.</li>
-<li>Not safe to keep reference if made dynamic</li>
-<li>Requires special method to dispose of and to allocate</li>
-<li>Knows its size.</li>
-</ol>
-<h3 id="dynamic-arrays">Dynamic arrays</h3>
-<p>Dynamic arrays are provided as a library and they are usually ref counted:</p>
-<pre><code>import array(int) alias IntArray;
-
-IntArray* a = IntArray.new();
-a += 23; // Append last
-a.pop(); // Remove last
-a.insert(1, 11); // Insert at position
-a.insert_front(12); // Insert at 0
-a.pop_front(); // Remove first.
-a.last(); // Return last
-</code></pre>
-
-<p>Thanks to generic overloading this is also possible:</p>
-<pre><code>a += 23;
-a[2] = 11;
-a[2] // Prints 11.
-</code></pre>
-
 <h2 id="unsorted">Unsorted</h2>
 <h2 id="halloc">Halloc</h2>
 <p>Hierarchal memory allocation http://swapped.cc/#!/halloc support it?</p>
@@ -623,17 +480,6 @@ a[2] // Prints 11.
 <p>Perhaps consider signed, rather than unsigned implicit conversion. Currently <code>ulong + long</code> becomes <code>ulong + @cast(ulong, long)</code> (according to C rules). Consider changing that to <code>@cast(long, ulong) + long</code>. That is, instead of "unsigned wins", use "signed wins".</p>
 <h5 id="tagged-any">Tagged any</h5>
 <p>A tagged pointer union type for any possible type.</p>
-<h5 id="cone-style-arrays">Cone style arrays</h5>
-<ol>
-<li>Fixed static sized arrays do not automatically decay into pointers (that is int[3] does not decay into int*)</li>
-<li>Fixed static sized arrays are treated as structs with that many identical items, and will be passed by value</li>
-<li>Fixed static sized arrays can be converted into fat array pointers</li>
-<li><code>int[]</code> would be a fat pointer to an array.</li>
-<li>Iteration over fat array pointers are defined in the language</li>
-<li>Taking the reference of a static fixed pointer of size X yields a pointer to that fixed pointer, e.g. <code>int[4]*</code></li>
-<li>Automatic conversion from fixed to fat pointer: <code>int[4] y = { 1, 2, 3, 4 }; int[] x = y;</code></li>
-<li>Automatic conversion from dynamic array to fat pointer: <code>int[+] y = { 1, 2 }; int[] x = y</code></li>
-</ol>
 <h5 id="require-explicit-uninitialization">Require explicit uninitialization</h5>
 <pre><code>int a = ---;
 int a = void; // Other possible variant

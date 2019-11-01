@@ -108,11 +108,23 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="arrays/">Arrays</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="functions/">Functions</a>
                 </li>
                 <li class="">
                     
     <a class="" href="statements/">Statements</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="expressions/">Expressions</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="variables/">Variables</a>
                 </li>
                 <li class="">
                     
@@ -237,11 +249,10 @@
               
                 <h1 id="what-is-c3">What is C3?</h1>
 <p>C3 is a systems language based on C. It intends tries to be a short step up from C rather than to replace it with a new paradigm or completely new syntax. </p>
-<p>C3 is built on top of the <a href="http://www.c2lang.org/">C2 lang project</a> by <a href="https://github.com/bvdberg">Bas van den Berg</a>. It goes substantially further in regards to error handling, macros, generics and strings. Although it might have some breaking changes, it can – at least currently – be considered a superset of C2.</p>
-<p>Last updated: <a href="changes">2019-09-30</a>.</p>
+<p>The syntax and improvements on C inherits from the <a href="http://www.c2lang.org/">C2 lang project</a> by <a href="https://github.com/bvdberg">Bas van den Berg</a>. It goes substantially further in regards to error handling, macros, generics and strings.</p>
+<p>Last updated: <a href="../changes">2019-11-01</a>.</p>
 <h2 id="planned-features">Planned features</h2>
 <ul>
-<li>Transpile to C</li>
 <li>Transpile-compile using Clang, GCC or TCC</li>
 <li>Compile directly using LLVM</li>
 <li>C to C3 conversion (for a subset of C)</li>
@@ -250,6 +261,7 @@
 <li>Zero overhead errors</li>
 <li>Struct subtyping</li>
 <li>Built-in safe arrays</li>
+<li>Zero cost simple gradual &amp; opt-in pre/post conditions.</li>
 <li>High level containers and string handling</li>
 </ul>
 <h2 id="design-principles">Design principles</h2>
@@ -258,8 +270,8 @@
 <li>Try to stay close to C - only change where truly needed.</li>
 <li>Flawless C integration.</li>
 <li>Learning C3 should be easy for a C programmer.</li>
-<li>Dare violating the "close to metal" principle if the value is great.</li>
-<li>Not an object oriented language.</li>
+<li>Dare add convienences if the value is great.</li>
+<li>Data is inert.</li>
 <li>Avoid "big ideas".</li>
 <li>Avoid the kitchen sink language trap.</li>
 </ul>
@@ -311,5 +323,5 @@
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-09-30 10:53:15
+Build Date UTC : 2019-11-01 10:17:52
 -->

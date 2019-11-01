@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Built in functions - C3 Documentation</title>
+  <title>Expressions - C3 Documentation</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Built in functions";
-    var mkdocs_page_input_path = "specialfunctions.md";
+    var mkdocs_page_name = "Expressions";
+    var mkdocs_page_input_path = "expressions.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -104,9 +104,15 @@
                     
     <a class="" href="../statements/">Statements</a>
                 </li>
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="../expressions/">Expressions</a>
+    <a class="current" href="./">Expressions</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#expressions">Expressions</a></li>
+    
+
+    </ul>
                 </li>
                 <li class="">
                     
@@ -222,8 +228,12 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
+        
+          <li>Documentation &raquo;</li>
+        
+      
     
-    <li>Built in functions</li>
+    <li>Expressions</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -233,100 +243,21 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="built-in-functions">Built in functions</h1>
-<p>C3 offers direct access to built in functions where available for certain operations.</p>
-<p>Often these are implemented as generic functions that may have multiple implementations.</p>
-<ul>
-<li>abs</li>
-<li>byteswap</li>
-<li>bitreverse</li>
-<li>ceil</li>
-<li>clz</li>
-<li>cos</li>
-<li>ctz</li>
-<li>divfloor</li>
-<li>divtrunc</li>
-<li>exp</li>
-<li>exp2</li>
-<li>floor</li>
-<li>ln</li>
-<li>log2</li>
-<li>log10</li>
-<li>memcpy</li>
-<li>memset</li>
-<li>mod</li>
-<li>muloverflow</li>
-<li>popcount</li>
-<li>shlexact</li>
-<li>shrexact</li>
-<li>sin</li>
-<li>sqrt</li>
-<li>suboverflow</li>
-<li>trunc</li>
-</ul>
-<h2 id="abs">abs</h2>
-<p>Returns the absolute value of a float or integer value. The underlying functions are:</p>
-<ul>
-<li><code>float fabsf(float)</code></li>
-<li><code>double fabsf(double)</code></li>
-<li><code>quad fabsl(quad)</code>*</li>
-<li><code>char absc(char)</code></li>
-<li><code>int abs(int)</code></li>
-<li><code>long absl(long)</code></li>
-</ul>
-<h2 id="byteswap">byteswap</h2>
-<p>Swaps the byte order, switching between little endian and big endian. The underlying functions are:</p>
-<ul>
-<li><code>ushort byteswapus(ushort)</code></li>
-<li><code>short byteswaps(short)</code></li>
-<li><code>uint byteswapu(uint)</code></li>
-<li><code>int byteswap(int)</code></li>
-<li><code>ulong byteswapul(ulong)</code></li>
-<li><code>long byteswapl(long)</code></li>
-</ul>
-<h2 id="bitreverse">bitreverse</h2>
-<p>Reverses all bits in an integer, including the sign bit the underlying functions are</p>
-<ul>
-<li><code>byte bitreverseb(byte)</code></li>
-<li><code>char bitreversec(char)</code></li>
-<li><code>ushort bitreverseus(ushort)</code></li>
-<li><code>short bitreverses(short)</code></li>
-<li><code>uint bitreverseu(uint)</code></li>
-<li><code>int bitreverse(int)</code></li>
-<li><code>ulong bitreverseul(ulong)</code></li>
-<li><code>long bitreversel(long)</code></li>
-</ul>
-<h2 id="ceil">ceil</h2>
-<p>Return the closest integral number, rounded up.</p>
-<ul>
-<li><code>float ceilf(float)</code></li>
-<li><code>double ceil(double)</code></li>
-</ul>
-<h2 id="clz">clz</h2>
-<p>Return the number of leading zeroes.</p>
-<ul>
-<li><code>uint clzb(byte/char)</code></li>
-<li><code>uint clz(int/uint)</code></li>
-<li><code>uint clzl(long/ulong)</code></li>
-</ul>
-<h2 id="cos">cos</h2>
-<p>Return the cos value from radian angle.</p>
-<ul>
-<li><code>float cosf(float)</code></li>
-<li><code>double cos(double)</code></li>
-<li><code>quad cos(quad)</code></li>
-</ul>
-<h2 id="ctz">ctz</h2>
-<p>Return the number of trailing zeroes.</p>
-<ul>
-<li><code>uint ctzb(byte/char)</code></li>
-<li><code>uint ctz(int/uint)</code></li>
-<li><code>uint ctzl(long/ulong)</code></li>
-</ul>
+                <h1 id="expressions">Expressions</h1>
+<p>Expressions work like in C.</p>
               
             </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../variables/" class="btn btn-neutral float-right" title="Variables">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../statements/" class="btn btn-neutral" title="Statements"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -350,6 +281,10 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
+        <span><a href="../statements/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../variables/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

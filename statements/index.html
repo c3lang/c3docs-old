@@ -94,6 +94,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../arrays/">Arrays</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../functions/">Functions</a>
                 </li>
                 <li class=" current">
@@ -107,10 +111,20 @@
         
             <li><a class="toctree-l4" href="#volatile-section">Volatile section</a></li>
         
+            <li><a class="toctree-l4" href="#function-blocks">Function blocks</a></li>
+        
         </ul>
     
 
     </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../expressions/">Expressions</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../variables/">Variables</a>
                 </li>
                 <li class="">
                     
@@ -238,6 +252,7 @@
             <div class="section">
               
                 <h1 id="statements">Statements</h1>
+<p>Statements largely work like in C, but with some additions.</p>
 <h2 id="volatile-section">Volatile section</h2>
 <p>Volatile sections replace volatile type qualifiers on variable types.</p>
 <pre><code>func void test()
@@ -258,6 +273,33 @@
 // But the assignment to x can be. 
 x = volatile(v = 1);
 </code></pre>
+
+<h2 id="function-blocks">Function blocks</h2>
+<p>Function blocks (delimited using <code>({ })</code>) are compound statements that opens its own function scope. Jumps cannot be done into or out of a function block, and <code>return</code> exits the block, rather than the function as a whole.</p>
+<p>The function below prints <code>World!</code></p>
+<pre><code>func void test()
+{
+    int a = 0;
+    ({
+        if (a != 0) return;
+        printf(&quot;Hello &quot;);
+        return;
+    });
+    printf(&quot;World!\n&quot;);
+}
+</code></pre>
+
+<p>Function blocks may also return values:</p>
+<pre><code>func void test(int x)
+{
+    int a = ({
+        if (x &gt; 0) return x * 2;
+        if (x == 0) return 100;
+        return -x;
+    });            
+    printf(&quot;The result was %d\n&quot;, a);
+}
+</code></pre>
               
             </div>
           </div>
@@ -265,7 +307,7 @@ x = volatile(v = 1);
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../errorhandling/" class="btn btn-neutral float-right" title="Errors">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../expressions/" class="btn btn-neutral float-right" title="Expressions">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../functions/" class="btn btn-neutral" title="Functions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -297,7 +339,7 @@ x = volatile(v = 1);
         <span><a href="../functions/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../errorhandling/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../expressions/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
