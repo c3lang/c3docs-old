@@ -185,7 +185,7 @@ Defer will be invoked on scope exit.
 func void test(int x)
 {
     defer printf("A");
-    if (x = 1) return;
+    if (x == 1) return;
     {
         defer printf("B");
         if (x == 0) return;
