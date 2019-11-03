@@ -1,6 +1,6 @@
 # What is C3?
 
-C3 is a systems language based on C. It intends tries to be a short step up from C rather than to replace it with a new paradigm or completely new syntax. 
+C3 is a systems language based on C. It tries to be a short step up from C rather than to replace it with a new paradigm or completely new syntax. 
 
 The syntax and improvements on C inherits from the [C2 lang project](http://www.c2lang.org/) by [Bas van den Berg](https://github.com/bvdberg). It goes substantially further in regards to error handling, macros, generics and strings.
 
