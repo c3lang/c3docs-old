@@ -454,7 +454,7 @@ State start = State.all[0];
 <pre><code>func void test(int x)
 {
     defer printf(&quot;A&quot;);
-    if (x = 1) return;
+    if (x == 1) return;
     {
         defer printf(&quot;B&quot;);
         if (x == 0) return;
