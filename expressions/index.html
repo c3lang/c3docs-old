@@ -269,7 +269,7 @@ func void test(Foo x) { ... }
 test(Foo { 1, 2.0 });
 </code></pre>
 
-<p>Literals are allocated on the heap, and similarly it's possible to allocate fixed size integers:</p>
+<p>Literals are allocated on the stack, and similarly it's possible to allocate fixed size integers:</p>
 <pre><code>// By value
 func void test1(int[3] x) { ... }
 
