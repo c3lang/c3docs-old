@@ -12,7 +12,7 @@ generic abs(x)
     case double:
         return fabs(x);
     case int:
-        return abs(x);
+        return abs(x); // Redefining abs(!)
 }
 ```
 

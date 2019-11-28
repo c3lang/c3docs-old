@@ -288,4 +288,41 @@ type($foo) i = nil;
 type(@test(4)) = 100;
 ```
 
+## Anonymous structs
 
+It's possible to use anonymous structs (structs without name) as arguments. These will only be checked for structural equivalence.
+
+```
+func void set_coordinates(struct { int i; int j; } coord) { ... }
+
+struct Vec2
+{
+    int x;
+    int y;
+}
+
+struct Vector
+{
+    int px;
+    int py;
+}
+
+struct Vec3
+{
+    int x;
+    int y;
+    int z;
+}
+
+func void test()
+{
+    Vec2 v2 = { 1, 2 };
+    Vector v = { 1, 4 };
+    Vec3 v3 = { 1, 2, 3};
+    set_coordinates(v2);  // valid
+    set_coordinates(v);   // valid
+    set_coordinates(v3);  // ERROR, no structural equivalence.
+    struct { int i; int j; } xy = v2;
+    v = cast(struct { int, int }, v2);
+}
+```

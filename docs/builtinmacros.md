@@ -76,7 +76,7 @@ Creates a runtime name of a value.
 func char[] test()
 {
     FooEnum x = FooEnum.B;
-    return @name(x); // Returns "A"
+    return @name(x); // Returns "B"
 }
 
 func char[] test_struct()

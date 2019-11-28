@@ -195,7 +195,7 @@ func void test(int x)
 
 test(1); // Prints "A"
 test(0); // Prints "BA"
-test(10); // Prints "!BA"
+test(10); // Prints "B!A"
 ```
 
 Because it's often relevant to run different defers when having an error return there is also a way to create an error defer, by using the `catch` keyword directly after the defer.

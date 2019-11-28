@@ -29,3 +29,7 @@ Last updated: [2019-11-01](changes).
 - Data is inert.
 - Avoid "big ideas".
 - Avoid the kitchen sink language trap.
+
+#### Thank yous
+
+Special thank yous to: Bas van der Berg (Author of [C2](http://www.c2lang.org), Jon Goodwin (Author of [Cone](http://cone.jondgoodwin.com)), Andrey Penechko and the people on the /r/ProgrammingLanguages Discord. 
