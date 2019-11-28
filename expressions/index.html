@@ -256,6 +256,7 @@
                 <h1 id="expressions">Expressions</h1>
 <p>Expressions work like in C.</p>
 <h2 id="compound-literals">Compound literals</h2>
+<p><em>Syntax and implementation under consideration!</em></p>
 <p>C3 has C's compound literals, but it uses C++ style initialization without the <code>()</code>.</p>
 <pre><code>struct Foo
 {
@@ -285,6 +286,7 @@ test3(&amp;int[3] { 1, 2, 3 });
 </code></pre>
 
 <h2 id="array-literals">Array literals</h2>
+<p><em>Syntax and implementation under consideration!</em></p>
 <p>Arrays can be initialized using compound literals, but there is also a special format for array initialization using <code>[]</code>. In this case, the type is inferred. It allows uniform initialization of all types of arrays:</p>
 <pre><code>int[] x = [1, 2, 3]; // Variable array allocated on the stack
 int[3] y = [1, 2, 3]; // Fixed array allocated on the stack
@@ -302,6 +304,7 @@ test3([ 1, 2, 3 ]);
 </code></pre>
 
 <h2 id="associative-array-literals">Associative array literals</h2>
+<p><em>Syntax and implementation under consideration!</em></p>
 <p>Associative arrays are mappings between keys and values:</p>
 <pre><code>IntStringMap x = { &quot;a&quot;: 2, &quot;b&quot;: { &quot;3&quot; : &quot;foo&quot; } };
 </code></pre>
