@@ -53,3 +53,57 @@ Substructs may be used in place of its parent structs in many cases. The rule is
 ## Pointer conversions
 
 Pointer conversion between types usually need explicit casts. The exception is `void *` which any type may implicitly convert *to* or *from*. Conversion rules from and to arrays are detailed under [arrays](../arrays)
+
+# Coercions
+
+Coercion in C3 is slightly more strict than C but not overly so. C3 prohibits implicit narrowing in assignment but is otherwise similar. In binary expressions there is usually the concept of the *maximum type*.
+
+For integers and floating points this is simply f64 > f32 > i64 > i32 > i16 > i8. So given the types i64 and i8, the maximum type is i64. If it was instead i64 and f32, the maximum is f32.
+
+For pointers, the rules are slightly different. The maximum type of a struct is the maximum common parent struct. So if A is a subtype of B which is a subtype of C, and D is a subtype of E which is a subtype of E, then the maximumum type is C.
+
+
+## Binary conversions
+
+| operation | action | result |
+| --- | --- | --- |
+| `*` `/` `%` `^` `|` `&` `*%` | promote both operands to the maximum type | maximum type |
+| ptr `+`/`-` int | integer is promoted to a isize or usize | ptr |
+| number `+`/`-`/`+%`/`+%` number | promote both operands to the maximum type | maximum type |
+| ptr `-` ptr | only valid if pointers are the same type or one pointer is void * | isize |
+| `<<` `>>` `<<=` `>>=` | no coercions | left hand type |
+| `&&` `||` | left and right side are evaluated as boolean | bool |
+| `+=` `+%=` `-=` `-%=` `*=` `*%=` `/=` `%=` `^=` `|=` `&=` | right hand side is explicitly cast to left size type | left side type |
+| `=` | right hand side is implicitly cast to left side type | left side type |
+| `<` `<=` `>` `>=` `==` `!=` | promote both operands to the maximum type | bool |
+
+## Return type conversions
+
+In some cases an expression may have more than one branch and those branches have different types. A simple example is the ternary expressions. To resolve this, C3 does *return type conversion*. In essence this involves trying to implicitly cast each of the branches to the expected *return type*.
+
+C3 resolves the type in this manner:
+
+1. Is there an expected return type? If so, try to implicitly cast each branch to this value. Failure is a compile time error.
+2. Is there no expected return type? Fall back to picking maximum type.
+
+```
+int a = foo();
+short b = bar();
+
+// This is using return type conversion:
+long c = baz() ? a : b;
+
+// The above will compile tog:
+long c = baz() ? @cast(long, a) : @cast(long, c);
+
+byte d = foobar();
+
+// This is using maximum type because the ternary
+// is inside of an addition.
+long e = (baz() ? a : b) + (baz2() ? b : d);
+
+// The above will compile to:
+long e = @cast(long, (baz() ? a : @cast(int, b)) 
+                     + @cast(int, (baz2() ? b : @cast(short, d))));
+```
+
