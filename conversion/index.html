@@ -138,6 +138,9 @@
         </ul>
     
 
+    <li class="toctree-l3"><a href="#coercions">Coercions</a></li>
+    
+
     </ul>
                 </li>
                 <li class="">
@@ -422,6 +425,66 @@
 </ol>
 <h2 id="pointer-conversions">Pointer conversions</h2>
 <p>Pointer conversion between types usually need explicit casts. The exception is <code>void *</code> which any type may implicitly convert <em>to</em> or <em>from</em>. Conversion rules from and to arrays are detailed under <a href="../arrays">arrays</a></p>
+<h1 id="coercions">Coercions</h1>
+<p>Coercion in C3 is slightly more strict than C but not overly so. C3 prohibits implicit narrowing in assignment but is otherwise similar. In binary expressions there is usually the concept of the <em>maximum type</em>.</p>
+<p>For integers and floating points this is simply f64 &gt; f32 &gt; i64 &gt; i32 &gt; i16 &gt; i8. So given the types i64 and i8, the maximum type is i64. If it was instead i64 and f32, the maximum is f32.</p>
+<p>For pointers, the rules are slightly different. The maximum type of a struct is the maximum common parent struct. So if A is a subtype of B which is a subtype of C, and D is a subtype of E which is a subtype of E, then the maximumum type is C.</p>
+<table>
+<thead>
+<tr>
+<th>operation</th>
+<th>action</th>
+<th>result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>* / % ^ | &amp; *%</code></td>
+<td>promote both operands to the maximum type</td>
+<td>maximum type</td>
+</tr>
+<tr>
+<td>ptr <code>+</code>/<code>-</code> int</td>
+<td>integer is promoted to a isize or usize</td>
+<td>ptr</td>
+</tr>
+<tr>
+<td>number <code>+</code>/<code>-</code>/<code>+%</code>/'+%' number</td>
+<td>promote both operands to the maximum type</td>
+<td>maximum type</td>
+</tr>
+<tr>
+<td>ptr <code>-</code> ptr</td>
+<td>only valid if pointers are the same type or one pointer is void *</td>
+<td>isize</td>
+</tr>
+<tr>
+<td><code>&lt;&lt; &gt;&gt; &lt;&lt;= &gt;&gt;=</code></td>
+<td>no coercions</td>
+<td>left hand type</td>
+</tr>
+<tr>
+<td><code>&amp;&amp; ||</code></td>
+<td>left and right side are evaluated as boolean</td>
+<td>bool</td>
+</tr>
+<tr>
+<td><code>+= +%= -= -%= *= *%= /= %= ^= |= &amp;=</code></td>
+<td>right hand side is explicitly cast to left size type</td>
+<td>left side type</td>
+</tr>
+<tr>
+<td><code>=</code></td>
+<td>right hand side is implicitly cast to left side type</td>
+<td>left side type</td>
+</tr>
+<tr>
+<td><code>&lt; &lt;= &gt; &gt;= == !=</code></td>
+<td>promote both operands to the maximum type</td>
+<td>bool</td>
+</tr>
+</tbody>
+</table>
               
             </div>
           </div>
