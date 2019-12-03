@@ -1,6 +1,10 @@
 # Change log
 
-Current revision made 2019-11-01.
+Current revision made 2019-12-03.
+
+##### Revision 2019-12-03
+- Added page on [conversions](../conversion).
+- Added page on [undefined behaviour](../undefinedbehaviour).
 
 ##### Revision 2019-11-01
 - Updated "changes from C" with the lack of array decays.
