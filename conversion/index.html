@@ -140,6 +140,14 @@
 
     <li class="toctree-l3"><a href="#coercions">Coercions</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l4" href="#binary-conversions">Binary conversions</a></li>
+        
+            <li><a class="toctree-l4" href="#return-type-conversions">Return type conversions</a></li>
+        
+        </ul>
+    
 
     </ul>
                 </li>
@@ -429,6 +437,7 @@
 <p>Coercion in C3 is slightly more strict than C but not overly so. C3 prohibits implicit narrowing in assignment but is otherwise similar. In binary expressions there is usually the concept of the <em>maximum type</em>.</p>
 <p>For integers and floating points this is simply f64 &gt; f32 &gt; i64 &gt; i32 &gt; i16 &gt; i8. So given the types i64 and i8, the maximum type is i64. If it was instead i64 and f32, the maximum is f32.</p>
 <p>For pointers, the rules are slightly different. The maximum type of a struct is the maximum common parent struct. So if A is a subtype of B which is a subtype of C, and D is a subtype of E which is a subtype of E, then the maximumum type is C.</p>
+<h2 id="binary-conversions">Binary conversions</h2>
 <table>
 <thead>
 <tr>
@@ -439,7 +448,7 @@
 </thead>
 <tbody>
 <tr>
-<td><code>* / % ^ | &amp; *%</code></td>
+<td><code>*</code> <code>/</code> <code>%</code> <code>^</code> <code>|</code> <code>&amp;</code> <code>*%</code></td>
 <td>promote both operands to the maximum type</td>
 <td>maximum type</td>
 </tr>
@@ -449,7 +458,7 @@
 <td>ptr</td>
 </tr>
 <tr>
-<td>number <code>+</code>/<code>-</code>/<code>+%</code>/'+%' number</td>
+<td>number <code>+</code>/<code>-</code>/<code>+%</code>/<code>+%</code> number</td>
 <td>promote both operands to the maximum type</td>
 <td>maximum type</td>
 </tr>
@@ -459,17 +468,17 @@
 <td>isize</td>
 </tr>
 <tr>
-<td><code>&lt;&lt; &gt;&gt; &lt;&lt;= &gt;&gt;=</code></td>
+<td><code>&lt;&lt;</code> <code>&gt;&gt;</code> <code>&lt;&lt;=</code> <code>&gt;&gt;=</code></td>
 <td>no coercions</td>
 <td>left hand type</td>
 </tr>
 <tr>
-<td><code>&amp;&amp; ||</code></td>
+<td><code>&amp;&amp;</code> <code>||</code></td>
 <td>left and right side are evaluated as boolean</td>
 <td>bool</td>
 </tr>
 <tr>
-<td><code>+= +%= -= -%= *= *%= /= %= ^= |= &amp;=</code></td>
+<td><code>+=</code> <code>+%=</code> <code>-=</code> <code>-%=</code> <code>*=</code> <code>*%=</code> <code>/=</code> <code>%=</code> <code>^=</code> <code>|=</code> <code>&amp;=</code></td>
 <td>right hand side is explicitly cast to left size type</td>
 <td>left side type</td>
 </tr>
@@ -479,12 +488,38 @@
 <td>left side type</td>
 </tr>
 <tr>
-<td><code>&lt; &lt;= &gt; &gt;= == !=</code></td>
+<td><code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code> <code>==</code> <code>!=</code></td>
 <td>promote both operands to the maximum type</td>
 <td>bool</td>
 </tr>
 </tbody>
 </table>
+<h2 id="return-type-conversions">Return type conversions</h2>
+<p>In some cases an expression may have more than one branch and those branches have different types. A simple example is the ternary expressions. To resolve this, C3 does <em>return type conversion</em>. In essence this involves trying to implicitly cast each of the branches to the expected <em>return type</em>.</p>
+<p>C3 resolves the type in this manner:</p>
+<ol>
+<li>Is there an expected return type? If so, try to implicitly cast each branch to this value. Failure is a compile time error.</li>
+<li>Is there no expected return type? Fall back to picking maximum type.</li>
+</ol>
+<pre><code>int a = foo();
+short b = bar();
+
+// This is using return type conversion:
+long c = baz() ? a : b;
+
+// The above will compile tog:
+long c = baz() ? @cast(long, a) : @cast(long, c);
+
+byte d = foobar();
+
+// This is using maximum type because the ternary
+// is inside of an addition.
+long e = (baz() ? a : b) + (baz2() ? b : d);
+
+// The above will compile to:
+long e = @cast(long, (baz() ? a : @cast(int, b)) 
+                     + @cast(int, (baz2() ? b : @cast(short, d))));
+</code></pre>
               
             </div>
           </div>
