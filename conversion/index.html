@@ -249,11 +249,14 @@
 <p>C3 uses two's complement arithmetic for all integer math.</p>
 <h2 id="signedunsigned-int-conversions">Signed/unsigned int conversions</h2>
 <p>In C, the can be simply described as "convert to the type with the largest positive value" (aside from the promotion up to int). Consequently a signed int + unsigned int converts to unsigned int. In C3, the sign is considered more important. Consequently the conversion with mixed signed / unsigned will <em>always</em> be converted to a signed value.</p>
+<p>On debug builds, a conversion of unsigned to signed which results in an overflow (for example, converting the ushort 0x8000 to a short) will trap. For release builds overflow is instead undefined behaviour.</p>
 <p>The rule is as follows:</p>
 <ol>
 <li>Find the largest bit size of the two operands.</li>
 <li>If either is signed: convert to a signed integer of the largest bit size.</li>
 <li>If both are unsigned: convert to an unsigned integer of the largest bit size.</li>
+<li>If the conversion results in overflow in debug builds this will trap.</li>
+<li>If the conversion results in overflow in release builds the result is undefined behaviour.</li>
 </ol>
 <table>
 <thead>
@@ -381,6 +384,14 @@
 </tr>
 </tbody>
 </table>
+<h2 id="sub-struct-conversions">Sub struct conversions</h2>
+<p>Substructs may be used in place of its parent structs in many cases. The rule is as follows:</p>
+<ol>
+<li>A substruct pointer may implicitly convert to a parent struct.</li>
+<li>A substruct <em>value</em> may be implicitly assigned to a variable with the parent struct type, This will <em>truncate</em> the value, copying only the parent part of the substruct. However, a substruct value cannot be assigned its parent struct.</li>
+<li>Substruct vararray and arrays <em>can not</em> be cast (implicitly or explicitly) to an array of the parent struct type.</li>
+<li>Substruct subarrays may at a later point be possible to convert into a subarray of the parent struct type.</li>
+</ol>
               
             </div>
           </div>
