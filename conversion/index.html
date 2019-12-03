@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Number conversions and promotions - C3 Documentation</title>
+  <title>Conversions - C3 Documentation</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,7 +17,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Number conversions and promotions";
+    var mkdocs_page_name = "Conversions";
     var mkdocs_page_input_path = "conversion.md";
     var mkdocs_page_url = null;
   </script>
@@ -115,6 +115,30 @@
                 <li class="">
                     
     <a class="" href="../errorhandling/">Errors</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../undefinedbehaviour/">Undefined behaviour</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Conversions</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#conversions-and-promotions">Conversions and promotions</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#signedunsigned-int-conversions">Signed/unsigned int conversions</a></li>
+        
+            <li><a class="toctree-l4" href="#sub-struct-conversions">Sub struct conversions</a></li>
+        
+            <li><a class="toctree-l4" href="#pointer-conversions">Pointer conversions</a></li>
+        
+        </ul>
+    
+
+    </ul>
                 </li>
                 <li class="">
                     
@@ -222,8 +246,12 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
+        
+          <li>Documentation &raquo;</li>
+        
+      
     
-    <li>Number conversions and promotions</li>
+    <li>Conversions</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -233,7 +261,7 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="number-conversions-and-promotions">Number conversions and promotions</h1>
+                <h1 id="conversions-and-promotions">Conversions and promotions</h1>
 <p>C3 differs in some crucial respects when it comes to number conversions and promotions. These are the rules for C3:</p>
 <ul>
 <li>float to int conversions require a cast</li>
@@ -392,10 +420,21 @@
 <li>Substruct vararray and arrays <em>can not</em> be cast (implicitly or explicitly) to an array of the parent struct type.</li>
 <li>Substruct subarrays may at a later point be possible to convert into a subarray of the parent struct type.</li>
 </ol>
+<h2 id="pointer-conversions">Pointer conversions</h2>
+<p>Pointer conversion between types usually need explicit casts. The exception is <code>void *</code> which any type may implicitly convert <em>to</em> or <em>from</em>. Conversion rules from and to arrays are detailed under <a href="../arrays">arrays</a></p>
               
             </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../builtinmacros/" class="btn btn-neutral float-right" title="Built-in Macros">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../undefinedbehaviour/" class="btn btn-neutral" title="Undefined behaviour"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -419,6 +458,10 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
+        <span><a href="../undefinedbehaviour/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../builtinmacros/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
