@@ -1,6 +1,9 @@
 # Change log
 
-Current revision made 2019-12-03.
+Current revision made 2019-12-11.
+
+##### Revision 2019-12-11
+- Updated the [setup](../setup) page.
 
 ##### Revision 2019-12-03
 - Added page on [conversions](../conversion).
