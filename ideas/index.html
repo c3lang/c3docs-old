@@ -153,13 +153,13 @@
     
         <ul>
         
+            <li><a class="toctree-l4" href="#polymorphic-functions">Polymorphic functions</a></li>
+        
             <li><a class="toctree-l4" href="#tests-built-in">Tests built in</a></li>
         
             <li><a class="toctree-l4" href="#allow-variable-alias">Allow variable alias</a></li>
         
             <li><a class="toctree-l4" href="#attribute-to-ensure-alignment">Attribute to ensure alignment</a></li>
-        
-            <li><a class="toctree-l4" href="#revised-module-idea">Revised module idea</a></li>
         
             <li><a class="toctree-l4" href="#binary-include">Binary include</a></li>
         
@@ -289,113 +289,14 @@
               
                 <h1 id="ideas">Ideas</h1>
 <p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
+<h2 id="polymorphic-functions">Polymorphic functions</h2>
+<p>To reduce the number of generic functions, investigate expressing it as polymorphic functions instead.</p>
 <h2 id="tests-built-in">Tests built in</h2>
 <p>Unit tests built in as an integral part of the language like D.</p>
 <h2 id="allow-variable-alias">Allow variable alias</h2>
 <p>Possibility to alias a variable name.</p>
 <h2 id="attribute-to-ensure-alignment">Attribute to ensure alignment</h2>
 <p><code>@assertalign</code> works as GCCs warn_if_not_aligned. On non packed structs, this will prevent compilation if padding is inserted in front of the member. On a packed struct, it will prevent compilation if it is not aligned.</p>
-<h2 id="revised-module-idea">Revised module idea</h2>
-<p>Rethink the whole concept like this:</p>
-<ol>
-<li>Imports are removed - completely.</li>
-<li>Automatic resolution is made from libraries according to the build file.</li>
-<li>Two level namepace.</li>
-<li>Structs, enums, error and unions lives in the top namespace.</li>
-<li>Functions lives in the lower namespace, which is at file level.</li>
-<li>Ambiguous names require qualifiers</li>
-<li>Current module shadows other modules by default (no qualifier needed).</li>
-<li>Top modules are implicitly created by folder.</li>
-<li>Sub module is implicitly created by file name.</li>
-</ol>
-<p>Example:</p>
-<pre><code>// File /foo/bar.c3
-struct Bar
-{ ... }
-
-struct Foo
-{ ... }
-
-struct FooBar
-{ ... }
-
-func void testSomething() { ... }
-
-func void testSomethingElse() { ... }
-</code></pre>
-
-<pre><code>// File /foo/baz.c3
-func void testModule() 
-{
-    bar::testSomething(); // qualifier is required
-    Bar bar;              // qualifier not required
-    bar.x = 1;
-}
-</code></pre>
-
-<pre><code>// File /fooa/xyz.c3
-struct FooBar
-{ ... }
-</code></pre>
-
-<pre><code>// File /foob/test.c3
-struct Foo
-{ ... }
-
-func void testModule() 
-{
-    Bar bar;            // Not ambiguous, fine to use.
-    Foo foo;            // Automatically uses own module Foo
-    bar::FooBar fooBar; // Ambiguous, so name is needed.    
-}
-</code></pre>
-
-<p>Note the lack of <code>import</code> and <code>module</code>.</p>
-<p>However, this breaks generic modules. So some further elaboration is needed. </p>
-<h3 id="fully-qualified-names">Fully qualified names</h3>
-<p>Two level namespaces are used in the uncommon case when sub namespaces are identical:</p>
-<pre><code>// File: /foo/foo.c3
-struct Foo
-{ int a; }
-</code></pre>
-
-<pre><code>// File: /bar/foo.c3
-struct Foo
-{ double b; }
-</code></pre>
-
-<pre><code>// File: /baz/tes.c3
-func void testFoo() 
-{
-    foo::foo::Foo foo1;
-    foo1.a = 1;
-    bar::foo::Foo foo2;    
-    foo2.b = 1.0;
-}
-</code></pre>
-
-<h3 id="sharing-sub-namespace">Sharing sub namespace</h3>
-<p>It's sometimes useful to spread code over several files while sharing the same sub namespace. This is done by placing the files in a sub directory.</p>
-<pre><code>// File: /foo/bar/file1.c3
-func void aTest() { ... }
-</code></pre>
-
-<pre><code>// File: /foo/bar/file2.c3
-func void aTest2() 
-{ 
-    aTest(); // Same namespace!
-}
-</code></pre>
-
-<pre><code>// File: /foo/baz.c3
-func void aTest3() 
-{ 
-    // Calls from outside see them as the same namespace:
-    bar::aTest();
-    bar::aTest2();
-}
-</code></pre>
-
 <h2 id="binary-include">Binary include</h2>
 <p>The ability to include a binary file during compile time.</p>
 <pre><code>byte[] file = @binary_include(&quot;foo.dat&quot;);

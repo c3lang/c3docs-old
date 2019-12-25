@@ -311,6 +311,16 @@ func void test()
 }
 </code></pre>
 
+<h2 id="method-macros">Method macros</h2>
+<p>Similar to <em>method functions</em> a macro may also be associated with a particular type:</p>
+<pre><code>struct Foo { ... }
+
+macro Foo.@generate(Foo *foo) { ... }
+
+Foo f;
+f.@generate();
+</code></pre>
+
 <h2 id="capturing-a-macro-body">Capturing a macro body</h2>
 <p>It is often useful for a macro to take a trailing compound statement as an argument. In C++ the pattern is usually expressed with a lambda, but in C3 this is completely inlined.</p>
 <p>For macros we add a trailing parameter in the format: <code>: var1, var2, ...</code>. Each declaration is an argument that macro will provide.</p>
