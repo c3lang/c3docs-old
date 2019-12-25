@@ -732,7 +732,7 @@ func void printFile(string filename)
 </code></pre>
 
 <h5 id="generic-modules">Generic modules</h5>
-<p>Generic modules are imported with their parameters set.</p>
+<p>Generic modules implements a generic system.</p>
 <pre><code>module stack($a)
 
 struct Stack
@@ -763,8 +763,10 @@ func bool Stack.empty(Stack* this)
 </code></pre>
 
 <p>Testing it out:</p>
-<pre><code>import stack(int) : Stack as IntStack;
-import stack(double) : Stack as DoubleStack;
+<pre><code>import stack;
+
+define Stack(int) as IntStack;
+define Stack(double) as DoubleStack;
 
 func void test()
 {
