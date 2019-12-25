@@ -135,12 +135,22 @@ func C test(B b, Foo *foo) {
 }
 ```
 
-When including a generic module, the generic parameters specified in the import, but must be aliased or imported as `local`. If `local`, more than one generic of the type may not be used.
+Including a generic module works as usual, but to use a type, it must be *defined* before use.
 
 ```
-import vector(double, float, int) as generic_test;
-import foo(int, int) local;
-// import foo(float, float) local; – Not allowed
+import foo_test;
+
+define Foo(float, double) as FooFloat;
+define foo_test::test(float, double) as testFloat;
+
+...
+
+FooFloat f;
+
+...
+
+testFloat(1.0, f);
+
 ```
 
 Just like for macros, optional constraints may be added to improve compile errors:

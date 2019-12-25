@@ -34,7 +34,7 @@ Here `file_a.c3` and `file_b.c3` belong to the same module, **foo** while `file_
 
 Some details about the C3 module system:
 
-- Modules are not nested, there only a single level to the name.
+- Modules can be arbitrarily nested, e.g. `module foo::bar::baz;` to create the sub module baz in the sub module `bar` of the module `foo`.
 - Module names must be alphanumeric lower case letters plus the underscore character: `_`.
 - Module names are limited to 31 characters.
 
@@ -64,37 +64,31 @@ import networking;
 /* ... */
 ```
 
-### Named imports
 
-It is often convenient to alias the module name (affecting the current file only) to a shorter alias.
+### Restricted imports
+
+It is possible to restrict imports to sub modules or individual functions.
 
 ```
 module foo;
 
-import extended_filesystems_io as fs;
+import bar::baz; // Only import the baz sub module.
+import some_module::some_function; // Only import some_function
+import some_module::SomeType, SomeOtherType, aFunc; // Import multiple symbols.
 ```
 
-The code in the file can now use the `fs` instead of the longer name. However, both names remain valid in the file scope.
+### Aliased imports
 
-### Local imports
-
-In many cases prefixes can become cumbersome. It is therefore also possible to use the `local` keyword to avoid the prefix completely.
+To avoid name collisions, it's possible to alias names. This will completely hide their old name in the file scope.
 
 ```
-import networking as net local;
-import filesystem local;
+module foo;
 
-// Equivalent
-filesystem::doSomething();
-doSomething();
-
-// Equivalent
-net::connect();
-networking::connect();
-connect();
+import bar::io as bio;
+import baz::io;
+import some_module::SomeType as FooType;
+import foo::funcA as fooFuncA, funcB as fooFuncB;
 ```
-
-In the case where a symbol would be ambiguous, for example if both `networking` and `filesystem` would have an `open()` function, then the prefix is still mandatory.
 
 ## Visibility
 
@@ -109,6 +103,79 @@ func void open() { .. }
 ```
 
 In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it isn't specified as public.
+
+### Visibility in sub modules
+
+For declarations in sub modules, the rule is that a sub module may see any parent name, and any children name. However, other children sub modules are hidden.
+
+Consider the modules `foo`, `foo::bar`, `foo::baz` and `foo::bar::xyzzy`. 
+
+1. From `foo::bar` the symbols of `foo`, `foo::bar` and `foo::bar::xyzzy` are visible. 
+2. From `foo::baz` only `foo` and `foo::baz` are visibile. 
+3. Finally from `foo`, all the symbols of `foo`, `foo::bar`, `foo::baz` and `foo::bar::xyzzy` are visibile.
+
+## Using functions and types from other modules
+
+As a rule, functions, macros, constants, variables and types in the same module do not need any namespace prefix. For imported modules, and for parent or child modules the following rules hold:
+
+1. Functions, macros, constants and variables require *at least* the (sub-) module name.
+2. Types do not require the module name except if the name is ambiguous.
+3. In case of ambiguity, only so many levels of module names are needed as to make the symbol unambiguous.
+
+
+```
+// File a.c3
+
+module a;
+
+struct Foo { ... }
+struct Bar { ... }
+struct TheAStruct { ... }
+
+func void anAFunction() { ... }
+
+// File b.c3
+
+module b;
+
+struct Foo { ... }
+struct Bar { ... }
+struct TheBStruct { ... }
+
+func void aBFunction() { ... }
+
+// File c.c3
+
+module b::c;
+import a;
+
+struct TheCStruct { ... }
+struct Bar { ... }
+
+func void aCFunction() { ... }
+
+func void test()
+{
+    TheAStruct stA;
+    TheBStruct stB;
+    TheCStruct stC;
+    // Name required to avoid ambiguity;
+    b::Foo stBFoo;
+    // Will always pick the current module's 
+    // name.
+    Bar bar;
+    // Namespace required:
+    a::aAFunction();
+    b::aBFunction();
+    // A local symbol does not require it:
+    aCFunction(); 
+}
+```
+
+This means that the rule for the common case can be summarized as
+
+> Types without prefix, functions, variables, macros and constants prefixed with the sub module name.
+
 
 ## Textual includes
 

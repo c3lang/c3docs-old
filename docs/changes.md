@@ -2,6 +2,12 @@
 
 Current revision made 2019-12-11.
 
+##### Revision 2019-12-25
+- Changes how generic modules work.
+- Switched so that vararrays use `Type[*]` and sub arrays use `Type[]`.
+- Added sub module granularity, partial imports (only importing selected functions and types), removal of `local`, extended aliasing. See [modules](../modules).
+- Updated "changes from C" with removal of multiple declarations.
+
 ##### Revision 2019-12-11
 - Updated the [setup](../setup) page.
 

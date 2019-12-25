@@ -84,6 +84,19 @@ func void test()
 }
 ```
 
+## Method macros
+
+Similar to *method functions* a macro may also be associated with a particular type:
+
+```
+struct Foo { ... }
+
+macro Foo.@generate(Foo *foo) { ... }
+
+Foo f;
+f.@generate();
+```
+
 ## Capturing a macro body
 
 It is often useful for a macro to take a trailing compound statement as an argument. In C++ the pattern is usually expressed with a lambda, but in C3 this is completely inlined.

@@ -84,3 +84,18 @@ int* d = &a; // Valid implicit conversion
 int* e = b; // Valid implicit conversion
 int[3] f = a; // Copy by value!
 ```
+
+##### Removal of multiple declaration syntax
+
+Only a single declaration is allowed per statement in C3:
+
+```
+int i, j; // ERROR
+int a;    // Fine
+```
+
+In conditionals, a special form of multiple declarations are allowed but each must then provide its type:
+
+```
+for (int i = 0, int j = 1; i < 10; i++, j++) { ... }
+```
