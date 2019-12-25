@@ -478,7 +478,7 @@ func void printFile(string filename)
 
 ##### Generic modules
 
-Generic modules are imported with their parameters set.
+Generic modules implements a generic system.
 
 ```
 module stack($a)
@@ -513,8 +513,10 @@ func bool Stack.empty(Stack* this)
 Testing it out:
 
 ```
-import stack(int) : Stack as IntStack;
-import stack(double) : Stack as DoubleStack;
+import stack;
+
+define Stack(int) as IntStack;
+define Stack(double) as DoubleStack;
 
 func void test()
 {
