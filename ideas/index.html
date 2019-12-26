@@ -153,6 +153,8 @@
     
         <ul>
         
+            <li><a class="toctree-l4" href="#module-versioning">Module versioning</a></li>
+        
             <li><a class="toctree-l4" href="#polymorphic-functions">Polymorphic functions</a></li>
         
             <li><a class="toctree-l4" href="#tests-built-in">Tests built in</a></li>
@@ -289,8 +291,45 @@
               
                 <h1 id="ideas">Ideas</h1>
 <p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
+<h2 id="module-versioning">Module versioning</h2>
+<p>Follow Go Modules: </p>
+<ol>
+<li>Build file contains required library versions: e.g. 2.5.7</li>
+<li>First number is major version number and is considered incompatible (basically a different module completely)</li>
+<li>Dependency resolution per major library version is done by picking the minimal version. E.g. module Foo requires Bar 1.5+ and module Baz requires 1.3+. Our module using Bar and Baz will resolve the minimal version to 1.3. This is the version that will be used. Note that if Foo used 2.5+, then both Bar 2.5 and 1.3 would be required.</li>
+</ol>
 <h2 id="polymorphic-functions">Polymorphic functions</h2>
-<p>To reduce the number of generic functions, investigate expressing it as polymorphic functions instead.</p>
+<p>It would theoretically be possible to replace the generics with ad hoc polymorphic functions.</p>
+<pre><code>module adding(TypeA, TypeB, TypeC)
+
+func TypeC add_module(TypeA a, TypeB b)
+{
+    return a + b;
+}
+</code></pre>
+
+<pre><code>generic func $c add_poly($a, $b)
+{
+    return $a + $b;
+}
+</code></pre>
+
+<p>Usage:</p>
+<pre><code>// Module:
+import adding;
+define add_module(int, float, float) as int_float_add;
+define add_module(int, double, double) as int_double_add;
+
+func void test()
+{
+    float f = int_float_add(2, 3.0)
+    float f2 = add_poly(2, 3.0);
+
+    double d = int_double_add(2, 3.0);
+    double d2 = add_poly(2, 3.0);
+}
+</code></pre>
+
 <h2 id="tests-built-in">Tests built in</h2>
 <p>Unit tests built in as an integral part of the language like D.</p>
 <h2 id="allow-variable-alias">Allow variable alias</h2>
