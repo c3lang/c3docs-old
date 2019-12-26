@@ -8,7 +8,6 @@ Last updated: [2019-12-25](changes).
 
 ## Planned features
 
-- Transpile-compile using Clang, GCC or TCC
 - Compile directly using LLVM
 - C to C3 conversion (for a subset of C)
 - Module system

@@ -1,6 +1,12 @@
 # Change log
 
-Current revision made 2019-12-11.
+Current revision made 2019-12-26.
+
+
+##### Revision 2019-12-26
+- Added module versioning system [idea](../ideas). 
+- Fleshed out polymorphic functions.
+- Unsigned to signed promotion mentioned in "changes from C"
 
 ##### Revision 2019-12-25
 - Changes how generic modules work.
