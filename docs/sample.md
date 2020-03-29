@@ -36,7 +36,7 @@ const uint OFFSET = 8;
  */
 void Heap.init(Heap* heap, usize start) 
 {
-    Node* init_region = @cast(Node*, start);
+    Node* init_region = cast(start, Node*);
     init_region.hole = 1;
     init_region.size = HEAP_INIT_SIZE - @sizeof(Node) - @sizeof(Footer);
 
@@ -44,14 +44,14 @@ void Heap.init(Heap* heap, usize start)
 
     heap.bins[get_bin_index(init_region.size)].add(init_region);
 
-    heap.start = @cast(void*, start);
-    heap.end   = @cast(void*, start + HEAP_INIT_SIZE);
+    heap.start = cast(start, void*);
+    heap.end   = cast(start + HEAP_INIT_SIZE, void*);
 }
 
 void* Heap.alloc(Heap* heap, usize size) 
 {
     uint index = get_bin_index(size);
-    Bin* temp = @cast(Bin*, heap.bins[index]);
+    Bin* temp = cast(heap.bins[index], Bin*);
     Node* found = temp.getBestFit(size);
 
     while (!found) 
@@ -62,7 +62,7 @@ void* Heap.alloc(Heap* heap, usize size)
 
     if ((found.size - size) > (overhead + MIN_ALLOC_SZ)) 
     {
-        Node* split = @cast(Node*, @cast(char*, found) + sizeof(Node) + sizeof(Footer)) + size);
+        Node* split = cast(cast(found, char*) + sizeof(Node) + sizeof(Footer), Node*) + size);
         split.size = found.size - size - sizeof(Node) - sizeof(Footer);
         split.hole = 1;
    
@@ -106,16 +106,16 @@ func void Heap.free(Heap* heap, void *p)
     Bin* list;
     Footer& new_foot, old_foot;
 
-    Node* head = @cast(Node*, @cast(char*, p) - OFFSET);
-    if (head == @cast(Node*, @cast(heap.start, usize)) 
+    Node* head = cast(cast(p, char*) - OFFSET, Node);
+    if (head == cast(cast(heap.start, usize), Node*) 
     {
         head.hole = 1; 
         heap.bins[get_bin_index(head.size)].addNode(head);
         return;
     }
 
-    Node* next = @cast(Node*, @cast(char*, head.getFoot()) + sizeof(Footer));
-    Footer* f = @cast(Footer*, @cast(char*, head) - sizeof(Footer));
+    Node* next = cast(cast(head.getFoot(), char*) + sizeof(Footer), Node*);
+    Footer* f = cast(cast(head, char*) - sizeof(Footer), Footer*);
     Node* prev = f.header;
     
     if (prev.hole) 
@@ -179,12 +179,12 @@ func void Node.createFoot(Node* head)
 
 func Footer* Node.getFoot(Node* node) 
 {
-    return @cast(Footer*, @cast(char*, node) + sizeof(Node) + node.size);
+    return cast(cast(node, char*) + sizeof(Node) + node.size, Footer*);
 }
 
 func Node* getWilderness(Heap* heap) 
 {
-    Footer* wild_foot = @cast(Footer*, @cast(char*, heap.end) - sizeof(Footer));
+    Footer* wild_foot = cast(cast(heap.end, char*) - sizeof(Footer), Footer*);
     return wild_foot.header;
 }
 ```

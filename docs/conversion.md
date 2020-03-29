@@ -9,37 +9,27 @@ C3 differs in some crucial respects when it comes to number conversions and prom
 - double to float conversion is allowed, but may be set to warn
 - narrowing integer conversions require a cast
 - widening conversions do *not* require a cast
-- signed/unsigned int conversions work differently from C as detailed below
+- signed -> unsigned conversions must be explicit
+- unsigned -> signed conversions do *not* need to be explicit if all unsigned values can be contained inside of the signed type. 
 - float to bool *do not* require a cast, any non zero float value considered true
 
 C3 uses two's complement arithmetic for all integer math.
 
 ## Signed/unsigned int conversions
 
-In C, the can be simply described as "convert to the type with the largest positive value" (aside from the promotion up to int). Consequently a signed int + unsigned int converts to unsigned int. In C3, the sign is considered more important. Consequently the conversion with mixed signed / unsigned will *always* be converted to a signed value.
-
-On debug builds, a conversion of unsigned to signed which results in an overflow (for example, converting the ushort 0x8000 to a short) will trap. For release builds overflow is instead undefined behaviour.
-
-
-The rule is as follows:
-
-1. Find the largest bit size of the two operands.
-2. If either is signed: convert to a signed integer of the largest bit size.
-3. If both are unsigned: convert to an unsigned integer of the largest bit size.
-4. If the conversion results in overflow in debug builds this will trap.
-5. If the conversion results in overflow in release builds the result is undefined behaviour.
+In C, the can be simply described as "convert to the type that can contain the other". If this cannot be guaranteed, the conversion must be explicit.
 
 |  | bool | byte | ushort | uint  | ulong | char | short | int | long |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| byte | bool | byte | ushort | uint | ulong | char | short | int | long |
-| byte | byte | byte | ushort | uint | ulong | char | short | int | long |
-| ushort | ushort | ushort | ushort | uint | ulong | short | short | int | long |
-| uint | uint | uint | uint | uint | ulong | int | int | int | long |
-| ulong | ulong | ulong | ulong | ulong | ulong | long | long | long | long |
-| char | char | char | short | int | long | char | short | int | long |
-| short | short | short | short | int | long | short | short | int | long |
-| int | int | int | int | int | long | int | int | int | long |
-| long | long | long | long | long | long | long | long | long | long |
+| bool | bool | byte | ushort | uint | ulong | char | short | int | long |
+| byte | byte | byte | ushort | uint | ulong | - | short | int | long |
+| ushort | ushort | ushort | ushort | uint | ulong | - | - | int | long |
+| uint | uint | uint | uint | uint | ulong | - | - | - | long |
+| ulong | ulong | ulong | ulong | ulong | ulong | - | - | - | - |
+| char | char | - | - | - | - | char | short | int | long |
+| short | short | short | - | - | - | short | short | int | long |
+| int | int | int | int | - | - | int | int | int | long |
+| long | long | long | long | long | - | long | long | long | long |
 
 ## Sub struct conversions
 
@@ -94,7 +84,7 @@ short b = bar();
 long c = baz() ? a : b;
 
 // The above will compile tog:
-long c = baz() ? @cast(long, a) : @cast(long, c);
+long c = baz() ? cast(a, long) : cast(c, long);
 
 byte d = foobar();
 
@@ -103,7 +93,6 @@ byte d = foobar();
 long e = (baz() ? a : b) + (baz2() ? b : d);
 
 // The above will compile to:
-long e = @cast(long, (baz() ? a : @cast(int, b)) 
-                     + @cast(int, (baz2() ? b : @cast(short, d))));
+long e = cast((baz() ? a : cast(b, int)) 
+               + cast((baz2() ? b : cast(d, short), int)), long);
 ```
-

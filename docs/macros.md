@@ -1,8 +1,8 @@
 # Macros
 
-**May be subject to later revision**
+**WILL be subject to later revision!**
 
-The macro capabilities of C3 reaches across several constructs: macros (prefixed with `@`), [generic functions](../generics/#generic-functions), [generic modules](../generics/#generic-modules), compile time variables (prefixed with `$e`), macro compile time execution (using `$if`, `$each`, `$switch`), attributes and incremental structs, enums and arrays.
+The macro capabilities of C3 reaches across several constructs: macros (prefixed with `@` at invocation), [generic functions](../generics/#generic-functions), [generic modules](../generics/#generic-modules), compile time variables (prefixed with `$e`), macro compile time execution (using `$if`, `$each`, `$switch`), attributes and incremental structs, enums and arrays.
 
 ## Top level evaluation
 
@@ -12,7 +12,7 @@ In C3, top level compile time evaluation is limited to `$if` and `$switch` const
 
 ## Macro declarations
 
-A macro is defined using `macro @<name>(<parameters>)`. All user defined macros use the @ symbol.
+A macro is defined using `macro <name>(<parameters>)`. All user defined macros use the @ symbol.
 
 The parameters have different sigils: `$` means compile time evaluated (captured variable, symbol or expression). Any parameters without sigils are passed by *value*, as if it was a normal function parameter.
 
@@ -21,13 +21,13 @@ A basic swap:
 
 ```
 /**
- * @ensure parse($a = $b), parse($b = $a)
+ * @ensure parse(a = b), parse(b = a)
  */
-macro void @swap($a, $b)
+macro void swap($a, $b)
 {
-    typeof($a) temp = $a;
-    $a = $b;
-    $b = temp;
+    typeof(a) temp = a;
+    a = b;
+    b = temp;
 }
 ```
 
@@ -56,7 +56,7 @@ func void test()
 Note the necessary `$`. Here is an incorrect swap and what it would expand to:
 
 ```
-macro void @badswap(a, b)
+macro void badswap(auto a, auto b)
 {
     typeof(a) temp = a;
     a = b;
@@ -91,17 +91,16 @@ Similar to *method functions* a macro may also be associated with a particular t
 ```
 struct Foo { ... }
 
-macro Foo.@generate(Foo *foo) { ... }
-
+macro Foo.generate(Foo *foo) { ... }
 Foo f;
-f.@generate();
+@f.generate();
 ```
 
 ## Capturing a macro body
 
 It is often useful for a macro to take a trailing compound statement as an argument. In C++ the pattern is usually expressed with a lambda, but in C3 this is completely inlined.
 
-For macros we add a trailing parameter in the format: `: var1, var2, ...`. Each declaration is an argument that macro will provide.
+Any macro that takes a macro in the last position may be expressed as a trailing body instead. When the call puts the parameters for the trailing macro after `;`.
 
 Here's an example to illustrate it the use:
 
@@ -112,18 +111,18 @@ Here's an example to illustrate it the use:
  *
  * @ensure parse(int i = a.len), parse(value2 = a[i])
  */
-macro @foreach(a : value1, value2)
+macro foreach(auto a, macro void(value, value) foo)
 {
     for (int i = 0; i < a.len; i++)
     {
-        yield(i, a[i]);
+		@body(i, a[i]);
     }
 }
 
 func void test()
 {
     double[] a = { 1.0, 2.0, 3.0 };
-    @foreach(a : int index, double value)
+    @foreach(a; int index, double value)
     {
         printf("a[%d] = %f\n", index, value);
     }
@@ -190,7 +189,7 @@ Inside of a macro, we can use the compile time statements `$if`, `$each` and `$s
 `$if (<const expr>)` takes a compile time constant value and evaluates it to true or false.
 
 ```
-macro @foo($X, $y)
+macro @foo($x, $y)
 {
     $if ($x > 3)
     {
@@ -270,7 +269,7 @@ macro @foo_enum($some_enum)
 {
     $each($some_enum as $x)  
     {
-        printf("%d\n", cast(int, $x));     
+        printf("%d\n", cast($x, int));     
     }
 }
 
@@ -284,8 +283,8 @@ func void test()
 {
     @foo_enum(MyEnum);
     // Expands to ->
-    // printf("%d\n", cast(int, MyEnum.A));
-    // printf("%d\n", cast(int, MyEnum.B));    
+    // printf("%d\n", cast(MyEnum.A, int));
+    // printf("%d\n", cast(MyEnum.B, int));    
 }
 ```
 

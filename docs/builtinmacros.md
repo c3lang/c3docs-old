@@ -16,18 +16,10 @@ Bitcast reinterprets the contents of a variable without any conversion. Bitsize 
 
 ```
 float f = 12.3;
-int i = @bitcast(int, f);
+int i = @bitcast(f, int);
 printf("%x", i); // Prints 4144cccd
 ```
 
-### @cast
-
-Cast one type to the other using the default conversion rules. Bit extension or truncation may occur.
-```
-float f = 12.3;
-int i = @cast(int, f);
-printf("%d", i); // Prints 12
-```
 
 ### @describe
 

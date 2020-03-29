@@ -78,6 +78,27 @@ The ability to run a piece of code at compile time and include the result in the
 @run_include("foo.sh", $some_param, "-x", $another_param);
 ```
 
+## Type functions
+
+Since static methods are out, it's natural to allow static values from the type, e.g.
+
+```
+struct Foo { ... }
+
+...
+
+Foo *foo = malloc(Foo.sizeof)
+```
+
+There are a lot of type functions possible:
+
+- sizeof
+- offsetof
+- name
+- description
+- elements
+
+There doesn't seem to be a need for applying this to non base type, but it should probably be allowed, e.g. `(Foo*).sizeof`
 
 
 ## Macro text interpolation
@@ -148,6 +169,72 @@ func Foo.next(Foo*)
 }
 ```
 
+
+## Managed pointer variables
+
+Managed pointer variables are introduced using `@` after the type, rather than `*` e.g. `Foo@ f`. A managed variable will automatically call the type's `release` member function on its value when the variable goes out of scope or is reassigned. If there is no `release` function, then `free` is called.
+
+
+```
+Foo@ f = Foo.alloc(); // * -> @ no retain.
+Foo@ b = f;           // => f.retain(); b = f;
+f = nil;              // => f.release(); f = nil;
+```
+
+Any managed variable that goes out of the scope will automatically invoke `release`, as if the pointer was set to `nil`.
+
+```
+{
+    Foo@ b = Foo.alloc();
+} // Automatic invocation of b.release();
+```
+
+In order to return a managed pointer that can be used as a temporary, it's often convenient to mark the return value as managed.
+
+```
+func Foo@ createFoo()
+{
+    return Foo.alloc();
+}
+
+createFoo(); // Implicitly introduces a deferred release.
+```
+
+If we assign a managed pointer to a variable, the release/retain is elided
+
+```
+// The following becomes f1 = createFoo() - no deferred release or retains.
+Foo@ f1 = createFoo(); 
+```
+
+It's possible to manually manage a managed pointer:
+
+```
+Foo* f2 = createFoo().retain();
+f2.release(); // Required to prevent leaks.
+```
+
+A managed pointer may safely assigned to a regular pointer as long as it's not retained outside of the scope.
+
+```
+{
+    Foo* f3 = createFoo(); 
+    printf("%d", f3.someValue);
+    // Safe, since f3 isn't actually used after the scope.
+}
+
+Foo* unsafeFoo;
+{
+    unsafeFoo = createFoo();
+}
+// <- access to unsafeFoo at this point will likely break things.
+```
+
+### Managed variables not pointers
+
+Managed variables should not be confused with automatic reference counting and similar. It is not possible to – for example – to make a struct member a "managed" pointer. It is strictly limited to variables and return values.
+
+
 ## C interop
 
 Steps:
@@ -177,7 +264,7 @@ Hierarchal memory allocation http://swapped.cc/#!/halloc support it?
 
 ##### Unsigned conversion to signed
 
-Perhaps consider signed, rather than unsigned implicit conversion. Currently `ulong + long` becomes `ulong + @cast(ulong, long)` (according to C rules). Consider changing that to `@cast(long, ulong) + long`. That is, instead of "unsigned wins", use "signed wins".
+Perhaps consider signed, rather than unsigned implicit conversion. Currently `ulong + long` becomes `ulong + cast(long, ulong)` (according to C rules). Consider changing that to `cast(ulong, long) + long`. That is, instead of "unsigned wins", use "signed wins".
  
 
 ##### Tagged any
@@ -336,6 +423,66 @@ struct Shape
     byte kind;
 }
 ```
+
+## Removal of the volatile type qualifier
+
+The volatile type qualifier is replaced by volatile sections. A volatile section is guaranteed to not be optimized away.
+
+```
+\\ C volatile
+void test()
+{
+    volatile v = 0;
+    for (int i = 0; i < 100; i++)
+    {
+        // Usually this would be optimized away,
+        // but volatile will ensure it is executed.
+        v = 1; 
+    }
+}
+
+\\ C3
+func void test()
+{
+    v = 0;
+    for (int i = 0; i < 100; i++)
+    {
+        // Everything in the block
+        // will avoid optimization
+        @volatile
+        {
+            v = 1; 
+        }
+    }
+}
+```
+
+## Volatile section
+
+Volatile sections replace volatile type qualifiers on variable types.
+
+```
+func void test()
+{
+    v = 0;
+    for (int i = 0; i < 100; i++)
+    {
+        volatile
+        {
+            v = 1; 
+        }
+    }
+}
+```
+
+Note that volatile sections may also be used as expressions:
+
+```
+// The v = 1 assignment may not be optimized away,
+// But the assignment to x can be. 
+x = volatile(v = 1);
+```
+
 
 ## Interfaces
 
@@ -610,115 +757,7 @@ public macro foreach(thelist, @body($element_type) )
 
 In this case `$element_type` works like "auto", but is also assigned the type, which then can be referred to in the signature.
 
-### Yet another way to do macros :D
 
-This was an older attempt...
-
-First, we have to consider macros as always expanding where they are referenced to keep it simple.
-
-```
-macro @foo(int v) 
-{
-    v++;
-    if (v > 10) return 10;
-    return v;
-}
-
-func void test()
-{
-    int a = 10;
-    @foo(a);
-}
-```
-
-This code would then be exactly equal to:
-
-```
-func void test()
-{
-    int a = 10;
-    a++;
-    if (a > 10) return 10;
-}
-```
-
-Macros simply expand in place.
-
-Secondly, we can have macros returning values:
-
-```
-macro int @foo2(int v, int w) 
-{
-    v++;
-    if (v > 10) return 10;
-    w += 3;
-    return 0;
-}
-
-func void test()
-{
-    int d = 0;
-    int a = 10;
-    int b = @foo(a, d);
-}
-```
-
-This expands to:
-
-```
-func void test()
-{
-    int d = 0;
-    int a = 10;
-    a++
-    int b;
-    if (a > 10) 
-    {
-        b = 10;
-    } 
-    else 
-    {
-        b = 0;
-        d += 3;
-    }
-}
-```
-
-Note that I'm using a sigil to indicate the code expansion to make macros more obvious.
-
-We can allow the macro to take a body (here I'm calling the type of the body "{}")
-
-```
-macro int @foo3(int a, {} body)
-{
-    while (a > 10) 
-    {
-        a--;
-        @body(); // Like a macro!
-    }
-}
-
-func void test()
-{
-    b = 20;
-    @foo3(b) {
-        print(b);
-    }
-}
-```
-
-We expand this to:
-
-```
-func void test()
-{
-    b = 20;
-    while (b > 10) {
-        b--;
-        print(b);
-    }
-}
-```
 
 #### Stepwise from C macros into C3 macros
 
@@ -988,7 +1027,7 @@ macro @foo_enum(&a)
 {
     $EACH(a AS $x)  
     {
-        printf("%d\n", @cast(int, $x));		
+        printf("%d\n", cast($x, int));		
     }
 }
 
@@ -1007,9 +1046,9 @@ func void test()
 // Expands to
 func void test()
 {
-	printf("%d\n", @cast(int, A));
-	printf("%d\n", @cast(int, B));
-	printf("%d\n", @cast(int, FOO));
+	printf("%d\n", cast(A, int));
+	printf("%d\n", cast(B, int));
+	printf("%d\n", cast(FOO, int));
 }
 ```
 

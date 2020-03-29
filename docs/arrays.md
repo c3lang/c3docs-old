@@ -83,8 +83,8 @@ The final type is the slice `<type>[]`  e.g. `int[]`. A slice is a view into eit
 ```
 int[4] a = { 1, 2, 3, 4};
 int[] b = &a; // Implicit conversion is always ok.
-int[4] c = @cast(int[4], b); // Will copy the value of b into c.
-int[4]* d = @cast(int[4]*, b); // Equivalent to d = &a
+int[4] c = cast(b, int[4]); // Will copy the value of b into c.
+int[4]* d = cast(b, int[4]); // Equivalent to d = &a
 int[*] e = @malloc(int[]);
 b.size; // Returns 4
 e.size; // Returns 0
@@ -95,7 +95,7 @@ int* f = b; // Equivalent to e = &a
 f = d; // implicit conversion ok.
 f = e; // implicit conversion ok.
 d = e; // ERROR! Not allowed
-d = @cast(int[4]*, e); // Fine
+d = cast(e, int[4]*); // Fine
 b = e; // Implicit conversion ok
 ```
 ### Conversion list
@@ -117,9 +117,9 @@ int[4] a;
 int[4]* b = &a;
 int* c = b;
 // Safe cast:
-int[4]* d = @cast(int[4]*, c); 
+int[4]* d = cast(c, int[4]*); 
 // Faulty code with undefined behaviour:
-int[*] e = @cast(int[*]*, c); 
+int[*] e = cast(c, int[*]*); 
 ```
 
 ```
@@ -128,10 +128,10 @@ a += 11;
 a += 12;
 a += 13;
 // Safe (2 is less than the dynamic size of a)
-int[2]* b = @cast(int[2]*, a);
+int[2]* b = cast(a, int[2]*);
 // Faulty code with undefined behaviour
 // (4 is greater than the dynamic size of a)
-int[4]* c = @cast(int[4]*, a);
+int[4]* c = cast(a, int[4]*);
 ```
 
 #### Internals

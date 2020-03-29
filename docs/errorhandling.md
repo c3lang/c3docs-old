@@ -34,7 +34,7 @@ catch (error err)
     printf("Error was %s\n", @describe(err)); 
     
     // Might print "Error code: 931938210"
-    printf("Error code: %ull\n", @cast(ulong, err)); 
+    printf("Error code: %ull\n", cast(err, ulong)); 
 }
 ```
 

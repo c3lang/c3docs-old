@@ -67,6 +67,18 @@ Furthermore, underscore `_` may be used to add space between digits to improve r
  
 Conversion is always done so that the character string has the correct ordering in memory. This means that the same characters may have different integer values on different architectures due to endianess.
 
+##### Base64 and hex data literals
+
+Base64 encoded values work like TwoCC/FourCC/EightCC, in that is it laid out in byte order in memory. It uses the format `'<base64>'b64`. Hex encoded values work as base64 but with the format `'<hex>'x`. In data literals any whitespace is ignored, so `'00 00 11'x` encodes to the same value as `'000011'x`.
+
+In our case we could encode `'Rk9PQkFSMTE='b64` as `'FOOBAR11'`.
+
+Base64 and hex data literals also has a form to allow initializing byte and char arrays, instead of enclosing the data in `''`, enclose the data in `""`
+
+```
+byte[] hello_world_base64 = "SGVsbG8gV29ybGQh"b64;
+char[] hello_world_hex = "4865 6c6c 6f20 776f 726c 6421"x;
+```
 
 ##### Floating point types
 
@@ -125,6 +137,44 @@ enum State : int
 ```
 Enum constants are namespaces by default, just like C++'s class enums. So accessing the enums above would for example use `State.PENDING` rather than `PENDING`.
 
+### Enum type inference
+
+When an enum is used in where the type can be inferred, like in case-clauses or in variable assignment, it is allowed to drop the enum name:
+
+```
+State foo = PENDING; // State.PENDING is inferred.
+switch (foo)
+{
+    case RUNNING: // State.RUNNING is inferred
+        ...
+    default:
+        ...
+}
+
+func void test(State s) { ... }
+
+...
+
+test(RUNNING); // State.RUNNING is inferred
+```
+
+In the case that it collides with a global in the same scope, it needs the qualifier:
+
+```
+module test;
+
+func void testState(State s) { ... }
+
+State RUNNING = State.TERMINATED; // Don't do this!
+
+... 
+
+test(RUNNING); // Ambiguous
+test(test::RUNNING); // Uses global.
+test(State.RUNNING); // Uses enum constant.
+```
+
+
 ## Error
 
 Error types are similar to enums, and are used for error returns.
@@ -157,6 +207,19 @@ This defines an alias to function pointer type of a function that returns nothin
 ```
 Callback cb = my_callback;
 cb(10, false);
+```
+
+## Distinct types
+
+`typedef` may also be used to create distinct new types. They do not implicitly convert to any other type, but may be used as the underlying type.
+
+```
+typedef int as Foo distinct;
+Foo f = 0;
+f = f + 1;
+int i = 1;
+// f = f + i Error!
+f = f + cast(i, Foo); // Valid
 ```
 
 ## Struct types
@@ -272,6 +335,15 @@ In C, using structs with an enum value to indicate type is common practice. C3 a
 
 TBD: Exact syntax (see the [ideas](../ideas) page)
 
+## Casting
+
+Casting does not use the C-style `(NewType) var` instead uses `cast(<expression>, <Type>)`
+    
+```
+float f = 2.0;
+int i = cast(f, int);
+```
+
 ## Conversion to symbol to type and back with `type`
 
 Macros and compile time constants may occasionally contain type *symbols*. To convert back and forth, the `type` operator is used.
@@ -323,6 +395,6 @@ func void test()
     set_coordinates(v);   // valid
     set_coordinates(v3);  // ERROR, no structural equivalence.
     struct { int i; int j; } xy = v2;
-    v = cast(struct { int, int }, v2);
+    v = cast(v2, struct { int, int });
 }
 ```

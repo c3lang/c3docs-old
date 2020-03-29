@@ -75,7 +75,7 @@ func void example_if_while_for()
         // ...
     }
     
-    if (int a = foo(), long b = bar(); a > 1) return @cast(int, a + b);
+    if (int a = foo(), long b = bar(); a > 1) return cast(a + b, int);
     
     for (int a = 0, long b = 0; a < 10; a++)
     {
@@ -85,6 +85,7 @@ func void example_if_while_for()
 }
 
 ```
+
 #####enum + switch
 
 Switches have implicit break and scope. Use "next" to implicitly fallthrough or use comma:
@@ -101,18 +102,18 @@ func void demo_enum(Height h)
 {
     switch (h) 
     {
-        case Height.LOW, Height.MEDIUM:
+        case LOW, MEDIUM:
             io.printf("Not high");
             // Implicit break.
-        case Height.HIGH:
+        case HIGH:
             io.printf("High");
     }
 
     // This also works
     switch (h) 
     {
-        case Height.LOW, 
-        case Height.MEDIUM:
+        case LOW, 
+        case MEDIUM:
             io.printf("Not high");
             // Implicit break.
         case Height.HIGH:
@@ -122,20 +123,20 @@ func void demo_enum(Height h)
     // Completely empty cases are not allowed.
     switch (h) 
     {
-        case Height.LOW:
+        case LOW:
             break; // Explicit break required, since switches can't be empty.
-        case Height.MEDIUM:
+        case MEDIUM:
             io.printf("Medium");
-        case Height.HIGH:
+        case HIGH:
             break;
     }
 
     // special checking of switching on enum types
     switch (h) 
     {
-        case Height.LOW,
-        case Height.MEDIUM,
-        case Height.HIGH,
+        case LOW,
+        case MEDIUM,
+        case HIGH,
             break;
         default:    // warning: default label in switch which covers all enumeration value
             break;
@@ -145,15 +146,15 @@ func void demo_enum(Height h)
     // and each case statement starts its own scope.
     switch (h) 
     {
-        case Height.LOW:
+        case LOW:
             int a = 1;
             printf("A\n");
             next;
-        case Height.MEDIUM,
+        case MEDIUM,
             int a = 2;
             printf("B\n");
             next;
-        case Height.HIGH,
+        case HIGH,
             // a is not defined here
             printf("C\n");
     }

@@ -22,39 +22,6 @@ The `->` operator is removed, access uses dot for both direct and pointer access
 
 Notably bit operations have higher precedence than +/-, making code like this: `a & b == c` evaluate like `(a & b) == c` instead of C's `a & (b == c)`. See the page about [precedence rules](../precedence).
 
-##### Removal of the volatile type qualifier
-
-The volatile type qualifier is replaced by volatile sections. A volatile section is guaranteed to not be optimized away.
-
-```
-\\ C volatile
-void test()
-{
-    volatile v = 0;
-    for (int i = 0; i < 100; i++)
-    {
-        // Usually this would be optimized away,
-        // but volatile will ensure it is executed.
-        v = 1; 
-    }
-}
-
-\\ C3
-func void test()
-{
-    v = 0;
-    for (int i = 0; i < 100; i++)
-    {
-        // Everything in the block
-        // will avoid optimization
-        @volatile
-        {
-            v = 1; 
-        }
-    }
-}
-```
-
 ##### Removal of the const type qualifier
 
 The const qualifier is only retained for actual constant variables. C3 uses a special type of [post condition](../preconditions) for functions to indicate that they do not alter in parameters.
@@ -100,16 +67,15 @@ In conditionals, a special form of multiple declarations are allowed but each mu
 for (int i = 0, int j = 1; i < 10; i++, j++) { ... }
 ```
 
-##### Integer promotions rules
+##### Integer promotions rules and safe signed-unsigned comparisons
 
-Promotion rules for integer types are different from C. C will always promote up to at least int size, then pick the size with the greatest unsigned range. That means that when adding an unsigned integer to a signed integer, the signed integer will convert to unsigned.
-
-In C3 this changes. Signed and unsigned values in comparisons will convert to the highest *signed* type with the maximum type. For example, adding a 16 bit signed integer to an unsigned 32 bit integer will convert both to a signed 32 bit integer! This can potentially overflow when the unsigned integer is converted. Such an overflow is considered UB in release builds and will trap in debug builds. Read more on the [conversion page](../conversion).
+Promotion rules for integer types are different from C. C3 only does widening to the largest possible type and so implicit conversion will only occur where it is lossless (read more on the [conversion page](../conversion). C3 also adds *safe signed-unsigned comparisons*, this means that comparing signed and unsigned values will always yield the correct result:
 
 ```
 // The code below will print "Hello C3!" on C3 and "Hello C!" in C.
 int i = -1;
-unsigned j = 1;
+uint j = 1;
+// int z = i + j; <- Error, explicit cast needed.
 if (i < j)
 {
   printf("Hello C3!\n");

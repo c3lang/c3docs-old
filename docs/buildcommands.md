@@ -1,16 +1,16 @@
 # Build Commands
 
-When starting out, with C3 it's natural to use `compile` and `compile-run` to try things out. For larger projects, the built-in build system is instead recommended.
+When starting out, with C3 it's natural to use `run` to try things out. For larger projects, the built-in build system is instead recommended. 
 
-## compile
+By default the compiler is compiling stand-alone files to output an executable binary.
 
-The default for c3c is compiling stand-alone files to output a binary.
+`c3c <file1> <file2> <file3>`
 
-`c3c compile <file1> <file2> <file3>`
+## run
 
-## compile-run
+The run command works same as compilation, but also immediately runs the resulting executable.
 
-The same as `compile` but then also runs the executable.
+`c3c run <file1> <file2> <file3>`
 
 ## Common additional parameters
 
@@ -70,9 +70,9 @@ The built in templates define two targets: `debug` (which is the default) and `r
 
 `clean`
 
-## run
+## build-run
 
-`run [target]`
+`build-run [target]`
 
 Build the target (if needed) and run the executable.
 

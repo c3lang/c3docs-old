@@ -15,7 +15,7 @@ authors = ["John Doe <john.doe@example.com>"]
 langrev = "1"
 # warnings used
 warnings = ["no-unused"]
-# sources compliled
+# sources compiled
 sources = ["src/**"]
 # libraries to use
 libs = ["lib/**"]

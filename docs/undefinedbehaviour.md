@@ -46,7 +46,6 @@ The following operations cause undefined behaviour in release builds of C3:
 
 | operation | well defined alternative | will trap in debug builds
 | --- | --- | :-: |
-| overflow during implicit conversion signed -> unsigned | explicit cast to signed, will use 2s complement on overflow | Yes |
 | overflow on + | Use +% or @add_overflow | Yes |
 | overflow on - | Use -% or @sub_overflow | Yes |
 | overflow on * | Use *% or @mult_overflow | Yes |

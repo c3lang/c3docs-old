@@ -73,8 +73,8 @@ It is possible to restrict imports to sub modules or individual functions.
 module foo;
 
 import bar::baz; // Only import the baz sub module.
-import some_module::some_function; // Only import some_function
-import some_module::SomeType, SomeOtherType, aFunc; // Import multiple symbols.
+import some_module : some_function; // Only import some_function
+import some_module : SomeType, SomeOtherType, aFunc; // Import multiple symbols.
 ```
 
 ### Aliased imports
@@ -86,8 +86,8 @@ module foo;
 
 import bar::io as bio;
 import baz::io;
-import some_module::SomeType as FooType;
-import foo::funcA as fooFuncA, funcB as fooFuncB;
+import some_module : SomeType as FooType;
+import foo : funcA as fooFuncA, funcB as fooFuncB;
 ```
 
 ## Visibility

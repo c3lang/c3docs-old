@@ -1,7 +1,19 @@
 # Change log
 
-Current revision made 2019-12-26.
+Current revision made 2020-03-29.
 
+##### Revision 2020-03-29
+- Type inference for enums.
+- Included [macro](../macros) page.
+- Corrected precedence rules with `try` and `@`.
+- Type functions.
+- Managed variables back to ideas.
+- Volatile moved back to ideas.
+- Removed implicit lossy signed conversions.
+- Introducing safe signed-unsigned comparisons.
+- "Function block" renamed "expression block".
+- `@` sigil removed from macros and is only used with macro invocations.
+- Changed cast syntax from `@cast(Type, var)` to `cast(var, Type)`
 
 ##### Revision 2019-12-26
 - Added module versioning system [idea](../ideas). 
