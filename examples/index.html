@@ -80,6 +80,10 @@
                     
     <a class="" href="../changesfromc/">Changes from C</a>
                 </li>
+                <li class="">
+                    
+    <a class="" href="../compare/">Comparisons with other languages</a>
+                </li>
                 <li class=" current">
                     
     <a class="current" href="./">Examples</a>
@@ -155,10 +159,6 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../variables/">Variables</a>
-                </li>
-                <li class="">
-                    
     <a class="" href="../errorhandling/">Errors</a>
                 </li>
                 <li class="">
@@ -180,6 +180,10 @@
                 <li class="">
                     
     <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../macros/">Macros</a>
                 </li>
                 <li class="">
                     
@@ -360,7 +364,7 @@
         // ...
     }
 
-    if (int a = foo(), long b = bar(); a &gt; 1) return @cast(int, a + b);
+    if (int a = foo(), long b = bar(); a &gt; 1) return cast(a + b, int);
 
     for (int a = 0, long b = 0; a &lt; 10; a++)
     {
@@ -384,18 +388,18 @@ func void demo_enum(Height h)
 {
     switch (h) 
     {
-        case Height.LOW, Height.MEDIUM:
+        case LOW, MEDIUM:
             io.printf(&quot;Not high&quot;);
             // Implicit break.
-        case Height.HIGH:
+        case HIGH:
             io.printf(&quot;High&quot;);
     }
 
     // This also works
     switch (h) 
     {
-        case Height.LOW, 
-        case Height.MEDIUM:
+        case LOW, 
+        case MEDIUM:
             io.printf(&quot;Not high&quot;);
             // Implicit break.
         case Height.HIGH:
@@ -405,20 +409,20 @@ func void demo_enum(Height h)
     // Completely empty cases are not allowed.
     switch (h) 
     {
-        case Height.LOW:
+        case LOW:
             break; // Explicit break required, since switches can't be empty.
-        case Height.MEDIUM:
+        case MEDIUM:
             io.printf(&quot;Medium&quot;);
-        case Height.HIGH:
+        case HIGH:
             break;
     }
 
     // special checking of switching on enum types
     switch (h) 
     {
-        case Height.LOW,
-        case Height.MEDIUM,
-        case Height.HIGH,
+        case LOW,
+        case MEDIUM,
+        case HIGH,
             break;
         default:    // warning: default label in switch which covers all enumeration value
             break;
@@ -428,15 +432,15 @@ func void demo_enum(Height h)
     // and each case statement starts its own scope.
     switch (h) 
     {
-        case Height.LOW:
+        case LOW:
             int a = 1;
             printf(&quot;A\n&quot;);
             next;
-        case Height.MEDIUM,
+        case MEDIUM,
             int a = 2;
             printf(&quot;B\n&quot;);
             next;
-        case Height.HIGH,
+        case HIGH,
             // a is not defined here
             printf(&quot;C\n&quot;);
     }
@@ -798,7 +802,7 @@ func void test()
         <a href="../modules/" class="btn btn-neutral float-right" title="Modules">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../changesfromc/" class="btn btn-neutral" title="Changes from C"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../compare/" class="btn btn-neutral" title="Comparisons with other languages"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -824,7 +828,7 @@ func void test()
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../changesfromc/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../compare/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../modules/" style="color: #fcfcfc">Next &raquo;</a></span>

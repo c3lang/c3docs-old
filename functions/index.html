@@ -82,6 +82,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../compare/">Comparisons with other languages</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../examples/">Examples</a>
                 </li>
                 <li class="">
@@ -126,10 +130,6 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../variables/">Variables</a>
-                </li>
-                <li class="">
-                    
     <a class="" href="../errorhandling/">Errors</a>
                 </li>
                 <li class="">
@@ -151,6 +151,10 @@
                 <li class="">
                     
     <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../macros/">Macros</a>
                 </li>
                 <li class="">
                     
@@ -339,8 +343,8 @@ func void varargsTyped(string bar, int... ints)
 
 func void test()
 {
-    varargsUntyped(&quot;Hello&quot;, 2, 1.0, cast(byte, 1), &quot;Test&quot;);
-    varargsTyped(&quot;Test&quot;, 2, cast(byte, 1));
+    varargsUntyped(&quot;Hello&quot;, 2, 1.0, cast(1, byte), &quot;Test&quot;);
+    varargsTyped(&quot;Test&quot;, 2, cast(1, byte));
     // The second parameter will be converted to an int implicitly.
 }
 </code></pre>

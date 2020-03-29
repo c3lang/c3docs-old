@@ -82,6 +82,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../compare/">Comparisons with other languages</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../examples/">Examples</a>
                 </li>
                 <li class="">
@@ -108,22 +112,6 @@
                     
     <a class="" href="../expressions/">Expressions</a>
                 </li>
-                <li class=" current">
-                    
-    <a class="current" href="./">Variables</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#variables">Variables</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l4" href="#managed-pointer-variables">Managed pointer variables</a></li>
-        
-        </ul>
-    
-
-    </ul>
-                </li>
                 <li class="">
                     
     <a class="" href="../errorhandling/">Errors</a>
@@ -147,6 +135,10 @@
                 <li class="">
                     
     <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../macros/">Macros</a>
                 </li>
                 <li class="">
                     
@@ -242,10 +234,6 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
-        
-          <li>Documentation &raquo;</li>
-        
-      
     
     <li>Variables</li>
     <li class="wy-breadcrumbs-aside">
@@ -258,67 +246,10 @@
             <div class="section">
               
                 <h1 id="variables">Variables</h1>
-<h2 id="managed-pointer-variables">Managed pointer variables</h2>
-<p>Managed pointer variables are introduced using <code>@</code> after the type, rather than <code>*</code> e.g. <code>Foo@ f</code>. A managed variable will automatically call the type's <code>release</code> member function on its value when the variable goes out of scope or is reassigned. If there is no <code>release</code> function, then <code>free</code> is called.</p>
-<pre><code>Foo@ f = Foo.alloc(); // * -&gt; @ no retain.
-Foo@ b = f;           // =&gt; f.retain(); b = f;
-f = nil;              // =&gt; f.release(); f = nil;
-</code></pre>
-
-<p>Any managed variable that goes out of the scope will automatically invoke <code>release</code>, as if the pointer was set to <code>nil</code>.</p>
-<pre><code>{
-    Foo@ b = Foo.alloc();
-} // Automatic invocation of b.release();
-</code></pre>
-
-<p>In order to return a managed pointer that can be used as a temporary, it's often convenient to mark the return value as managed.</p>
-<pre><code>func Foo@ createFoo()
-{
-    return Foo.alloc();
-}
-
-createFoo(); // Implicitly introduces a deferred release.
-</code></pre>
-
-<p>If we assign a managed pointer to a variable, the release/retain is elided</p>
-<pre><code>// The following becomes f1 = createFoo() - no deferred release or retains.
-Foo@ f1 = createFoo(); 
-</code></pre>
-
-<p>It's possible to manually manage a managed pointer:</p>
-<pre><code>Foo* f2 = createFoo().retain();
-f2.release(); // Required to prevent leaks.
-</code></pre>
-
-<p>A managed pointer may safely assigned to a regular pointer as long as it's not retained outside of the scope.</p>
-<pre><code>{
-    Foo* f3 = createFoo(); 
-    printf(&quot;%d&quot;, f3.someValue);
-    // Safe, since f3 isn't actually used after the scope.
-}
-
-Foo* unsafeFoo;
-{
-    unsafeFoo = createFoo();
-}
-// &lt;- access to unsafeFoo at this point will likely break things.
-</code></pre>
-
-<h3 id="managed-variables-not-pointers">Managed variables not pointers</h3>
-<p>Managed variables should not be confused with automatic reference counting and similar. It is not possible to – for example – to make a struct member a "managed" pointer. It is strictly limited to variables and return values.</p>
               
             </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../errorhandling/" class="btn btn-neutral float-right" title="Errors">Next <span class="icon icon-circle-arrow-right"></span></a>
-      
-      
-        <a href="../expressions/" class="btn btn-neutral" title="Expressions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
@@ -342,10 +273,6 @@ Foo* unsafeFoo;
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../expressions/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../errorhandling/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

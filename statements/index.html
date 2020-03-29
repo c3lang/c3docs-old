@@ -82,6 +82,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../compare/">Comparisons with other languages</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../examples/">Examples</a>
                 </li>
                 <li class="">
@@ -109,9 +113,7 @@
     
         <ul>
         
-            <li><a class="toctree-l4" href="#volatile-section">Volatile section</a></li>
-        
-            <li><a class="toctree-l4" href="#function-blocks">Function blocks</a></li>
+            <li><a class="toctree-l4" href="#expression-blocks">Expression blocks</a></li>
         
         </ul>
     
@@ -121,10 +123,6 @@
                 <li class="">
                     
     <a class="" href="../expressions/">Expressions</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../variables/">Variables</a>
                 </li>
                 <li class="">
                     
@@ -149,6 +147,10 @@
                 <li class="">
                     
     <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../macros/">Macros</a>
                 </li>
                 <li class="">
                     
@@ -261,29 +263,8 @@
               
                 <h1 id="statements">Statements</h1>
 <p>Statements largely work like in C, but with some additions.</p>
-<h2 id="volatile-section">Volatile section</h2>
-<p>Volatile sections replace volatile type qualifiers on variable types.</p>
-<pre><code>func void test()
-{
-    v = 0;
-    for (int i = 0; i &lt; 100; i++)
-    {
-        volatile
-        {
-            v = 1; 
-        }
-    }
-}
-</code></pre>
-
-<p>Note that volatile sections may also be used as expressions:</p>
-<pre><code>// The v = 1 assignment may not be optimized away,
-// But the assignment to x can be. 
-x = volatile(v = 1);
-</code></pre>
-
-<h2 id="function-blocks">Function blocks</h2>
-<p>Function blocks (delimited using <code>({ })</code>) are compound statements that opens its own function scope. Jumps cannot be done into or out of a function block, and <code>return</code> exits the block, rather than the function as a whole.</p>
+<h2 id="expression-blocks">Expression blocks</h2>
+<p>Expression blocks (delimited using <code>({ })</code>) are compound statements that opens its own function scope. Jumps cannot be done into or out of a function block, and <code>return</code> exits the block, rather than the function as a whole.</p>
 <p>The function below prints <code>World!</code></p>
 <pre><code>func void test()
 {
@@ -297,7 +278,7 @@ x = volatile(v = 1);
 }
 </code></pre>
 
-<p>Function blocks may also return values:</p>
+<p>Expression blocks may also return values:</p>
 <pre><code>func void test(int x)
 {
     int a = ({

@@ -82,6 +82,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../compare/">Comparisons with other languages</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../examples/">Examples</a>
                 </li>
                 <li class="">
@@ -109,6 +113,8 @@
         
             <li><a class="toctree-l4" href="#alias-and-function-types">Alias and function types</a></li>
         
+            <li><a class="toctree-l4" href="#distinct-types">Distinct types</a></li>
+        
             <li><a class="toctree-l4" href="#struct-types">Struct types</a></li>
         
             <li><a class="toctree-l4" href="#struct-subtyping">Struct subtyping</a></li>
@@ -118,6 +124,8 @@
             <li><a class="toctree-l4" href="#anonymous-sub-structs-unions">Anonymous sub-structs / unions</a></li>
         
             <li><a class="toctree-l4" href="#tagged-unions">Tagged unions</a></li>
+        
+            <li><a class="toctree-l4" href="#casting">Casting</a></li>
         
             <li><a class="toctree-l4" href="#conversion-to-symbol-to-type-and-back-with-type">Conversion to symbol to type and back with type</a></li>
         
@@ -146,10 +154,6 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../variables/">Variables</a>
-                </li>
-                <li class="">
-                    
     <a class="" href="../errorhandling/">Errors</a>
                 </li>
                 <li class="">
@@ -171,6 +175,10 @@
                 <li class="">
                     
     <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../macros/">Macros</a>
                 </li>
                 <li class="">
                     
@@ -396,6 +404,14 @@ func c_int stat(const c_char* pathname, Stat* buf);
 <li>8 character strings, e.g. <code>'FOOBAR11'</code> converts to an ulong or long.</li>
 </ul>
 <p>Conversion is always done so that the character string has the correct ordering in memory. This means that the same characters may have different integer values on different architectures due to endianess.</p>
+<h5 id="base64-and-hex-data-literals">Base64 and hex data literals</h5>
+<p>Base64 encoded values work like TwoCC/FourCC/EightCC, in that is it laid out in byte order in memory. It uses the format <code>'&lt;base64&gt;'b64</code>. Hex encoded values work as base64 but with the format <code>'&lt;hex&gt;'x</code>. In data literals any whitespace is ignored, so <code>'00 00 11'x</code> encodes to the same value as <code>'000011'x</code>.</p>
+<p>In our case we could encode <code>'Rk9PQkFSMTE='b64</code> as <code>'FOOBAR11'</code>.</p>
+<p>Base64 and hex data literals also has a form to allow initializing byte and char arrays, instead of enclosing the data in <code>''</code>, enclose the data in <code>""</code></p>
+<pre><code>byte[] hello_world_base64 = &quot;SGVsbG8gV29ybGQh&quot;b64;
+char[] hello_world_hex = &quot;4865 6c6c 6f20 776f 726c 6421&quot;x;
+</code></pre>
+
 <h5 id="floating-point-types">Floating point types</h5>
 <table>
 <thead>
@@ -502,6 +518,38 @@ func c_int stat(const c_char* pathname, Stat* buf);
 </code></pre>
 
 <p>Enum constants are namespaces by default, just like C++'s class enums. So accessing the enums above would for example use <code>State.PENDING</code> rather than <code>PENDING</code>.</p>
+<h3 id="enum-type-inference">Enum type inference</h3>
+<p>When an enum is used in where the type can be inferred, like in case-clauses or in variable assignment, it is allowed to drop the enum name:</p>
+<pre><code>State foo = PENDING; // State.PENDING is inferred.
+switch (foo)
+{
+    case RUNNING: // State.RUNNING is inferred
+        ...
+    default:
+        ...
+}
+
+func void test(State s) { ... }
+
+...
+
+test(RUNNING); // State.RUNNING is inferred
+</code></pre>
+
+<p>In the case that it collides with a global in the same scope, it needs the qualifier:</p>
+<pre><code>module test;
+
+func void testState(State s) { ... }
+
+State RUNNING = State.TERMINATED; // Don't do this!
+
+... 
+
+test(RUNNING); // Ambiguous
+test(test::RUNNING); // Uses global.
+test(State.RUNNING); // Uses enum constant.
+</code></pre>
+
 <h2 id="error">Error</h2>
 <p>Error types are similar to enums, and are used for error returns.</p>
 <pre><code>error IOError
@@ -523,6 +571,16 @@ typedef int[10] as Numbers;
 <p>This defines an alias to function pointer type of a function that returns nothing and requires two arguments: an int and a bool. Here is a sample usage:</p>
 <pre><code>Callback cb = my_callback;
 cb(10, false);
+</code></pre>
+
+<h2 id="distinct-types">Distinct types</h2>
+<p><code>typedef</code> may also be used to create distinct new types. They do not implicitly convert to any other type, but may be used as the underlying type.</p>
+<pre><code>typedef int as Foo distinct;
+Foo f = 0;
+f = f + 1;
+int i = 1;
+// f = f + i Error!
+f = f + cast(i, Foo); // Valid
 </code></pre>
 
 <h2 id="struct-types">Struct types</h2>
@@ -615,6 +673,12 @@ io.printf(&quot;%d&quot;, i.as_byte);
 <h2 id="tagged-unions">Tagged unions</h2>
 <p>In C, using structs with an enum value to indicate type is common practice. C3 also offers tagged unions, which is formalizing this within the language:</p>
 <p>TBD: Exact syntax (see the <a href="../ideas">ideas</a> page)</p>
+<h2 id="casting">Casting</h2>
+<p>Casting does not use the C-style <code>(NewType) var</code> instead uses <code>cast(&lt;expression&gt;, &lt;Type&gt;)</code></p>
+<pre><code>float f = 2.0;
+int i = cast(f, int);
+</code></pre>
+
 <h2 id="conversion-to-symbol-to-type-and-back-with-type">Conversion to symbol to type and back with <code>type</code></h2>
 <p>Macros and compile time constants may occasionally contain type <em>symbols</em>. To convert back and forth, the <code>type</code> operator is used.</p>
 <pre><code>macro @test($i)
@@ -660,7 +724,7 @@ func void test()
     set_coordinates(v);   // valid
     set_coordinates(v3);  // ERROR, no structural equivalence.
     struct { int i; int j; } xy = v2;
-    v = cast(struct { int, int }, v2);
+    v = cast(v2, struct { int, int });
 }
 </code></pre>
               

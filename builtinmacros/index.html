@@ -82,6 +82,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../compare/">Comparisons with other languages</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../examples/">Examples</a>
                 </li>
                 <li class="">
@@ -110,10 +114,6 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../variables/">Variables</a>
-                </li>
-                <li class="">
-                    
     <a class="" href="../errorhandling/">Errors</a>
                 </li>
                 <li class="">
@@ -134,8 +134,6 @@
         <ul>
         
             <li><a class="toctree-l4" href="#bitcast">@bitcast</a></li>
-        
-            <li><a class="toctree-l4" href="#cast">@cast</a></li>
         
             <li><a class="toctree-l4" href="#describe">@describe</a></li>
         
@@ -161,6 +159,10 @@
                 <li class="">
                     
     <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../macros/">Macros</a>
                 </li>
                 <li class="">
                     
@@ -285,15 +287,8 @@
 <h3 id="bitcast">@bitcast</h3>
 <p>Bitcast reinterprets the contents of a variable without any conversion. Bitsize must be the same for both types.</p>
 <pre><code>float f = 12.3;
-int i = @bitcast(int, f);
+int i = @bitcast(f, int);
 printf(&quot;%x&quot;, i); // Prints 4144cccd
-</code></pre>
-
-<h3 id="cast">@cast</h3>
-<p>Cast one type to the other using the default conversion rules. Bit extension or truncation may occur.</p>
-<pre><code>float f = 12.3;
-int i = @cast(int, f);
-printf(&quot;%d&quot;, i); // Prints 12
 </code></pre>
 
 <h3 id="describe">@describe</h3>

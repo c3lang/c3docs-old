@@ -82,6 +82,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../compare/">Comparisons with other languages</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../examples/">Examples</a>
                 </li>
                 <li class="">
@@ -110,10 +114,6 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../variables/">Variables</a>
-                </li>
-                <li class="">
-                    
     <a class="" href="../errorhandling/">Errors</a>
                 </li>
                 <li class="">
@@ -135,6 +135,38 @@
                 <li class="">
                     
     <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Macros</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#macros">Macros</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#top-level-evaluation">Top level evaluation</a></li>
+        
+            <li><a class="toctree-l4" href="#macro-declarations">Macro declarations</a></li>
+        
+            <li><a class="toctree-l4" href="#method-macros">Method macros</a></li>
+        
+            <li><a class="toctree-l4" href="#capturing-a-macro-body">Capturing a macro body</a></li>
+        
+            <li><a class="toctree-l4" href="#macros-returning-values">Macros returning values</a></li>
+        
+            <li><a class="toctree-l4" href="#calling-macros">Calling macros</a></li>
+        
+            <li><a class="toctree-l4" href="#macro-directives">Macro directives</a></li>
+        
+            <li><a class="toctree-l4" href="#escape-macros">Escape macros</a></li>
+        
+            <li><a class="toctree-l4" href="#conditional-macros-at-the-top-level">Conditional macros at the top level</a></li>
+        
+        </ul>
+    
+
+    </ul>
                 </li>
                 <li class="">
                     
@@ -230,6 +262,10 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
+        
+          <li>Documentation &raquo;</li>
+        
+      
     
     <li>Macros</li>
     <li class="wy-breadcrumbs-aside">
@@ -242,23 +278,23 @@
             <div class="section">
               
                 <h1 id="macros">Macros</h1>
-<p><strong>May be subject to later revision</strong></p>
-<p>The macro capabilities of C3 reaches across several constructs: macros (prefixed with <code>@</code>), <a href="../generics/#generic-functions">generic functions</a>, <a href="../generics/#generic-modules">generic modules</a>, compile time variables (prefixed with <code>$e</code>), macro compile time execution (using <code>$if</code>, <code>$each</code>, <code>$switch</code>), attributes and incremental structs, enums and arrays.</p>
+<p><strong>WILL be subject to later revision!</strong></p>
+<p>The macro capabilities of C3 reaches across several constructs: macros (prefixed with <code>@</code> at invocation), <a href="../generics/#generic-functions">generic functions</a>, <a href="../generics/#generic-modules">generic modules</a>, compile time variables (prefixed with <code>$e</code>), macro compile time execution (using <code>$if</code>, <code>$each</code>, <code>$switch</code>), attributes and incremental structs, enums and arrays.</p>
 <h2 id="top-level-evaluation">Top level evaluation</h2>
 <p>Script languages, and also upcoming languages like <em>Jai</em>, usually have unbounded top level evaluation. The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. </p>
 <p>In C3, top level compile time evaluation is limited to <code>$if</code> and <code>$switch</code> constructs. This makes the code easier to read by sacrificing flexibility. However, the incremental structs, enums and arrays provided by the compiler offers a way to build compile time structures without the necessity for full meta programming capabilities.</p>
 <h2 id="macro-declarations">Macro declarations</h2>
-<p>A macro is defined using <code>macro @&lt;name&gt;(&lt;parameters&gt;)</code>. All user defined macros use the @ symbol.</p>
+<p>A macro is defined using <code>macro &lt;name&gt;(&lt;parameters&gt;)</code>. All user defined macros use the @ symbol.</p>
 <p>The parameters have different sigils: <code>$</code> means compile time evaluated (captured variable, symbol or expression). Any parameters without sigils are passed by <em>value</em>, as if it was a normal function parameter.</p>
 <p>A basic swap:</p>
 <pre><code>/**
- * @ensure parse($a = $b), parse($b = $a)
+ * @ensure parse(a = b), parse(b = a)
  */
-macro void @swap($a, $b)
+macro void swap($a, $b)
 {
-    typeof($a) temp = $a;
-    $a = $b;
-    $b = temp;
+    typeof(a) temp = a;
+    a = b;
+    b = temp;
 }
 </code></pre>
 
@@ -283,7 +319,7 @@ func void test()
 </code></pre>
 
 <p>Note the necessary <code>$</code>. Here is an incorrect swap and what it would expand to:</p>
-<pre><code>macro void @badswap(a, b)
+<pre><code>macro void badswap(auto a, auto b)
 {
     typeof(a) temp = a;
     a = b;
@@ -315,15 +351,14 @@ func void test()
 <p>Similar to <em>method functions</em> a macro may also be associated with a particular type:</p>
 <pre><code>struct Foo { ... }
 
-macro Foo.@generate(Foo *foo) { ... }
-
+macro Foo.generate(Foo *foo) { ... }
 Foo f;
-f.@generate();
+@f.generate();
 </code></pre>
 
 <h2 id="capturing-a-macro-body">Capturing a macro body</h2>
 <p>It is often useful for a macro to take a trailing compound statement as an argument. In C++ the pattern is usually expressed with a lambda, but in C3 this is completely inlined.</p>
-<p>For macros we add a trailing parameter in the format: <code>: var1, var2, ...</code>. Each declaration is an argument that macro will provide.</p>
+<p>Any macro that takes a macro in the last position may be expressed as a trailing body instead. When the call puts the parameters for the trailing macro after <code>;</code>.</p>
 <p>Here's an example to illustrate it the use:</p>
 <pre><code>/**
  * A macro looping through a list of values, executing the body once
@@ -331,18 +366,18 @@ f.@generate();
  *
  * @ensure parse(int i = a.len), parse(value2 = a[i])
  */
-macro @foreach(a : value1, value2)
+macro foreach(auto a, macro void(value, value) foo)
 {
     for (int i = 0; i &lt; a.len; i++)
     {
-        yield(i, a[i]);
+        @body(i, a[i]);
     }
 }
 
 func void test()
 {
     double[] a = { 1.0, 2.0, 3.0 };
-    @foreach(a : int index, double value)
+    @foreach(a; int index, double value)
     {
         printf(&quot;a[%d] = %f\n&quot;, index, value);
     }
@@ -395,7 +430,7 @@ macro @squarePlusOne(x)
 <p>Inside of a macro, we can use the compile time statements <code>$if</code>, <code>$each</code> and <code>$switch</code>. Macros may also be recursively invoked. As previously mentioned, <code>$if</code> and <code>$switch</code> may also be invoked on the top level.</p>
 <h3 id="if-else-and-elif">$if, $else and $elif</h3>
 <p><code>$if (&lt;const expr&gt;)</code> takes a compile time constant value and evaluates it to true or false.</p>
-<pre><code>macro @foo($X, $y)
+<pre><code>macro @foo($x, $y)
 {
     $if ($x &gt; 3)
     {
@@ -467,7 +502,7 @@ func void test()
 {
     $each($some_enum as $x)  
     {
-        printf(&quot;%d\n&quot;, cast(int, $x));     
+        printf(&quot;%d\n&quot;, cast($x, int));     
     }
 }
 
@@ -481,8 +516,8 @@ func void test()
 {
     @foo_enum(MyEnum);
     // Expands to -&gt;
-    // printf(&quot;%d\n&quot;, cast(int, MyEnum.A));
-    // printf(&quot;%d\n&quot;, cast(int, MyEnum.B));    
+    // printf(&quot;%d\n&quot;, cast(MyEnum.A, int));
+    // printf(&quot;%d\n&quot;, cast(MyEnum.B, int));    
 }
 </code></pre>
 
@@ -697,6 +732,15 @@ const string[] SPECIAL_STRUCTS = @specialStructs();
           </div>
           <footer>
   
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../preconditions/" class="btn btn-neutral float-right" title="Pre and post conditions">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../generics/" class="btn btn-neutral" title="Generics"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
 
   <hr/>
 
@@ -719,6 +763,10 @@ const string[] SPECIAL_STRUCTS = @specialStructs();
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
+        <span><a href="../generics/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../preconditions/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

@@ -82,6 +82,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../compare/">Comparisons with other languages</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../examples/">Examples</a>
                 </li>
                 <li class="">
@@ -110,10 +114,6 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../variables/">Variables</a>
-                </li>
-                <li class="">
-                    
     <a class="" href="../errorhandling/">Errors</a>
                 </li>
                 <li class="">
@@ -135,6 +135,10 @@
                 <li class="">
                     
     <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../macros/">Macros</a>
                 </li>
                 <li class="">
                     
@@ -196,9 +200,7 @@
     
         <ul>
         
-            <li><a class="toctree-l4" href="#compile">compile</a></li>
-        
-            <li><a class="toctree-l4" href="#compile-run">compile-run</a></li>
+            <li><a class="toctree-l4" href="#run">run</a></li>
         
             <li><a class="toctree-l4" href="#common-additional-parameters">Common additional parameters</a></li>
         
@@ -208,7 +210,7 @@
         
             <li><a class="toctree-l4" href="#clean">clean</a></li>
         
-            <li><a class="toctree-l4" href="#run">run</a></li>
+            <li><a class="toctree-l4" href="#build-run">build-run</a></li>
         
             <li><a class="toctree-l4" href="#clean-run">clean-run</a></li>
         
@@ -278,12 +280,12 @@
             <div class="section">
               
                 <h1 id="build-commands">Build Commands</h1>
-<p>When starting out, with C3 it's natural to use <code>compile</code> and <code>compile-run</code> to try things out. For larger projects, the built-in build system is instead recommended.</p>
-<h2 id="compile">compile</h2>
-<p>The default for c3c is compiling stand-alone files to output a binary.</p>
-<p><code>c3c compile &lt;file1&gt; &lt;file2&gt; &lt;file3&gt;</code></p>
-<h2 id="compile-run">compile-run</h2>
-<p>The same as <code>compile</code> but then also runs the executable.</p>
+<p>When starting out, with C3 it's natural to use <code>run</code> to try things out. For larger projects, the built-in build system is instead recommended. </p>
+<p>By default the compiler is compiling stand-alone files to output an executable binary.</p>
+<p><code>c3c &lt;file1&gt; &lt;file2&gt; &lt;file3&gt;</code></p>
+<h2 id="run">run</h2>
+<p>The run command works same as compilation, but also immediately runs the resulting executable.</p>
+<p><code>c3c run &lt;file1&gt; &lt;file2&gt; &lt;file3&gt;</code></p>
 <h2 id="common-additional-parameters">Common additional parameters</h2>
 <p>Additional parameters:
 - <code>--lib &lt;path&gt;</code> add a library to search.
@@ -328,8 +330,8 @@
 <p>The built in templates define two targets: <code>debug</code> (which is the default) and <code>release</code>.</p>
 <h2 id="clean">clean</h2>
 <p><code>clean</code></p>
-<h2 id="run">run</h2>
-<p><code>run [target]</code></p>
+<h2 id="build-run">build-run</h2>
+<p><code>build-run [target]</code></p>
 <p>Build the target (if needed) and run the executable.</p>
 <h2 id="clean-run">clean-run</h2>
 <p><code>clean-run [target]</code></p>

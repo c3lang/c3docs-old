@@ -82,6 +82,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../compare/">Comparisons with other languages</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../examples/">Examples</a>
                 </li>
                 <li class="">
@@ -110,10 +114,6 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../variables/">Variables</a>
-                </li>
-                <li class="">
-                    
     <a class="" href="../errorhandling/">Errors</a>
                 </li>
                 <li class="">
@@ -135,6 +135,10 @@
                 <li class="">
                     
     <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../macros/">Macros</a>
                 </li>
                 <li class="">
                     
@@ -274,7 +278,7 @@
 <p>As a basic rule, all identifiers are limited to a-z, A-Z, 0-9 and <code>_</code>. The initial character can not be a number. Furthermore, all identifiers are limited to 31 character.</p>
 <h3 id="structs-unions-enums-and-errors">Structs, unions, enums and errors</h3>
 <p>All user defined types must start with A-Z after any optional initial <code>_</code> and include at least 1 lower case letter. <code>Bar</code>, <code>_T_i12</code> and <code>TTi</code> are all valid names. <code>_1</code>, <code>bAR</code> and <code>BAR</code> are not. For C-compatibility it's possible to alias the type to a C name using the attribute "cname".</p>
-<pre><code>struct Foo @(cname = &quot;foo&quot;)
+<pre><code>struct Foo @cname(&quot;foo&quot;)
 {
     int x;
     Bar bar;

@@ -82,6 +82,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../compare/">Comparisons with other languages</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../examples/">Examples</a>
                 </li>
                 <li class="">
@@ -110,10 +114,6 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../variables/">Variables</a>
-                </li>
-                <li class="">
-                    
     <a class="" href="../errorhandling/">Errors</a>
                 </li>
                 <li class="">
@@ -135,6 +135,10 @@
                 <li class="">
                     
     <a class="" href="../generics/">Generics</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../macros/">Macros</a>
                 </li>
                 <li class="">
                     
@@ -167,15 +171,23 @@
         
             <li><a class="toctree-l4" href="#compile-time-run-include">Compile time run-include</a></li>
         
+            <li><a class="toctree-l4" href="#type-functions">Type functions</a></li>
+        
             <li><a class="toctree-l4" href="#macro-text-interpolation">Macro text interpolation</a></li>
         
             <li><a class="toctree-l4" href="#implicit-this-in-method-functions">Implicit "this" in method functions</a></li>
+        
+            <li><a class="toctree-l4" href="#managed-pointer-variables">Managed pointer variables</a></li>
         
             <li><a class="toctree-l4" href="#c-interop">C interop</a></li>
         
             <li><a class="toctree-l4" href="#unsorted">Unsorted</a></li>
         
             <li><a class="toctree-l4" href="#halloc">Halloc</a></li>
+        
+            <li><a class="toctree-l4" href="#removal-of-the-volatile-type-qualifier">Removal of the volatile type qualifier</a></li>
+        
+            <li><a class="toctree-l4" href="#volatile-section">Volatile section</a></li>
         
             <li><a class="toctree-l4" href="#interfaces">Interfaces</a></li>
         
@@ -346,6 +358,24 @@ func void test()
 <pre><code>@run_include(&quot;foo.sh&quot;, $some_param, &quot;-x&quot;, $another_param);
 </code></pre>
 
+<h2 id="type-functions">Type functions</h2>
+<p>Since static methods are out, it's natural to allow static values from the type, e.g.</p>
+<pre><code>struct Foo { ... }
+
+...
+
+Foo *foo = malloc(Foo.sizeof)
+</code></pre>
+
+<p>There are a lot of type functions possible:</p>
+<ul>
+<li>sizeof</li>
+<li>offsetof</li>
+<li>name</li>
+<li>description</li>
+<li>elements</li>
+</ul>
+<p>There doesn't seem to be a need for applying this to non base type, but it should probably be allowed, e.g. <code>(Foo*).sizeof</code></p>
 <h2 id="macro-text-interpolation">Macro text interpolation</h2>
 <p>For certain cases, pure text interpolation might be needed. Within macros, any text within <code>``</code> can be evaluated and parsed.</p>
 <pre><code>macro void @foo($x, #f)
@@ -404,6 +434,54 @@ func Foo.next(Foo*)
 }
 </code></pre>
 
+<h2 id="managed-pointer-variables">Managed pointer variables</h2>
+<p>Managed pointer variables are introduced using <code>@</code> after the type, rather than <code>*</code> e.g. <code>Foo@ f</code>. A managed variable will automatically call the type's <code>release</code> member function on its value when the variable goes out of scope or is reassigned. If there is no <code>release</code> function, then <code>free</code> is called.</p>
+<pre><code>Foo@ f = Foo.alloc(); // * -&gt; @ no retain.
+Foo@ b = f;           // =&gt; f.retain(); b = f;
+f = nil;              // =&gt; f.release(); f = nil;
+</code></pre>
+
+<p>Any managed variable that goes out of the scope will automatically invoke <code>release</code>, as if the pointer was set to <code>nil</code>.</p>
+<pre><code>{
+    Foo@ b = Foo.alloc();
+} // Automatic invocation of b.release();
+</code></pre>
+
+<p>In order to return a managed pointer that can be used as a temporary, it's often convenient to mark the return value as managed.</p>
+<pre><code>func Foo@ createFoo()
+{
+    return Foo.alloc();
+}
+
+createFoo(); // Implicitly introduces a deferred release.
+</code></pre>
+
+<p>If we assign a managed pointer to a variable, the release/retain is elided</p>
+<pre><code>// The following becomes f1 = createFoo() - no deferred release or retains.
+Foo@ f1 = createFoo(); 
+</code></pre>
+
+<p>It's possible to manually manage a managed pointer:</p>
+<pre><code>Foo* f2 = createFoo().retain();
+f2.release(); // Required to prevent leaks.
+</code></pre>
+
+<p>A managed pointer may safely assigned to a regular pointer as long as it's not retained outside of the scope.</p>
+<pre><code>{
+    Foo* f3 = createFoo(); 
+    printf(&quot;%d&quot;, f3.someValue);
+    // Safe, since f3 isn't actually used after the scope.
+}
+
+Foo* unsafeFoo;
+{
+    unsafeFoo = createFoo();
+}
+// &lt;- access to unsafeFoo at this point will likely break things.
+</code></pre>
+
+<h3 id="managed-variables-not-pointers">Managed variables not pointers</h3>
+<p>Managed variables should not be confused with automatic reference counting and similar. It is not possible to – for example – to make a struct member a "managed" pointer. It is strictly limited to variables and return values.</p>
 <h2 id="c-interop">C interop</h2>
 <p>Steps:</p>
 <ol>
@@ -425,7 +503,7 @@ func Foo.next(Foo*)
 <h2 id="halloc">Halloc</h2>
 <p>Hierarchal memory allocation http://swapped.cc/#!/halloc support it?</p>
 <h5 id="unsigned-conversion-to-signed">Unsigned conversion to signed</h5>
-<p>Perhaps consider signed, rather than unsigned implicit conversion. Currently <code>ulong + long</code> becomes <code>ulong + @cast(ulong, long)</code> (according to C rules). Consider changing that to <code>@cast(long, ulong) + long</code>. That is, instead of "unsigned wins", use "signed wins".</p>
+<p>Perhaps consider signed, rather than unsigned implicit conversion. Currently <code>ulong + long</code> becomes <code>ulong + cast(long, ulong)</code> (according to C rules). Consider changing that to <code>cast(ulong, long) + long</code>. That is, instead of "unsigned wins", use "signed wins".</p>
 <h5 id="tagged-any">Tagged any</h5>
 <p>A tagged pointer union type for any possible type.</p>
 <h5 id="require-explicit-uninitialization">Require explicit uninitialization</h5>
@@ -561,6 +639,57 @@ switch(@tag(foo))
     }
     byte kind;
 }
+</code></pre>
+
+<h2 id="removal-of-the-volatile-type-qualifier">Removal of the volatile type qualifier</h2>
+<p>The volatile type qualifier is replaced by volatile sections. A volatile section is guaranteed to not be optimized away.</p>
+<pre><code>\\ C volatile
+void test()
+{
+    volatile v = 0;
+    for (int i = 0; i &lt; 100; i++)
+    {
+        // Usually this would be optimized away,
+        // but volatile will ensure it is executed.
+        v = 1; 
+    }
+}
+
+\\ C3
+func void test()
+{
+    v = 0;
+    for (int i = 0; i &lt; 100; i++)
+    {
+        // Everything in the block
+        // will avoid optimization
+        @volatile
+        {
+            v = 1; 
+        }
+    }
+}
+</code></pre>
+
+<h2 id="volatile-section">Volatile section</h2>
+<p>Volatile sections replace volatile type qualifiers on variable types.</p>
+<pre><code>func void test()
+{
+    v = 0;
+    for (int i = 0; i &lt; 100; i++)
+    {
+        volatile
+        {
+            v = 1; 
+        }
+    }
+}
+</code></pre>
+
+<p>Note that volatile sections may also be used as expressions:</p>
+<pre><code>// The v = 1 assignment may not be optimized away,
+// But the assignment to x can be. 
+x = volatile(v = 1);
 </code></pre>
 
 <h2 id="interfaces">Interfaces</h2>
@@ -804,100 +933,6 @@ foreach(list, Element *i) // &lt;- Note type declaration!
 </code></pre>
 
 <p>In this case <code>$element_type</code> works like "auto", but is also assigned the type, which then can be referred to in the signature.</p>
-<h3 id="yet-another-way-to-do-macros-d">Yet another way to do macros :D</h3>
-<p>This was an older attempt...</p>
-<p>First, we have to consider macros as always expanding where they are referenced to keep it simple.</p>
-<pre><code>macro @foo(int v) 
-{
-    v++;
-    if (v &gt; 10) return 10;
-    return v;
-}
-
-func void test()
-{
-    int a = 10;
-    @foo(a);
-}
-</code></pre>
-
-<p>This code would then be exactly equal to:</p>
-<pre><code>func void test()
-{
-    int a = 10;
-    a++;
-    if (a &gt; 10) return 10;
-}
-</code></pre>
-
-<p>Macros simply expand in place.</p>
-<p>Secondly, we can have macros returning values:</p>
-<pre><code>macro int @foo2(int v, int w) 
-{
-    v++;
-    if (v &gt; 10) return 10;
-    w += 3;
-    return 0;
-}
-
-func void test()
-{
-    int d = 0;
-    int a = 10;
-    int b = @foo(a, d);
-}
-</code></pre>
-
-<p>This expands to:</p>
-<pre><code>func void test()
-{
-    int d = 0;
-    int a = 10;
-    a++
-    int b;
-    if (a &gt; 10) 
-    {
-        b = 10;
-    } 
-    else 
-    {
-        b = 0;
-        d += 3;
-    }
-}
-</code></pre>
-
-<p>Note that I'm using a sigil to indicate the code expansion to make macros more obvious.</p>
-<p>We can allow the macro to take a body (here I'm calling the type of the body "{}")</p>
-<pre><code>macro int @foo3(int a, {} body)
-{
-    while (a &gt; 10) 
-    {
-        a--;
-        @body(); // Like a macro!
-    }
-}
-
-func void test()
-{
-    b = 20;
-    @foo3(b) {
-        print(b);
-    }
-}
-</code></pre>
-
-<p>We expand this to:</p>
-<pre><code>func void test()
-{
-    b = 20;
-    while (b &gt; 10) {
-        b--;
-        print(b);
-    }
-}
-</code></pre>
-
 <h4 id="stepwise-from-c-macros-into-c3-macros">Stepwise from C macros into C3 macros</h4>
 <pre><code>#define ADD_TO(x, y) {
     x += y;
@@ -1130,7 +1165,7 @@ macro @foo_enum(&amp;a)
 {
     $EACH(a AS $x)  
     {
-        printf(&quot;%d\n&quot;, @cast(int, $x));     
+        printf(&quot;%d\n&quot;, cast($x, int));      
     }
 }
 
@@ -1149,9 +1184,9 @@ func void test()
 // Expands to
 func void test()
 {
-    printf(&quot;%d\n&quot;, @cast(int, A));
-    printf(&quot;%d\n&quot;, @cast(int, B));
-    printf(&quot;%d\n&quot;, @cast(int, FOO));
+    printf(&quot;%d\n&quot;, cast(A, int));
+    printf(&quot;%d\n&quot;, cast(B, int));
+    printf(&quot;%d\n&quot;, cast(FOO, int));
 }
 </code></pre>
 
