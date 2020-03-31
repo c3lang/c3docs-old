@@ -264,34 +264,25 @@
                 <h1 id="undefined-behaviour">Undefined behaviour</h1>
 <p>Like C, C3 uses undefined behaviour. In contrast, C3 will <em>trap</em> - that is, print an error trace and abort – on undefined behaviour in debug builds. This is similar to using C with a UB sanitizer. It is only during release builds that actual undefined behaviour occurs.</p>
 <p>In C3, undefined behaviour means that the compiler is free to interpret <em>undefined behaviour as if behaviour cannot occur</em>.</p>
-<p>In the example below, a ushort is compared to a short:</p>
-<pre><code>ushort u = foo();
-short s = bar();
-if (s &lt; 0 &amp;&amp; u &gt; s) return 1;
-return 0;
+<p>In the example below:</p>
+<pre><code>uint x = foo();
+uint z = x + 1;
+if (x == 0xFFFF) return bar();
+return 1;
 </code></pre>
 
-<p>In this example we know that for the result <code>1</code></p>
-<ol>
-<li><code>s &lt; 0</code></li>
-<li><code>u &gt; s</code></li>
-</ol>
-<p>The comparison between <code>u</code> and <code>s</code> will cast <code>u</code> to a short. For any value u &gt;= 0x8000 this will overflow, and with 2s complement we know that this will yield a negative value. However, overflow on implicit cast of unsigned -&gt; signed is undefined behaviour (see <a href="../conversion">conversions</a>). This means that the compiler is allowed to assume that overflow never happens. Consequently the code can be reduced to the following in release builds:</p>
-<pre><code>ushort u = foo();
-short s = bar();
-if (s &lt; 0) return 1;
-return 0;
+<p>The case of <code>x == 0xFFFF</code> would invoke undefined behaviour (due to overflow) for the assignment to <code>z</code>. For that reason, 
+the compiler may assume that <code>x &lt; 0xFFFF</code> and compile it into the following code: </p>
+<pre><code>foo();
+return 1;
 </code></pre>
 
 <p>As a contrast, the debug build will compile code equivalent to the following.</p>
-<pre><code>ushort u = foo();
-short s = bar();
-if (s &lt; 0)
-{
-    if (u &gt;= 0x0800) trap(&quot;Unsigned to signed conversion overflow.&quot;);
-    return 1;
-}
-return 0;
+<pre><code>uint x = foo();
+uint z;
+if (!@add_overflow(&amp;z, x, 1)) trap(&quot;Unsigned overflow&quot;);
+if (x == 0xFFFF) return bar();
+return 1;
 </code></pre>
 
 <h2 id="list-of-undefined-behaviours">List of undefined behaviours</h2>

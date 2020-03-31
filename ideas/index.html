@@ -161,6 +161,8 @@
         
             <li><a class="toctree-l4" href="#polymorphic-functions">Polymorphic functions</a></li>
         
+            <li><a class="toctree-l4" href="#allow-narrowing-conversions-for-floats">Allow narrowing conversions for floats</a></li>
+        
             <li><a class="toctree-l4" href="#tests-built-in">Tests built in</a></li>
         
             <li><a class="toctree-l4" href="#allow-variable-alias">Allow variable alias</a></li>
@@ -342,6 +344,8 @@ func void test()
 }
 </code></pre>
 
+<h2 id="allow-narrowing-conversions-for-floats">Allow narrowing conversions for floats</h2>
+<p>Narrowing conversions for double -&gt; float are common and might not be sufficiently important to do explicitly.</p>
 <h2 id="tests-built-in">Tests built in</h2>
 <p>Unit tests built in as an integral part of the language like D.</p>
 <h2 id="allow-variable-alias">Allow variable alias</h2>
@@ -815,7 +819,7 @@ Renderer*[4] renderers;
 </code></pre>
 
 <h2 id="built-in-maps">Built in maps</h2>
-<p>Same reasoing as arrays. Question about memory management is the same.</p>
+<p>Same reasoning as arrays. Question about memory management is the same.</p>
 <pre><code>int[int] map; // Built-in maps
 map[1] = 11;
 // Retrieving a value
@@ -942,7 +946,7 @@ ADD_TO(x, 1)
 </code></pre>
 
 <p>The { } introduces a multiline macro that does not need explicit linebreaks.</p>
-<p>No, add the "$" symbol to introduce hygienic temporaries:</p>
+<p>Now, add the "$" symbol to introduce hygienic temporaries:</p>
 <pre><code>#define SWAP(x, y) {
     typeof(x) $tmp = x;
     x = y;

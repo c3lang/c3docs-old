@@ -280,15 +280,16 @@
 <p>C3 differs in some crucial respects when it comes to number conversions and promotions. These are the rules for C3:</p>
 <ul>
 <li>float to int conversions require a cast</li>
-<li>float to boolean conversions <em>do not</em> require a cast.</li>
 <li>int to float conversions do not require a cast</li>
 <li>bool to float converts to 0.0 / 1.0</li>
-<li>double to float conversion is allowed, but may be set to warn</li>
+<li>widening float conversions do <em>not</em> require a cast</li>
 <li>narrowing integer conversions require a cast</li>
 <li>widening conversions do <em>not</em> require a cast</li>
 <li>signed -&gt; unsigned conversions must be explicit</li>
 <li>unsigned -&gt; signed conversions do <em>not</em> need to be explicit if all unsigned values can be contained inside of the signed type. </li>
-<li>float to bool <em>do not</em> require a cast, any non zero float value considered true</li>
+<li>In conditionals float to bool <em>do not</em> require a cast, any non zero float value considered true</li>
+<li>Implicit conversion to bool only occurs in conditionals 
+  or when the value is enclosed in <code>()</code> e.g. <code>bool x = (1.0)</code> or <code>if (1.0) { ... }</code></li>
 </ul>
 <p>C3 uses two's complement arithmetic for all integer math.</p>
 <h2 id="signedunsigned-int-conversions">Signed/unsigned int conversions</h2>
@@ -297,7 +298,6 @@
 <thead>
 <tr>
 <th align="center"></th>
-<th align="center">bool</th>
 <th align="center">byte</th>
 <th align="center">ushort</th>
 <th align="center">uint</th>
@@ -310,19 +310,6 @@
 </thead>
 <tbody>
 <tr>
-<td align="center">bool</td>
-<td align="center">bool</td>
-<td align="center">byte</td>
-<td align="center">ushort</td>
-<td align="center">uint</td>
-<td align="center">ulong</td>
-<td align="center">char</td>
-<td align="center">short</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">byte</td>
 <td align="center">byte</td>
 <td align="center">byte</td>
 <td align="center">ushort</td>
@@ -337,7 +324,6 @@
 <td align="center">ushort</td>
 <td align="center">ushort</td>
 <td align="center">ushort</td>
-<td align="center">ushort</td>
 <td align="center">uint</td>
 <td align="center">ulong</td>
 <td align="center">-</td>
@@ -350,7 +336,6 @@
 <td align="center">uint</td>
 <td align="center">uint</td>
 <td align="center">uint</td>
-<td align="center">uint</td>
 <td align="center">ulong</td>
 <td align="center">-</td>
 <td align="center">-</td>
@@ -363,14 +348,12 @@
 <td align="center">ulong</td>
 <td align="center">ulong</td>
 <td align="center">ulong</td>
-<td align="center">ulong</td>
 <td align="center">-</td>
 <td align="center">-</td>
 <td align="center">-</td>
 <td align="center">-</td>
 </tr>
 <tr>
-<td align="center">char</td>
 <td align="center">char</td>
 <td align="center">-</td>
 <td align="center">-</td>
@@ -384,7 +367,6 @@
 <tr>
 <td align="center">short</td>
 <td align="center">short</td>
-<td align="center">short</td>
 <td align="center">-</td>
 <td align="center">-</td>
 <td align="center">-</td>
@@ -397,7 +379,6 @@
 <td align="center">int</td>
 <td align="center">int</td>
 <td align="center">int</td>
-<td align="center">int</td>
 <td align="center">-</td>
 <td align="center">-</td>
 <td align="center">int</td>
@@ -406,7 +387,6 @@
 <td align="center">long</td>
 </tr>
 <tr>
-<td align="center">long</td>
 <td align="center">long</td>
 <td align="center">long</td>
 <td align="center">long</td>
