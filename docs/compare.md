@@ -135,8 +135,39 @@ an implicit context system to switch allocation schemes.
 
 ## Odin
 
-TODO
+Odin is a language built for high performance but tries to remain
+a simple language to learn. Superficially the syntax shares much with
+Jai, and some of Jai's features things – like an implicit context – also shows up
+in Odin. In contrast with both Jai and Zig, Odin uses only minimal compile time evaluation
+and instead only relies on parametric polymorphism to ensure reuse.
+It also contains conveniences, like maps and arrays built into 
+the language.
+
+##### In Odin but not in C3
+
+- Different syntax and behaviour compared to C.
+- Ad hoc parametric polymorphism.
+
+##### In C3 but not in Odin
+
+- Familiar C syntax and behaviour
+- Semantic macros
+- Method functions
+- Optional contracts
 
 ### D
 
-TODO  
+D is a *huge* language. Where C++ is big, D provides all that C++ does and adds anything 
+else you might think of. There is very little you can't do in D that isn't supported
+one way or the other.
+
+##### In D but not in C3
+
+- Objects and classes
+- RAII
+- Exceptions
+... and almost any other feature in the universe ...
+
+##### In C3 but not in D
+
+- Small language that provides what you need and not more

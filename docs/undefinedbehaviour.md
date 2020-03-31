@@ -4,40 +4,31 @@ Like C, C3 uses undefined behaviour. In contrast, C3 will *trap* - that is, prin
 
 In C3, undefined behaviour means that the compiler is free to interpret *undefined behaviour as if behaviour cannot occur*.
 
-In the example below, a ushort is compared to a short:
+In the example below:
 
 ```
-ushort u = foo();
-short s = bar();
-if (s < 0 && u > s) return 1;
-return 0;
+uint x = foo();
+uint z = x + 1;
+if (x == 0xFFFF) return bar();
+return 1;
 ```
 
-In this example we know that for the result `1`
-
-1. `s < 0`
-2. `u > s`
-
-The comparison between `u` and `s` will cast `u` to a short. For any value u >= 0x8000 this will overflow, and with 2s complement we know that this will yield a negative value. However, overflow on implicit cast of unsigned -> signed is undefined behaviour (see [conversions](../conversion)). This means that the compiler is allowed to assume that overflow never happens. Consequently the code can be reduced to the following in release builds:
+The case of `x == 0xFFFF` would invoke undefined behaviour (due to overflow) for the assignment to `z`. For that reason, 
+the compiler may assume that `x < 0xFFFF` and compile it into the following code: 
 
 ```
-ushort u = foo();
-short s = bar();
-if (s < 0) return 1;
-return 0;
+foo();
+return 1;
 ```
 
 As a contrast, the debug build will compile code equivalent to the following.
 
 ```
-ushort u = foo();
-short s = bar();
-if (s < 0)
-{
-    if (u >= 0x0800) trap("Unsigned to signed conversion overflow.");
-    return 1;
-}
-return 0;
+uint x = foo();
+uint z;
+if (!@add_overflow(&z, x, 1)) trap("Unsigned overflow");
+if (x == 0xFFFF) return bar();
+return 1;
 ```
 
 ## List of undefined behaviours

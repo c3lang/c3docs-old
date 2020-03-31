@@ -169,7 +169,7 @@ double getTheSquare2(double x)
 It's perfectly fine for a macro to invoke another macro or itself.
 
 ```
-macro @square(x) { return x * x }
+macro @square(x) { return x * x; }
 
 macro @squarePlusOne(x)
 {

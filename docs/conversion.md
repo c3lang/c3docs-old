@@ -3,15 +3,16 @@
 C3 differs in some crucial respects when it comes to number conversions and promotions. These are the rules for C3:
 
 - float to int conversions require a cast
-- float to boolean conversions *do not* require a cast.
 - int to float conversions do not require a cast
 - bool to float converts to 0.0 / 1.0
-- double to float conversion is allowed, but may be set to warn
+- widening float conversions do *not* require a cast
 - narrowing integer conversions require a cast
 - widening conversions do *not* require a cast
 - signed -> unsigned conversions must be explicit
 - unsigned -> signed conversions do *not* need to be explicit if all unsigned values can be contained inside of the signed type. 
-- float to bool *do not* require a cast, any non zero float value considered true
+- In conditionals float to bool *do not* require a cast, any non zero float value considered true
+- Implicit conversion to bool only occurs in conditionals 
+  or when the value is enclosed in `()` e.g. `bool x = (1.0)` or `if (1.0) { ... }`
 
 C3 uses two's complement arithmetic for all integer math.
 
@@ -19,17 +20,16 @@ C3 uses two's complement arithmetic for all integer math.
 
 In C, the can be simply described as "convert to the type that can contain the other". If this cannot be guaranteed, the conversion must be explicit.
 
-|  | bool | byte | ushort | uint  | ulong | char | short | int | long |
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| bool | bool | byte | ushort | uint | ulong | char | short | int | long |
-| byte | byte | byte | ushort | uint | ulong | - | short | int | long |
-| ushort | ushort | ushort | ushort | uint | ulong | - | - | int | long |
-| uint | uint | uint | uint | uint | ulong | - | - | - | long |
-| ulong | ulong | ulong | ulong | ulong | ulong | - | - | - | - |
-| char | char | - | - | - | - | char | short | int | long |
-| short | short | short | - | - | - | short | short | int | long |
-| int | int | int | int | - | - | int | int | int | long |
-| long | long | long | long | long | - | long | long | long | long |
+|  | byte | ushort | uint  | ulong | char | short | int | long |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| byte | byte | ushort | uint | ulong | - | short | int | long |
+| ushort | ushort | ushort | uint | ulong | - | - | int | long |
+| uint | uint | uint | uint | ulong | - | - | - | long |
+| ulong | ulong | ulong | ulong | ulong | - | - | - | - |
+| char | - | - | - | - | char | short | int | long |
+| short | short | - | - | - | short | short | int | long |
+| int | int | int | - | - | int | int | int | long |
+| long | long | long | long | - | long | long | long | long |
 
 ## Sub struct conversions
 

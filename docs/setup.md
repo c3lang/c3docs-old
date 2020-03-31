@@ -1,10 +1,11 @@
 # Setup
 
-C3 is ready for end users yet, but should be possible to get it up and running on any platform that LLVM can compile on. You will need CMake installed.
+C3 is not ready for end users yet, but should be possible to get it up and running on any platform that LLVM can compile on. You will need CMake installed.
 
 ## 1. Install LLVM
 
 See LLVM the [LLVM documentation](https://llvm.org/docs/GettingStarted.html) on how to set up LLVM 10 for development. On OS X, installing through Homebrew works fine.
+Using apt-get on Linux should work fine as well.
 
 ## 2. Clone the C3 compiler source code from Github
 

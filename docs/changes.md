@@ -1,6 +1,12 @@
 # Change log
 
-Current revision made 2020-03-29.
+##### Revision 2020-03-30
+- Added Odin and D to comparisons.
+- Updated text on how to contribute.
+- Updated the example on undefined behaviour.
+- Updated text on conversions.
+- Moved double -> float conversion to "ideas"
+- Fixed some typos.
 
 ##### Revision 2020-03-29
 - Type inference for enums.

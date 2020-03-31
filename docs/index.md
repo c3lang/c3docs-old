@@ -6,7 +6,7 @@ The syntax and improvements on C inherits from the [C2 lang project](http://www.
 
 The C3 compiler can be found on github: [https://github.com/c3lang/c3c](https://github.com/c3lang/c3c).
 
-Last updated: [2020-03-29](changes).
+Last updated: [2020-03-30](changes).
 
 ## Planned features
 
@@ -33,4 +33,4 @@ Last updated: [2020-03-29](changes).
 
 #### Thank yous
 
-Special thank yous to: Bas van der Berg (Author of [C2](http://www.c2lang.org), Jon Goodwin (Author of [Cone](http://cone.jondgoodwin.com)), Andrey Penechko and the people on the /r/ProgrammingLanguages Discord. 
+Special thank yous to: Bas van der Berg (Author of [C2](http://www.c2lang.org)), Jon Goodwin (Author of [Cone](http://cone.jondgoodwin.com)), Andrey Penechko and the people on the /r/ProgrammingLanguages Discord. 

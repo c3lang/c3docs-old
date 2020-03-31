@@ -50,6 +50,10 @@ func void test()
 }
 ```
 
+## Allow narrowing conversions for floats
+
+Narrowing conversions for double -> float are common and might not be sufficiently important to do explicitly.
+
 ## Tests built in
 
 Unit tests built in as an integral part of the language like D.
@@ -611,7 +615,7 @@ Renderer*[4] renderers;
 
 ## Built in maps
 
-Same reasoing as arrays. Question about memory management is the same.
+Same reasoning as arrays. Question about memory management is the same.
 
 ```
 int[int] map; // Built-in maps
@@ -771,7 +775,7 @@ ADD_TO(x, 1)
 
 The { } introduces a multiline macro that does not need explicit linebreaks.
 
-No, add the "$" symbol to introduce hygienic temporaries:
+Now, add the "$" symbol to introduce hygienic temporaries:
 
 ```
 #define SWAP(x, y) {
