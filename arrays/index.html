@@ -160,6 +160,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../reflection/">Reflection</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../preconditions/">Pre and post conditions</a>
                 </li>
                 <li class="">
@@ -444,14 +448,14 @@ for (int x : a)
 }
 </code></pre>
 
-<p>It is possible for any type to get this iteration by implementing the macro <code>@iterator(&lt;Type&gt; *type : value)</code>:</p>
+<p>It is possible for any type to get this iteration by implementing the macro <code>iterator(&lt;Type&gt; *type : value)</code>:</p>
 <pre><code>struct Vector
 {
     usize size;
     int* elements;
 }
 
-Vector.@iterator(Vector *vector : value)
+macro Vector.iterator(Vector *vector : value)
 {
     for (int i = 0; i &lt; vector.size; i++)
     {

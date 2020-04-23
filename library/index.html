@@ -142,6 +142,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../reflection/">Reflection</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../preconditions/">Pre and post conditions</a>
                 </li>
                 <li class=" current">
@@ -152,6 +156,8 @@
     <li class="toctree-l3"><a href="#library">Library</a></li>
     
         <ul>
+        
+            <li><a class="toctree-l4" href="#encodings">Encodings</a></li>
         
             <li><a class="toctree-l4" href="#ref-counting">Ref counting</a></li>
         
@@ -262,9 +268,14 @@
             <div class="section">
               
                 <h1 id="library">Library</h1>
+<p>The standard library design is a sketch, no work has been done on this yet.</p>
+<h2 id="encodings">Encodings</h2>
+<ul>
+<li></li>
+</ul>
 <h2 id="ref-counting">Ref counting</h2>
 <p>Any struct can enable ref counting by including the RefCount struct:</p>
-<pre><code>import refcount local;
+<pre><code>import std::refcount;
 
 struct Person
 {
@@ -281,11 +292,7 @@ func void test()
     printf(&quot;RC = %d\n&quot;, person.refCount); // Prints 2
     person.release(); 
     printf(&quot;RC = %d\n&quot;, person.refCount); // Prints 1
-    person.release(); // Will call free(person)    
-
-    // More briefly, use @rcmalloc
-    Person@ person2 = @rcmalloc(Person); 
-    // Above will call malloc &amp; free and return a managed pointer
+    person.release(); // Will call free(person)        
 }
 </code></pre>
               

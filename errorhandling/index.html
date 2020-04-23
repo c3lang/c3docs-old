@@ -154,6 +154,10 @@
                 </li>
                 <li class="">
                     
+    <a class="" href="../reflection/">Reflection</a>
+                </li>
+                <li class="">
+                    
     <a class="" href="../preconditions/">Pre and post conditions</a>
                 </li>
                 <li class="">
@@ -266,14 +270,15 @@
 <p>Because there is no stack unwinding, error handling is completely deterministic and has no additional runtime cost.</p>
 <p>The call of a function which returns an error <em>must</em> be preceeded by the keyword <code>try</code>. </p>
 <h3 id="error-returns">Error returns</h3>
-<p>From C, a function throwing an error value appears simply as a union:</p>
+<p>From C, a function throwing an error value will appear as an out parameter – if the function returns a union of error codes – or as the return parameter if the function would a single enum.:</p>
 <p>C3 code:</p>
-<pre><code>func int getValue() throws
+<pre><code>func int getValue() throws;
+func int getFoo() throws RetrieveError;
 </code></pre>
 
 <p>Corresponding C code:</p>
-<pre><code class="c">struct Result { char error; union { int res; uint64_t err_code; }; };
-struct Result getValue();
+<pre><code class="c">int getValue(Error *error);
+RetrieveError getFoo(int *result);
 </code></pre>
 
 <p>It is possible to extract the error code and also store it, to retrieve it later:</p>
@@ -281,10 +286,10 @@ struct Result getValue();
 catch (error err)
 {
     // Might print &quot;Error was FILE_NOT_FOUND&quot;
-    printf(&quot;Error was %s\n&quot;, @name(err)); 
+    printf(&quot;Error was %s\n&quot;, err.name()); 
 
     // Might print &quot;Error was FileError.FILE_NOT_FOUND&quot;
-    printf(&quot;Error was %s\n&quot;, @describe(err)); 
+    printf(&quot;Error was %s\n&quot;, err.fullName()); 
 
     // Might print &quot;Error code: 931938210&quot;
     printf(&quot;Error code: %ull\n&quot;, cast(err, ulong)); 
@@ -384,9 +389,36 @@ catch (error err)
 </code></pre>
 
 <h5 id="default-values">Default values</h5>
+<p>A <code>try</code> may be followed by an <code>else</code> and an expression. The call then executes and returns the expression.</p>
 <pre><code>func int testDefault()
 {
     return try getIntNumberOrFail() else -1;
+}
+
+// The above is equivalent to:
+
+func int testDefault()
+{
+    return try getIntNumberOrFail();    
+    catch (error e) return -1;
+}
+
+</code></pre>
+
+<h5 id="default-jump">Default jump</h5>
+<p>The else can also be followed by a jump statement: <code>goto</code>, <code>return</code>, <code>break</code>, <code>continue</code> or <code>throw</code>.</p>
+<pre><code>func int testBreak(int times)
+{
+    int index;
+    for (index = 0; i &lt; times; i++)
+    {
+       try callTest(index) else break; 
+    }
+    if (index &lt; times)
+    {
+        printf(&quot;Aborted test at index: %d\n&quot;, index);
+    }
+    return index;
 }
 </code></pre>
               
