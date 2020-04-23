@@ -160,7 +160,7 @@ for (int x : a)
 }
 ```
 
-It is possible for any type to get this iteration by implementing the macro `@iterator(<Type> *type : value)`:
+It is possible for any type to get this iteration by implementing the macro `iterator(<Type> *type : value)`:
 
 ```
 struct Vector
@@ -169,7 +169,7 @@ struct Vector
     int* elements;
 }
 
-Vector.@iterator(Vector *vector : value)
+macro Vector.iterator(Vector *vector : value)
 {
     for (int i = 0; i < vector.size; i++)
     {

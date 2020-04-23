@@ -1,11 +1,18 @@
 # Library
 
+The standard library design is a sketch, no work has been done on this yet.
+
+
+## Encodings
+
+- 
+
 ## Ref counting
 
 Any struct can enable ref counting by including the RefCount struct:
 
 ```
-import refcount local;
+import std::refcount;
 
 struct Person
 {
@@ -22,11 +29,6 @@ func void test()
     printf("RC = %d\n", person.refCount); // Prints 2
     person.release(); 
     printf("RC = %d\n", person.refCount); // Prints 1
-    person.release(); // Will call free(person)    
-    
-    // More briefly, use @rcmalloc
-    Person@ person2 = @rcmalloc(Person); 
-    // Above will call malloc & free and return a managed pointer
+    person.release(); // Will call free(person)        
 }
 ```
-

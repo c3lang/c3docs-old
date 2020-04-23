@@ -21,6 +21,7 @@ nav:
     - Precedence: 'precedence.md'
     - Generics: 'generics.md'
     - Macros: 'macros.md'
+    - Reflection: 'reflection.md'
     - Pre and post conditions: 'preconditions.md'
     - Library: 'library.md'
     - Crazy ideas: 'ideas.md'

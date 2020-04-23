@@ -1,5 +1,9 @@
 # Change log
 
+##### Revision 2020-04-23
+- Updated error handling, adding try-else-jump and changed how errors are passed.
+- Included [reflection](../reflection) page
+
 ##### Revision 2020-03-30
 - Added Odin and D to comparisons.
 - Updated text on how to contribute.

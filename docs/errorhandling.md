@@ -8,17 +8,18 @@ The call of a function which returns an error _must_ be preceeded by the keyword
 
 ### Error returns
 
-From C, a function throwing an error value appears simply as a union:
+From C, a function throwing an error value will appear as an out parameter – if the function returns a union of error codes – or as the return parameter if the function would a single enum.:
 
 C3 code:
 ```
-func int getValue() throws
+func int getValue() throws;
+func int getFoo() throws RetrieveError;
 ```
 
 Corresponding C code:
 ```c
-struct Result { char error; union { int res; uint64_t err_code; }; };
-struct Result getValue();
+int getValue(Error *error);
+RetrieveError getFoo(int *result);
 ```
 
 It is possible to extract the error code and also store it, to retrieve it later:
@@ -28,10 +29,10 @@ try openFile("foo.txt");
 catch (error err)
 {
     // Might print "Error was FILE_NOT_FOUND"
-    printf("Error was %s\n", @name(err)); 
+    printf("Error was %s\n", err.name()); 
     
     // Might print "Error was FileError.FILE_NOT_FOUND"
-    printf("Error was %s\n", @describe(err)); 
+    printf("Error was %s\n", err.fullName()); 
     
     // Might print "Error code: 931938210"
     printf("Error code: %ull\n", cast(err, ulong)); 
@@ -143,9 +144,41 @@ func void testErrorScopes()
 
 
 ##### Default values
+
+A `try` may be followed by an `else` and an expression. The call then executes and returns the expression.
+
 ```
 func int testDefault()
 {
     return try getIntNumberOrFail() else -1;
+}
+
+// The above is equivalent to:
+
+func int testDefault()
+{
+    return try getIntNumberOrFail();    
+    catch (error e) return -1;
+}
+
+```
+
+##### Default jump
+
+The else can also be followed by a jump statement: `goto`, `return`, `break`, `continue` or `throw`.
+
+```
+func int testBreak(int times)
+{
+    int index;
+    for (index = 0; i < times; i++)
+    {
+       try callTest(index) else break; 
+    }
+    if (index < times)
+    {
+        printf("Aborted test at index: %d\n", index);
+    }
+    return index;
 }
 ```
