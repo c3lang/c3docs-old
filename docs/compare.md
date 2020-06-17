@@ -15,7 +15,7 @@ C3 adds features, but also removes a few.
 - Semantic Macros
 - Error handling
 - Defer
-- Method functions
+- Value methods
 - Associated enum data
 - Subtypes
 - Optional contracts
@@ -141,19 +141,22 @@ Jai, and some of Jai's features things – like an implicit context – also sho
 in Odin. In contrast with both Jai and Zig, Odin uses only minimal compile time evaluation
 and instead only relies on parametric polymorphism to ensure reuse.
 It also contains conveniences, like maps and arrays built into 
-the language.
+the language. For error handling it relies on Go style tuple returns.
 
 ##### In Odin but not in C3
 
-- Different syntax and behaviour compared to C.
-- Ad hoc parametric polymorphism.
+- Different syntax and behaviour compared to C
+- Ad hoc parametric polymorphism
+- Tuple returns
+- A rich built in set of types
 
 ##### In C3 but not in Odin
 
 - Familiar C syntax and behaviour
 - Semantic macros
-- Method functions
+- Value methods
 - Optional contracts
+- Error handling support
 
 ### D
 

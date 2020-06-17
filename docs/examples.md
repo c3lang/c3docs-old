@@ -202,17 +202,17 @@ test(10); // Prints "B!A"
 Because it's often relevant to run different defers when having an error return there is also a way to create an error defer, by using the `catch` keyword directly after the defer.
 
 ```
-func void test(int x)
+func void! test(int x)
 {
     defer printf("A");
     defer catch printf("B")
-    defer catch (error e) printf("%s", @name(e));
-    if (x = 1) return throw Error.FOO;
+    defer catch (err) printf("%s", e.message);
+    if (x = 1) return FooError!;
     printf("!")
 }
 
 test(0); // Prints "!A"
-test(1); // Prints "FOOBA" and throws
+test(1); // Prints "FOOBA" and returns a FooError
 ```
 
 #####struct types
@@ -290,45 +290,63 @@ func void example_cb()
 
 #####Error handling
 
-Errors are sent as a result value but uses an exception-like try/catch syntax.
+Errors are sent as a result value, called a "failable":
+
 ```
-error RandomError
+error DivisionByZero;
+
+func double divide(int a, int b)
 {
-    NORMAL,
-    EXCEPTIONAL
+    if (b == 0) return DivisionByZero!;
+    return cast(a, double) / cast(b, double);
+
 }
 
-func int mayThrowError() throws RandomError
+// Rethrowing an error uses "try"
+func void! testMayError()
 {
-    if (rand() > 0.5) throw RandomError.NORMAL;
-    if (rand() > 0.99) throw RandomError.EXCEPTIONAL;
-    return 1;
+    try divide(foo(), bar()); 
 }
 
-func void testMayError() throws
+func void testHandlingError()
 {
-    // all throwable sites must be annotated with "try"
-    try mayThrowError(); 
-}
-
-func void testWithoutError()
-{
-    try testMayError();
+    // ratio has a failable type.
+    double! ratio = divide(foo(), bar());
     
-    // Catching will catch any try above in the scope.
-    catch (error e)
+    // Handle the error
+    catch (err = ratio)
     {
-        case RandomError.NORMAL:
-            io.printf("Normal Error\n");
-        case RandomError.EXCEPTIONAL:
-            io.printf("You win!");
+        case DivisionByZero:
+            io::printf("Division by zero\n");
+            return;
         default:
-            io.printf("What is this error you're talking about?");                 
+            io::printf("Unexpected error!");                 
+            return;
+    }
+    // Flow typing makes "ratio"
+    // have the type double here.
+    printf("Ratio was %f\n", ratio);
+}
+```
+
+```
+import std::io;
+func void printFile(string filename)
+{
+    string! file = io::load_file(filename);
+    
+    // The following function is not executed on error.
+    io::printf("Loaded %s and got:\n%s", filename, file);
+
+    catch (err = file)
+    {
+        case FileNotFoundError:
+            printf("I could not find the file %s\n", filename);
+        default:
+            printf("Could not load %s: '%s'", filename, error.message());
     }
 }
-
 ```
-
 
 ##### Pre and post conditions
 
@@ -430,7 +448,7 @@ func void test()
 }
 ```
 
-##### Method functions
+##### Value functions
 
 It's possible to namespace functions with a union, struct or enum type to enable "dot syntax" calls:
 
@@ -455,27 +473,6 @@ func void test()
 }
 ```
 
-
-##### Error handling
-
-```
-import stdio as io;
-
-func void printFile(string filename)
-{
-    string file = try io::load_file(filename);
-    
-    io::printf("Loaded %s and got:\n%s", filename, file);
-
-    catch (error err)
-    {
-        case io::FileError.FILE_NOT_FOUND:
-            printf("I could not find the file %s\n", filename);
-        default:
-            printf("Could not load %s: '%s'", filename, @describe(err));
-    }
-}
-```
 
 ##### Generic modules
 

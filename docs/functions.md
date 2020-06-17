@@ -98,35 +98,72 @@ func void test()
 }
 ```
 
-### Using throws
+### Functions and failables
 
-The throws parameter may return a generic throws clause – in this case the error type is unknown.
+The return parameter may be a *failable* – a type suffixed by `!` indicating that this function might either return a regular value or an error.
 
 The below example might throw errors from both the `SomeError` error domain as well as the `OtherError` error domain.
 
 ```
-func int test() throws
+func double! testError() throws
 {
-    if (random_value() > 0.2) throw SomeError.BAD_JOSS_ERROR;
-    if (random_value() > 0.5) throw OtherError.BAD_LUCK_ERROR;
-    return 0;
+    double val = random_value();_
+    if (val >= 0.2) return BadJossError!;
+    if (val > 0.5) return BadLuckError!;
+    return val;
 }
 ```
 
-The errors can be explicitly documented, by listing the error domains, separated by `,`
+*A function* that is passed a *failable* value will only conditionally execute if and only if all failable values evaluate to true, otherwise *the first* error is returned.
 
 ```
-func int test() throws SomeError, OtherError
+func void test()
 {
-    if (random_value() > 0.2) throw SomeError.BAD_JOSS_ERROR;
-    if (random_value() > 0.5) throw OtherError.BAD_LUCK_ERROR;
-    return 0;
+    // The following line is either prints a value less than 0.2
+    // or does not print at all:
+    printf("%d\n", testError());
+    
+    double x = (testError() + testError()) else 100;
+    
+    // This prints either a value less than 0.4 or 100:
+    printf("%d\n", x);
 }
 ```
 
-## Member functions
+This allows us to chain functions:
 
-Member functions look exactly like functions, but are prefixed with the struct, union or enum name:
+```
+
+func void printInputWithExplicitChecks()
+{
+    string! line = readLine();
+    if (line)
+    {
+        // line is a regular "string" here.
+        int! val = atoi(line);
+        if (val)
+        {
+            printf("You typed the number %d\n", val);
+            return;
+        }
+    }
+    printf("You didn't type an integer :(\n");    
+}
+
+func void printInputWithChaining()
+{
+    if (int val = atoi(readLine()))
+    {
+        printf("You typed the number %d\n", val);
+        return;
+    }
+    printf("You didn't type an integer :(\n");    
+}
+```
+
+## Methods
+
+Methods look exactly like functions, but are prefixed with the struct, union or enum name and is (usually) invoked using dot syntax:
 
 ```
 struct Point
@@ -152,7 +189,7 @@ func void example()
 }
 ```
 
-If a member function does not take the type as the first parameter, then it may only be invoked qualified with the type name:
+If a method does not take the type as the first parameter, then it may only be invoked qualified with the type name:
 
 ```
 func Point* Point.new(int x, int y) 
@@ -189,13 +226,11 @@ func bool State.mayOpen(State state)
 ```
 
 
-### Restrictions on member functions
+### Restrictions on methods
 
-Member functions may not:
-
-- Member functions on a struct/union may not have the same name as a member.
-- Member functions only works on struct, union and enum types.
-- When taking a function pointer of a member function, use the full name.
+- Methods on a struct/union may not have the same name as a member.
+- Methods only works on struct, union and enum types.
+- When taking a function pointer of a method, use the full name.
 - Using sub types, overlapping function names will be shadowed.
 
 ## Pre and post conditions

@@ -2,6 +2,50 @@
 
 **WARNING** Unfinished ideas / brain dumps
 
+## Simpler casts
+
+Use the type-call style casts:
+
+```
+int i = int(2.0);
+Foo* f = Foo*(getBar());
+```
+Or explore some more exotic casts:
+```
+int i = 2.0->int;
+Foo* f = getBar()->Foo*;
+
+int i = 2.0 as int;
+Foo* f = getBar() as Foo*;
+
+int i = 2.0::int;
+Foo* f = getBar()::Foo*;
+```
+
+## Static initializers
+
+Allow initialization of globals before main is invoked. Introduce a general `static` block.
+
+```
+module foo;
+
+int x;
+
+static
+{
+    x = rand();
+}
+
+int y = rand();
+
+func int randomCalculation()
+{
+    return rand();
+}
+```
+
+Sematic roughly work like in Java, except that all know globals are initialized before main, as opposed to when the class is invoked. The order of initialization is unspecified.
+
 ## Module versioning
 
 Follow Go Modules: 

@@ -1,5 +1,10 @@
 # Change log
 
+##### Revision 2020-06-17
+- Alternate casts in [idea](../ideas).
+- Method functions simply renamed to "method".
+- Completely revised [error handling](../errorhandling).
+
 ##### Revision 2020-04-23
 - Updated error handling, adding try-else-jump and changed how errors are passed.
 - Included [reflection](../reflection) page

@@ -88,7 +88,7 @@ string z = Foo[*].elementType.name; // "Foo"
 
 #### baseType
 
-*Only available for pointer types.*
+*Only available for pointer types and failables.*
 Returns the type the pointer points to. E.g. for `int*` the base type is `int`.
 
 ```
@@ -206,22 +206,28 @@ typedef func int(int, double) as TestFunc;
 string s = TestFunc.params[1].name; // "double"
 ```
 
-#### thrownErrors
+#### errors
 
 *Only available for functions.*
-Returns a list containing all errors thrown, or nil otherwise. An empty list
-is returned on throwing any. 
+Returns a list containing all errors returned, or nil otherwise. An empty list
+is returned on not returning. 
 
 ```
 error SomeError { ... }
 error SomeOtherError { ... }
-typedef func int(int, double) as TestFunc;
-typedef func int(int, double) throws SomeError, SomeOtherError as ThrowTestFunc;
-typedef func int(int, double) throws as ThrowAllTestFunc;
 
-string s = ThrowTestFunc.thrownErrors[1].name; // "SomeOtherError"
-bool throwsAnyError = ThrowsTestFunc.thrownErrors.size == 0;
-bool throwsNoError = TestFunc.thrownErrors == nil; 
+func void! foo()
+{
+    if (someReason()) return SomeError!;
+    try bar();
+}
+func void! bar()
+{
+    return SomeOtherError!;
+}
+
+string s = foo.errors[1].name; // "SomeOtherError"
+int errors = bar.errors.size == 1;
 ```
 
 
@@ -275,4 +281,4 @@ The TypeKind enum contains the basic kinds of types:
 * `TYPEID`
 * `STRING`
 * `OPAQUE`
-
+* `FAILABLE`

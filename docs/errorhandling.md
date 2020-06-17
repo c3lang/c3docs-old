@@ -1,32 +1,30 @@
 ## Error Handling
 
-Unlike usual exception handling, errors in C3 build on normal returns. A function declaring errors using the `throws` keyword essentially returns a union containing either the return value or an 64 bit integer. A register or a flag is used to determine if the result is an error or a normal result.
-
-Because there is no stack unwinding, error handling is completely deterministic and has no additional runtime cost.
-
-The call of a function which returns an error _must_ be preceeded by the keyword `try`. 
+Unlike usual exception handling, errors in C3 build on normal returns. A function returning errors add a `!` to the return type. In C3 this called a "failable" type.
 
 ### Error returns
 
-From C, a function throwing an error value will appear as an out parameter – if the function returns a union of error codes – or as the return parameter if the function would a single enum.:
+From C, a function returning an error value will appear as an out parameter – if the function returns a union of error codes – or as the return parameter if the function would a single enum.:
 
 C3 code:
 ```
-func int getValue() throws;
-func int getFoo() throws RetrieveError;
+func int! getValue();
 ```
 
 Corresponding C code:
 ```c
 int getValue(Error *error);
-RetrieveError getFoo(int *result);
 ```
 
-It is possible to extract the error code and also store it, to retrieve it later:
+The `int!` here is the failable return type, which is a tagged union: it might hold either the error or an int.
 
 ```
-try openFile("foo.txt");
-catch (error err)
+// Open a file, we will get a failable:
+// Either a File* or an error.
+File*! file = openFile("foo.txt");
+
+// We can extract the error using "catch"
+catch (err = file)
 {
     // Might print "Error was FILE_NOT_FOUND"
     printf("Error was %s\n", err.name()); 
@@ -36,63 +34,90 @@ catch (error err)
     
     // Might print "Error code: 931938210"
     printf("Error code: %ull\n", cast(err, ulong)); 
+    return;
+}
+
+// We can also just execute of success:
+File*! file2 = openFile("bar.txt");
+
+// Only true if there is no error.
+if (file2)
+{
+    // Inside here file2 is a regular File*
 }
 ```
+
+A function, method or macro call with one or more parameters will only execute if the failable has no error. This makes error returns composable. 
+
+```
+func int! fooMayError() { ... }
+func int double(int i) { ... }
+func int! save(int i) { ... }
+
+func void test()
+(
+    int! i = fooMayError();
+    
+    // "double" is only called if "fooMayError()"
+    // returns a non error result.
+    int! j = double(fooMayError());
+    
+    int! k = save(double(fooMAyError()));
+    catch (err = k)
+    {
+        // The error may be from fooMayError
+        // or save!
+    }    
+)
+```
+
 
 #### Some simple examples.
 
-##### Defining an error set
+##### Defining an error
+
+Errors may either be flat or contain additional data.
+
 ```
-error FileError
+error FileNotFoundError;
+error ParseError
 {
-    FILE_NOT_FOUND,
-    FILE_CANNOT_OPEN,
-    PATH_DOES_NOT_EXIST,    
+    int line;
+    int col;
 }
 ```
 
-##### Throwing an error
+##### Returning an error
+
+Returning an error looks like a normal return but with the `!`
 
 ```
-func void findFile() throws
+func void! findFile()
 {
-    if (File.doesFileExist("foo.txt")) throw FileError.FILE_NOT_FOUND;
+    if (File.doesFileExist("foo.txt")) return FileNotFoundError!;
     /* ... */
 }
 ```
 
-##### Declaring a function as throwing a specific set of errors
+##### Calling a function automatically returning any error
+
+The `try` keyword will create an implicit return.
 
 ```
-func void findFile() throws FileError
-{
-    /* ... */
-}
-```
-
-##### Declaring a function to throw a union of errors
-```
-func void findAndParseFile() throws FileError, ParseError
-{
-    /* ... */
-}
-```
-
-##### Calling a function that throws
-```
-func void findFileAndTest() throws
+func void! findFileAndTest()
 {
     try findFile();
+    // Implictly:
+    // catch (err = findFile()) return err!;
 }
 ```
 
 ##### Catching errors
 ```
-func void findFileAndNoExcept()
+func void findFileAndNoErr()
 {
-    try findFile();
-    
-    catch (error err)
+    File*! res = findFile();    
+    catch (res)
     {
         printf("An error occurred!\n");
         return;
@@ -100,44 +125,30 @@ func void findFileAndNoExcept()
 }
 ```
 
-##### Catching error subsets
+##### Only do if no error
+
 ```
-func void findFileAndParse2() throws ParseError
+func void doSomethingToFile()
 {
-    try findFileAndParse();
-    
-    catch (FileError err)
+    void! res = findFile();    
+    if (res)
     {
-        printf("Error loading the file!\n");
-        return;
+        printf("I found the file\n");
     }
-    
-    // No catch for the ParseError, so it escapes.
 }
 ```
 
-##### Scoped error catching
+##### Catching some errors
+
 ```
-func void testErrorScopes()
+func void! findFileAndParse2()
 {
+    catch (err = findFileAndParse())
     {
-        try findFileAndParse();
-        
-        catch (FileError err)
-        {
-            try sendAlarm("Error loading the file");
-            catch (error err)
-            {
-                printf("Failed to send the alarm");
-            }
-            return;
-        }        
-    }
-    
-    try someOtherCall();
-    catch (error err)
-    {
-        printf("Some other error\n");
+        case FileNotFoundError:
+            printf("Error loading the file!\n");
+        default:
+            return err;
     }
 }
 ```
@@ -145,20 +156,21 @@ func void testErrorScopes()
 
 ##### Default values
 
-A `try` may be followed by an `else` and an expression. The call then executes and returns the expression.
+A function returning an error may be followed by an `else` and an expression. The call then executes and returns the expression.
 
 ```
 func int testDefault()
 {
-    return try getIntNumberOrFail() else -1;
+    return getIntNumberOrFail() else -1;
 }
 
 // The above is equivalent to:
 
 func int testDefault()
 {
-    return try getIntNumberOrFail();    
-    catch (error e) return -1;
+    int! i = getIntNumberOrFail();    
+    catch (i) return -1;
+    return i;
 }
 
 ```
@@ -173,7 +185,7 @@ func int testBreak(int times)
     int index;
     for (index = 0; i < times; i++)
     {
-       try callTest(index) else break; 
+       callTest(index) else break; 
     }
     if (index < times)
     {

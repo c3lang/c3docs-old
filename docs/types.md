@@ -180,14 +180,42 @@ test(State.RUNNING); // Uses enum constant.
 Error types are similar to enums, and are used for error returns.
 
 ```
-error IOError
+error IOError;
+error ParseError
 {
-    FILE_CLOSED
-    FILE_EOF_REACHED
+    int line;
+    int col;
 }
 ```
 
-Just like enums, the errors are namespaced. Read more about the error types on the page about [error handling](../errorhandling).
+An error is similar to a struct and is initialized the same way. One exception is that simple errors without a body does not need to be
+created using a `()`:
+
+```
+return IOError!; 
+return IOError()!; // Same as above
+return ParseError(line, col)!;
+```
+
+## Failable
+
+A failable is created by taking a type and appending `!`. A failable is a tagged union containing either the given type or an error.
+
+```
+int! i;
+i = 5; // Assigning a real value to i.
+i = IOError!; // Assigning an error to i.
+```
+
+Only variables and return variables may be of the *failable* type. Function and macro parameters may not be failable types.
+
+```
+func Foo*! getFoo() { ... } // Ok!
+func void processFoo(Foo*! f) { ... } // Error!
+int! x = 0; // Ok!
+```
+
+Read more about the errors on the page about [error handling](../errorhandling).
 
 ## Alias and function types
 
