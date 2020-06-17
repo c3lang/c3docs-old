@@ -161,6 +161,10 @@
     
         <ul>
         
+            <li><a class="toctree-l4" href="#simpler-casts">Simpler casts</a></li>
+        
+            <li><a class="toctree-l4" href="#static-initializers">Static initializers</a></li>
+        
             <li><a class="toctree-l4" href="#module-versioning">Module versioning</a></li>
         
             <li><a class="toctree-l4" href="#polymorphic-functions">Polymorphic functions</a></li>
@@ -309,6 +313,43 @@
               
                 <h1 id="ideas">Ideas</h1>
 <p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
+<h2 id="simpler-casts">Simpler casts</h2>
+<p>Use the type-call style casts:</p>
+<pre><code>int i = int(2.0);
+Foo* f = Foo*(getBar());
+</code></pre>
+
+<p>Or explore some more exotic casts:</p>
+<pre><code>int i = 2.0-&gt;int;
+Foo* f = getBar()-&gt;Foo*;
+
+int i = 2.0 as int;
+Foo* f = getBar() as Foo*;
+
+int i = 2.0::int;
+Foo* f = getBar()::Foo*;
+</code></pre>
+
+<h2 id="static-initializers">Static initializers</h2>
+<p>Allow initialization of globals before main is invoked. Introduce a general <code>static</code> block.</p>
+<pre><code>module foo;
+
+int x;
+
+static
+{
+    x = rand();
+}
+
+int y = rand();
+
+func int randomCalculation()
+{
+    return rand();
+}
+</code></pre>
+
+<p>Sematic roughly work like in Java, except that all know globals are initialized before main, as opposed to when the class is invoked. The order of initialization is unspecified.</p>
 <h2 id="module-versioning">Module versioning</h2>
 <p>Follow Go Modules: </p>
 <ol>

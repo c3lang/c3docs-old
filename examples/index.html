@@ -122,10 +122,7 @@
     <li class="toctree-l3"><a href="#macros">Macros</a></li>
     
 
-    <li class="toctree-l3"><a href="#method-functions">Method functions</a></li>
-    
-
-    <li class="toctree-l3"><a href="#error-handling_1">Error handling</a></li>
+    <li class="toctree-l3"><a href="#value-functions">Value functions</a></li>
     
 
     <li class="toctree-l3"><a href="#generic-modules">Generic modules</a></li>
@@ -484,17 +481,17 @@ test(10); // Prints &quot;B!A&quot;
 </code></pre>
 
 <p>Because it's often relevant to run different defers when having an error return there is also a way to create an error defer, by using the <code>catch</code> keyword directly after the defer.</p>
-<pre><code>func void test(int x)
+<pre><code>func void! test(int x)
 {
     defer printf(&quot;A&quot;);
     defer catch printf(&quot;B&quot;)
-    defer catch (error e) printf(&quot;%s&quot;, @name(e));
-    if (x = 1) return throw Error.FOO;
+    defer catch (err) printf(&quot;%s&quot;, e.message);
+    if (x = 1) return FooError!;
     printf(&quot;!&quot;)
 }
 
 test(0); // Prints &quot;!A&quot;
-test(1); // Prints &quot;FOOBA&quot; and throws
+test(1); // Prints &quot;FOOBA&quot; and returns a FooError
 </code></pre>
 
 <h5 id="struct-types">struct types</h5>
@@ -566,42 +563,59 @@ func void example_cb()
 </code></pre>
 
 <h5 id="error-handling">Error handling</h5>
-<p>Errors are sent as a result value but uses an exception-like try/catch syntax.</p>
-<pre><code>error RandomError
+<p>Errors are sent as a result value, called a "failable":</p>
+<pre><code>error DivisionByZero;
+
+func double divide(int a, int b)
 {
-    NORMAL,
-    EXCEPTIONAL
+    if (b == 0) return DivisionByZero!;
+    return cast(a, double) / cast(b, double);
+
 }
 
-func int mayThrowError() throws RandomError
+// Rethrowing an error uses &quot;try&quot;
+func void! testMayError()
 {
-    if (rand() &gt; 0.5) throw RandomError.NORMAL;
-    if (rand() &gt; 0.99) throw RandomError.EXCEPTIONAL;
-    return 1;
+    try divide(foo(), bar()); 
 }
 
-func void testMayError() throws
+func void testHandlingError()
 {
-    // all throwable sites must be annotated with &quot;try&quot;
-    try mayThrowError(); 
-}
+    // ratio has a failable type.
+    double! ratio = divide(foo(), bar());
 
-func void testWithoutError()
-{
-    try testMayError();
-
-    // Catching will catch any try above in the scope.
-    catch (error e)
+    // Handle the error
+    catch (err = ratio)
     {
-        case RandomError.NORMAL:
-            io.printf(&quot;Normal Error\n&quot;);
-        case RandomError.EXCEPTIONAL:
-            io.printf(&quot;You win!&quot;);
+        case DivisionByZero:
+            io::printf(&quot;Division by zero\n&quot;);
+            return;
         default:
-            io.printf(&quot;What is this error you're talking about?&quot;);                 
+            io::printf(&quot;Unexpected error!&quot;);                 
+            return;
+    }
+    // Flow typing makes &quot;ratio&quot;
+    // have the type double here.
+    printf(&quot;Ratio was %f\n&quot;, ratio);
+}
+</code></pre>
+
+<pre><code>import std::io;
+func void printFile(string filename)
+{
+    string! file = io::load_file(filename);
+
+    // The following function is not executed on error.
+    io::printf(&quot;Loaded %s and got:\n%s&quot;, filename, file);
+
+    catch (err = file)
+    {
+        case FileNotFoundError:
+            printf(&quot;I could not find the file %s\n&quot;, filename);
+        default:
+            printf(&quot;Could not load %s: '%s'&quot;, filename, error.message());
     }
 }
-
 </code></pre>
 
 <h5 id="pre-and-post-conditions">Pre and post conditions</h5>
@@ -698,7 +712,7 @@ func void test()
 }
 </code></pre>
 
-<h5 id="method-functions">Method functions</h5>
+<h5 id="value-functions">Value functions</h5>
 <p>It's possible to namespace functions with a union, struct or enum type to enable "dot syntax" calls:</p>
 <pre><code>struct Foo
 {
@@ -717,25 +731,6 @@ func void test()
     foo.next();
     // Prints 4
     printf(&quot;%d&quot;, foo.i); 
-}
-</code></pre>
-
-<h5 id="error-handling_1">Error handling</h5>
-<pre><code>import stdio as io;
-
-func void printFile(string filename)
-{
-    string file = try io::load_file(filename);
-
-    io::printf(&quot;Loaded %s and got:\n%s&quot;, filename, file);
-
-    catch (error err)
-    {
-        case io::FileError.FILE_NOT_FOUND:
-            printf(&quot;I could not find the file %s\n&quot;, filename);
-        default:
-            printf(&quot;Could not load %s: '%s'&quot;, filename, @describe(err));
-    }
 }
 </code></pre>
 

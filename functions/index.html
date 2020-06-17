@@ -111,7 +111,7 @@
         
             <li><a class="toctree-l4" href="#regular-functions">Regular functions</a></li>
         
-            <li><a class="toctree-l4" href="#member-functions">Member functions</a></li>
+            <li><a class="toctree-l4" href="#methods">Methods</a></li>
         
             <li><a class="toctree-l4" href="#pre-and-post-conditions">Pre and post conditions</a></li>
         
@@ -353,28 +353,63 @@ func void test()
 }
 </code></pre>
 
-<h3 id="using-throws">Using throws</h3>
-<p>The throws parameter may return a generic throws clause – in this case the error type is unknown.</p>
+<h3 id="functions-and-failables">Functions and failables</h3>
+<p>The return parameter may be a <em>failable</em> – a type suffixed by <code>!</code> indicating that this function might either return a regular value or an error.</p>
 <p>The below example might throw errors from both the <code>SomeError</code> error domain as well as the <code>OtherError</code> error domain.</p>
-<pre><code>func int test() throws
+<pre><code>func double! testError() throws
 {
-    if (random_value() &gt; 0.2) throw SomeError.BAD_JOSS_ERROR;
-    if (random_value() &gt; 0.5) throw OtherError.BAD_LUCK_ERROR;
-    return 0;
+    double val = random_value();_
+    if (val &gt;= 0.2) return BadJossError!;
+    if (val &gt; 0.5) return BadLuckError!;
+    return val;
 }
 </code></pre>
 
-<p>The errors can be explicitly documented, by listing the error domains, separated by <code>,</code></p>
-<pre><code>func int test() throws SomeError, OtherError
+<p><em>A function</em> that is passed a <em>failable</em> value will only conditionally execute if and only if all failable values evaluate to true, otherwise <em>the first</em> error is returned.</p>
+<pre><code>func void test()
 {
-    if (random_value() &gt; 0.2) throw SomeError.BAD_JOSS_ERROR;
-    if (random_value() &gt; 0.5) throw OtherError.BAD_LUCK_ERROR;
-    return 0;
+    // The following line is either prints a value less than 0.2
+    // or does not print at all:
+    printf(&quot;%d\n&quot;, testError());
+
+    double x = (testError() + testError()) else 100;
+
+    // This prints either a value less than 0.4 or 100:
+    printf(&quot;%d\n&quot;, x);
 }
 </code></pre>
 
-<h2 id="member-functions">Member functions</h2>
-<p>Member functions look exactly like functions, but are prefixed with the struct, union or enum name:</p>
+<p>This allows us to chain functions:</p>
+<pre><code>
+func void printInputWithExplicitChecks()
+{
+    string! line = readLine();
+    if (line)
+    {
+        // line is a regular &quot;string&quot; here.
+        int! val = atoi(line);
+        if (val)
+        {
+            printf(&quot;You typed the number %d\n&quot;, val);
+            return;
+        }
+    }
+    printf(&quot;You didn't type an integer :(\n&quot;);    
+}
+
+func void printInputWithChaining()
+{
+    if (int val = atoi(readLine()))
+    {
+        printf(&quot;You typed the number %d\n&quot;, val);
+        return;
+    }
+    printf(&quot;You didn't type an integer :(\n&quot;);    
+}
+</code></pre>
+
+<h2 id="methods">Methods</h2>
+<p>Methods look exactly like functions, but are prefixed with the struct, union or enum name and is (usually) invoked using dot syntax:</p>
 <pre><code>struct Point
 {
     int x;
@@ -398,7 +433,7 @@ func void example()
 }
 </code></pre>
 
-<p>If a member function does not take the type as the first parameter, then it may only be invoked qualified with the type name:</p>
+<p>If a method does not take the type as the first parameter, then it may only be invoked qualified with the type name:</p>
 <pre><code>func Point* Point.new(int x, int y) 
 {
     Point* p = malloc(@sizeof(Point));
@@ -430,12 +465,11 @@ func bool State.mayOpen(State state)
 }
 </code></pre>
 
-<h3 id="restrictions-on-member-functions">Restrictions on member functions</h3>
-<p>Member functions may not:</p>
+<h3 id="restrictions-on-methods">Restrictions on methods</h3>
 <ul>
-<li>Member functions on a struct/union may not have the same name as a member.</li>
-<li>Member functions only works on struct, union and enum types.</li>
-<li>When taking a function pointer of a member function, use the full name.</li>
+<li>Methods on a struct/union may not have the same name as a member.</li>
+<li>Methods only works on struct, union and enum types.</li>
+<li>When taking a function pointer of a method, use the full name.</li>
 <li>Using sub types, overlapping function names will be shadowed.</li>
 </ul>
 <h2 id="pre-and-post-conditions">Pre and post conditions</h2>

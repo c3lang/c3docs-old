@@ -331,7 +331,7 @@ string z = Foo[*].elementType.name; // &quot;Foo&quot;
 </code></pre>
 
 <h4 id="basetype">baseType</h4>
-<p><em>Only available for pointer types.</em>
+<p><em>Only available for pointer types and failables.</em>
 Returns the type the pointer points to. E.g. for <code>int*</code> the base type is <code>int</code>.</p>
 <pre><code>struct Foo { ... }
 string x = (Foo*).baseType.name; // &quot;Foo&quot;
@@ -420,19 +420,25 @@ Returns a list of all parameters.</p>
 string s = TestFunc.params[1].name; // &quot;double&quot;
 </code></pre>
 
-<h4 id="thrownerrors">thrownErrors</h4>
+<h4 id="errors_1">errors</h4>
 <p><em>Only available for functions.</em>
-Returns a list containing all errors thrown, or nil otherwise. An empty list
-is returned on throwing any. </p>
+Returns a list containing all errors returned, or nil otherwise. An empty list
+is returned on not returning. </p>
 <pre><code>error SomeError { ... }
 error SomeOtherError { ... }
-typedef func int(int, double) as TestFunc;
-typedef func int(int, double) throws SomeError, SomeOtherError as ThrowTestFunc;
-typedef func int(int, double) throws as ThrowAllTestFunc;
 
-string s = ThrowTestFunc.thrownErrors[1].name; // &quot;SomeOtherError&quot;
-bool throwsAnyError = ThrowsTestFunc.thrownErrors.size == 0;
-bool throwsNoError = TestFunc.thrownErrors == nil; 
+func void! foo()
+{
+    if (someReason()) return SomeError!;
+    try bar();
+}
+func void! bar()
+{
+    return SomeOtherError!;
+}
+
+string s = foo.errors[1].name; // &quot;SomeOtherError&quot;
+int errors = bar.errors.size == 1;
 </code></pre>
 
 <h2 id="runtime-reflection">Runtime reflection</h2>
@@ -479,6 +485,7 @@ bool throwsNoError = TestFunc.thrownErrors == nil;
 <li><code>TYPEID</code></li>
 <li><code>STRING</code></li>
 <li><code>OPAQUE</code></li>
+<li><code>FAILABLE</code></li>
 </ul>
               
             </div>

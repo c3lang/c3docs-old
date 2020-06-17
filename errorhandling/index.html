@@ -266,24 +266,24 @@
             <div class="section">
               
                 <h2 id="error-handling">Error Handling</h2>
-<p>Unlike usual exception handling, errors in C3 build on normal returns. A function declaring errors using the <code>throws</code> keyword essentially returns a union containing either the return value or an 64 bit integer. A register or a flag is used to determine if the result is an error or a normal result.</p>
-<p>Because there is no stack unwinding, error handling is completely deterministic and has no additional runtime cost.</p>
-<p>The call of a function which returns an error <em>must</em> be preceeded by the keyword <code>try</code>. </p>
+<p>Unlike usual exception handling, errors in C3 build on normal returns. A function returning errors add a <code>!</code> to the return type. In C3 this called a "failable" type.</p>
 <h3 id="error-returns">Error returns</h3>
-<p>From C, a function throwing an error value will appear as an out parameter – if the function returns a union of error codes – or as the return parameter if the function would a single enum.:</p>
+<p>From C, a function returning an error value will appear as an out parameter – if the function returns a union of error codes – or as the return parameter if the function would a single enum.:</p>
 <p>C3 code:</p>
-<pre><code>func int getValue() throws;
-func int getFoo() throws RetrieveError;
+<pre><code>func int! getValue();
 </code></pre>
 
 <p>Corresponding C code:</p>
 <pre><code class="c">int getValue(Error *error);
-RetrieveError getFoo(int *result);
 </code></pre>
 
-<p>It is possible to extract the error code and also store it, to retrieve it later:</p>
-<pre><code>try openFile(&quot;foo.txt&quot;);
-catch (error err)
+<p>The <code>int!</code> here is the failable return type, which is a tagged union: it might hold either the error or an int.</p>
+<pre><code>// Open a file, we will get a failable:
+// Either a File* or an error.
+File*! file = openFile(&quot;foo.txt&quot;);
+
+// We can extract the error using &quot;catch&quot;
+catch (err = file)
 {
     // Might print &quot;Error was FILE_NOT_FOUND&quot;
     printf(&quot;Error was %s\n&quot;, err.name()); 
@@ -293,54 +293,76 @@ catch (error err)
 
     // Might print &quot;Error code: 931938210&quot;
     printf(&quot;Error code: %ull\n&quot;, cast(err, ulong)); 
+    return;
 }
+
+// We can also just execute of success:
+File*! file2 = openFile(&quot;bar.txt&quot;);
+
+// Only true if there is no error.
+if (file2)
+{
+    // Inside here file2 is a regular File*
+}
+</code></pre>
+
+<p>A function, method or macro call with one or more parameters will only execute if the failable has no error. This makes error returns composable. </p>
+<pre><code>func int! fooMayError() { ... }
+func int double(int i) { ... }
+func int! save(int i) { ... }
+
+func void test()
+(
+    int! i = fooMayError();
+
+    // &quot;double&quot; is only called if &quot;fooMayError()&quot;
+    // returns a non error result.
+    int! j = double(fooMayError());
+
+    int! k = save(double(fooMAyError()));
+    catch (err = k)
+    {
+        // The error may be from fooMayError
+        // or save!
+    }    
+)
 </code></pre>
 
 <h4 id="some-simple-examples">Some simple examples.</h4>
-<h5 id="defining-an-error-set">Defining an error set</h5>
-<pre><code>error FileError
+<h5 id="defining-an-error">Defining an error</h5>
+<p>Errors may either be flat or contain additional data.</p>
+<pre><code>error FileNotFoundError;
+error ParseError
 {
-    FILE_NOT_FOUND,
-    FILE_CANNOT_OPEN,
-    PATH_DOES_NOT_EXIST,    
+    int line;
+    int col;
 }
 </code></pre>
 
-<h5 id="throwing-an-error">Throwing an error</h5>
-<pre><code>func void findFile() throws
+<h5 id="returning-an-error">Returning an error</h5>
+<p>Returning an error looks like a normal return but with the <code>!</code></p>
+<pre><code>func void! findFile()
 {
-    if (File.doesFileExist(&quot;foo.txt&quot;)) throw FileError.FILE_NOT_FOUND;
+    if (File.doesFileExist(&quot;foo.txt&quot;)) return FileNotFoundError!;
     /* ... */
 }
 </code></pre>
 
-<h5 id="declaring-a-function-as-throwing-a-specific-set-of-errors">Declaring a function as throwing a specific set of errors</h5>
-<pre><code>func void findFile() throws FileError
-{
-    /* ... */
-}
-</code></pre>
-
-<h5 id="declaring-a-function-to-throw-a-union-of-errors">Declaring a function to throw a union of errors</h5>
-<pre><code>func void findAndParseFile() throws FileError, ParseError
-{
-    /* ... */
-}
-</code></pre>
-
-<h5 id="calling-a-function-that-throws">Calling a function that throws</h5>
-<pre><code>func void findFileAndTest() throws
+<h5 id="calling-a-function-automatically-returning-any-error">Calling a function automatically returning any error</h5>
+<p>The <code>try</code> keyword will create an implicit return.</p>
+<pre><code>func void! findFileAndTest()
 {
     try findFile();
+    // Implictly:
+    // catch (err = findFile()) return err!;
 }
 </code></pre>
 
 <h5 id="catching-errors">Catching errors</h5>
-<pre><code>func void findFileAndNoExcept()
+<pre><code>func void findFileAndNoErr()
 {
-    try findFile();
-
-    catch (error err)
+    File*! res = findFile();    
+    catch (res)
     {
         printf(&quot;An error occurred!\n&quot;);
         return;
@@ -348,59 +370,44 @@ catch (error err)
 }
 </code></pre>
 
-<h5 id="catching-error-subsets">Catching error subsets</h5>
-<pre><code>func void findFileAndParse2() throws ParseError
+<h5 id="only-do-if-no-error">Only do if no error</h5>
+<pre><code>func void doSomethingToFile()
 {
-    try findFileAndParse();
-
-    catch (FileError err)
+    void! res = findFile();    
+    if (res)
     {
-        printf(&quot;Error loading the file!\n&quot;);
-        return;
+        printf(&quot;I found the file\n&quot;);
     }
-
-    // No catch for the ParseError, so it escapes.
 }
 </code></pre>
 
-<h5 id="scoped-error-catching">Scoped error catching</h5>
-<pre><code>func void testErrorScopes()
+<h5 id="catching-some-errors">Catching some errors</h5>
+<pre><code>func void! findFileAndParse2()
 {
+    catch (err = findFileAndParse())
     {
-        try findFileAndParse();
-
-        catch (FileError err)
-        {
-            try sendAlarm(&quot;Error loading the file&quot;);
-            catch (error err)
-            {
-                printf(&quot;Failed to send the alarm&quot;);
-            }
-            return;
-        }        
-    }
-
-    try someOtherCall();
-    catch (error err)
-    {
-        printf(&quot;Some other error\n&quot;);
+        case FileNotFoundError:
+            printf(&quot;Error loading the file!\n&quot;);
+        default:
+            return err;
     }
 }
 </code></pre>
 
 <h5 id="default-values">Default values</h5>
-<p>A <code>try</code> may be followed by an <code>else</code> and an expression. The call then executes and returns the expression.</p>
+<p>A function returning an error may be followed by an <code>else</code> and an expression. The call then executes and returns the expression.</p>
 <pre><code>func int testDefault()
 {
-    return try getIntNumberOrFail() else -1;
+    return getIntNumberOrFail() else -1;
 }
 
 // The above is equivalent to:
 
 func int testDefault()
 {
-    return try getIntNumberOrFail();    
-    catch (error e) return -1;
+    int! i = getIntNumberOrFail();    
+    catch (i) return -1;
+    return i;
 }
 
 </code></pre>
@@ -412,7 +419,7 @@ func int testDefault()
     int index;
     for (index = 0; i &lt; times; i++)
     {
-       try callTest(index) else break; 
+       callTest(index) else break; 
     }
     if (index &lt; times)
     {

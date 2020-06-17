@@ -111,6 +111,8 @@
         
             <li><a class="toctree-l4" href="#error">Error</a></li>
         
+            <li><a class="toctree-l4" href="#failable">Failable</a></li>
+        
             <li><a class="toctree-l4" href="#alias-and-function-types">Alias and function types</a></li>
         
             <li><a class="toctree-l4" href="#distinct-types">Distinct types</a></li>
@@ -556,14 +558,35 @@ test(State.RUNNING); // Uses enum constant.
 
 <h2 id="error">Error</h2>
 <p>Error types are similar to enums, and are used for error returns.</p>
-<pre><code>error IOError
+<pre><code>error IOError;
+error ParseError
 {
-    FILE_CLOSED
-    FILE_EOF_REACHED
+    int line;
+    int col;
 }
 </code></pre>
 
-<p>Just like enums, the errors are namespaced. Read more about the error types on the page about <a href="../errorhandling">error handling</a>.</p>
+<p>An error is similar to a struct and is initialized the same way. One exception is that simple errors without a body does not need to be
+created using a <code>()</code>:</p>
+<pre><code>return IOError!; 
+return IOError()!; // Same as above
+return ParseError(line, col)!;
+</code></pre>
+
+<h2 id="failable">Failable</h2>
+<p>A failable is created by taking a type and appending <code>!</code>. A failable is a tagged union containing either the given type or an error.</p>
+<pre><code>int! i;
+i = 5; // Assigning a real value to i.
+i = IOError!; // Assigning an error to i.
+</code></pre>
+
+<p>Only variables and return variables may be of the <em>failable</em> type. Function and macro parameters may not be failable types.</p>
+<pre><code>func Foo*! getFoo() { ... } // Ok!
+func void processFoo(Foo*! f) { ... } // Error!
+int! x = 0; // Ok!
+</code></pre>
+
+<p>Read more about the errors on the page about <a href="../errorhandling">error handling</a>.</p>
 <h2 id="alias-and-function-types">Alias and function types</h2>
 <p>Alias types are used to give an alias to a different type, like:</p>
 <pre><code>typedef char* as CharPtr;
