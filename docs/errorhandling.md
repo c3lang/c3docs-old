@@ -51,18 +51,18 @@ A function, method or macro call with one or more parameters will only execute i
 
 ```
 func int! fooMayError() { ... }
-func int double(int i) { ... }
+func int mult(int i) { ... }
 func int! save(int i) { ... }
 
 func void test()
 (
     int! i = fooMayError();
     
-    // "double" is only called if "fooMayError()"
+    // "mult" is only called if "fooMayError()"
     // returns a non error result.
-    int! j = double(fooMayError());
+    int! j = mult(fooMayError());
     
-    int! k = save(double(fooMAyError()));
+    int! k = save(mult(fooMAyError()));
     catch (err = k)
     {
         // The error may be from fooMayError
@@ -71,6 +71,8 @@ func void test()
 )
 ```
 
+If a `catch` returns or jumps out of the current scope in a different way, then the variable becomes
+unwrapped to it's non-failable type. 
 
 #### Some simple examples.
 
@@ -101,18 +103,21 @@ func void! findFile()
 
 ##### Calling a function automatically returning any error
 
-The `try` keyword will create an implicit return.
+The `!!` suffix will create an implicit return on error.
 
 ```
 func void! findFileAndTest()
 {
-    try findFile();
+    findFile()!!;
     // Implictly:
     // catch (err = findFile()) return err!;
 }
 ```
 
 ##### Catching errors
+
+Catching an error and returning will implicitly unwrap the checked variable.
+
 ```
 func void findFileAndNoErr()
 {
@@ -122,6 +127,8 @@ func void findFileAndNoErr()
         printf("An error occurred!\n");
         return;
     }
+    // res is implicitly unwrapped here.
+    // and have an effective type of File* here.
 }
 ```
 
@@ -131,7 +138,7 @@ func void findFileAndNoErr()
 func void doSomethingToFile()
 {
     void! res = findFile();    
-    if (res)
+    try (res)
     {
         printf("I found the file\n");
     }
@@ -177,7 +184,7 @@ func int testDefault()
 
 ##### Default jump
 
-The else can also be followed by a jump statement: `goto`, `return`, `break`, `continue` or `throw`.
+The else can also be followed by a jump statement: `return`, `break` or `continue`.
 
 ```
 func int testBreak(int times)
@@ -194,3 +201,23 @@ func int testBreak(int times)
     return index;
 }
 ```
+
+#### Check for error or success
+
+`try` and `catch` without a statements returns a boolean true / false:
+
+```
+func int testResult()
+{
+    int! result = getValue();
+    if (try(result))
+    {
+        printf("Success!\n");
+    }
+    if (catch(result))
+    {
+        printf("Failure\n");
+    }
+}
+```
+

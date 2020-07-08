@@ -1,5 +1,10 @@
 # Change log
 
+##### Revision 2020-07-08
+- Additions to [error handling](../errorhandling).
+- Introduction of labelled `next`, `break` and `continue`.
+- Removal of `goto`.
+
 ##### Revision 2020-06-17
 - Alternate casts in [idea](../ideas).
 - Method functions simply renamed to "method".

@@ -36,4 +36,73 @@ func void test(int x)
 }
 ```
 
+## Labelled break and continue
 
+Labelled `break` and `continue` lets you break out of an outer scope. Labels can be put on `if`, 
+`switch`, `catch`, `while` and `do` statements.
+   
+```
+func void test(int i)
+{
+    if FOO: (i > 0)
+    {
+        while (1)
+        {
+            printf("%d\n", i);
+            // Break out of the top if statement.
+            if (i++ > 10) break FOO;
+        }
+    }
+}
+```
+
+## Do-without-while
+
+Do-while statements can skip the ending `while`. In that case it acts as if the `while` was `while(0)`:
+
+```
+do 
+{
+    printf("FOO\n");
+} while (0);
+
+// Equivalent to the above.
+do 
+{
+    printf("FOO\n");
+}
+```
+
+## Next and labelled next
+
+The `next` statement is used in `switch` and `catch` to jump to the next statement:
+
+```
+switch (i)
+{
+   case 1:
+     doSomething();
+     next; // Jumps to case 2
+   case 2:
+     doSomethingElse();
+}
+```
+
+It's also possible to use `next` with an expression, to jump to an arbitrary case:
+
+```
+switch (i)
+{
+    case 1:
+        doSomething();
+        next 3; // Jump to case 3
+    case 2:
+        doSomethingElse();
+    case 3:
+        next rand(); // Jump to random case
+    default:
+        printf("Ended\n");
+}  
+```
+
+Which can be used as structured `goto` when creating state machines.

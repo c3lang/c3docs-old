@@ -309,7 +309,7 @@ macro void foo(a, b)
 
 ## Escape macros
 
-Usually macro will generate its own scope, so that break, return, continue and goto only stays valid inside of the macro's "scope". A `return` from inside a macro does not normally escape the scope into which it's called:
+Usually macro will generate its own scope, so that break, return, continue and next only stays valid inside of the macro's "scope". A `return` from inside a macro does not normally escape the scope into which it's called:
 
 ```
 macro void @foo() { return; }
@@ -337,23 +337,25 @@ func void test()
 }
 ```
 
-This is not limited to return: `break`, `continue` and even `goto` is allowed.
+This is not limited to return: `break`, `continue` and `next` is allowed.
 
 ```
-macro @goto!($f) 
+macro next!($f) 
 { 
-     goto $f;
+     next $f;
 }
 
 func void test()
 {
-    @goto!(test)
-
-    printf("Foo!\n")    
-    return;
-    
-    test:
-    printf("Bar!\n")
+    int i = 1;
+    switch (i)
+    {
+        case 1:
+            @next!(3);
+            printf("Foo\n");
+        case 3:
+            printf("Bar!\n")
+    }
 }
 ```
 
