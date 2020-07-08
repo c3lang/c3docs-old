@@ -308,18 +308,18 @@ if (file2)
 
 <p>A function, method or macro call with one or more parameters will only execute if the failable has no error. This makes error returns composable. </p>
 <pre><code>func int! fooMayError() { ... }
-func int double(int i) { ... }
+func int mult(int i) { ... }
 func int! save(int i) { ... }
 
 func void test()
 (
     int! i = fooMayError();
 
-    // &quot;double&quot; is only called if &quot;fooMayError()&quot;
+    // &quot;mult&quot; is only called if &quot;fooMayError()&quot;
     // returns a non error result.
-    int! j = double(fooMayError());
+    int! j = mult(fooMayError());
 
-    int! k = save(double(fooMAyError()));
+    int! k = save(mult(fooMAyError()));
     catch (err = k)
     {
         // The error may be from fooMayError
@@ -328,6 +328,8 @@ func void test()
 )
 </code></pre>
 
+<p>If a <code>catch</code> returns or jumps out of the current scope in a different way, then the variable becomes
+unwrapped to it's non-failable type. </p>
 <h4 id="some-simple-examples">Some simple examples.</h4>
 <h5 id="defining-an-error">Defining an error</h5>
 <p>Errors may either be flat or contain additional data.</p>
@@ -349,16 +351,17 @@ error ParseError
 </code></pre>
 
 <h5 id="calling-a-function-automatically-returning-any-error">Calling a function automatically returning any error</h5>
-<p>The <code>try</code> keyword will create an implicit return.</p>
+<p>The <code>!!</code> suffix will create an implicit return on error.</p>
 <pre><code>func void! findFileAndTest()
 {
-    try findFile();
+    findFile()!!;
     // Implictly:
     // catch (err = findFile()) return err!;
 }
 </code></pre>
 
 <h5 id="catching-errors">Catching errors</h5>
+<p>Catching an error and returning will implicitly unwrap the checked variable.</p>
 <pre><code>func void findFileAndNoErr()
 {
     File*! res = findFile();    
@@ -367,6 +370,8 @@ error ParseError
         printf(&quot;An error occurred!\n&quot;);
         return;
     }
+    // res is implicitly unwrapped here.
+    // and have an effective type of File* here.
 }
 </code></pre>
 
@@ -374,7 +379,7 @@ error ParseError
 <pre><code>func void doSomethingToFile()
 {
     void! res = findFile();    
-    if (res)
+    try (res)
     {
         printf(&quot;I found the file\n&quot;);
     }
@@ -413,7 +418,7 @@ func int testDefault()
 </code></pre>
 
 <h5 id="default-jump">Default jump</h5>
-<p>The else can also be followed by a jump statement: <code>goto</code>, <code>return</code>, <code>break</code>, <code>continue</code> or <code>throw</code>.</p>
+<p>The else can also be followed by a jump statement: <code>return</code>, <code>break</code> or <code>continue</code>.</p>
 <pre><code>func int testBreak(int times)
 {
     int index;
@@ -426,6 +431,22 @@ func int testDefault()
         printf(&quot;Aborted test at index: %d\n&quot;, index);
     }
     return index;
+}
+</code></pre>
+
+<h4 id="check-for-error-or-success">Check for error or success</h4>
+<p><code>try</code> and <code>catch</code> without a statements returns a boolean true / false:</p>
+<pre><code>func int testResult()
+{
+    int! result = getValue();
+    if (try(result))
+    {
+        printf(&quot;Success!\n&quot;);
+    }
+    if (catch(result))
+    {
+        printf(&quot;Failure\n&quot;);
+    }
 }
 </code></pre>
               

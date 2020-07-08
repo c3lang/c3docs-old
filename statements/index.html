@@ -115,6 +115,12 @@
         
             <li><a class="toctree-l4" href="#expression-blocks">Expression blocks</a></li>
         
+            <li><a class="toctree-l4" href="#labelled-break-and-continue">Labelled break and continue</a></li>
+        
+            <li><a class="toctree-l4" href="#do-without-while">Do-without-while</a></li>
+        
+            <li><a class="toctree-l4" href="#next-and-labelled-next">Next and labelled next</a></li>
+        
         </ul>
     
 
@@ -293,6 +299,66 @@
     printf(&quot;The result was %d\n&quot;, a);
 }
 </code></pre>
+
+<h2 id="labelled-break-and-continue">Labelled break and continue</h2>
+<p>Labelled <code>break</code> and <code>continue</code> lets you break out of an outer scope. Labels can be put on <code>if</code>, 
+<code>switch</code>, <code>catch</code>, <code>while</code> and <code>do</code> statements.</p>
+<pre><code>func void test(int i)
+{
+    if FOO: (i &gt; 0)
+    {
+        while (1)
+        {
+            printf(&quot;%d\n&quot;, i);
+            // Break out of the top if statement.
+            if (i++ &gt; 10) break FOO;
+        }
+    }
+}
+</code></pre>
+
+<h2 id="do-without-while">Do-without-while</h2>
+<p>Do-while statements can skip the ending <code>while</code>. In that case it acts as if the <code>while</code> was <code>while(0)</code>:</p>
+<pre><code>do 
+{
+    printf(&quot;FOO\n&quot;);
+} while (0);
+
+// Equivalent to the above.
+do 
+{
+    printf(&quot;FOO\n&quot;);
+}
+</code></pre>
+
+<h2 id="next-and-labelled-next">Next and labelled next</h2>
+<p>The <code>next</code> statement is used in <code>switch</code> and <code>catch</code> to jump to the next statement:</p>
+<pre><code>switch (i)
+{
+   case 1:
+     doSomething();
+     next; // Jumps to case 2
+   case 2:
+     doSomethingElse();
+}
+</code></pre>
+
+<p>It's also possible to use <code>next</code> with an expression, to jump to an arbitrary case:</p>
+<pre><code>switch (i)
+{
+    case 1:
+        doSomething();
+        next 3; // Jump to case 3
+    case 2:
+        doSomethingElse();
+    case 3:
+        next rand(); // Jump to random case
+    default:
+        printf(&quot;Ended\n&quot;);
+}  
+</code></pre>
+
+<p>Which can be used as structured <code>goto</code> when creating state machines.</p>
               
             </div>
           </div>

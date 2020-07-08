@@ -541,7 +541,7 @@ It's not possible to compile partial statements.</p>
 </code></pre>
 
 <h2 id="escape-macros">Escape macros</h2>
-<p>Usually macro will generate its own scope, so that break, return, continue and goto only stays valid inside of the macro's "scope". A <code>return</code> from inside a macro does not normally escape the scope into which it's called:</p>
+<p>Usually macro will generate its own scope, so that break, return, continue and next only stays valid inside of the macro's "scope". A <code>return</code> from inside a macro does not normally escape the scope into which it's called:</p>
 <pre><code>macro void @foo() { return; }
 
 func void test()
@@ -564,21 +564,23 @@ func void test()
 }
 </code></pre>
 
-<p>This is not limited to return: <code>break</code>, <code>continue</code> and even <code>goto</code> is allowed.</p>
-<pre><code>macro @goto!($f) 
+<p>This is not limited to return: <code>break</code>, <code>continue</code> and <code>next</code> is allowed.</p>
+<pre><code>macro next!($f) 
 { 
-     goto $f;
+     next $f;
 }
 
 func void test()
 {
-    @goto!(test)
-
-    printf(&quot;Foo!\n&quot;)    
-    return;
-
-    test:
-    printf(&quot;Bar!\n&quot;)
+    int i = 1;
+    switch (i)
+    {
+        case 1:
+            @next!(3);
+            printf(&quot;Foo\n&quot;);
+        case 3:
+            printf(&quot;Bar!\n&quot;)
+    }
 }
 </code></pre>
 
