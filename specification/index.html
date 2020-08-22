@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Errors - C3 Documentation</title>
+  <title>Specification - C3 Documentation</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Errors";
-    var mkdocs_page_input_path = "errorhandling.md";
+    var mkdocs_page_name = "Specification";
+    var mkdocs_page_input_path = "specification.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -112,21 +112,9 @@
                     
     <a class="" href="../expressions/">Expressions</a>
                 </li>
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Errors</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#error-handling">Error Handling</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l4" href="#error-returns">Error returns</a></li>
-        
-        </ul>
-    
-
-    </ul>
+    <a class="" href="../errorhandling/">Errors</a>
                 </li>
                 <li class="">
                     
@@ -250,12 +238,8 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
-        
-          <li>Documentation &raquo;</li>
-        
-      
     
-    <li>Errors</li>
+    <li>Specification</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -265,203 +249,60 @@
           <div role="main">
             <div class="section">
               
-                <h2 id="error-handling">Error Handling</h2>
-<p>Unlike usual exception handling, errors in C3 build on normal returns. A function returning errors add a <code>!</code> to the return type. In C3 this called a "failable" type.</p>
-<h3 id="error-returns">Error returns</h3>
-<p>From C, a function returning an error value will appear as an out parameter – if the function returns a union of error codes – or as the return parameter if the function would a single enum.:</p>
-<p>C3 code:</p>
-<pre><code>func int! getValue();
-</code></pre>
-
-<p>Corresponding C code:</p>
-<pre><code class="c">int getValue(Error *error);
-</code></pre>
-
-<p>The <code>int!</code> here is the failable return type, which is a tagged union: it might hold either the error or an int.</p>
-<pre><code>// Open a file, we will get a failable:
-// Either a File* or an error.
-File*! file = openFile(&quot;foo.txt&quot;);
-
-// We can extract the error using &quot;catch&quot;
-catch (err = file)
-{
-    // Might print &quot;Error was FILE_NOT_FOUND&quot;
-    printf(&quot;Error was %s\n&quot;, err.name()); 
-
-    // Might print &quot;Error was FileError.FILE_NOT_FOUND&quot;
-    printf(&quot;Error was %s\n&quot;, err.fullName()); 
-
-    // Might print &quot;Error code: 931938210&quot;
-    printf(&quot;Error code: %ull\n&quot;, cast(err as ulong)); 
-    return;
-}
-
-// We can also just execute of success:
-File*! file2 = openFile(&quot;bar.txt&quot;);
-
-// Only true if there is no error.
-if (file2)
-{
-    // Inside here file2 is a regular File*
-}
-</code></pre>
-
-<p>A function, method or macro call with one or more parameters will only execute if the failable has no error. This makes error returns composable. </p>
-<pre><code>func int! fooMayError() { ... }
-func int mult(int i) { ... }
-func int! save(int i) { ... }
-
-func void test()
-(
-    int! i = fooMayError();
-
-    // &quot;mult&quot; is only called if &quot;fooMayError()&quot;
-    // returns a non error result.
-    int! j = mult(fooMayError());
-
-    int! k = save(mult(fooMAyError()));
-    catch (err = k)
-    {
-        // The error may be from fooMayError
-        // or save!
-    }    
-)
-</code></pre>
-
-<p>If a <code>catch</code> returns or jumps out of the current scope in a different way, then the variable becomes
-unwrapped to it's non-failable type. </p>
-<h4 id="some-simple-examples">Some simple examples.</h4>
-<h5 id="defining-an-error">Defining an error</h5>
-<p>Errors may either be flat or contain additional data.</p>
-<pre><code>error FileNotFoundError;
-error ParseError
-{
-    int line;
-    int col;
-}
-</code></pre>
-
-<h5 id="returning-an-error">Returning an error</h5>
-<p>Returning an error looks like a normal return but with the <code>!</code></p>
-<pre><code>func void! findFile()
-{
-    if (File.doesFileExist(&quot;foo.txt&quot;)) return FileNotFoundError!;
-    /* ... */
-}
-</code></pre>
-
-<h5 id="calling-a-function-automatically-returning-any-error">Calling a function automatically returning any error</h5>
-<p>The <code>!!</code> suffix will create an implicit return on error.</p>
-<pre><code>func void! findFileAndTest()
-{
-    findFile()!!;
-    // Implictly:
-    // catch (err = findFile()) return err!;
-}
-</code></pre>
-
-<h5 id="catching-errors">Catching errors</h5>
-<p>Catching an error and returning will implicitly unwrap the checked variable.</p>
-<pre><code>func void findFileAndNoErr()
-{
-    File*! res = findFile();    
-    catch (res)
-    {
-        printf(&quot;An error occurred!\n&quot;);
-        return;
-    }
-    // res is implicitly unwrapped here.
-    // and have an effective type of File* here.
-}
-</code></pre>
-
-<h5 id="only-do-if-no-error">Only do if no error</h5>
-<pre><code>func void doSomethingToFile()
-{
-    void! res = findFile();    
-    try (res)
-    {
-        printf(&quot;I found the file\n&quot;);
-    }
-}
-</code></pre>
-
-<h5 id="catching-some-errors">Catching some errors</h5>
-<pre><code>func void! findFileAndParse2()
-{
-    catch (err = findFileAndParse())
-    {
-        case FileNotFoundError:
-            printf(&quot;Error loading the file!\n&quot;);
-        default:
-            return err;
-    }
-}
-</code></pre>
-
-<h5 id="default-values">Default values</h5>
-<p>A function returning an error may be followed by an <code>else</code> and an expression. The call then executes and returns the expression.</p>
-<pre><code>func int testDefault()
-{
-    return getIntNumberOrFail() else -1;
-}
-
-// The above is equivalent to:
-
-func int testDefault()
-{
-    int! i = getIntNumberOrFail();    
-    catch (i) return -1;
-    return i;
-}
-
-</code></pre>
-
-<h5 id="default-jump">Default jump</h5>
-<p>The else can also be followed by a jump statement: <code>return</code>, <code>break</code> or <code>continue</code>.</p>
-<pre><code>func int testBreak(int times)
-{
-    int index;
-    for (index = 0; i &lt; times; i++)
-    {
-       callTest(index) else break; 
-    }
-    if (index &lt; times)
-    {
-        printf(&quot;Aborted test at index: %d\n&quot;, index);
-    }
-    return index;
-}
-</code></pre>
-
-<h4 id="check-for-error-or-success">Check for error or success</h4>
-<p><code>try</code> and <code>catch</code> without a statements returns a boolean true / false:</p>
-<pre><code>func int testResult()
-{
-    int! result = getValue();
-    if (try(result))
-    {
-        printf(&quot;Success!\n&quot;);
-    }
-    if (catch(result))
-    {
-        printf(&quot;Failure\n&quot;);
-    }
-}
-</code></pre>
+                <h1 id="specification">Specification</h1>
+<h2 id="lexical-structure">Lexical structure</h2>
+<h3 id="unicode">Unicode</h3>
+<p>Programs are written using the Unicode character set. The C3 language represents text as a sequence of bytes using the UTF-8 encoding.</p>
+<p>Except for comments and the contents of character and string literals, all input elements are formed only from ASCII characters.</p>
+<h3 id="lexical-translations">Lexical Translations</h3>
+<p>A raw byte stream is translated into a sequence of tokens which white space and non-doc comments are discarded. Doc comments may optionally be discarded as well. The resulting input elements form the tokens that are the terminal symbols of the syntactic grammar.</p>
+<p>The longest possible translation is used at each step, even if the result does not ultimately make a correct program while another lexical translation would.</p>
+<blockquote>
+<p>Example: <code>a--b</code> is translated as <code>a</code>, <code>--</code>, <code>b</code>, which does not form a grammatically correct expression, even &gt;though the tokenization <code>a</code>, <code>-</code>, <code>-</code>, <code>b</code> could form a grammatically correct expression.</p>
+</blockquote>
+<h3 id="line-terminators">Line Terminators</h3>
+<p>A Java compiler divides the sequence of input bytes into lines by recognizing <em>line terminators</em></p>
+<p>Lines are terminated by the ASCII LF character (byte value 0x0A), also known as "newline". A line termination specifies the termination of the // form of a comment.</p>
+<h3 id="input-elements-and-tokens">Input Elements and Tokens</h3>
+<p>An input element may be:</p>
+<ol>
+<li>White space</li>
+<li>Commoent</li>
+<li>Doc Comment</li>
+<li>Token</li>
+</ol>
+<p>A token may be:</p>
+<ol>
+<li>Identifier</li>
+<li>Keyword</li>
+<li>Literal</li>
+<li>Separator</li>
+<li>Operator</li>
+</ol>
+<p>A Doc Comment consists of:</p>
+<ol>
+<li>A stream of descriptive text</li>
+<li>A list of directive Tokens</li>
+</ol>
+<p>Those input elements that are not white space or comments are tokens. The tokens are the terminal symbols of the syntactic grammar. Whitespace and comments can serve to separate tokens that might be tokenized in another manner. For example the characters <code>+</code> and <code>=</code> may form the operator token <code>+=</code> only if there is no intervening white space or comment.</p>
+<h3 id="white-space">White Space</h3>
+<p>White space is defined as the ASCII CR (byte value 0x0D), the ASCII horizontal tab character (byte value 0x09) and the space character (byte value 0x20) and the line terminator character.</p>
+<h3 id="comments">Comments</h3>
+<p>Thre are three types of regular comments:</p>
+<ol>
+<li><code>/* text */</code> block comments. The text between <code>/*</code> and <code>*/</code> is ignored.</li>
+<li><code>// text</code> a line comment. The text between <code>//</code> and line end is ignored.</li>
+<li><code>/+ text +/</code> nesting comments. The text between <code>/+</code> and <code>+/</code> is ignored. Unlike <code>/* text */</code> it has nesting behaviour, so for every <code>/+</code> discovered between the first <code>/+</code> and the last <code>+/</code> a corresponding <code>+/</code> must be found.</li>
+</ol>
+<p>TODO grammar</p>
+<ol>
+<li><code>/** text **/</code> doc block comment. The text between <code>/**</code> and <code>**/</code> is optionally parsed using the doc comment syntatic grammar. A compiler may choose to read <code>/** text **/</code> as a regular comment.</li>
+<li><code>/// text`` doc line comment. The text between</code>///<code>and line end is optionally parsed using the doc comment syntactic grammar. A compiler may choose to read</code>/* </li>
+</ol>
               
             </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../undefinedbehaviour/" class="btn btn-neutral float-right" title="Undefined behaviour">Next <span class="icon icon-circle-arrow-right"></span></a>
-      
-      
-        <a href="../expressions/" class="btn btn-neutral" title="Expressions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
@@ -485,10 +326,6 @@ func int testDefault()
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../expressions/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../undefinedbehaviour/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

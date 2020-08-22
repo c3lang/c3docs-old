@@ -145,6 +145,8 @@
     
         <ul>
         
+            <li><a class="toctree-l4" href="#a-quick-comparison-of-c-and-c3-macros">A quick comparison of C and C3 macros</a></li>
+        
             <li><a class="toctree-l4" href="#top-level-evaluation">Top level evaluation</a></li>
         
             <li><a class="toctree-l4" href="#macro-declarations">Macro declarations</a></li>
@@ -284,6 +286,144 @@
                 <h1 id="macros">Macros</h1>
 <p><strong>WILL be subject to later revision!</strong></p>
 <p>The macro capabilities of C3 reaches across several constructs: macros (prefixed with <code>@</code> at invocation), <a href="../generics/#generic-functions">generic functions</a>, <a href="../generics/#generic-modules">generic modules</a>, compile time variables (prefixed with <code>$e</code>), macro compile time execution (using <code>$if</code>, <code>$each</code>, <code>$switch</code>), attributes and incremental structs, enums and arrays.</p>
+<h2 id="a-quick-comparison-of-c-and-c3-macros">A quick comparison of C and C3 macros</h2>
+<h3 id="conditional-compilation">Conditional compilation</h3>
+<pre><code>// C
+#if defined(x) &amp;&amp; y &gt; 3
+int z;
+#endif
+
+// C3
+$if ($defined(x) &amp;&amp; y &gt; 3)
+{
+    int z;
+}
+</code></pre>
+
+<h3 id="macros_1">Macros</h3>
+<pre><code>// C
+#define M(x) ((x) + 2)
+#define RETURN(x) return x;
+#define u32 unsigned int
+
+// Use:
+int y = M(foo() + 2);
+RETURN(bar());
+u32 b = y;
+
+// C3
+macro m(x)
+{
+    return x + 2;
+}
+macro ret!(x)
+{
+    return x;
+}
+typedef uint as u32;
+
+// Use:
+int y = @m(foo() + 2);
+@ret!(bar());
+u32 b = y;
+</code></pre>
+
+<h3 id="dynamic-scoping">Dynamic scoping</h3>
+<pre><code>// C
+#define Z() ptr-&gt;x-&gt;y-&gt;z
+int z = Z();
+
+// C3
+macro z(implicit ptr)
+{
+    return ptr-&gt;x-&gt;y-&gt;z;
+}
+int z = @z();
+</code></pre>
+
+<h3 id="reference-arguments">Reference arguments</h3>
+<pre><code>// C
+#define M(x, y) x = 2 * (y);
+
+// C3
+macro m(int &amp;x, int y)
+{
+    x = 2 * y;
+}
+</code></pre>
+
+<h3 id="first-class-types">First class types</h3>
+<pre><code>// C
+#define SIZE(T) (sizeof(T) + sizeof(int))
+
+// C3
+macro size($Type)
+{
+    return sizeof($Type) + sizeof(int);
+}
+</code></pre>
+
+<h3 id="first-class-statements">First class statements</h3>
+<pre><code>// C
+#define FOR_EACH(x, list) \
+ for (x = (list); x; x = x-&gt;next)
+
+// Use:
+Foo *it;
+FOR_EACH(it, list) 
+{
+    if (!process(it)) return;
+}
+
+
+// C3
+macro for_each(list, macro void(it) @body)
+{
+    for (typeof(list) x = list; x; x = x-&gt;next) @body(x);
+}
+// Use:
+@for_each(list; Foo* x)
+{
+  if (!process(x)) return;
+}
+</code></pre>
+
+<h3 id="first-class-names">First class names</h3>
+<pre><code>// C
+#define offsetof(T, field) (size_t)(&amp;((T*)0)-&gt;field)
+
+// C3
+macro offsetof($Type, $field)
+{
+    return (size_t)(&amp;((T*)0)-&gt;field);
+}
+</code></pre>
+
+<h3 id="declaration-attributes">Declaration attributes</h3>
+<pre><code>// C
+#define NONNULL(args...) __attribute__((nonnull(args)))
+
+// C3
+... currently no corresponding functionality ...
+</code></pre>
+
+<h3 id="declaration-macros">Declaration macros</h3>
+<pre><code>// C
+#define DECLARE_LIST(name) List name = { .head = NULL };
+// Use:
+DECLARE_LIST(hello)
+
+// C3
+... currently no corresponding functionality ...
+</code></pre>
+
+<h3 id="stringingification">Stringingification</h3>
+<pre><code>#define DECLARE_STRING(name, s) char *name##_str = #s;
+
+// C3
+... currently no corresponding functionality ...
+</code></pre>
+
 <h2 id="top-level-evaluation">Top level evaluation</h2>
 <p>Script languages, and also upcoming languages like <em>Jai</em>, usually have unbounded top level evaluation. The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. </p>
 <p>In C3, top level compile time evaluation is limited to <code>$if</code> and <code>$switch</code> constructs. This makes the code easier to read by sacrificing flexibility. However, the incremental structs, enums and arrays provided by the compiler offers a way to build compile time structures without the necessity for full meta programming capabilities.</p>
@@ -506,7 +646,7 @@ func void test()
 {
     $each($some_enum as $x)  
     {
-        printf(&quot;%d\n&quot;, cast($x, int));     
+        printf(&quot;%d\n&quot;, cast($x as int));     
     }
 }
 
@@ -520,8 +660,8 @@ func void test()
 {
     @foo_enum(MyEnum);
     // Expands to -&gt;
-    // printf(&quot;%d\n&quot;, cast(MyEnum.A, int));
-    // printf(&quot;%d\n&quot;, cast(MyEnum.B, int));    
+    // printf(&quot;%d\n&quot;, cast(MyEnum.A as int));
+    // printf(&quot;%d\n&quot;, cast(MyEnum.B as int));    
 }
 </code></pre>
 
@@ -593,7 +733,7 @@ meaning of the code that follows.</p>
 <p>Still, the usefulness of top level macros is great, which is why C3 offers 
 four pieces of functionality for the top level: conditional compilation,
 global compile time varibles, attributes and incremental arrays.</p>
-<h3 id="conditional-compilation">Conditional compilation</h3>
+<h3 id="conditional-compilation_1">Conditional compilation</h3>
 <p>Conditional compilation is done with $if and $else, which works just like
 inside of functions.</p>
 <pre><code>$if (@defined($os) &amp;&amp; $os == 'WIN32')

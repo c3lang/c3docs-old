@@ -197,8 +197,6 @@
         
             <li><a class="toctree-l4" href="#removal-of-the-volatile-type-qualifier">Removal of the volatile type qualifier</a></li>
         
-            <li><a class="toctree-l4" href="#volatile-section">Volatile section</a></li>
-        
             <li><a class="toctree-l4" href="#interfaces">Interfaces</a></li>
         
             <li><a class="toctree-l4" href="#built-in-maps">Built in maps</a></li>
@@ -551,8 +549,6 @@ Foo* unsafeFoo;
 <h2 id="unsorted">Unsorted</h2>
 <h2 id="halloc">Halloc</h2>
 <p>Hierarchal memory allocation http://swapped.cc/#!/halloc support it?</p>
-<h5 id="unsigned-conversion-to-signed">Unsigned conversion to signed</h5>
-<p>Perhaps consider signed, rather than unsigned implicit conversion. Currently <code>ulong + long</code> becomes <code>ulong + cast(long, ulong)</code> (according to C rules). Consider changing that to <code>cast(ulong, long) + long</code>. That is, instead of "unsigned wins", use "signed wins".</p>
 <h5 id="tagged-any">Tagged any</h5>
 <p>A tagged pointer union type for any possible type.</p>
 <h5 id="require-explicit-uninitialization">Require explicit uninitialization</h5>
@@ -691,54 +687,30 @@ switch(@tag(foo))
 </code></pre>
 
 <h2 id="removal-of-the-volatile-type-qualifier">Removal of the volatile type qualifier</h2>
-<p>The volatile type qualifier is replaced by volatile sections. A volatile section is guaranteed to not be optimized away.</p>
+<p>The volatile type qualifier is replaced by volatile stores and loads.</p>
 <pre><code>\\ C volatile
 void test()
 {
-    volatile v = 0;
+    volatile int v = 0;
     for (int i = 0; i &lt; 100; i++)
     {
-        // Usually this would be optimized away,
+        // Usually these two would be optimized away,
         // but volatile will ensure it is executed.
-        v = 1; 
+        v = 1;
+        int x = v; 
     }
 }
 
 \\ C3
 func void test()
 {
-    v = 0;
+    int v = 0;
     for (int i = 0; i &lt; 100; i++)
     {
-        // Everything in the block
-        // will avoid optimization
-        @volatile
-        {
-            v = 1; 
-        }
+        volatile(v) = 1;
+        int x = volatile(v);
     }
 }
-</code></pre>
-
-<h2 id="volatile-section">Volatile section</h2>
-<p>Volatile sections replace volatile type qualifiers on variable types.</p>
-<pre><code>func void test()
-{
-    v = 0;
-    for (int i = 0; i &lt; 100; i++)
-    {
-        volatile
-        {
-            v = 1; 
-        }
-    }
-}
-</code></pre>
-
-<p>Note that volatile sections may also be used as expressions:</p>
-<pre><code>// The v = 1 assignment may not be optimized away,
-// But the assignment to x can be. 
-x = volatile(v = 1);
 </code></pre>
 
 <h2 id="interfaces">Interfaces</h2>
@@ -749,10 +721,10 @@ x = volatile(v = 1);
 
 interface Renderer
 {
-    void renderPage(Renderer* renderer, Page* info);
+    void renderPage(virtual Renderer* renderer, Page* info);
 }
 
-func void render(Renderer* renderer, Page* info)
+func void render(virtual Renderer* renderer, Page* info)
 {
     if (!rendered) return;
     renderer-&gt;renderPage(info);
@@ -767,9 +739,10 @@ func void test()
     Renderer.render(foo, page);
 
     // Option 2
-    Renderer* renderer = foo;
+    virtual Renderer* renderer = foo;
     renderer.render(page);
 }
+
 
 // C equivalent: 
 // struct RendererVtable { 
@@ -793,74 +766,6 @@ func void test()
 //     struct RendererRef renderer = { foo, &amp;FooRendererVTable };
 //     Renderer__render(renderer, page);
 // }
-</code></pre>
-
-<p>Possible syntax ideas:</p>
-<pre><code>func void test()
-{
-    Renderer* renderer1 = getFoo(); // Implicit
-
-    Renderer* renderer2 = Renderer(getFoo());
-
-    Renderer* renderer3 = getFoo() as Renderer;
-
-    Renderer* renderer4 = @wrap(Renderer, getFoo()); // Macro
-
-    Renderer renderer5 = getFoo(); // Look, no pointer!
-
-    Renderer@ renderer6 = getFoo(); // Special pointer type?
-
-    interface Renderer renderer7 = getFoo(); // Love long lines
-
-    @Renderer renderer8 = getFoo();
-
-    Renderer^ renderer9 = getFoo(); // Pascal    
-
-    Renderer renderer10 = interface getFoo();
-
-    Renderer renderer11 = interface(getFoo());
-
-    Renderer renderer12 = virtual { getFoo() };
-
-    virtual Renderer renderer13 = getFoo();
-
-    virtual Renderer renderer14 = getFoo();
-
-}
-
-func void render(Renderer renderer, Page* info)
-{
-    renderer.renderPage(info);
-}
-
-virtual Renderer
-{
-    void renderPage(Page* info);
-}
-
-func void render(virtual Renderer* renderer, Page* info)
-{
-    renderer.renderPage(info);
-}
-
-func void render(virtual Renderer* renderer, Page* info)
-{
-    renderer-&gt;renderPage(info);
-}
-
-func void render(interface Renderer* renderer, Page* info)
-{
-    renderer-&gt;renderPage(info);
-}
-
-
-interface Renderer*[4] renderers;
-
-interface Renderer[4] renderers;
-
-virtual Renderer[4] renderers;
-
-Renderer*[4] renderers;
 </code></pre>
 
 <h2 id="built-in-maps">Built in maps</h2>
@@ -1214,7 +1119,7 @@ macro @foo_enum(&amp;a)
 {
     $EACH(a AS $x)  
     {
-        printf(&quot;%d\n&quot;, cast($x, int));      
+        printf(&quot;%d\n&quot;, cast($x as int));        
     }
 }
 
@@ -1233,9 +1138,9 @@ func void test()
 // Expands to
 func void test()
 {
-    printf(&quot;%d\n&quot;, cast(A, int));
-    printf(&quot;%d\n&quot;, cast(B, int));
-    printf(&quot;%d\n&quot;, cast(FOO, int));
+    printf(&quot;%d\n&quot;, cast(A as int));
+    printf(&quot;%d\n&quot;, cast(B as int));
+    printf(&quot;%d\n&quot;, cast(FOO as int));
 }
 </code></pre>
 
