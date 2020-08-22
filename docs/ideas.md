@@ -2,6 +2,7 @@
 
 **WARNING** Unfinished ideas / brain dumps
 
+
 ## Simpler casts
 
 Use the type-call style casts:
@@ -310,10 +311,6 @@ Steps:
 
 Hierarchal memory allocation http://swapped.cc/#!/halloc support it?
 
-##### Unsigned conversion to signed
-
-Perhaps consider signed, rather than unsigned implicit conversion. Currently `ulong + long` becomes `ulong + cast(long, ulong)` (according to C rules). Consider changing that to `cast(ulong, long) + long`. That is, instead of "unsigned wins", use "signed wins".
- 
 
 ##### Tagged any
 
@@ -474,62 +471,34 @@ struct Shape
 
 ## Removal of the volatile type qualifier
 
-The volatile type qualifier is replaced by volatile sections. A volatile section is guaranteed to not be optimized away.
+The volatile type qualifier is replaced by volatile stores and loads.
 
 ```
 \\ C volatile
 void test()
 {
-    volatile v = 0;
+    volatile int v = 0;
     for (int i = 0; i < 100; i++)
     {
-        // Usually this would be optimized away,
+        // Usually these two would be optimized away,
         // but volatile will ensure it is executed.
-        v = 1; 
+        v = 1;
+        int x = v; 
     }
 }
 
 \\ C3
 func void test()
 {
-    v = 0;
+    int v = 0;
     for (int i = 0; i < 100; i++)
     {
-        // Everything in the block
-        // will avoid optimization
-        @volatile
-        {
-            v = 1; 
-        }
+        volatile(v) = 1;
+        int x = volatile(v);
     }
 }
 ```
 
-## Volatile section
-
-Volatile sections replace volatile type qualifiers on variable types.
-
-```
-func void test()
-{
-    v = 0;
-    for (int i = 0; i < 100; i++)
-    {
-        volatile
-        {
-            v = 1; 
-        }
-    }
-}
-```
-
-Note that volatile sections may also be used as expressions:
-
-```
-// The v = 1 assignment may not be optimized away,
-// But the assignment to x can be. 
-x = volatile(v = 1);
-```
 
 
 ## Interfaces
@@ -542,10 +511,10 @@ func void Foo.renderPage(Foo* foo, Page* info)
 
 interface Renderer
 {
-    void renderPage(Renderer* renderer, Page* info);
+    void renderPage(virtual Renderer* renderer, Page* info);
 }
 
-func void render(Renderer* renderer, Page* info)
+func void render(virtual Renderer* renderer, Page* info)
 {
     if (!rendered) return;
     renderer->renderPage(info);
@@ -560,9 +529,10 @@ func void test()
     Renderer.render(foo, page);
     
     // Option 2
-    Renderer* renderer = foo;
+    virtual Renderer* renderer = foo;
     renderer.render(page);
 }
+
 
 // C equivalent: 
 // struct RendererVtable { 
@@ -586,75 +556,6 @@ func void test()
 //     struct RendererRef renderer = { foo, &FooRendererVTable };
 //     Renderer__render(renderer, page);
 // }
-```
-
-Possible syntax ideas:
-```
-func void test()
-{
-    Renderer* renderer1 = getFoo(); // Implicit
-
-    Renderer* renderer2 = Renderer(getFoo());
-
-    Renderer* renderer3 = getFoo() as Renderer;
-
-    Renderer* renderer4 = @wrap(Renderer, getFoo()); // Macro
-
-    Renderer renderer5 = getFoo(); // Look, no pointer!
-
-    Renderer@ renderer6 = getFoo(); // Special pointer type?
-
-    interface Renderer renderer7 = getFoo(); // Love long lines
-
-    @Renderer renderer8 = getFoo();
-
-    Renderer^ renderer9 = getFoo(); // Pascal    
-    
-    Renderer renderer10 = interface getFoo();
-
-    Renderer renderer11 = interface(getFoo());
-
-    Renderer renderer12 = virtual { getFoo() };
-    
-    virtual Renderer renderer13 = getFoo();
-    
-    virtual Renderer renderer14 = getFoo();
-    
-}
-
-func void render(Renderer renderer, Page* info)
-{
-    renderer.renderPage(info);
-}
-
-virtual Renderer
-{
-    void renderPage(Page* info);
-}
-
-func void render(virtual Renderer* renderer, Page* info)
-{
-    renderer.renderPage(info);
-}
-
-func void render(virtual Renderer* renderer, Page* info)
-{
-    renderer->renderPage(info);
-}
-
-func void render(interface Renderer* renderer, Page* info)
-{
-    renderer->renderPage(info);
-}
-
-
-interface Renderer*[4] renderers;
-
-interface Renderer[4] renderers;
-
-virtual Renderer[4] renderers;
-
-Renderer*[4] renderers;
 ```
 
 ## Built in maps
@@ -1075,7 +976,7 @@ macro @foo_enum(&a)
 {
     $EACH(a AS $x)  
     {
-        printf("%d\n", cast($x, int));		
+        printf("%d\n", cast($x as int));		
     }
 }
 
@@ -1094,9 +995,9 @@ func void test()
 // Expands to
 func void test()
 {
-	printf("%d\n", cast(A, int));
-	printf("%d\n", cast(B, int));
-	printf("%d\n", cast(FOO, int));
+	printf("%d\n", cast(A as int));
+	printf("%d\n", cast(B as int));
+	printf("%d\n", cast(FOO as int));
 }
 ```
 

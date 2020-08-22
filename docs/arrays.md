@@ -22,9 +22,18 @@ int x[3] = { 1, 2, 3 };
 foo(&x);
 ```
 
+When you want to initialize a fixed array without specififying the size, use the [+] array syntax:
+
+```
+int[3] a = { 1, 2, 3};
+int[+] b = { 4, 5, 6}; // Type inferred to be int[3]
+```
+
 ## Variable arrays
 
 Variable arrays are specially allocated arrays that are prefixed with both a size and a capacity. If allocated on the heap, they cannot expand, but heap allocated variable arrays will do so automatically using whatever memory allocator was used to create it. 
+
+*THIS PART WILL BE SUBJECT TO REVISION*
 
 ```
 int[*] x = @malloc(int[*]);
@@ -76,15 +85,15 @@ return the size of the array.
 ###### resize(size)
 Resize the array to the given size.
 
-## Slices
+## Subarray
 
-The final type is the slice `<type>[]`  e.g. `int[]`. A slice is a view into either a fixed or variable array. Internally it is represented as a struct containing a pointer and a size. Both fixed and variable arrays may be converted into slices, and slices may be implicitly converted to pointers:
+The final type is the subarray `<type>[]`  e.g. `int[]`. A subarray is a view into either a fixed or variable array. Internally it is represented as a struct containing a pointer and a size. Both fixed and variable arrays may be converted into slices, and slices may be implicitly converted to pointers:
     
 ```
 int[4] a = { 1, 2, 3, 4};
 int[] b = &a; // Implicit conversion is always ok.
-int[4] c = cast(b, int[4]); // Will copy the value of b into c.
-int[4]* d = cast(b, int[4]); // Equivalent to d = &a
+int[4] c = cast(b as int[4]); // Will copy the value of b into c.
+int[4]* d = cast(b as int[4]); // Equivalent to d = &a
 int[*] e = @malloc(int[]);
 b.size; // Returns 4
 e.size; // Returns 0
@@ -95,9 +104,58 @@ int* f = b; // Equivalent to e = &a
 f = d; // implicit conversion ok.
 f = e; // implicit conversion ok.
 d = e; // ERROR! Not allowed
-d = cast(e, int[4]*); // Fine
+d = cast(e as int[4]*); // Fine
 b = e; // Implicit conversion ok
 ```
+
+### Slicing arrays
+
+It's possible to use a range syntax to create subarrays from pointers, arrays, vararrays and other subarrays. The usual syntax is `arr[<start index>..<end index>]`. The end index is not included in the final result.
+    
+```
+int[5] a = { 1, 20, 50, 100, 200 };
+int[] b = a[0..5]; // The whole array as a slice.
+int[] c = a[1..3]; // { 20, 50 }
+```
+
+It's possible to omit the first and last index, in which case the start and the len is inferred. Note that omitting the last index is not allowed for pointers.
+
+The following are all equivalent:
+
+```
+int[5] a = { 1, 20, 50, 100, 200 };
+int[] b = a[0..5];
+int[] c = a[..5];
+int[] d = a[0..];
+int[] e = a[..];
+```
+
+One may also slice from the end. Again this is not allowed for pointers.
+
+```
+int[5] a = { 1, 20, 50, 100, 200 };
+int[] b = a[1..^1]; // { 20, 50, 100 }
+int[] c = a[^3..]; // { 50, 100, 200 }
+```
+
+One may also use assign to slices:
+
+```
+int[3] a = { 1, 20, 50 };
+a[1..3] = 0; // a = { 1, 0, 0}
+```
+
+Or copy slices to slices:
+
+```
+int[3] a = { 1, 20, 50 };
+int[3] b = { 2, 4, 5 }
+a[1..3] = b[0..2]; // a = { 1, 2, 4}
+```
+
+Copying overlapping ranges, e.g. `a[1..3] = a[0..2]` is undefined behaviour.
+
+    
 ### Conversion list
 
 |  |       int[4] | int[*] | int[] | int[4]* | int* |
@@ -117,9 +175,9 @@ int[4] a;
 int[4]* b = &a;
 int* c = b;
 // Safe cast:
-int[4]* d = cast(c, int[4]*); 
+int[4]* d = cast(c as int[4]*); 
 // Faulty code with undefined behaviour:
-int[*] e = cast(c, int[*]*); 
+int[*] e = cast(c as int[*]*); 
 ```
 
 ```
@@ -128,10 +186,10 @@ a += 11;
 a += 12;
 a += 13;
 // Safe (2 is less than the dynamic size of a)
-int[2]* b = cast(a, int[2]*);
+int[2]* b = cast(a as int[2]*);
 // Faulty code with undefined behaviour
 // (4 is greater than the dynamic size of a)
-int[4]* c = cast(a, int[4]*);
+int[4]* c = cast(a as int[4]*);
 ```
 
 #### Internals

@@ -1,5 +1,9 @@
 # Change log
 
+##### Revision 2020-08-22
+- Added slice operations
+- Changed cast syntax to `cast(<expr> as <type>)`
+    
 ##### Revision 2020-07-08
 - Additions to [error handling](../errorhandling).
 - Introduction of labelled `next`, `break` and `continue`.

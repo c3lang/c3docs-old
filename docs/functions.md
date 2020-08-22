@@ -92,8 +92,8 @@ func void varargsTyped(string bar, int... ints)
 
 func void test()
 {
-    varargsUntyped("Hello", 2, 1.0, cast(1, byte), "Test");
-    varargsTyped("Test", 2, cast(1, byte));
+    varargsUntyped("Hello", 2, 1.0, cast(1 as byte), "Test");
+    varargsTyped("Test", 2, cast(1 as byte));
     // The second parameter will be converted to an int implicitly.
 }
 ```

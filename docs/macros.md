@@ -4,6 +4,165 @@
 
 The macro capabilities of C3 reaches across several constructs: macros (prefixed with `@` at invocation), [generic functions](../generics/#generic-functions), [generic modules](../generics/#generic-modules), compile time variables (prefixed with `$e`), macro compile time execution (using `$if`, `$each`, `$switch`), attributes and incremental structs, enums and arrays.
 
+## A quick comparison of C and C3 macros
+
+### Conditional compilation
+
+```
+// C
+#if defined(x) && y > 3
+int z;
+#endif
+
+// C3
+$if ($defined(x) && y > 3)
+{
+    int z;
+}
+```
+
+### Macros
+
+```
+// C
+#define M(x) ((x) + 2)
+#define RETURN(x) return x;
+#define u32 unsigned int
+
+// Use:
+int y = M(foo() + 2);
+RETURN(bar());
+u32 b = y;
+
+// C3
+macro m(x)
+{
+    return x + 2;
+}
+macro ret!(x)
+{
+    return x;
+}
+typedef uint as u32;
+
+// Use:
+int y = @m(foo() + 2);
+@ret!(bar());
+u32 b = y;
+```
+
+### Dynamic scoping
+
+```
+// C
+#define Z() ptr->x->y->z
+int z = Z();
+
+// C3
+macro z(implicit ptr)
+{
+    return ptr->x->y->z;
+}
+int z = @z();
+```
+
+### Reference arguments
+
+```
+// C
+#define M(x, y) x = 2 * (y);
+
+// C3
+macro m(int &x, int y)
+{
+    x = 2 * y;
+}
+```
+
+### First class types
+
+```
+// C
+#define SIZE(T) (sizeof(T) + sizeof(int))
+
+// C3
+macro size($Type)
+{
+    return sizeof($Type) + sizeof(int);
+}
+```
+
+### First class statements
+```
+// C
+#define FOR_EACH(x, list) \
+ for (x = (list); x; x = x->next)
+
+// Use:
+Foo *it;
+FOR_EACH(it, list) 
+{
+    if (!process(it)) return;
+}
+
+
+// C3
+macro for_each(list, macro void(it) @body)
+{
+    for (typeof(list) x = list; x; x = x->next) @body(x);
+}
+// Use:
+@for_each(list; Foo* x)
+{
+  if (!process(x)) return;
+}
+```
+
+### First class names
+
+```
+// C
+#define offsetof(T, field) (size_t)(&((T*)0)->field)
+
+// C3
+macro offsetof($Type, $field)
+{
+    return (size_t)(&((T*)0)->field);
+}
+```
+
+### Declaration attributes
+
+```
+// C
+#define NONNULL(args...) __attribute__((nonnull(args)))
+
+// C3
+... currently no corresponding functionality ...
+```
+
+### Declaration macros
+
+```
+// C
+#define DECLARE_LIST(name) List name = { .head = NULL };
+// Use:
+DECLARE_LIST(hello)
+
+// C3
+... currently no corresponding functionality ...
+```
+
+### Stringingification
+
+```
+#define DECLARE_STRING(name, s) char *name##_str = #s;
+
+// C3
+... currently no corresponding functionality ...
+```
+
+
 ## Top level evaluation
 
 Script languages, and also upcoming languages like *Jai*, usually have unbounded top level evaluation. The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. 
@@ -269,7 +428,7 @@ macro @foo_enum($some_enum)
 {
     $each($some_enum as $x)  
     {
-        printf("%d\n", cast($x, int));     
+        printf("%d\n", cast($x as int));     
     }
 }
 
@@ -283,8 +442,8 @@ func void test()
 {
     @foo_enum(MyEnum);
     // Expands to ->
-    // printf("%d\n", cast(MyEnum.A, int));
-    // printf("%d\n", cast(MyEnum.B, int));    
+    // printf("%d\n", cast(MyEnum.A as int));
+    // printf("%d\n", cast(MyEnum.B as int));    
 }
 ```
 

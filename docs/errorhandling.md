@@ -33,7 +33,7 @@ catch (err = file)
     printf("Error was %s\n", err.fullName()); 
     
     // Might print "Error code: 931938210"
-    printf("Error code: %ull\n", cast(err, ulong)); 
+    printf("Error code: %ull\n", cast(err as ulong)); 
     return;
 }
 

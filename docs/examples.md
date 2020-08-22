@@ -75,7 +75,7 @@ func void example_if_while_for()
         // ...
     }
     
-    if (int a = foo(), long b = bar(); a > 1) return cast(a + b, int);
+    if (int a = foo(), long b = bar(); a > 1) return cast(a + b as int);
     
     for (int a = 0, long b = 0; a < 10; a++)
     {
@@ -298,7 +298,7 @@ error DivisionByZero;
 func double divide(int a, int b)
 {
     if (b == 0) return DivisionByZero!;
-    return cast(a, double) / cast(b, double);
+    return cast(a as double) / cast(b as double);
 
 }
 

@@ -21,6 +21,11 @@ C3 adds features, but also removes a few.
 - Optional contracts
 - Built-in strings, maps, subarrays and vararrays
 
+##### In C but not in C3
+
+- Qualified types (`const`, `volatile` etc)
+- Unsafe implicit conversions
+
 ## C++
 
 C++ is a very complex object oriented "almost superset" of C. It tries to be everything to everyone,

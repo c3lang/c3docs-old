@@ -6,7 +6,7 @@ The syntax and improvements on C inherits from the [C2 lang project](http://www.
 
 The C3 compiler can be found on github: [https://github.com/c3lang/c3c](https://github.com/c3lang/c3c).
 
-Last updated: [2020-07-08](changes).
+Last updated: [2020-08-22](changes).
 
 ## Planned features
 

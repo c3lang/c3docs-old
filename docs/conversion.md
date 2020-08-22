@@ -84,7 +84,7 @@ short b = bar();
 long c = baz() ? a : b;
 
 // The above will compile tog:
-long c = baz() ? cast(a, long) : cast(c, long);
+long c = baz() ? cast(a as long) : cast(c as long);
 
 byte d = foobar();
 
@@ -93,6 +93,6 @@ byte d = foobar();
 long e = (baz() ? a : b) + (baz2() ? b : d);
 
 // The above will compile to:
-long e = cast((baz() ? a : cast(b, int)) 
-               + cast((baz2() ? b : cast(d, short), int)), long);
+long e = cast((baz() ? a : cast(b as int)) 
+               + cast((baz2() ? b : cast(d as short) as int)) as long);
 ```
