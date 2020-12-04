@@ -47,14 +47,14 @@ Arrays can be initialized using compound literals, but there is also a special f
 ```
 int[] x = [1, 2, 3]; // Variable array allocated on the stack
 int[3] y = [1, 2, 3]; // Fixed array allocated on the stack
-int[:] z = [1, 2, 3]; // Slice pointing at literal allocated on the stack
+int[] z = [1, 2, 3]; // Slice pointing at literal allocated on the stack
 ```
 
 It offers some convenience when calling functions taking arrays:
 
 ```
 func void test1(int[3] x) { ... }
-func void test2(int[:] y) { ... }
+func void test2(int[] y) { ... }
 func void test2(int[3]* z) { ... }
 
 test1([ 1, 2, 3 ]);

@@ -3,7 +3,7 @@
 ## Hello World
 
 ```
-import stdio as io;
+import std::io;
 
 func void main()
 {
@@ -25,10 +25,10 @@ func long fib(long n)
 ## HTTP Server
 
 ```
-import http_server local;
-import net local;
+import net::http_server;
+import net;
 
-func void httpHandler(HttpContext* context) throws HTTPError
+func void! httpHandler(HttpContext* context)
 {
     context.response.contentType = "text/plain";
     context.response.printf("Hello world!\n");
@@ -38,14 +38,15 @@ func void main()
 {
     HttpServer server;
     server.init();
-    InetAddress addr = try server.bindPort(8080);
-    printf("Begin listening to on http://%s\n", addr.description());
-    server.listen(&httpHandler);
-       
-    catch (HTTPError e)
+    InetAddress! addr = server.bindPort(8080);
+    catch (addr)
     {
         printf("Failed to open server.\n");
         exit(-1);
     }
+    
+    printf("Begin listening to on http://%s\n", addr.description());
+    server.listen(&httpHandler);
+    
 }
 ```

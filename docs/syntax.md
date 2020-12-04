@@ -13,8 +13,6 @@ try, type, typedef, union, until, var, void, volatile, while,
 f32, f64, float, double, 
 u1, i8, i16, i32, i64, u8, u16, u32, u64, 
 char, bool, byte, short, ushort, int, uint, long, ulong, isize, usize,
-c_short, c_ushort, c_int, c_uint, c_long, c_ulong, c_longlong, 
-c_ulonglong, c_longdouble
 
 
 In addition to those, the following 12 are reserved but currently not used:

@@ -19,7 +19,7 @@ func void example_for() {
     // the for-loop is the same as C99. 
     for (int i = 0; i < 10; i++) 
     {
-        io.printf("%d\n", i);
+        io::printf("%d\n", i);
     }
 
     // also equal
@@ -50,42 +50,6 @@ func void example_while()
 }
 ```
 
-#####In-block declarations
-
-Any control structure may declare block level variables.
-
-```
-func void example_if_while_for()
-{
-    // a is initialized only once, when entering the while statement
-    while (int a = 10; a > 0) 
-    {
-        a--;
-    }
-    
-    // a is initialized every time through the loop.
-    while (int a = foo()) 
-    {
-        // ...
-    }
-    
-    // a is initialized once, but assigned every time through the loop.
-    while (int a = 0; a = foo()) 
-    {
-        // ...
-    }
-    
-    if (int a = foo(), long b = bar(); a > 1) return cast(a + b as int);
-    
-    for (int a = 0, long b = 0; a < 10; a++)
-    {
-        b += foo();
-        if (b > 10) break;
-    }
-}
-
-```
-
 #####enum + switch
 
 Switches have implicit break and scope. Use "next" to implicitly fallthrough or use comma:
@@ -103,10 +67,10 @@ func void demo_enum(Height h)
     switch (h) 
     {
         case LOW, MEDIUM:
-            io.printf("Not high");
+            io::printf("Not high");
             // Implicit break.
         case HIGH:
-            io.printf("High");
+            io::printf("High");
     }
 
     // This also works
@@ -114,10 +78,10 @@ func void demo_enum(Height h)
     {
         case LOW, 
         case MEDIUM:
-            io.printf("Not high");
+            io::printf("Not high");
             // Implicit break.
         case Height.HIGH:
-            io.printf("High");
+            io::printf("High");
     }
 
     // Completely empty cases are not allowed.
@@ -126,7 +90,7 @@ func void demo_enum(Height h)
         case LOW:
             break; // Explicit break required, since switches can't be empty.
         case MEDIUM:
-            io.printf("Medium");
+            io::printf("Medium");
         case HIGH:
             break;
     }
@@ -479,11 +443,11 @@ func void test()
 Generic modules implements a generic system.
 
 ```
-module stack($a)
+module stack(Type)
 
 struct Stack
 {
-    type($a)[] elems;
+    Type[] elems;
 }
 
 func Stack.init(Stack* this)
@@ -491,7 +455,7 @@ func Stack.init(Stack* this)
     this.elems = nil;
 }
 
-func void Stack.push(Stack* this, type($a) element)
+func void Stack.push(Stack* this, Type element)
 {
     this.elems.add(element);
 }

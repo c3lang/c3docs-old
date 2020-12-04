@@ -115,9 +115,18 @@ Possibility to alias a variable name.
 
 The ability to include a binary file during compile time.
 
+An additional `embed-path` gives search dirs.
+
 ```
 byte[] file = @binary_include("foo.dat");
 ```
+
+Limiting embed to x bytes:
+
+```
+byte[] file = @binary_include("/dev/urandomg", 16);
+```
+
 
 ## Compile time run-include
 
@@ -316,13 +325,6 @@ Hierarchal memory allocation http://swapped.cc/#!/halloc support it?
 
 A tagged pointer union type for any possible type.
 
-
-##### Require explicit uninitialization
-
-```
-int a = ---;
-int a = void; // Other possible variant
-```
 
 ##### Extended "case"
 

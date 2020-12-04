@@ -7,12 +7,12 @@ As usual, types are divided into basic types and user defined types (enum, union
 All user defined types in C3 starts with upper case. So `MyStruct` or `Mystruct` would be fine, `mystruct_t` or `mystruct` would not. Since this runs into probles with C compatibility, it is possible to use attributes to change the c name of a type, as well as control whether a C typedef should be emitted for the type.
 
 ```
-struct Stat @(cname="stat", no_typedef)
+struct Stat @cname("stat") @notypedef
 {
     // ...
 } 
 
-func c_int stat(const c_char* pathname, Stat* buf);
+func CInt stat(const char* pathname, Stat* buf);
 ```
 
 ##### Differences from C
@@ -27,7 +27,7 @@ Basic types are divided into floating point types, and integer types. Integer ty
 
 | Name         | alias | bit size | signed |
 | ------------ | -----:| --------:|:------:|
-| bool         | u1    | 1        | no     |
+| bool*        | u1    | 1        | no     |
 | char         | i8    | 8        | yes    |
 | byte         | u8    | 8        | no     |
 | short        | i16   | 16       | yes    |
@@ -36,10 +36,11 @@ Basic types are divided into floating point types, and integer types. Integer ty
 | uint         | u32   | 32       | no     |
 | long         | i64   | 64       | yes    |
 | ulong        | u64   | 64       | no     |
-| isize*       | -     | varies   | yes    |
-| usize*       | -     | varies   | no     |
+| isize**      | -     | varies   | yes    |
+| usize**      | -     | varies   | no     |
 
-*`isize` and `usize` are pointer sized.
+* `bool` will be stored as a byte.
+** `isize` and `usize` are pointer sized.
 
 ##### Integer arithmetics
 
@@ -98,22 +99,22 @@ Floating point values may be written in decimal or hexadecimal. For decimal, the
 
 ### C compatibility
 
-For C compatibility the following types are also defined:
+For C compatibility the following types are also defined when including std.cinterop
 
 | Name         | c type             |
 | ------------ | ------------------:|
-| c_char       | char               |
-| c_short      | short int          |
-| c_ushort     | unsigned short int |
-| c_int        | int                |
-| c_uint       | unsigned int       |
-| c_long       | long int           |
-| c_ulong      | unsigned long int  |
-| c_longlong   | long long          |
-| c_ulonglong  | unsigned long long |
-| c_float      | float              |
-| c_double     | double             |
-| c_longdouble | long double        |
+| CChar        | char               |
+| CShort       | short int          |
+| CUShort      | unsigned short int |
+| CInt         | int                |
+| CUInt        | unsigned int       |
+| CLong        | long int           |
+| CULong       | unsigned long int  |
+| CLongLong    | long long          |
+| CULongLong   | unsigned long long |
+| CFloat       | float              |
+| CDouble      | double             |
+| CLongDouble  | long double        |
 
 ### Pointer types
 

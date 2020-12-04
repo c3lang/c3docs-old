@@ -38,6 +38,7 @@ nav:
   - Development:
     - Contribute: 'contribute.md'  
     - Changes: 'changes.md'
+	- Rejected ideas: 'rejectedideas.md'
 theme:
     name: readthedocs
     hljs_languages:

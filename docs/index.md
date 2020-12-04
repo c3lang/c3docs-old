@@ -1,12 +1,14 @@
 # What is C3?
 
-C3 is a systems language based on C. It tries to be a short step up from C rather than to replace it with a new paradigm or completely new syntax. 
+C3 is a systems language based on C. It wants to be evolution C, and enable the same paradigms and 
+retain the same syntax (as far as possible).
 
-The syntax and improvements on C inherits from the [C2 lang project](http://www.c2lang.org/) by [Bas van den Berg](https://github.com/bvdberg). It goes substantially further in regards to error handling, macros, generics and strings.
+C3 started as an extension of the [C2 language](http://www.c2lang.org/) by [Bas van den Berg](https://github.com/bvdberg). 
+It has since departed substantially in regards to error handling, macros, generics and strings.
 
 The C3 compiler can be found on github: [https://github.com/c3lang/c3c](https://github.com/c3lang/c3c).
 
-Last updated: [2020-08-22](changes).
+Last updated: [Revision 2020-12-04](changes).
 
 ## Planned features
 

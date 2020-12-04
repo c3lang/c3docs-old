@@ -1,5 +1,13 @@
 # Change log
 
+##### Revision 2020-12-04
+- Local variables are implicitly zero.
+- Removed in-block declarations
+- Changed struct member initialization syntax
+- Changed named parameter syntax  
+- Updated on macro syntax
+- Removed built in c types
+
 ##### Revision 2020-08-22
 - Added slice operations
 - Changed cast syntax to `cast(<expr> as <type>)`

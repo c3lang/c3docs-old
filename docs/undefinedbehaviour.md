@@ -42,7 +42,7 @@ The following operations cause undefined behaviour in release builds of C3:
 | overflow on * | Use *% or @mult_overflow | Yes |
 | int / 0 | - | Yes |
 | int % 0 | - | Yes |
-| using uninitialized memory | - | Yes |
+| using explicitly uninitialized memory | - | Yes |
 | array index out of bounds | - | Yes |
 | dereference NULL | - | Yes |
 | dereferencing memory not allocated | - | Implementation dependent |

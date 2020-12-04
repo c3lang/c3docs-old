@@ -15,10 +15,9 @@ int z;
 #endif
 
 // C3
-$if ($defined(x) && y > 3)
-{
+$if ($defined(x) && y > 3):
     int z;
-}
+$endif;
 ```
 
 ### Macros
@@ -345,19 +344,16 @@ Inside of a macro, we can use the compile time statements `$if`, `$each` and `$s
 
 ### $if, $else and $elif
 
-`$if (<const expr>)` takes a compile time constant value and evaluates it to true or false.
+`$if (<const expr>):` takes a compile time constant value and evaluates it to true or false.
 
 ```
 macro @foo($x, $y)
 {
-    $if ($x > 3)
-    {
+    $if ($x > 3):
         $y += $x * $x;
-    } 
-    $else
-    {
+    $else:
         $y += $x;
-    }
+    $endif;    
 }
 
 const int FOO = 10;
@@ -372,45 +368,18 @@ func void test()
 }
 ```
 
-There is an alternative form of `$if`/`$else`/`$elif` using `:` and terminated
-with `$endif`. These have by convention no indentation.
+### Loops using $foreach
 
-This is mostly useful for top level use where indentation might not be desired.
-
-```
-macro @foo($X, $y)
-{
-
-$if ($x > 3):
-
-    $y += $x * $x;
-
-$elif ($x < 100):
-    
-    $y += -$x;
-
-$else:
-        
-    $y += $x;
-
-$endif;
-
-}
-```  
-
-### Loops using $each
-
-`$each (<range> as <variable>) { ... }` allows compile time recursion. `$each` may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.
+`$foreach (<range> as <variable>): ... $endforeach;` allows compile time recursion. `$each` may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.
 
 
 Looping over ranges:
 ```
 macro @foo($a)
 {
-    $each (0..$a as $x) 
-    {
+    $foreach (0..$a as $x):
         printf("%d\n", $x);     
-    }
+    $endforeach;
 }
 
 func void test()
@@ -426,10 +395,9 @@ Looping over enums:
 ```
 macro @foo_enum($some_enum)
 {
-    $each($some_enum as $x)  
-    {
+    $foreach($some_enum as $x):
         printf("%d\n", cast($x as int));     
-    }
+    $endforeach;
 }
 
 enum MyEnum
@@ -457,11 +425,10 @@ It's possible to switch on type, similar to generic functions, but used internal
 ```
 macro void foo(a, b)
 {
-    $switch(a, b)
-    {
+    $switch(a, b):
         $case int, int: 
             return a * b;
-    }
+    endswitch;
     return a + b;
 }
 ```
@@ -538,14 +505,14 @@ Conditional compilation is done with $if and $else, which works just like
 inside of functions.
 
 ```
-$if (@defined($os) && $os == 'WIN32')
+$if (@defined($os) && $os == 'WIN32'):
 
 func void doSomethingWin32Specific()
 {
     /* .... */
 }
 
-$endif
+$endif;
 ```
 
 ### Global compile time variables
@@ -559,12 +526,14 @@ Consider this code:
 ```
 macro @foo()
 {
-    $if (@defined($a)) return $a + 1;
+    $if (@defined(A)): 
+        return A + 1; 
+    endif;
     return 1;
 }
-const $z = @foo(); // $z = 1
-const $a = @foo(); // $a = 1
-const $b = @foo(); // $b = 2
+const Z = @foo(); // Z = 1
+const A = @foo(); // A = 1
+const B = @foo(); // B = 2
 ```
 
 ### Attributes
@@ -595,10 +564,9 @@ time:
 ```
 macro @fooCheck($a)
 {
-    $if (@defined($a.@foo))
-    {
+    $if (@defined($a.@foo)):
         return "Was fooed";
-    }
+    endif;
     return "Ok";
 }
 
@@ -659,10 +627,9 @@ enum MyEnum { A, B }
 macro type @foo_enum($theEnum)
 {
     string[+] arr = {};
-    $each($theEnum AS $x)  
-    {
+    $foreach ($theEnum as $x):
         arr += @name($x);     
-    }
+    $endif;
 }
 
 // allMyEnum will contain { "A", "B" }
@@ -681,10 +648,9 @@ struct TestC @special { float f; }
 macro void @specialStructs()
 {
     string[+] res = {};
-    $each(@special as $x)
-    {
+    $foreach (@special as $x):
         res += @name($x);
-    }
+    endif;
     // The above expands to:
     // res += "TestA";
     // res += "TestC";    

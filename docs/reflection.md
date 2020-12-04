@@ -18,60 +18,60 @@ Returns the typeid for the given type. Typedefs will return the typeid of the un
 typeid x = Foo.typeid; 
 ```
 
-#### name
+#### nameof
 
 The basic name of the type without module prefixes.
 
 ```
 struct Foo { ... }
 typedef Foo as Bar;
-string a = int[4].name; // => "int[4]"
-string b = Foo.name; // => "Foo"
-string c = Bar.name; // => "Foo" 
+string a = int[4].nameof; // => "int[4]"
+string b = Foo.nameof; // => "Foo"
+string c = Bar.nameof; // => "Foo" 
 ```
 
-#### fullName
+#### qnameof
 
 Same as the name, but includes the full module path: e.g. "baz::bar::Foo".
 
 ```
 module bar;
 struct Foo { ... }
-string a = int[4].fullName; // => "int[4]"
-string b = Foo.name; // => "bar::Foo"
-string c = Foo[4].name; // => "bar::Foo[4]" 
+string a = int[4].qnameof; // => "int[4]"
+string b = Foo.qnameof; // => "bar::Foo"
+string c = Foo[4].qnameof; // => "bar::Foo[4]" 
 ```
 
-#### size
+#### sizeof
 
 Returns the size in bytes needed to store the type.
 
 ```
 struct Foo { long a; long b; }
-usize x = Foo.size; // 16
-usize y = int.size; // 4
+usize x = Foo.sizeof; // 16
+usize y = int.sizeof; // 4
 ```
 
-#### alignment
+#### alignof
 
 Returns the alignment in bytes needed for the type.
 
 ```
 struct Foo { long a; int b; }
-usize x = Foo.alignment; // 8
-usize y = int.alignment; // 4
+usize x = Foo.alignof; // 8
+usize y = int.alignof; // 4
 ```
 
-#### kind
+#### kindof
 
 Returns the TypeKind of the variable.
 
 ```
 struct Foo { ... }
 union Bar { ... }
-TypeKind a = Foo.kind; // STRUCT
-TypeKind b = Bar.kind; // BAR
-TypeKind c = int.kind; // INTEGER
+TypeKind a = Foo.kindof; // STRUCT
+TypeKind b = Bar.kindof; // BAR
+TypeKind c = int.kindof; // INTEGER
 ```
 
 #### elementType

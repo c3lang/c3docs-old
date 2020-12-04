@@ -46,7 +46,7 @@ func void testNamed(int times, double data)
 
 func void test()
 {
-    testNamed(data = 3.0, times = 1)
+    testNamed(.data = 3.0, .times = 1)
     testNamed(3, 4.0);
 }
 ```
@@ -64,13 +64,13 @@ func void testNamedDefault(int times = 1, double data = 3.0, bool dummy = false)
 
 func void test()
 {
-    testNamed(data = 3.0)
+    testNamed(.data = 3.0)
     
     // Mixing named and defaults:
-    testNamed(3, dummy = false);
+    testNamed(3, .dummy = false);
     
     // Mixing named and defaults leaving out initial values:
-    testNamed(,,false, times = 1);
+    testNamed(,,false, .times = 1);
 }
 ```
 

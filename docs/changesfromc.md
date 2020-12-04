@@ -88,5 +88,8 @@ else
 
 ##### Goto removed
 
-`goto` is removed and replaced with labelled `break` and `continue` together with 
-the `next` statement that allows you to jump between cases in a `switch` statement.
+`goto` is removed and replaced with labelled `break` and `continue` together with the `next` statement that allows you to jump between cases in a `switch` statement.
+
+##### Locals variables are implictly zeroed
+
+In C global variables are implicitly zeroed out, but local variables aren't. In C3 local variables are zeroed out by default, but may be explicitly undefined to get the C behaviour.
