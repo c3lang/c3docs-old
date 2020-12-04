@@ -7,13 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   
+  
   <link rel="shortcut icon" href="../img/favicon.ico">
   <title>Types - C3 Documentation</title>
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
-  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
   
   <script>
     // Current page data
@@ -24,11 +25,11 @@
   
   <script src="../js/jquery-2.1.1.min.js" defer></script>
   <script src="../js/modernizr-2.8.3.min.js" defer></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
   
 </head>
@@ -39,6 +40,7 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
         <a href=".." class="icon icon-home"> C3 Documentation</a>
         <div role="search">
@@ -49,219 +51,152 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-	<ul class="current">
-	  
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="..">About C3</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">Installing</span>
-    <ul class="subnav">
-                <li class="">
-                    
-    <a class="" href="../setup/">Setup</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../firstproject/">Your first project</a>
-                </li>
-    </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">Documentation</span>
-    <ul class="subnav">
-                <li class="">
-                    
-    <a class="" href="../changesfromc/">Changes from C</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../compare/">Comparisons with other languages</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../examples/">Examples</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../modules/">Modules</a>
-                </li>
-                <li class=" current">
-                    
-    <a class="current" href="./">Types</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#types">Types</a></li>
-    
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">About C3</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Installing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../setup/">Setup</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../firstproject/">Your first project</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../changesfromc/">Changes from C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../compare/">Comparisons with other languages</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../modules/">Modules</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Types</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#naming">Naming</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#differences-from-c">Differences from C</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#basic-types">Basic types</a>
         <ul>
-        
-            <li><a class="toctree-l4" href="#naming">Naming</a></li>
-        
-            <li><a class="toctree-l4" href="#differences-from-c">Differences from C</a></li>
-        
-            <li><a class="toctree-l4" href="#basic-types">Basic types</a></li>
-        
-            <li><a class="toctree-l4" href="#enum">Enum</a></li>
-        
-            <li><a class="toctree-l4" href="#error">Error</a></li>
-        
-            <li><a class="toctree-l4" href="#failable">Failable</a></li>
-        
-            <li><a class="toctree-l4" href="#alias-and-function-types">Alias and function types</a></li>
-        
-            <li><a class="toctree-l4" href="#distinct-types">Distinct types</a></li>
-        
-            <li><a class="toctree-l4" href="#struct-types">Struct types</a></li>
-        
-            <li><a class="toctree-l4" href="#struct-subtyping">Struct subtyping</a></li>
-        
-            <li><a class="toctree-l4" href="#union-types">Union types</a></li>
-        
-            <li><a class="toctree-l4" href="#anonymous-sub-structs-unions">Anonymous sub-structs / unions</a></li>
-        
-            <li><a class="toctree-l4" href="#tagged-unions">Tagged unions</a></li>
-        
-            <li><a class="toctree-l4" href="#casting">Casting</a></li>
-        
-            <li><a class="toctree-l4" href="#conversion-to-symbol-to-type-and-back-with-type">Conversion to symbol to type and back with type</a></li>
-        
-            <li><a class="toctree-l4" href="#anonymous-structs">Anonymous structs</a></li>
-        
+    <li class="toctree-l3"><a class="reference internal" href="#integer-types">Integer types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#integer-arithmetics">Integer arithmetics</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#integer-constants">Integer constants</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#twocc-fourcc-and-eightcc">TwoCC, FourCC and EightCC</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#base64-and-hex-data-literals">Base64 and hex data literals</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#floating-point-types">Floating point types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#floating-point-constants">Floating point constants</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#c-compatibility">C compatibility</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pointer-types">Pointer types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#array-types">Array types</a>
+    </li>
         </ul>
-    
-
-    </ul>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../arrays/">Arrays</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../functions/">Functions</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../statements/">Statements</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../expressions/">Expressions</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../errorhandling/">Errors</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../undefinedbehaviour/">Undefined behaviour</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../conversion/">Conversions</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../builtinmacros/">Built-in Macros</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../precedence/">Precedence</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../generics/">Generics</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../macros/">Macros</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../reflection/">Reflection</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../preconditions/">Pre and post conditions</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../library/">Library</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../ideas/">Crazy ideas</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../naming/">Naming rules</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../comments/">Comments & Docs</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../attributes/">Attributes</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../cinterop/">C Interop</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../syntax/">Grammar</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../sample/">More code examples</a>
-                </li>
-    </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">Build system</span>
-    <ul class="subnav">
-                <li class="">
-                    
-    <a class="" href="../buildintro/">Introduction</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../project/">Project Structure</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../buildcommands/">Commands</a>
-                </li>
-    </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">Development</span>
-    <ul class="subnav">
-                <li class="">
-                    
-    <a class="" href="../contribute/">Contribute</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../changes/">Changes</a>
-                </li>
-    </ul>
-	    </li>
-          
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#enum">Enum</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#enum-type-inference">Enum type inference</a>
+    </li>
         </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#error">Error</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#failable">Failable</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#alias-and-function-types">Alias and function types</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#distinct-types">Distinct types</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#struct-types">Struct types</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#struct-subtyping">Struct subtyping</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#union-types">Union types</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#anonymous-sub-structs-unions">Anonymous sub-structs / unions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#tagged-unions">Tagged unions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#casting">Casting</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#conversion-to-symbol-to-type-and-back-with-type">Conversion to symbol to type and back with type</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#anonymous-structs">Anonymous structs</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../statements/">Statements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../expressions/">Expressions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../errorhandling/">Errors</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../builtinmacros/">Built-in Macros</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../macros/">Macros</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../preconditions/">Pre and post conditions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../ideas/">Crazy ideas</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../naming/">Naming rules</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../comments/">Comments & Docs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../attributes/">Attributes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../cinterop/">C Interop</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../syntax/">Grammar</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../sample/">More code examples</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Build system</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../buildintro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../project/">Project Structure</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../buildcommands/">Commands</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Development</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../contribute/">Contribute</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../changes/">Changes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../rejectedideas/">Rejected ideas</a>
+                    </li>
+                </ul>
       </div>
-      &nbsp;
+    </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -290,6 +225,7 @@
       
     </li>
   </ul>
+  
   <hr/>
 </div>
           <div role="main">
@@ -299,12 +235,12 @@
 <p>As usual, types are divided into basic types and user defined types (enum, union, struct, error, aliases). All types are defined on a global level. Using the <code>public</code> prefix is necessary for any type that is to be exposed outside of the current module.</p>
 <h5 id="naming">Naming</h5>
 <p>All user defined types in C3 starts with upper case. So <code>MyStruct</code> or <code>Mystruct</code> would be fine, <code>mystruct_t</code> or <code>mystruct</code> would not. Since this runs into probles with C compatibility, it is possible to use attributes to change the c name of a type, as well as control whether a C typedef should be emitted for the type.</p>
-<pre><code>struct Stat @(cname=&quot;stat&quot;, no_typedef)
+<pre><code>struct Stat @cname(&quot;stat&quot;) @notypedef
 {
     // ...
 } 
 
-func c_int stat(const c_char* pathname, Stat* buf);
+func CInt stat(const char* pathname, Stat* buf);
 </code></pre>
 
 <h5 id="differences-from-c">Differences from C</h5>
@@ -323,7 +259,7 @@ func c_int stat(const c_char* pathname, Stat* buf);
 </thead>
 <tbody>
 <tr>
-<td>bool</td>
+<td>bool*</td>
 <td align="right">u1</td>
 <td align="right">1</td>
 <td align="center">no</td>
@@ -377,20 +313,23 @@ func c_int stat(const c_char* pathname, Stat* buf);
 <td align="center">no</td>
 </tr>
 <tr>
-<td>isize*</td>
+<td>isize**</td>
 <td align="right">-</td>
 <td align="right">varies</td>
 <td align="center">yes</td>
 </tr>
 <tr>
-<td>usize*</td>
+<td>usize**</td>
 <td align="right">-</td>
 <td align="right">varies</td>
 <td align="center">no</td>
 </tr>
 </tbody>
 </table>
-<p>*<code>isize</code> and <code>usize</code> are pointer sized.</p>
+<ul>
+<li><code>bool</code> will be stored as a byte.
+** <code>isize</code> and <code>usize</code> are pointer sized.</li>
+</ul>
 <h5 id="integer-arithmetics">Integer arithmetics</h5>
 <p>All signed integer arithmetics uses 2's complement.</p>
 <h5 id="integer-constants">Integer constants</h5>
@@ -450,7 +389,7 @@ char[] hello_world_hex = &quot;4865 6c6c 6f20 776f 726c 6421&quot;x;
 <p>Floating point constants will <em>at least</em> use 64 bit precision. Just like for integer constants, it is allowed to use underscore, but it may not occur immediagely before or after a dot or an exponential.</p>
 <p>Floating point values may be written in decimal or hexadecimal. For decimal, the exponential symbol is e (or E, both are acceptable), for hexadecimal p (or P) is used: <code>-2.22e-21</code> <code>-0x21.93p-10</code> </p>
 <h3 id="c-compatibility">C compatibility</h3>
-<p>For C compatibility the following types are also defined:</p>
+<p>For C compatibility the following types are also defined when including std.cinterop</p>
 <table>
 <thead>
 <tr>
@@ -460,51 +399,51 @@ char[] hello_world_hex = &quot;4865 6c6c 6f20 776f 726c 6421&quot;x;
 </thead>
 <tbody>
 <tr>
-<td>c_char</td>
+<td>CChar</td>
 <td align="right">char</td>
 </tr>
 <tr>
-<td>c_short</td>
+<td>CShort</td>
 <td align="right">short int</td>
 </tr>
 <tr>
-<td>c_ushort</td>
+<td>CUShort</td>
 <td align="right">unsigned short int</td>
 </tr>
 <tr>
-<td>c_int</td>
+<td>CInt</td>
 <td align="right">int</td>
 </tr>
 <tr>
-<td>c_uint</td>
+<td>CUInt</td>
 <td align="right">unsigned int</td>
 </tr>
 <tr>
-<td>c_long</td>
+<td>CLong</td>
 <td align="right">long int</td>
 </tr>
 <tr>
-<td>c_ulong</td>
+<td>CULong</td>
 <td align="right">unsigned long int</td>
 </tr>
 <tr>
-<td>c_longlong</td>
+<td>CLongLong</td>
 <td align="right">long long</td>
 </tr>
 <tr>
-<td>c_ulonglong</td>
+<td>CULongLong</td>
 <td align="right">unsigned long long</td>
 </tr>
 <tr>
-<td>c_float</td>
+<td>CFloat</td>
 <td align="right">float</td>
 </tr>
 <tr>
-<td>c_double</td>
+<td>CDouble</td>
 <td align="right">double</td>
 </tr>
 <tr>
-<td>c_longdouble</td>
+<td>CLongDouble</td>
 <td align="right">long double</td>
 </tr>
 </tbody>
@@ -776,7 +715,7 @@ func void test()
     
   </div>
 
-  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
 </footer>
       
         </div>
@@ -786,7 +725,7 @@ func void test()
 
   </div>
 
-  <div class="rst-versions" role="note" style="cursor: pointer">
+  <div class="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
@@ -800,6 +739,11 @@ func void test()
     <script>var base_url = '..';</script>
     <script src="../js/theme.js" defer></script>
       <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
 
 </body>
 </html>
