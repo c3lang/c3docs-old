@@ -7,11 +7,11 @@ Open a text editor and enter the following in a file you call `hello_world.c3`:
 ```
 module hello_world;
 
-import stdio;
+import io;
 
 public func int main(int argc, char*[] argv) 
 {
-    printf("Hello World!\n");
+    io::println("Hello World!");
     return 0;
 }
 ```
