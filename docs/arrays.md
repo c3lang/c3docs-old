@@ -110,12 +110,12 @@ b = e; // Implicit conversion ok
 
 ### Slicing arrays
 
-It's possible to use a range syntax to create subarrays from pointers, arrays, vararrays and other subarrays. The usual syntax is `arr[<start index>..<end index>]`. The end index is not included in the final result.
+It's possible to use a range syntax to create subarrays from pointers, arrays, vararrays and other subarrays. The usual syntax is `arr[<start index>..<end index>]`. The end index is included in the final result.
     
 ```
 int[5] a = { 1, 20, 50, 100, 200 };
-int[] b = a[0..5]; // The whole array as a slice.
-int[] c = a[1..3]; // { 20, 50 }
+int[] b = a[0..4]; // The whole array as a slice.
+int[] c = a[1..2]; // { 20, 50 }
 ```
 
 It's possible to omit the first and last index, in which case the start and the len is inferred. Note that omitting the last index is not allowed for pointers.
@@ -124,8 +124,8 @@ The following are all equivalent:
 
 ```
 int[5] a = { 1, 20, 50, 100, 200 };
-int[] b = a[0..5];
-int[] c = a[..5];
+int[] b = a[0..4];
+int[] c = a[..4];
 int[] d = a[0..];
 int[] e = a[..];
 ```
@@ -134,7 +134,7 @@ One may also slice from the end. Again this is not allowed for pointers.
 
 ```
 int[5] a = { 1, 20, 50, 100, 200 };
-int[] b = a[1..^1]; // { 20, 50, 100 }
+int[] b = a[1..^2]; // { 20, 50, 100 }
 int[] c = a[^3..]; // { 50, 100, 200 }
 ```
 
@@ -142,7 +142,7 @@ One may also use assign to slices:
 
 ```
 int[3] a = { 1, 20, 50 };
-a[1..3] = 0; // a = { 1, 0, 0}
+a[1..2] = 0; // a = { 1, 0, 0}
 ```
 
 Or copy slices to slices:
@@ -150,10 +150,10 @@ Or copy slices to slices:
 ```
 int[3] a = { 1, 20, 50 };
 int[3] b = { 2, 4, 5 }
-a[1..3] = b[0..2]; // a = { 1, 2, 4}
+a[1..2] = b[0..1]; // a = { 1, 2, 4}
 ```
 
-Copying overlapping ranges, e.g. `a[1..3] = a[0..2]` is undefined behaviour.
+Copying overlapping ranges, e.g. `a[1..2] = a[0..1]` is undefined behaviour.
 
     
 ### Conversion list

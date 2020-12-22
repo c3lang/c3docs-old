@@ -1,5 +1,7 @@
 # Specification
 
+*THIS SPECIFICATION IS UNDER DEVELOPMENT*
+
 ## Notation
 
 The syntax is specified using Extended Backus-Naur Form (EBNF):
@@ -362,6 +364,28 @@ Th
 
 ## Expressions
 ### Operands
+### Compound Literals
+
+Compound literals have the format
+
+```
+compound_literal   ::= TYPE_IDENTIFIER '(' initializer_list ')'
+initializer_list   ::= '{' (initializer_param (',' initializer_param)* ','?)? '}'
+initializer_param  ::= expression | designator '=' expression
+designator         ::= array_designator | range_designator | field_designator
+array_designator   ::= '[' expression ']'
+range_designator   ::= '[' range_expression ']'
+field_designator   ::= IDENTIFIER
+range_expression   ::= (range_index)? '..' (range_index)?
+range_index        ::= expression | '^' expression
+```
+
+Taking the address of a compound literal will yield a pointer to stack allocated temporary.
+
+### Function calls
+#### Varargs
+
+For varargs, a `bool` or *any integer* smaller than what the C ABI specifies for the c `int` type is cast to `int`. Any float smaller than a double is cast to `double`. Compile time floats will be cast to double. Compile time integers will be cast to c `int` type.
 
 ## Statements
 ### If statement

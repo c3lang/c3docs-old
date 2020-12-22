@@ -1,16 +1,21 @@
 # Change log
 
+##### Revision 2020-12-23
+- Updated slice behaviour.
+- Updated expression block syntax.  
+- Added link to specification-in-progress.
+
 ##### Revision 2020-12-04
 - Local variables are implicitly zero.
-- Removed in-block declarations
-- Changed struct member initialization syntax
-- Changed named parameter syntax  
-- Updated on macro syntax
-- Removed built in c types
+- Removed in-block declarations.
+- Changed struct member initialization syntax.
+- Changed named parameter syntax.
+- Updated on macro syntax.
+- Removed built in c types.
 
 ##### Revision 2020-08-22
-- Added slice operations
-- Changed cast syntax to `cast(<expr> as <type>)`
+- Added slice operations.
+- Changed cast syntax to `cast(<expr> as <type>)`.
     
 ##### Revision 2020-07-08
 - Additions to [error handling](../errorhandling).

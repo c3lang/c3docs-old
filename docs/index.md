@@ -8,7 +8,7 @@ It has since departed substantially in regards to error handling, macros, generi
 
 The C3 compiler can be found on github: [https://github.com/c3lang/c3c](https://github.com/c3lang/c3c).
 
-Last updated: [Revision 2020-12-04](changes).
+Last updated: [Revision 2020-12-23](changes).
 
 ## Planned features
 

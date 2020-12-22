@@ -7,7 +7,7 @@ Open a text editor and enter the following in a file you call `hello_world.c3`:
 ```
 module hello_world;
 
-import io;
+import std::io;
 
 public func int main(int argc, char*[] argv) 
 {

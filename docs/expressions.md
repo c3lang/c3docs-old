@@ -18,7 +18,7 @@ struct Foo
 ...
 func void test(Foo x) { ... }
 
-test(Foo { 1, 2.0 });
+test(Foo({ 1, 2.0 }));
 ```
 
 Literals are allocated on the stack, and similarly it's possible to allocate fixed size integers:
