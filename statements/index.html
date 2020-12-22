@@ -126,6 +126,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../sample/">More code examples</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../specification/">Specification</a>
+                    </li>
                 </ul>
                 <p class="caption"><span class="caption-text">Build system</span></p>
                 <ul>
@@ -184,16 +186,17 @@
                 <h1 id="statements">Statements</h1>
 <p>Statements largely work like in C, but with some additions.</p>
 <h2 id="expression-blocks">Expression blocks</h2>
-<p>Expression blocks (delimited using <code>({ })</code>) are compound statements that opens its own function scope. Jumps cannot be done into or out of a function block, and <code>return</code> exits the block, rather than the function as a whole.</p>
+<p><em>NOTE: This syntax may be subject to change</em></p>
+<p>Expression blocks (delimited using <code>{| |}</code>) are compound statements that opens its own function scope. Jumps cannot be done into or out of a function block, and <code>return</code> exits the block, rather than the function as a whole.</p>
 <p>The function below prints <code>World!</code></p>
 <pre><code>func void test()
 {
     int a = 0;
-    ({
+    {|
         if (a != 0) return;
         printf(&quot;Hello &quot;);
         return;
-    });
+    |};
     printf(&quot;World!\n&quot;);
 }
 </code></pre>
@@ -201,11 +204,11 @@
 <p>Expression blocks may also return values:</p>
 <pre><code>func void test(int x)
 {
-    int a = ({
+    int a = {|
         if (x &gt; 0) return x * 2;
         if (x == 0) return 100;
         return -x;
-    });            
+    |};            
     printf(&quot;The result was %d\n&quot;, a);
 }
 </code></pre>

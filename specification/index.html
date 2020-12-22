@@ -63,7 +63,7 @@
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">Documentation</span></p>
-                <ul>
+                <ul class="current">
                     <li class="toctree-l1"><a class="reference internal" href="../changesfromc/">Changes from C</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../compare/">Comparisons with other languages</a>
@@ -116,6 +116,106 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../sample/">More code examples</a>
                     </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Specification</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#notation">Notation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#source-code-representation">Source code representation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#lexical-translations">Lexical Translations</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#line-terminators">Line Terminators</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#input-elements-and-tokens">Input Elements and Tokens</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#white-space">White Space</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#letters-and-digits">Letters and digits</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#comments">Comments</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#doc-comments">Doc comments</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#identifiers">Identifiers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#keywords">Keywords</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#operators-and-punctuation">Operators and punctuation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#integer-literals">Integer literals</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#floating-point-literals">Floating point literals</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#character-literals">Character literals</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#string-literals">String literals</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#types">Types</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#boolean-types">Boolean types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#integer-types">Integer types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#floating-point-types">Floating point types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vector-types">Vector types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#complex-types">Complex types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#string-types">String types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#array-types">Array types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vararray-types">Vararray types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#subarray-types">Subarray types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pointer-types">Pointer types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#struct-types">Struct types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#union-types">Union types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#error-types">Error types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#enum-types">Enum types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#function-types">Function types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#virtual-types">Virtual types</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#declarations-and-scope">Declarations and scope</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#expressions">Expressions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#operands">Operands</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compound-literals">Compound Literals</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#function-calls">Function calls</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#varargs">Varargs</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#statements">Statements</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#if-statement">If statement</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#switch-stat">Switch stat</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#modules">Modules</a>
+    </li>
+    </ul>
+                    </li>
                 </ul>
                 <p class="caption"><span class="caption-text">Build system</span></p>
                 <ul>
@@ -155,6 +255,10 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
+        
+          <li>Documentation &raquo;</li>
+        
+      
     
     <li>Specification</li>
     <li class="wy-breadcrumbs-aside">
@@ -168,6 +272,7 @@
             <div class="section">
               
                 <h1 id="specification">Specification</h1>
+<p><em>THIS SPECIFICATION IS UNDER DEVELOPMENT</em></p>
 <h2 id="notation">Notation</h2>
 <p>The syntax is specified using Extended Backus-Naur Form (EBNF):</p>
 <pre><code>production  ::= PRODUCTION_NAME '::=' expression?
@@ -454,6 +559,23 @@ EIGHTCC_LIT     ::= &quot;'&quot; CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR
 <h2 id="declarations-and-scope">Declarations and scope</h2>
 <h2 id="expressions">Expressions</h2>
 <h3 id="operands">Operands</h3>
+<h3 id="compound-literals">Compound Literals</h3>
+<p>Compound literals have the format</p>
+<pre><code>compound_literal   ::= TYPE_IDENTIFIER '(' initializer_list ')'
+initializer_list   ::= '{' (initializer_param (',' initializer_param)* ','?)? '}'
+initializer_param  ::= expression | designator '=' expression
+designator         ::= array_designator | range_designator | field_designator
+array_designator   ::= '[' expression ']'
+range_designator   ::= '[' range_expression ']'
+field_designator   ::= IDENTIFIER
+range_expression   ::= (range_index)? '..' (range_index)?
+range_index        ::= expression | '^' expression
+</code></pre>
+
+<p>Taking the address of a compound literal will yield a pointer to stack allocated temporary.</p>
+<h3 id="function-calls">Function calls</h3>
+<h4 id="varargs">Varargs</h4>
+<p>For varargs, a <code>bool</code> or <em>any integer</em> smaller than what the C ABI specifies for the c <code>int</code> type is cast to <code>int</code>. Any float smaller than a double is cast to <code>double</code>. Compile time floats will be cast to double. Compile time integers will be cast to c <code>int</code> type.</p>
 <h2 id="statements">Statements</h2>
 <h3 id="if-statement">If statement</h3>
 <h3 id="switch-stat">Switch stat</h3>
@@ -462,6 +584,15 @@ EIGHTCC_LIT     ::= &quot;'&quot; CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR
             </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../buildintro/" class="btn btn-neutral float-right" title="Introduction">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../sample/" class="btn btn-neutral" title="More code examples"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -485,6 +616,10 @@ EIGHTCC_LIT     ::= &quot;'&quot; CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
+        <span><a href="../sample/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../buildintro/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

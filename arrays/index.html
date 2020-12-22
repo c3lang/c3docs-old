@@ -154,6 +154,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../sample/">More code examples</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../specification/">Specification</a>
+                    </li>
                 </ul>
                 <p class="caption"><span class="caption-text">Build system</span></p>
                 <ul>
@@ -297,39 +299,39 @@ b = e; // Implicit conversion ok
 </code></pre>
 
 <h3 id="slicing-arrays">Slicing arrays</h3>
-<p>It's possible to use a range syntax to create subarrays from pointers, arrays, vararrays and other subarrays. The usual syntax is <code>arr[&lt;start index&gt;..&lt;end index&gt;]</code>. The end index is not included in the final result.</p>
+<p>It's possible to use a range syntax to create subarrays from pointers, arrays, vararrays and other subarrays. The usual syntax is <code>arr[&lt;start index&gt;..&lt;end index&gt;]</code>. The end index is included in the final result.</p>
 <pre><code>int[5] a = { 1, 20, 50, 100, 200 };
-int[] b = a[0..5]; // The whole array as a slice.
-int[] c = a[1..3]; // { 20, 50 }
+int[] b = a[0..4]; // The whole array as a slice.
+int[] c = a[1..2]; // { 20, 50 }
 </code></pre>
 
 <p>It's possible to omit the first and last index, in which case the start and the len is inferred. Note that omitting the last index is not allowed for pointers.</p>
 <p>The following are all equivalent:</p>
 <pre><code>int[5] a = { 1, 20, 50, 100, 200 };
-int[] b = a[0..5];
-int[] c = a[..5];
+int[] b = a[0..4];
+int[] c = a[..4];
 int[] d = a[0..];
 int[] e = a[..];
 </code></pre>
 
 <p>One may also slice from the end. Again this is not allowed for pointers.</p>
 <pre><code>int[5] a = { 1, 20, 50, 100, 200 };
-int[] b = a[1..^1]; // { 20, 50, 100 }
+int[] b = a[1..^2]; // { 20, 50, 100 }
 int[] c = a[^3..]; // { 50, 100, 200 }
 </code></pre>
 
 <p>One may also use assign to slices:</p>
 <pre><code>int[3] a = { 1, 20, 50 };
-a[1..3] = 0; // a = { 1, 0, 0}
+a[1..2] = 0; // a = { 1, 0, 0}
 </code></pre>
 
 <p>Or copy slices to slices:</p>
 <pre><code>int[3] a = { 1, 20, 50 };
 int[3] b = { 2, 4, 5 }
-a[1..3] = b[0..2]; // a = { 1, 2, 4}
+a[1..2] = b[0..1]; // a = { 1, 2, 4}
 </code></pre>
 
-<p>Copying overlapping ranges, e.g. <code>a[1..3] = a[0..2]</code> is undefined behaviour.</p>
+<p>Copying overlapping ranges, e.g. <code>a[1..2] = a[0..1]</code> is undefined behaviour.</p>
 <h3 id="conversion-list">Conversion list</h3>
 <table>
 <thead>
