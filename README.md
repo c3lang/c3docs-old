@@ -8,4 +8,4 @@ Read the docs directly here: https://c3lang.github.io/c3docs/
 
 Do you have some suggestion on how to improve the language or some language feature? 
 - File an issue with the docs: https://github.com/c3lang/c3docs/issues/new 
-- Or discuss it in the #c3 channel on the r/ProgrammingLanguages discord: https://discord.gg/cfu4wdk
+- Or discuss it in the C3 discord: [https://discord.gg/qN76R87](https://discord.gg/qN76R87)
