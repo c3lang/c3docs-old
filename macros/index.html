@@ -629,7 +629,7 @@ func void test()
 <p>This is not limited to return: <code>break</code>, <code>continue</code> and <code>next</code> is allowed.</p>
 <pre><code>macro next!($f) 
 { 
-     next $f;
+     nextcase $f;
 }
 
 func void test()
@@ -675,7 +675,7 @@ has to be taken into account when used in conjunction with @defined.</p>
 <p>Consider this code:</p>
 <pre><code>macro @foo()
 {
-    $if (@defined(A)): 
+    $if ($defined(A)): 
         return A + 1; 
     endif;
     return 1;
@@ -707,7 +707,7 @@ struct Test @foo
 time:</p>
 <pre><code>macro @fooCheck($a)
 {
-    $if (@defined($a.@foo)):
+    $if ($defined($a.@foo)):
         return &quot;Was fooed&quot;;
     endif;
     return &quot;Ok&quot;;

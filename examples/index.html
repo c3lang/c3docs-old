@@ -224,7 +224,7 @@
 </code></pre>
 
 <h5 id="enum-switch">enum + switch</h5>
-<p>Switches have implicit break and scope. Use "next" to implicitly fallthrough or use comma:</p>
+<p>Switches have implicit break and scope. Use "nextcase" to implicitly fallthrough or use comma:</p>
 <pre><code>enum Height : uint 
 {
     LOW = 0,
@@ -276,18 +276,18 @@ func void demo_enum(Height h)
             break;
     }
 
-    // Using &quot;next&quot; will fallthrough to the next case statement, 
+    // Using &quot;nextcase&quot; will fallthrough to the next case statement, 
     // and each case statement starts its own scope.
     switch (h) 
     {
         case LOW:
             int a = 1;
             printf(&quot;A\n&quot;);
-            next;
+            nextcase;
         case MEDIUM,
             int a = 2;
             printf(&quot;B\n&quot;);
-            next;
+            nextcase;
         case HIGH,
             // a is not defined here
             printf(&quot;C\n&quot;);

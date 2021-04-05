@@ -86,7 +86,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#do-without-while">Do-without-while</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#next-and-labelled-next">Next and labelled next</a>
+    <li class="toctree-l2"><a class="reference internal" href="#nextcase-and-labelled-nextcase">Nextcase and labelled nextcase</a>
     </li>
     </ul>
                     </li>
@@ -244,28 +244,28 @@ do
 }
 </code></pre>
 
-<h2 id="next-and-labelled-next">Next and labelled next</h2>
-<p>The <code>next</code> statement is used in <code>switch</code> and <code>catch</code> to jump to the next statement:</p>
+<h2 id="nextcase-and-labelled-nextcase">Nextcase and labelled nextcase</h2>
+<p>The <code>nextcase</code> statement is used in <code>switch</code> and <code>catch</code> to jump to the next statement:</p>
 <pre><code>switch (i)
 {
    case 1:
      doSomething();
-     next; // Jumps to case 2
+     nextcase; // Jumps to case 2
    case 2:
      doSomethingElse();
 }
 </code></pre>
 
-<p>It's also possible to use <code>next</code> with an expression, to jump to an arbitrary case:</p>
+<p>It's also possible to use <code>nextcase</code> with an expression, to jump to an arbitrary case:</p>
 <pre><code>switch (i)
 {
     case 1:
         doSomething();
-        next 3; // Jump to case 3
+        nextcase 3; // Jump to case 3
     case 2:
         doSomethingElse();
     case 3:
-        next rand(); // Jump to random case
+        nextcase rand(); // Jump to random case
     default:
         printf(&quot;Ended\n&quot;);
 }  

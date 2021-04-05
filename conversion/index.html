@@ -88,11 +88,67 @@
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Conversions</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#signedunsigned-int-conversions">Signed/unsigned int conversions</a>
+    <li class="toctree-l2"><a class="reference internal" href="#target-type">Target type</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#implicit-promotion">Implicit promotion</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#maximum-type">Maximum type</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#sub-struct-conversions">Sub struct conversions</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#pointer-conversions">Pointer conversions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#implicit-narrowing">Implicit narrowing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#binary-conversions">Binary conversions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-multiplication-division-remainder-subtraction-addition-with-both-operands-being-numbers">1. Multiplication, division, remainder, subtraction / addition with both operands being numbers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-addition-with-left-side-being-a-pointer">2. Addition with left side being a pointer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-subtraction-with-lhs-pointer-and-rhs-integer">3. Subtraction with lhs pointer and rhs integer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-subtraction-with-both-sides-pointers">4. Subtraction with both sides pointers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#6-bit-operations-amp">6. Bit operations ^ &amp;amp; |</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#6-shift-operations-ltlt-gtgt">6. Shift operations &amp;lt;&amp;lt; &amp;gt;&amp;gt;</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#7-assignment-operations-amp">7. Assignment operations += -= *= *= /= %= ^= |= &amp;amp;=</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#8-assignment-shift-gtgt-ltlt">8. Assignment shift &amp;gt;&amp;gt;= &amp;lt;&amp;lt;=</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#9-ampamp-and">9. &amp;amp;&amp;amp; and ||</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#10-lt-gt">10. &amp;lt;= == &amp;gt;= !=</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#unary-conversions">Unary conversions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-bit-negate">1. Bit negate</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-boolean-not">2. Boolean not</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-negation">3. Negation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-amp-and-ampamp">4. &amp;amp; and &amp;amp;&amp;amp;</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#5">5. *</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#6-and-">6. ++ and --</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#base-expressions">Base expressions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-typed-identifiers">1. Typed identifiers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-constants-and-literals">2. Constants and literals</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ternary-and-return-type-conversions">Ternary and return type conversions</a>
     </li>
     </ul>
                     </li>
@@ -188,199 +244,197 @@
 <li>int to float conversions do not require a cast</li>
 <li>bool to float converts to 0.0 / 1.0</li>
 <li>widening float conversions do <em>not</em> require a cast</li>
-<li>narrowing integer conversions require a cast</li>
+<li>narrowing conversions require a cast(*)</li>
 <li>widening conversions do <em>not</em> require a cast</li>
-<li>signed -&gt; unsigned conversions must be explicit</li>
-<li>unsigned -&gt; signed conversions do <em>not</em> need to be explicit if all unsigned values can be contained inside of the signed type. </li>
+<li>signed &lt;-&gt; unsigned conversions do not require a cast.</li>
 <li>In conditionals float to bool <em>do not</em> require a cast, any non zero float value considered true</li>
-<li>Implicit conversion to bool only occurs in conditionals 
-  or when the value is enclosed in <code>()</code> e.g. <code>bool x = (1.0)</code> or <code>if (1.0) { ... }</code></li>
+<li>Implicit conversion to bool only occurs in conditionals or when the value is enclosed in <code>()</code> e.g. <code>bool x = (1.0)</code> or <code>if (1.0) { ... }</code></li>
 </ul>
 <p>C3 uses two's complement arithmetic for all integer math.</p>
-<h2 id="signedunsigned-int-conversions">Signed/unsigned int conversions</h2>
-<p>In C, the can be simply described as "convert to the type that can contain the other". If this cannot be guaranteed, the conversion must be explicit.</p>
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center">byte</th>
-<th align="center">ushort</th>
-<th align="center">uint</th>
-<th align="center">ulong</th>
-<th align="center">char</th>
-<th align="center">short</th>
-<th align="center">int</th>
-<th align="center">long</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">byte</td>
-<td align="center">byte</td>
-<td align="center">ushort</td>
-<td align="center">uint</td>
-<td align="center">ulong</td>
-<td align="center">-</td>
-<td align="center">short</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">ushort</td>
-<td align="center">ushort</td>
-<td align="center">ushort</td>
-<td align="center">uint</td>
-<td align="center">ulong</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">uint</td>
-<td align="center">uint</td>
-<td align="center">uint</td>
-<td align="center">uint</td>
-<td align="center">ulong</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">ulong</td>
-<td align="center">ulong</td>
-<td align="center">ulong</td>
-<td align="center">ulong</td>
-<td align="center">ulong</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">-</td>
-</tr>
-<tr>
-<td align="center">char</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">char</td>
-<td align="center">short</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">short</td>
-<td align="center">short</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">short</td>
-<td align="center">short</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">int</td>
-<td align="center">int</td>
-<td align="center">int</td>
-<td align="center">-</td>
-<td align="center">-</td>
-<td align="center">int</td>
-<td align="center">int</td>
-<td align="center">int</td>
-<td align="center">long</td>
-</tr>
-<tr>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">-</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-<td align="center">long</td>
-</tr>
-</tbody>
-</table>
+<h2 id="target-type">Target type</h2>
+<p>The left hand side of an assignment, or the parameter type in a call is known as the <em>target type</em> the target type is used for implicit widening and inferring struct initialization.</p>
+<h2 id="implicit-promotion">Implicit promotion</h2>
+<p>Like C, C3 uses implicit promotion of integer and floating point variables:</p>
+<ol>
+<li>For any floating point type with a bit width smaller than 32 bits, widen to <code>float</code>. E.g. <code>half -&gt; float</code></li>
+<li>After 1, for any floatimg point type with a bit width smaller than the <em>target type</em> widen to the target type.</li>
+<li>For an integer type smaller than the <em>minimum arithmetic width</em>, promote the value to a signed integer of the <em>minimum arithmetic width</em> (this usually corresponds to a c int). E.g. <code>uchar -&gt; int</code></li>
+<li>After 3, for an integer type smaller than the <em>target type</em>, promote the value to an integer of the the same bit width. E.g. <code>ulong = int + int -&gt; ulong = long + long</code></li>
+</ol>
+<h2 id="maximum-type">Maximum type</h2>
+<p>The <em>maximum type</em> is a concept used when unifying two or more types. The algorithm follows:</p>
+<ol>
+<li>First perform implicit promotion.</li>
+<li>If both types are the same, the maximum type is this type. </li>
+<li>If one type is a floating point type, and the other is an integer type, the maximum type is the floating point type. E.g. <code>int + float -&gt; float</code>.</li>
+<li>If both types are floating point types, the maximum type is the widest floating point type. E.g. <code>float + double -&gt; double</code>.</li>
+<li>If both types are integer types with the same signedness, the maximum type is the widest integer type of the two. E.g. <code>uint + ulong -&gt; ulong</code>.</li>
+<li>If both types are integer types with different signedness, the maximum type is a signed integer with the same bit width as the maximum integer type. <code>ulong + int -&gt; long</code></li>
+<li>If at least one side is a struct or a pointer to a struct with an <code>inline</code> directive on a member, check recursively check if the type of the inline member can be used to find a maximum type (see below under sub struct conversions)</li>
+<li>All other cases are errors.</li>
+</ol>
 <h2 id="sub-struct-conversions">Sub struct conversions</h2>
 <p>Substructs may be used in place of its parent structs in many cases. The rule is as follows:</p>
 <ol>
 <li>A substruct pointer may implicitly convert to a parent struct.</li>
 <li>A substruct <em>value</em> may be implicitly assigned to a variable with the parent struct type, This will <em>truncate</em> the value, copying only the parent part of the substruct. However, a substruct value cannot be assigned its parent struct.</li>
-<li>Substruct vararray and arrays <em>can not</em> be cast (implicitly or explicitly) to an array of the parent struct type.</li>
-<li>Substruct subarrays may at a later point be possible to convert into a subarray of the parent struct type.</li>
+<li>Substruct subarrays, vararrays and arrays <em>can not</em> be cast (implicitly or explicitly) to an array of the parent struct type.</li>
 </ol>
 <h2 id="pointer-conversions">Pointer conversions</h2>
 <p>Pointer conversion between types usually need explicit casts. The exception is <code>void *</code> which any type may implicitly convert <em>to</em> or <em>from</em>. Conversion rules from and to arrays are detailed under <a href="../arrays">arrays</a></p>
-<h1 id="coercions">Coercions</h1>
-<p>Coercion in C3 is slightly more strict than C but not overly so. C3 prohibits implicit narrowing in assignment but is otherwise similar. In binary expressions there is usually the concept of the <em>maximum type</em>.</p>
-<p>For integers and floating points this is simply f64 &gt; f32 &gt; i64 &gt; i32 &gt; i16 &gt; i8. So given the types i64 and i8, the maximum type is i64. If it was instead i64 and f32, the maximum is f32.</p>
-<p>For pointers, the rules are slightly different. The maximum type of a struct is the maximum common parent struct. So if A is a subtype of B which is a subtype of C, and D is a subtype of E which is a subtype of E, then the maximumum type is C.</p>
+<h2 id="implicit-narrowing">Implicit narrowing</h2>
+<p>Implicit narrowing is only allowed for floating point values and integer types. The following must hold:</p>
+<ol>
+<li>To narrow to a floating point type, all sub expressions must be integers or a floating point as narrow or more narrow than the target type.</li>
+<li>To narrow to an integer type, all sub expressions must be integers and as narrow or mor narrow than the target type, ignoring signedness.</li>
+</ol>
+<pre><code>half h = 12.0;
+float f = 13.0;
+double d = 22.0;
+
+char x = 1;
+short y = -3;
+int z = 0xFFFFF;
+ulong w = -0xFFFFFFF;
+
+x = x + x; // =&gt; calculated as x = cast(cast(x as int) + cast(x as int), char);
+x = y + x; // =&gt; error
+w = x + y; // =&gt; calculated as w = cast(cast(cast(x as long) + cast(y as long) as ulong);
+
+h = x * h; // =&gt; calculated as h = cast(cast(x as float) * cast(h as float) as half);
+h = f + x; // =&gt; error
+d = f * h; // =&gt; calculated as d = cast(f as double) * cast(h as double);
+</code></pre>
+
 <h2 id="binary-conversions">Binary conversions</h2>
-<table>
-<thead>
-<tr>
-<th>operation</th>
-<th>action</th>
-<th>result</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>*</code> <code>/</code> <code>%</code> <code>^</code> <code>|</code> <code>&amp;</code> <code>*%</code></td>
-<td>promote both operands to the maximum type</td>
-<td>maximum type</td>
-</tr>
-<tr>
-<td>ptr <code>+</code>/<code>-</code> int</td>
-<td>integer is promoted to a isize or usize</td>
-<td>ptr</td>
-</tr>
-<tr>
-<td>number <code>+</code>/<code>-</code>/<code>+%</code>/<code>+%</code> number</td>
-<td>promote both operands to the maximum type</td>
-<td>maximum type</td>
-</tr>
-<tr>
-<td>ptr <code>-</code> ptr</td>
-<td>only valid if pointers are the same type or one pointer is void *</td>
-<td>isize</td>
-</tr>
-<tr>
-<td><code>&lt;&lt;</code> <code>&gt;&gt;</code> <code>&lt;&lt;=</code> <code>&gt;&gt;=</code></td>
-<td>no coercions</td>
-<td>left hand type</td>
-</tr>
-<tr>
-<td><code>&amp;&amp;</code> <code>||</code></td>
-<td>left and right side are evaluated as boolean</td>
-<td>bool</td>
-</tr>
-<tr>
-<td><code>+=</code> <code>+%=</code> <code>-=</code> <code>-%=</code> <code>*=</code> <code>*%=</code> <code>/=</code> <code>%=</code> <code>^=</code> <code>|=</code> <code>&amp;=</code></td>
-<td>right hand side is explicitly cast to left size type</td>
-<td>left side type</td>
-</tr>
-<tr>
-<td><code>=</code></td>
-<td>right hand side is implicitly cast to left side type</td>
-<td>left side type</td>
-</tr>
-<tr>
-<td><code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code> <code>==</code> <code>!=</code></td>
-<td>promote both operands to the maximum type</td>
-<td>bool</td>
-</tr>
-</tbody>
-</table>
-<h2 id="return-type-conversions">Return type conversions</h2>
+<h3 id="1-multiplication-division-remainder-subtraction-addition-with-both-operands-being-numbers">1. Multiplication, division, remainder, subtraction / addition with both operands being numbers</h3>
+<p>These operations are only valid for integer and float types.</p>
+<ol>
+<li>Resolve the operands, left to right, pushing down the target type.</li>
+<li>Find the maximum type of the two operands.</li>
+<li>Promote both operands to the resulting type.</li>
+<li>The resulting type of the expression is the resulting type.</li>
+</ol>
+<h3 id="2-addition-with-left-side-being-a-pointer">2. Addition with left side being a pointer</h3>
+<ol>
+<li>Resolve the left hand operand pushing down the target type.</li>
+<li>Resolve the right hand operand pushing down iptrdiff as the target type.</li>
+<li>If the rhs is not an integer, this is an error.   </li>
+<li>If the rhs has a bit width that exceeds iptrdiff, this is an error.</li>
+<li>The result of the expression is the lhs type.</li>
+</ol>
+<h3 id="3-subtraction-with-lhs-pointer-and-rhs-integer">3. Subtraction with lhs pointer and rhs integer</h3>
+<ol>
+<li>Resolve the left hand operand pushing down the target type.</li>
+<li>Resolve the right hand operand pushing down iptrdiff as the target type.</li>
+<li>If the right hand type has a bit width that exceeds iptrdiff, this is an error.</li>
+<li>The result of the expression is the left hand type.</li>
+</ol>
+<h3 id="4-subtraction-with-both-sides-pointers">4. Subtraction with both sides pointers</h3>
+<ol>
+<li>Resolve the operands, left to right.</li>
+<li>If the either side is a <code>void *</code>, it is cast to the other type.</li>
+<li>If the types of the sides are different, this is an error.   </li>
+<li>The result of the expression is iptrdiff.</li>
+<li>If this result exceeds the target width, this is an error.</li>
+</ol>
+<h3 id="6-bit-operations-amp">6. Bit operations <code>^</code> <code>&amp;</code> <code>|</code></h3>
+<p>These operations are only valid for integers and booleans.</p>
+<ol>
+<li>Resolve the operands, left to right, pushing down the target type.</li>
+<li>Find the maximum type of the two operands.</li>
+<li>Promote both operands to the resulting type.</li>
+<li>The result of the expression is the resulting type.</li>
+</ol>
+<h3 id="6-shift-operations-ltlt-gtgt">6. Shift operations <code>&lt;&lt;</code> <code>&gt;&gt;</code></h3>
+<p>These operations are only valid for integers.</p>
+<ol>
+<li>Resolve the left operand pushing down the target type.</li>
+<li>Resolve the right operand <em>without pushing down</em> a target type.   </li>
+<li>In safe mode, insert a trap to ensure that rhs &gt;= 0 and rhs &lt; bit width of the left hand side.</li>
+<li>The result of the expression is the lhs type.</li>
+</ol>
+<h3 id="7-assignment-operations-amp">7. Assignment operations <code>+=</code> <code>-=</code> <code>*=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>^=</code> <code>|=</code> <code>&amp;=</code></h3>
+<ol>
+<li>Resolve the type of the left operand.</li>
+<li>Resolve the right operand pushing down the lhs type as target type</li>
+<li>The result of the expression is the lhs type.</li>
+</ol>
+<h3 id="8-assignment-shift-gtgt-ltlt">8. Assignment shift <code>&gt;&gt;=</code> <code>&lt;&lt;=</code></h3>
+<ol>
+<li>Resolve both operands</li>
+<li>In safe mode, insert a trap to ensure that rhs &gt;= 0 and rhs &lt; bit width of the left hand side.</li>
+<li>The result of the expression is the lhs type.</li>
+</ol>
+<h3 id="9-ampamp-and">9. <code>&amp;&amp;</code> and <code>||</code></h3>
+<ol>
+<li>Resolve both operands.</li>
+<li>Insert bool cast of both operands.</li>
+<li>The type is bool.</li>
+</ol>
+<h3 id="10-lt-gt">10. <code>&lt;=</code> <code>==</code> <code>&gt;=</code> <code>!=</code></h3>
+<ol>
+<li>Resolve the operands, left to right.</li>
+<li>Find the maximum type of the two operands.</li>
+<li>Promote both operands to the resulting type.</li>
+<li>The type is bool.</li>
+</ol>
+<h2 id="unary-conversions">Unary conversions</h2>
+<h3 id="1-bit-negate">1. Bit negate</h3>
+<ol>
+<li>Resolve the inner operand, pushing down the target type.</li>
+<li>If the inner type is not an integer this is an error.   </li>
+<li>The type is the inner type.</li>
+</ol>
+<h3 id="2-boolean-not">2. Boolean not</h3>
+<ol>
+<li>Resolve the inner operand.</li>
+<li>The type is bool.</li>
+</ol>
+<h3 id="3-negation">3. Negation</h3>
+<ol>
+<li>Resolve the inner operand, pushing down the target type.</li>
+<li>If the type inner type is not a number this is an error.</li>
+<li>If the inner type is an unsigned integer, cast it to the same signed type.</li>
+<li>The type is the type of the result from (3)</li>
+</ol>
+<h3 id="4-amp-and-ampamp">4. <code>&amp;</code> and <code>&amp;&amp;</code></h3>
+<ol>
+<li>Resolve the inner operand.</li>
+<li>The type is a pointer to the type of the inner operand.</li>
+</ol>
+<h3 id="5">5. <code>*</code></h3>
+<ol>
+<li>Resolve the inner operand.</li>
+<li>If the operand is not a pointer, or is a <code>void *</code> pointer, this is an error.</li>
+<li>The type is the pointee of the inner operand's type.</li>
+</ol>
+<p>Dereferencing 0 is implementation defined.</p>
+<h3 id="6-and-">6. <code>++</code> and <code>--</code></h3>
+<ol>
+<li>Resolve the inner operand.</li>
+<li>If the type is not a number, this is an error.</li>
+<li>The type is the same as the inner operand.</li>
+</ol>
+<h2 id="base-expressions">Base expressions</h2>
+<h3 id="1-typed-identifiers">1. Typed identifiers</h3>
+<ol>
+<li>The type is that of the declaration.</li>
+<li>If the width of the type is less than that of the target type, widen to the target type.</li>
+<li>If the width of the type is greater than that of the target type, it is an error.</li>
+</ol>
+<h3 id="2-constants-and-literals">2. Constants and literals</h3>
+<ol>
+<li>If it is untyped, the type is that of the smallest type that the constant can fit in.</li>
+<li>If the width of the type is less than that of the target type, widen to the target type.</li>
+<li>If the width of the type is greater than that of the target type, it is an error.</li>
+</ol>
+<h2 id="ternary-and-return-type-conversions">Ternary and return type conversions</h2>
 <p>In some cases an expression may have more than one branch and those branches have different types. A simple example is the ternary expressions. To resolve this, C3 does <em>return type conversion</em>. In essence this involves trying to implicitly cast each of the branches to the expected <em>return type</em>.</p>
 <p>C3 resolves the type in this manner:</p>
 <ol>
-<li>Is there an expected return type? If so, try to implicitly cast each branch to this value. Failure is a compile time error.</li>
-<li>Is there no expected return type? Fall back to picking maximum type.</li>
+<li>Is there an expected return type? Proceed error checking with the expected return type as the <em>target type</em> </li>
+<li>Is there no expected return type? Find the maximum type of all results and promote all results to the value. </li>
 </ol>
 <pre><code>int a = foo();
 short b = bar();
@@ -388,18 +442,17 @@ short b = bar();
 // This is using return type conversion:
 long c = baz() ? a : b;
 
-// The above will compile tog:
+// The above will compile to:
 long c = baz() ? cast(a as long) : cast(c as long);
 
-byte d = foobar();
+char d = foobar();
 
 // This is using maximum type because the ternary
 // is inside of an addition.
-long e = (baz() ? a : b) + (baz2() ? b : d);
+baz() ? a : b;
 
 // The above will compile to:
-long e = cast((baz() ? a : cast(b as int)) 
-               + cast((baz2() ? b : cast(d as short) as int)) as long);
+baz() ? a : cast(b as int);               
 </code></pre>
               
             </div>

@@ -386,7 +386,7 @@ char[] hello_world_hex = &quot;4865 6c6c 6f20 776f 726c 6421&quot;x;
 </tr>
 </tbody>
 </table>
-<p>*support will depend on platform</p>
+<p>*support depends on platform</p>
 <h5 id="floating-point-constants">Floating point constants</h5>
 <p>Floating point constants will <em>at least</em> use 64 bit precision. Just like for integer constants, it is allowed to use underscore, but it may not occur immediagely before or after a dot or an exponential.</p>
 <p>Floating point values may be written in decimal or hexadecimal. For decimal, the exponential symbol is e (or E, both are acceptable), for hexadecimal p (or P) is used: <code>-2.22e-21</code> <code>-0x21.93p-10</code> </p>
@@ -543,7 +543,7 @@ cb(10, false);
 
 <h2 id="distinct-types">Distinct types</h2>
 <p><code>typedef</code> may also be used to create distinct new types. They do not implicitly convert to any other type, but may be used as the underlying type.</p>
-<pre><code>typedef int as Foo distinct;
+<pre><code>typedef int as distinct Foo;
 Foo f = 0;
 f = f + 1;
 int i = 1;
@@ -595,7 +595,6 @@ important_person.title = &quot;Rockstar&quot;;
 printPerson(important_person); // Only the first part of the struct is copied.
 </code></pre>
 
-<p><code>inline</code> is not strictly needed. It allows a struct or union to be both addressed by name and directly as an anonymous struct/union. (See below)</p>
 <h2 id="union-types">Union types</h2>
 <p>Union types are defined just like structs.</p>
 <pre><code>union Integral  
