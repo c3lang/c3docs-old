@@ -3,6 +3,6 @@ subject to change. That also means that any contribution right now will have a b
 So if you find the project interesting, here's what you can do to help:
 
 
-- Discuss the language on the r/ProgrammingLanguages Discord [https://discord.gg/cfu4wdk](https://discord.gg/cfu4wdk) 
+- Discuss the language on the C3 Discord [https://discord.gg/qN76R87](https://discord.gg/qN76R87) 
 - Suggest improvements by filing an issue: [https://github.com/c3lang/c3docs/issues/new](https://github.com/c3lang/c3docs/issues/new)
 - Offer to work on the compiler being written here: [https://github.com/c3lang/c3c](https://github.com/c3lang/c3c)

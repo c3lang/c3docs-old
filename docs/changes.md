@@ -1,5 +1,12 @@
 # Change log
 
+##### Revision 2020-04-05
+- "next" is now "nextcase".
+- Added link to the C3 discord.
+- The [conversions](../conversion) page updated with new conversion rules.
+- Updated compound literal syntax.
+- Removed [undefined behaviour](../undefinedbehaviour) behaviour on integer overflow and added a list of unspecified behaviour.
+
 ##### Revision 2020-12-23
 - Updated slice behaviour.
 - Updated expression block syntax.  
@@ -19,7 +26,7 @@
     
 ##### Revision 2020-07-08
 - Additions to [error handling](../errorhandling).
-- Introduction of labelled `next`, `break` and `continue`.
+- Introduction of labelled `nextcase`, `break` and `continue`.
 - Removal of `goto`.
 
 ##### Revision 2020-06-17

@@ -4,9 +4,7 @@ Expressions work like in C.
 
 ## Compound literals
 
-_Syntax and implementation under consideration!_
-
-C3 has C's compound literals, but it uses C++ style initialization without the `()`.
+C3 has C's compound literals, but unlike C's cast style syntax `(MyStruct) { 1, 2 }`, it uses a slightly different syntax, similar to C++: `MyStruct({ 1, 2 })`.
 
 ```
 struct Foo
@@ -28,14 +26,15 @@ Literals are allocated on the stack, and similarly it's possible to allocate fix
 func void test1(int[3] x) { ... }
 
 // By slice
-func void test2(int[:] y) { ... }
+func void test2(int[] y) { ... }
 
 // By reference
 func void test2(int[3]* z) { ... }
 
-test1(int[3] { 1, 2, 3 });
-test2(&int[3] { 1, 2, 3 });
-test3(&int[3] { 1, 2, 3 });
+test1(int[3]({ 1, 2, 3 }));
+test2(&&int[3]({ 1, 2, 3 }));
+test3(&&int[3]({ 1, 2, 3 }));
+
 ```
 
 ## Array literals
@@ -45,7 +44,7 @@ _Syntax and implementation under consideration!_
 Arrays can be initialized using compound literals, but there is also a special format for array initialization using `[]`. In this case, the type is inferred. It allows uniform initialization of all types of arrays:
 
 ```
-int[] x = [1, 2, 3]; // Variable array allocated on the stack
+int[*] x = [1, 2, 3]; // Variable array allocated on the stack
 int[3] y = [1, 2, 3]; // Fixed array allocated on the stack
 int[] z = [1, 2, 3]; // Slice pointing at literal allocated on the stack
 ```

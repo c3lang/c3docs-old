@@ -229,7 +229,7 @@ func bool State.mayOpen(State state)
 ### Restrictions on methods
 
 - Methods on a struct/union may not have the same name as a member.
-- Methods only works on struct, union and enum types.
+- Methods only works on distinct, struct, union and enum types.
 - When taking a function pointer of a method, use the full name.
 - Using sub types, overlapping function names will be shadowed.
 

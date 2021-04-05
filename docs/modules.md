@@ -23,7 +23,7 @@ module foo;
 `file_c.c3`
 
 ```
-module baz;
+module bar;
 
 /* ... */
 ```

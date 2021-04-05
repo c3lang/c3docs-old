@@ -145,7 +145,7 @@ else        enum        extern
 error       false       func
 generic     if          import
 in          local       macro
-module      next        nil
+module      nextcase    nil
 public      return      struct
 switch      true        try
 typeid      typeof      typedef
@@ -363,6 +363,42 @@ Th
 ## Declarations and scope
 
 ## Expressions
+
+### Casts
+
+### Pointer casts
+
+#### Integer to pointer cast
+Any integer of pointer size or larger may be explicitly cast to a pointer. An integer to pointer cast is considered non-constant, except in the special case where the integer == 0. In that case, the result is constant `null`.
+
+Example:
+```
+byte a = 1;
+int* b = cast(a as int*); // Invalid, pointer type is > 8 bits.
+int* c = cast(1 as int*); // Valid, but runtime value.
+int* d = cast(0 as int*); // Valid and constant value.
+```
+
+#### Pointer to integer cast
+A pointer may be cast to any integer, truncating the pointer value if the size of the pointer is larger than the pointer size. A pointer to integer cast is considered non-constant, except in the special case of a null pointer, where it is equal to the integer value 0.
+
+Example:
+
+```
+func void test() { ... }
+typedef func void test() as VoidFunc;
+
+VoidFunc a = &test;
+int b = cast(null as int);
+int c = cast(a as int); // Invalid, not constant
+int d = cast(cast(1 as int*) as int); // Invalid, not constant
+```
+
+### Subscript operator
+
+The subscript operator may take as its left side a pointer, array, subarray or vararray. The index may be of any integer type. TODO
+*NOTE* The subscript operator is not symmetrical as in C. For example in C3 `array[n] = 33` is allowed, but not `n[array] = 33`. This is a change from C. 
+
 ### Operands
 ### Compound Literals
 

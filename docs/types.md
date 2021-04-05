@@ -89,7 +89,7 @@ char[] hello_world_hex = "4865 6c6c 6f20 776f 726c 6421"x;
 | double       | f64   | 64       |
 | quad*        | f128  | 128      |
 
-*support will depend on platform
+*support depends on platform
 
 ##### Floating point constants
 
@@ -243,7 +243,7 @@ cb(10, false);
 `typedef` may also be used to create distinct new types. They do not implicitly convert to any other type, but may be used as the underlying type.
 
 ```
-typedef int as Foo distinct;
+typedef int as distinct Foo;
 Foo f = 0;
 f = f + 1;
 int i = 1;
@@ -303,8 +303,6 @@ important_person.name = "Jane Doe";
 important_person.title = "Rockstar";
 printPerson(important_person); // Only the first part of the struct is copied.
 ```
-
-`inline` is not strictly needed. It allows a struct or union to be both addressed by name and directly as an anonymous struct/union. (See below)
 
 ## Union types
 

@@ -52,7 +52,7 @@ func void example_while()
 
 #####enum + switch
 
-Switches have implicit break and scope. Use "next" to implicitly fallthrough or use comma:
+Switches have implicit break and scope. Use "nextcase" to implicitly fallthrough or use comma:
 
 ```
 enum Height : uint 
@@ -106,18 +106,18 @@ func void demo_enum(Height h)
             break;
     }
     
-    // Using "next" will fallthrough to the next case statement, 
+    // Using "nextcase" will fallthrough to the next case statement, 
     // and each case statement starts its own scope.
     switch (h) 
     {
         case LOW:
             int a = 1;
             printf("A\n");
-            next;
+            nextcase;
         case MEDIUM,
             int a = 2;
             printf("B\n");
-            next;
+            nextcase;
         case HIGH,
             // a is not defined here
             printf("C\n");

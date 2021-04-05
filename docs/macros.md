@@ -468,7 +468,7 @@ This is not limited to return: `break`, `continue` and `next` is allowed.
 ```
 macro next!($f) 
 { 
-     next $f;
+     nextcase $f;
 }
 
 func void test()
@@ -526,7 +526,7 @@ Consider this code:
 ```
 macro @foo()
 {
-    $if (@defined(A)): 
+    $if ($defined(A)): 
         return A + 1; 
     endif;
     return 1;
@@ -564,7 +564,7 @@ time:
 ```
 macro @fooCheck($a)
 {
-    $if (@defined($a.@foo)):
+    $if ($defined($a.@foo)):
         return "Was fooed";
     endif;
     return "Ok";

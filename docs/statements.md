@@ -75,33 +75,33 @@ do
 }
 ```
 
-## Next and labelled next
+## Nextcase and labelled nextcase
 
-The `next` statement is used in `switch` and `catch` to jump to the next statement:
+The `nextcase` statement is used in `switch` and `catch` to jump to the next statement:
 
 ```
 switch (i)
 {
    case 1:
      doSomething();
-     next; // Jumps to case 2
+     nextcase; // Jumps to case 2
    case 2:
      doSomethingElse();
 }
 ```
 
-It's also possible to use `next` with an expression, to jump to an arbitrary case:
+It's also possible to use `nextcase` with an expression, to jump to an arbitrary case:
 
 ```
 switch (i)
 {
     case 1:
         doSomething();
-        next 3; // Jump to case 3
+        nextcase 3; // Jump to case 3
     case 2:
         doSomethingElse();
     case 3:
-        next rand(); // Jump to random case
+        nextcase rand(); // Jump to random case
     default:
         printf("Ended\n");
 }  
