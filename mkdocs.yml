@@ -1,4 +1,6 @@
 site_name: C3 Documentation
+markdown_extensions:
+  - footnotes
 nav:
   - About C3: 'index.md'
   - Installing:

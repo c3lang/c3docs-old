@@ -33,26 +33,43 @@ return 1;
 
 The following operations cause undefined behaviour in release builds of C3:
 
-| operation | will trap in safe builds
-| --- | :-: |
+| operation | will trap in safe builds |
+| --------- | :----------------------: |
 | int / 0 | Yes |
 | int % 0 | Yes |
-| using explicitly uninitialized memory | Implementation dependent |
+| using explicitly uninitialized memory | Possible* |
 | array index out of bounds | Yes |
 | dereference `null` | Yes |
-| dereferencing memory not allocated | Implementation dependent |
-| dereferencing memory outside of its lifetime | Implementation dependent |
-| casting pointer to the incorrect array or vararray | Implementation dependent |
+| dereferencing memory not allocated | Possible* |
+| dereferencing memory outside of its lifetime | Possible* |
+| casting pointer to the incorrect array or vararray | Possible* |
 | violating pre or post conditions | Yes |
 | violating asserts | Yes |
 | reaching $unreachable code | Yes |
 
+\* "Possible" indicates trapping is implementation dependent.
+
 ## List of implementation dependent behaviours
 
-Some behaviour is allowed to differ between implementations.
+Some behaviour is allowed to differ between implementations and platforms.
 
-| operation | will trap in safe builds | possible behaviour
-| --- | :-: | --- |
-| comparing pointers of different provenance | No | Any result |
-| shifting by more than bit width | Yes | Any result |
+| operation | will trap in safe builds | possible behaviour |
+| --------- | :----------------------: | :----------------: |
+| comparing pointers of different provenance | Optional | Any result |
+| subtracting pointers of different provenance | Optional | Any result |
+| shifting by more or equal to the bit width | Yes | Any result |
+| conversion floating point <-> integer type is out of range | Optional | Any result |
+| conversion between pointer types produces one with incorrect alignment | Optional | Any result / Error  |
+| calling a function through a function pointer that does not match the function | Optional | Any result / Error |
+| attempt to modify a string literal | Optional | Partial modification / Error |
+| modifying a `const` variable | Optional | Partial modification / Error |
 
+## List of undefined behaviour in C, which is defined in C3
+
+### Signed Integer Overflow
+
+Signed integer is always wrapped using 2s complement.
+
+### Modifying the intermediate results of an expression
+
+Behaves as if the intermediate result was stored in a variable on the stack.

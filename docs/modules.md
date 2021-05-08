@@ -65,31 +65,6 @@ import networking;
 ```
 
 
-### Restricted imports
-
-It is possible to restrict imports to sub modules or individual functions.
-
-```
-module foo;
-
-import bar::baz; // Only import the baz sub module.
-import some_module : some_function; // Only import some_function
-import some_module : SomeType, SomeOtherType, aFunc; // Import multiple symbols.
-```
-
-### Aliased imports
-
-To avoid name collisions, it's possible to alias names. This will completely hide their old name in the file scope.
-
-```
-module foo;
-
-import bar::io as bio;
-import baz::io;
-import some_module : SomeType as FooType;
-import foo : funcA as fooFuncA, funcB as fooFuncB;
-```
-
 ## Visibility
 
 All files in the same module share the same global declaration namespace. However, by default a function is not visible outside the module. To make the symbol visible outside the module, use the keyword `public`.
@@ -104,22 +79,47 @@ func void open() { .. }
 
 In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it isn't specified as public.
 
-### Visibility in sub modules
+## Overriding symbol visibility rules
 
-For declarations in sub modules, the rule is that a sub module may see any parent name, and any children name. However, other children sub modules are hidden.
+By using `as module` after an import, it's possible to access another module´s private symbols.
+Many other module systems have hierarchal visibility rules, but the `as module` feature allows 
+visibility to be manipulated in a more ad-hoc manner without imposing hard rules.
 
-Consider the modules `foo`, `foo::bar`, `foo::baz` and `foo::bar::xyzzy`. 
+For example, you may provide a library with two modules: "mylib::net" and "mylib::file" - which both use functions
+and types from a common "mylib::internals" module. The two libraries use `import mylib::internals as module`
+to access this module's private functions and type. To an external user of the library, the "mylib::internals"
+does not seem to exist, but inside of your library you use it as a shared dependency.
 
-1. From `foo::bar` the symbols of `foo`, `foo::bar` and `foo::bar::xyzzy` are visible. 
-2. From `foo::baz` only `foo` and `foo::baz` are visibile. 
-3. Finally from `foo`, all the symbols of `foo`, `foo::bar`, `foo::baz` and `foo::bar::xyzzy` are visibile.
+A simple example:
+```c
+// File a.c3
+module a;
+
+func void aFunction() { ... }
+
+// File b.c3
+module b;
+
+func void bFunction() { ... }
+
+// File c.c3
+module c;
+import a;
+import b as module;
+
+func void test() 
+{
+  a::aFunction(); // <-- error, aFunction not public
+  b::bFunction(); // Allowed since import was "as module"
+}
+```
 
 ## Using functions and types from other modules
 
-As a rule, functions, macros, constants, variables and types in the same module do not need any namespace prefix. For imported modules, and for parent or child modules the following rules hold:
+As a rule, functions, macros, constants, variables and types in the same module do not need any namespace prefix. For imported modules the following rules hold:
 
 1. Functions, macros, constants and variables require *at least* the (sub-) module name.
-2. Types do not require the module name except if the name is ambiguous.
+2. Types do not require the module name unless the name is ambiguous.
 3. In case of ambiguity, only so many levels of module names are needed as to make the symbol unambiguous.
 
 
@@ -128,26 +128,26 @@ As a rule, functions, macros, constants, variables and types in the same module 
 
 module a;
 
-struct Foo { ... }
-struct Bar { ... }
-struct TheAStruct { ... }
+public struct Foo { ... }
+public struct Bar { ... }
+public struct TheAStruct { ... }
 
-func void anAFunction() { ... }
+public func void anAFunction() { ... }
 
 // File b.c3
 
 module b;
 
-struct Foo { ... }
-struct Bar { ... }
-struct TheBStruct { ... }
+public struct Foo { ... }
+public struct Bar { ... }
+public struct TheBStruct { ... }
 
-func void aBFunction() { ... }
+public func void aBFunction() { ... }
 
 // File c.c3
-
-module b::c;
+module c;
 import a;
+import b;
 
 struct TheCStruct { ... }
 struct Bar { ... }
@@ -174,18 +174,18 @@ func void test()
 
 This means that the rule for the common case can be summarized as
 
-> Types without prefix, functions, variables, macros and constants prefixed with the sub module name.
+> Types are used without prefix; functions, variables, macros and constants are prefixed with the sub module name.
 
 
 ## Textual includes
 
-It's sometimes useful to include an entire file, doing so employs the `@include` macro.
+It's sometimes useful to include an entire file, doing so employs the `$include` function.
 
 File `Foo.c3`
 ```
 module foo;
 
-@include("Foo.x");
+$include("Foo.x");
 
 func void test() 
 {

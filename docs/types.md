@@ -36,11 +36,15 @@ Basic types are divided into floating point types, and integer types. Integer ty
 | uint         | u32   | 32       | no     |
 | long         | i64   | 64       | yes    |
 | ulong        | u64   | 64       | no     |
+| iptr**       | -     | varies   | yes    |
+| uptr**       | -     | varies   | no     |
+| iptrdiff**   | -     | varies   | yes    |
+| uptrdiff**   | -     | varies   | no     |
 | isize**      | -     | varies   | yes    |
 | usize**      | -     | varies   | no     |
 
-* `bool` will be stored as a byte.
-** `isize` and `usize` are pointer sized.
+\* `bool` will be stored as a byte.  
+\*\* size, pointer and pointer sized types depend on platform.
 
 ##### Integer arithmetics
 
@@ -85,6 +89,7 @@ char[] hello_world_hex = "4865 6c6c 6f20 776f 726c 6421"x;
 
 | Name         | alias | bit size |
 | ------------ | -----:| --------:|
+| half*        | f16   | 16       |
 | float        | f32   | 32       |
 | double       | f64   | 64       |
 | quad*        | f128  | 128      |
@@ -417,7 +422,7 @@ func void test()
 {
     Vec2 v2 = { 1, 2 };
     Vector v = { 1, 4 };
-    Vec3 v3 = { 1, 2, 3};
+    Vec3 v3 = { 1, 2, 3 };
     set_coordinates(v2);  // valid
     set_coordinates(v);   // valid
     set_coordinates(v3);  // ERROR, no structural equivalence.

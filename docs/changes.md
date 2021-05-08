@@ -1,5 +1,13 @@
 # Change log
 
+##### Revision 2020-05-08
+- Added rationale for some changes from C.
+- Updated undefined and [undefined behaviour](../undefinedbehaviour).
+- Removed many of the fine grained module features.
+- Removed "local" visibility in [modules](../modules).
+- All modules are now distinct, parent modules do not have any special access to sub modules.
+- Added `as module` imports.
+
 ##### Revision 2020-04-05
 - "next" is now "nextcase".
 - Added link to the C3 discord.

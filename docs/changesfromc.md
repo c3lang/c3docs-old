@@ -39,6 +39,8 @@ func void test(Foo* foo, Bar* bar)
 }
 ```
 
+*Rationale: const correctness requires littering const across the code base. Although const is useful, it provides weaker guarantees that it appears.*
+
 ##### Fixed arrays do not decay and have copy sematics
 
 C3 has three different array types. Variable arrays and slices decay to pointers, but fixed arrays are value objects and do not decay.
@@ -69,7 +71,8 @@ for (int i = 0, int j = 1; i < 10; i++, j++) { ... }
 
 ##### Integer promotions rules and safe signed-unsigned comparisons
 
-Promotion rules for integer types are different from C. C3 only does widening to the largest possible type and so implicit conversion will only occur where it is lossless (read more on the [conversion page](../conversion). C3 also adds *safe signed-unsigned comparisons*, this means that comparing signed and unsigned values will always yield the correct result:
+Promotion rules for integer types are different from C. Most prominently, C3 does left side widening in the case of `long x = intValue1 + intValue2`. In C this becomes:
+`long x = (long)(intValue1 + intValue2), whereas in C3 it would behaves as `long x = (long)intValue1 + (long)intValue2` to minimize chance of overflow. (read more on the [conversion page](../conversion). C3 also adds *safe signed-unsigned comparisons*, this means that comparing signed and unsigned values will always yield the correct result:
 
 ```
 // The code below will print "Hello C3!" on C3 and "Hello C!" in C.
@@ -90,6 +93,14 @@ else
 
 `goto` is removed and replaced with labelled `break` and `continue` together with the `nextcase` statement that allows you to jump between cases in a `switch` statement.
 
+*Rationale: It is very difficult to make goto work well with defer and implicit unwrapping of failables. It is not just making the compiler harder to write, but
+the code is harder to understand as well. The replacements together with `defer` cover many if not all usages of `goto` in regular code.
+
 ##### Locals variables are implictly zeroed
 
 In C global variables are implicitly zeroed out, but local variables aren't. In C3 local variables are zeroed out by default, but may be explicitly undefined to get the C behaviour.
+
+*Rationale: In the "zero-is-initialization" paradigm, zeroing variables, in particular structs, is very common. By offering zero initialization by default this avoids a whole class of vulnerabilites.
+Another alternative that was considered for C3 was mandatory initialization,
+but this adds a lot of extra boilerplate. 
+C3 also offers a way to opt out of zero-initialization, so the change comes at no performance loss.*
