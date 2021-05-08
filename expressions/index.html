@@ -196,7 +196,6 @@ func void test(Foo x) { ... }
 
 test(Foo({ 1, 2.0 }));
 </code></pre>
-
 <p>Literals are allocated on the stack, and similarly it's possible to allocate fixed size integers:</p>
 <pre><code>// By value
 func void test1(int[3] x) { ... }
@@ -212,7 +211,6 @@ test2(&amp;&amp;int[3]({ 1, 2, 3 }));
 test3(&amp;&amp;int[3]({ 1, 2, 3 }));
 
 </code></pre>
-
 <h2 id="array-literals">Array literals</h2>
 <p><em>Syntax and implementation under consideration!</em></p>
 <p>Arrays can be initialized using compound literals, but there is also a special format for array initialization using <code>[]</code>. In this case, the type is inferred. It allows uniform initialization of all types of arrays:</p>
@@ -220,7 +218,6 @@ test3(&amp;&amp;int[3]({ 1, 2, 3 }));
 int[3] y = [1, 2, 3]; // Fixed array allocated on the stack
 int[] z = [1, 2, 3]; // Slice pointing at literal allocated on the stack
 </code></pre>
-
 <p>It offers some convenience when calling functions taking arrays:</p>
 <pre><code>func void test1(int[3] x) { ... }
 func void test2(int[] y) { ... }
@@ -230,13 +227,11 @@ test1([ 1, 2, 3 ]);
 test2([ 1, 2, 3 ]);
 test3([ 1, 2, 3 ]);
 </code></pre>
-
 <h2 id="associative-array-literals">Associative array literals</h2>
 <p><em>Syntax and implementation under consideration!</em></p>
 <p>Associative arrays are mappings between keys and values:</p>
 <pre><code>IntStringMap x = { &quot;a&quot;: 2, &quot;b&quot;: { &quot;3&quot; : &quot;foo&quot; } };
 </code></pre>
-
 <p>To use an associative array, the struct needs to define the following method macros: <code>@map_init()</code> <code>@map_init_add()</code>. In the example above, the actual code is compiled to:</p>
 <pre><code>IntStringMap x;
 x.@map_init();

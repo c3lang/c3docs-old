@@ -188,7 +188,6 @@
     }
 }
 </code></pre>
-
 <h5 id="for-loop">for-loop</h5>
 <pre><code>func void example_for() {
     // the for-loop is the same as C99. 
@@ -204,7 +203,6 @@
     }
 }
 </code></pre>
-
 <h5 id="while-loop">while-loop</h5>
 <pre><code>func void example_while() 
 {
@@ -222,7 +220,6 @@
     }
 }
 </code></pre>
-
 <h5 id="enum-switch">enum + switch</h5>
 <p>Switches have implicit break and scope. Use "nextcase" to implicitly fallthrough or use comma:</p>
 <pre><code>enum Height : uint 
@@ -294,7 +291,6 @@ func void demo_enum(Height h)
     }
 }
 </code></pre>
-
 <p>Enums are always namespaced.</p>
 <p>Enums also define <code>.min</code> and <code>.max</code>, returning the minimum and maximum value for the enum values. <code>.all</code> returns an array with all enums.</p>
 <pre><code>enum State : uint 
@@ -308,7 +304,6 @@ const uint highest = State.max;
 
 State start = State.all[0];
 </code></pre>
-
 <h5 id="defer">defer</h5>
 <p>Defer will be invoked on scope exit.</p>
 <pre><code>func void test(int x)
@@ -326,7 +321,6 @@ test(1); // Prints &quot;A&quot;
 test(0); // Prints &quot;BA&quot;
 test(10); // Prints &quot;B!A&quot;
 </code></pre>
-
 <p>Because it's often relevant to run different defers when having an error return there is also a way to create an error defer, by using the <code>catch</code> keyword directly after the defer.</p>
 <pre><code>func void! test(int x)
 {
@@ -340,7 +334,6 @@ test(10); // Prints &quot;B!A&quot;
 test(0); // Prints &quot;!A&quot;
 test(1); // Prints &quot;FOOBA&quot; and returns a FooError
 </code></pre>
-
 <h5 id="struct-types">struct types</h5>
 <pre><code>type Callback func int(char c);
 
@@ -388,7 +381,6 @@ struct MyData
     }
 }
 </code></pre>
-
 <h5 id="function-pointers">Function pointers</h5>
 <pre><code>module demo;
 
@@ -408,7 +400,6 @@ func void example_cb()
     // ..
 }
 </code></pre>
-
 <h5 id="error-handling">Error handling</h5>
 <p>Errors are sent as a result value, called a "failable":</p>
 <pre><code>error DivisionByZero;
@@ -446,7 +437,6 @@ func void testHandlingError()
     printf(&quot;Ratio was %f\n&quot;, ratio);
 }
 </code></pre>
-
 <pre><code>import std::io;
 func void printFile(string filename)
 {
@@ -464,7 +454,6 @@ func void printFile(string filename)
     }
 }
 </code></pre>
-
 <h5 id="pre-and-post-conditions">Pre and post conditions</h5>
 <p>Pre- and postconditions are optionally compiled into asserts helping to optimize the code.</p>
 <pre><code>/**
@@ -488,7 +477,6 @@ func int getLastElement(int? array, int length)
     return array[length - 1];
 }
 </code></pre>
-
 <h5 id="macros">Macros</h5>
 <p>Macro arguments may be immediately evaluated.</p>
 <pre><code>macro foo(a, b)
@@ -510,7 +498,6 @@ func int test()
     // Error the symbol &quot;square&quot; cannot be used as an argument.
 }
 </code></pre>
-
 <p>Macro arguments may have deferred evaluation, which is basically text expansion.</p>
 <pre><code>macro foo($a, b, $c)
 {
@@ -540,7 +527,6 @@ func int test2()
     return foo2(1 + 1); // 1 + 1 * 1 + 1 = 3
 }
 </code></pre>
-
 <p>Improve macro errors with preconditions:</p>
 <pre><code>/**
  * @param x : value to square
@@ -558,7 +544,6 @@ func void test()
     square(&amp;a); // Error: cannot multiply '&amp;a'
 }
 </code></pre>
-
 <h5 id="value-functions">Value functions</h5>
 <p>It's possible to namespace functions with a union, struct or enum type to enable "dot syntax" calls:</p>
 <pre><code>struct Foo
@@ -580,7 +565,6 @@ func void test()
     printf(&quot;%d&quot;, foo.i); 
 }
 </code></pre>
-
 <h5 id="generic-modules">Generic modules</h5>
 <p>Generic modules implements a generic system.</p>
 <pre><code>module stack(Type)
@@ -611,7 +595,6 @@ func bool Stack.empty(Stack* this)
     return this.elems.size == 0;
 }
 </code></pre>
-
 <p>Testing it out:</p>
 <pre><code>import stack;
 

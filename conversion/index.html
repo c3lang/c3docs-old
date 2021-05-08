@@ -110,17 +110,17 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#4-subtraction-with-both-sides-pointers">4. Subtraction with both sides pointers</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#6-bit-operations-amp">6. Bit operations ^ &amp;amp; |</a>
+    <li class="toctree-l3"><a class="reference internal" href="#6-bit-operations">6. Bit operations ^ &amp; |</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#6-shift-operations-ltlt-gtgt">6. Shift operations &amp;lt;&amp;lt; &amp;gt;&amp;gt;</a>
+    <li class="toctree-l3"><a class="reference internal" href="#6-shift-operations">6. Shift operations &lt;&lt; &gt;&gt;</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#7-assignment-operations-amp">7. Assignment operations += -= *= *= /= %= ^= |= &amp;amp;=</a>
+    <li class="toctree-l3"><a class="reference internal" href="#7-assignment-operations-">7. Assignment operations += -= *= *= /= %= ^= |= &amp;=</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#8-assignment-shift-gtgt-ltlt">8. Assignment shift &amp;gt;&amp;gt;= &amp;lt;&amp;lt;=</a>
+    <li class="toctree-l3"><a class="reference internal" href="#8-assignment-shift">8. Assignment shift &gt;&gt;= &lt;&lt;=</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#9-ampamp-and">9. &amp;amp;&amp;amp; and ||</a>
+    <li class="toctree-l3"><a class="reference internal" href="#9-and">9. &amp;&amp; and ||</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#10-lt-gt">10. &amp;lt;= == &amp;gt;= !=</a>
+    <li class="toctree-l3"><a class="reference internal" href="#10">10. &lt;= == &gt;= !=</a>
     </li>
         </ul>
     </li>
@@ -132,7 +132,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#3-negation">3. Negation</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#4-amp-and-ampamp">4. &amp;amp; and &amp;amp;&amp;amp;</a>
+    <li class="toctree-l3"><a class="reference internal" href="#4-and">4. &amp; and &amp;&amp;</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#5">5. *</a>
     </li>
@@ -305,7 +305,6 @@ h = x * h; // =&gt; calculated as h = cast(cast(x as float) * cast(h as float) a
 h = f + x; // =&gt; error
 d = f * h; // =&gt; calculated as d = cast(f as double) * cast(h as double);
 </code></pre>
-
 <h2 id="binary-conversions">Binary conversions</h2>
 <h3 id="1-multiplication-division-remainder-subtraction-addition-with-both-operands-being-numbers">1. Multiplication, division, remainder, subtraction / addition with both operands being numbers</h3>
 <p>These operations are only valid for integer and float types.</p>
@@ -338,7 +337,7 @@ d = f * h; // =&gt; calculated as d = cast(f as double) * cast(h as double);
 <li>The result of the expression is iptrdiff.</li>
 <li>If this result exceeds the target width, this is an error.</li>
 </ol>
-<h3 id="6-bit-operations-amp">6. Bit operations <code>^</code> <code>&amp;</code> <code>|</code></h3>
+<h3 id="6-bit-operations">6. Bit operations <code>^</code> <code>&amp;</code> <code>|</code></h3>
 <p>These operations are only valid for integers and booleans.</p>
 <ol>
 <li>Resolve the operands, left to right, pushing down the target type.</li>
@@ -346,7 +345,7 @@ d = f * h; // =&gt; calculated as d = cast(f as double) * cast(h as double);
 <li>Promote both operands to the resulting type.</li>
 <li>The result of the expression is the resulting type.</li>
 </ol>
-<h3 id="6-shift-operations-ltlt-gtgt">6. Shift operations <code>&lt;&lt;</code> <code>&gt;&gt;</code></h3>
+<h3 id="6-shift-operations">6. Shift operations <code>&lt;&lt;</code> <code>&gt;&gt;</code></h3>
 <p>These operations are only valid for integers.</p>
 <ol>
 <li>Resolve the left operand pushing down the target type.</li>
@@ -354,25 +353,25 @@ d = f * h; // =&gt; calculated as d = cast(f as double) * cast(h as double);
 <li>In safe mode, insert a trap to ensure that rhs &gt;= 0 and rhs &lt; bit width of the left hand side.</li>
 <li>The result of the expression is the lhs type.</li>
 </ol>
-<h3 id="7-assignment-operations-amp">7. Assignment operations <code>+=</code> <code>-=</code> <code>*=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>^=</code> <code>|=</code> <code>&amp;=</code></h3>
+<h3 id="7-assignment-operations-">7. Assignment operations <code>+=</code> <code>-=</code> <code>*=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>^=</code> <code>|=</code> <code>&amp;=</code></h3>
 <ol>
 <li>Resolve the type of the left operand.</li>
 <li>Resolve the right operand pushing down the lhs type as target type</li>
 <li>The result of the expression is the lhs type.</li>
 </ol>
-<h3 id="8-assignment-shift-gtgt-ltlt">8. Assignment shift <code>&gt;&gt;=</code> <code>&lt;&lt;=</code></h3>
+<h3 id="8-assignment-shift">8. Assignment shift <code>&gt;&gt;=</code> <code>&lt;&lt;=</code></h3>
 <ol>
 <li>Resolve both operands</li>
 <li>In safe mode, insert a trap to ensure that rhs &gt;= 0 and rhs &lt; bit width of the left hand side.</li>
 <li>The result of the expression is the lhs type.</li>
 </ol>
-<h3 id="9-ampamp-and">9. <code>&amp;&amp;</code> and <code>||</code></h3>
+<h3 id="9-and">9. <code>&amp;&amp;</code> and <code>||</code></h3>
 <ol>
 <li>Resolve both operands.</li>
 <li>Insert bool cast of both operands.</li>
 <li>The type is bool.</li>
 </ol>
-<h3 id="10-lt-gt">10. <code>&lt;=</code> <code>==</code> <code>&gt;=</code> <code>!=</code></h3>
+<h3 id="10">10. <code>&lt;=</code> <code>==</code> <code>&gt;=</code> <code>!=</code></h3>
 <ol>
 <li>Resolve the operands, left to right.</li>
 <li>Find the maximum type of the two operands.</li>
@@ -398,7 +397,7 @@ d = f * h; // =&gt; calculated as d = cast(f as double) * cast(h as double);
 <li>If the inner type is an unsigned integer, cast it to the same signed type.</li>
 <li>The type is the type of the result from (3)</li>
 </ol>
-<h3 id="4-amp-and-ampamp">4. <code>&amp;</code> and <code>&amp;&amp;</code></h3>
+<h3 id="4-and">4. <code>&amp;</code> and <code>&amp;&amp;</code></h3>
 <ol>
 <li>Resolve the inner operand.</li>
 <li>The type is a pointer to the type of the inner operand.</li>

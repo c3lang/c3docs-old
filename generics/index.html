@@ -195,7 +195,6 @@
         return abs(x); // Redefining abs(!)
 }
 </code></pre>
-
 <p>Unlike a regular macro, a generic function is not invoked with @. It may also be extended by other packages / files:</p>
 <pre><code>// File 1
 module foo;
@@ -217,7 +216,6 @@ generic foo::abs(x)
         return abs(x);
 }
 </code></pre>
-
 <p>It is possible to dispatch on multiple arguments:</p>
 <pre><code>module foo;
 generic add(x, y)
@@ -228,7 +226,6 @@ generic add(x, y)
         return (double)x + y;
 }
 </code></pre>
-
 <p>Generics can also be used for overloading operators:</p>
 <pre><code>generic operator_add(x, y)
 {
@@ -248,7 +245,6 @@ generic operator_index_assign(x, y, z)
         return x.set(y, z); // Enables foo[12] = 2
 }
 </code></pre>
-
 <p>Note that generics is actually a macro expansion. Consequently this is possible:</p>
 <pre><code>generic weird_fun(x)
 {
@@ -270,7 +266,6 @@ void func test()
     wierd_fun(foo);  // Prints &quot;HiHiHiHi&quot;
 }
 </code></pre>
-
 <h4 id="shorthand">Shorthand</h4>
 <p>There is also a shorthand for declaring generics that only match a single type – it's done by declaring the types directly in the header:</p>
 <pre><code>generic add(double x, double y)
@@ -278,13 +273,11 @@ void func test()
     return x + y;
 }
 </code></pre>
-
 <h2 id="generic-modules">Generic modules</h2>
 <p>Generic modules are parameterized modules that allow functionality for arbitrary types.</p>
 <p>For generic modules, the generic parameters follows the module name:</p>
 <pre><code>module vector (A, B, C); // A, B, C are generic parameters.
 </code></pre>
-
 <p>The code inside of the module can use the generic parameters as if they were well defined symbols:</p>
 <pre><code>module foo_test (A, B);
 
@@ -296,7 +289,6 @@ func C test(B b, Foo *foo) {
    return a + b;
 }
 </code></pre>
-
 <p>Including a generic module works as usual, but to use a type, it must be <em>defined</em> before use.</p>
 <pre><code>import foo_test;
 
@@ -312,7 +304,6 @@ FooFloat f;
 testFloat(1.0, f);
 
 </code></pre>
-
 <p>Just like for macros, optional constraints may be added to improve compile errors:</p>
 <pre><code>/**
  * @require c = a + b
@@ -321,7 +312,6 @@ module vector (A, B, C);
 
 /* .. code * ../
 </code></pre>
-
 <pre><code>import vector(Bar, f32, i32) as gen_test;
 
 // This would give the error 

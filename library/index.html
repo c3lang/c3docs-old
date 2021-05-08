@@ -212,7 +212,6 @@ double b = 1.0;
 // Prints a = 3, b = 1.0
 printf(&quot;a = %d, b = %f\n&quot;, a, b);
 </code></pre>
-
 <p>This can be useful to push another allocator:</p>
 <pre><code>@scoped(mem::defaultAllocator)
 {
@@ -223,7 +222,6 @@ printf(&quot;a = %d, b = %f\n&quot;, a, b);
 }
 // The default allocator is restored here.
 </code></pre>
-
 <h3 id="other-macros">Other macros:</h3>
 <ul>
 <li><code>max(a, b)</code> maximum of two values using &gt;</li>

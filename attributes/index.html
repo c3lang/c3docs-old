@@ -233,7 +233,6 @@ prevents the enum from being converted to a value.</p>
 func void foo() myattribute
 { ...  }
 </code></pre>
-
 <h3 id="multi-type-attributes">Multi type attributes</h3>
 <p>It's possible to make an attribute match more than a single declaration type, by separating them using comma:</p>
 <pre><code>attribute func, enum, struct fooattribute;
@@ -248,7 +247,6 @@ struct Bar @fooattribute
     int i;
 }
 </code></pre>
-
 <h3 id="arguments">Arguments</h3>
 <p>An attribute may take a number of arguments, similar to a function. All such arguments must be compile time constants.</p>
 <pre><code>attribute func intdec(int i)
@@ -256,7 +254,6 @@ struct Bar @fooattribute
 void foo() @intdec(2)
 { ... }
 </code></pre>
-
 <p>Just like for function calls, the arguments may have defaults, use named arguments etc. However, varargs are not allowed.</p>
 <pre><code>attribute func dec(int d, int i = 0, float f = 1.0)
 
@@ -266,7 +263,6 @@ void foo() @dec(2)
 void bar() @dec(7, f = 3.0)
 { ... }
 </code></pre>
-
 <h2 id="compile-time-attribute-access">Compile time attribute access</h2>
 <p>What's useful about attributes is that they can be accessed during compile
 time:</p>
@@ -298,7 +294,6 @@ func void test()
     // Check TestB: Was fooed
 }
 </code></pre>
-
 <p>The values may be recovered:</p>
 <p>It's also possible to get hold of the values:</p>
 <pre><code>attribute func myvar(int i = 0);
@@ -313,7 +308,6 @@ func void test()
     printf(&quot;%d&quot;, test.myvar.i); // Prints 200
 }
 </code></pre>
-
 <h2 id="bundled-attributes">Bundled attributes</h2>
 <p>It's also possible to create bundles of attributes, that simply contain other attributes. Unlike a normal attribute, an attribute bundle is a simple alias, so it has no real compile time information.</p>
 <pre><code>attribute func foodec;
@@ -327,7 +321,6 @@ func void test() @mixdec
     /* ... */
 }
 </code></pre>
-
 <p>A attribute bundle might also be completely empty.</p>
 <h2 id="iterating-over-attributes">Iterating over attributes</h2>
 <p>Within a macro it's possible to iterate in compile time over all non-alias attributes 

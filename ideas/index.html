@@ -262,7 +262,6 @@
 <pre><code>int i = int(2.0);
 Foo* f = Foo*(getBar());
 </code></pre>
-
 <p>Or explore some more exotic casts:</p>
 <pre><code>int i = 2.0-&gt;int;
 Foo* f = getBar()-&gt;Foo*;
@@ -273,7 +272,6 @@ Foo* f = getBar() as Foo*;
 int i = 2.0::int;
 Foo* f = getBar()::Foo*;
 </code></pre>
-
 <h2 id="static-initializers">Static initializers</h2>
 <p>Allow initialization of globals before main is invoked. Introduce a general <code>static</code> block.</p>
 <pre><code>module foo;
@@ -292,7 +290,6 @@ func int randomCalculation()
     return rand();
 }
 </code></pre>
-
 <p>Sematic roughly work like in Java, except that all know globals are initialized before main, as opposed to when the class is invoked. The order of initialization is unspecified.</p>
 <h2 id="module-versioning">Module versioning</h2>
 <p>Follow Go Modules: </p>
@@ -310,13 +307,11 @@ func TypeC add_module(TypeA a, TypeB b)
     return a + b;
 }
 </code></pre>
-
 <pre><code>generic func $c add_poly($a, $b)
 {
     return $a + $b;
 }
 </code></pre>
-
 <p>Usage:</p>
 <pre><code>// Module:
 import adding;
@@ -332,7 +327,6 @@ func void test()
     double d2 = add_poly(2, 3.0);
 }
 </code></pre>
-
 <h2 id="allow-narrowing-conversions-for-floats">Allow narrowing conversions for floats</h2>
 <p>Narrowing conversions for double -&gt; float are common and might not be sufficiently important to do explicitly.</p>
 <h2 id="tests-built-in">Tests built in</h2>
@@ -346,16 +340,13 @@ func void test()
 <p>An additional <code>embed-path</code> gives search dirs.</p>
 <pre><code>byte[] file = @binary_include(&quot;foo.dat&quot;);
 </code></pre>
-
 <p>Limiting embed to x bytes:</p>
 <pre><code>byte[] file = @binary_include(&quot;/dev/urandomg&quot;, 16);
 </code></pre>
-
 <h2 id="compile-time-run-include">Compile time run-include</h2>
 <p>The ability to run a piece of code at compile time and include the result in the code.</p>
 <pre><code>@run_include(&quot;foo.sh&quot;, $some_param, &quot;-x&quot;, $another_param);
 </code></pre>
-
 <h2 id="type-functions">Type functions</h2>
 <p>Since static methods are out, it's natural to allow static values from the type, e.g.</p>
 <pre><code>struct Foo { ... }
@@ -364,7 +355,6 @@ func void test()
 
 Foo *foo = malloc(Foo.sizeof)
 </code></pre>
-
 <p>There are a lot of type functions possible:</p>
 <ul>
 <li>sizeof</li>
@@ -389,7 +379,6 @@ func void test()
     // x += 4 * 4;
 }
 </code></pre>
-
 <p>Another example, showing the difference between <code>#var</code> and <code>`#var`</code>:</p>
 <pre><code>macro void @foo2(#f)
 {
@@ -404,7 +393,6 @@ funct void test2()
     // printf(&quot;%s was %d\n&quot;, &quot;x&quot;, x);
 }
 </code></pre>
-
 <h3 id="compile-time-string-functions">Compile time string functions</h3>
 <p>In order to facilitate certain types of macros, the following macros are built in:</p>
 <ul>
@@ -431,20 +419,17 @@ func Foo.next(Foo*)
     i++;
 }
 </code></pre>
-
 <h2 id="managed-pointer-variables">Managed pointer variables</h2>
 <p>Managed pointer variables are introduced using <code>@</code> after the type, rather than <code>*</code> e.g. <code>Foo@ f</code>. A managed variable will automatically call the type's <code>release</code> member function on its value when the variable goes out of scope or is reassigned. If there is no <code>release</code> function, then <code>free</code> is called.</p>
 <pre><code>Foo@ f = Foo.alloc(); // * -&gt; @ no retain.
 Foo@ b = f;           // =&gt; f.retain(); b = f;
 f = nil;              // =&gt; f.release(); f = nil;
 </code></pre>
-
 <p>Any managed variable that goes out of the scope will automatically invoke <code>release</code>, as if the pointer was set to <code>nil</code>.</p>
 <pre><code>{
     Foo@ b = Foo.alloc();
 } // Automatic invocation of b.release();
 </code></pre>
-
 <p>In order to return a managed pointer that can be used as a temporary, it's often convenient to mark the return value as managed.</p>
 <pre><code>func Foo@ createFoo()
 {
@@ -453,17 +438,14 @@ f = nil;              // =&gt; f.release(); f = nil;
 
 createFoo(); // Implicitly introduces a deferred release.
 </code></pre>
-
 <p>If we assign a managed pointer to a variable, the release/retain is elided</p>
 <pre><code>// The following becomes f1 = createFoo() - no deferred release or retains.
 Foo@ f1 = createFoo(); 
 </code></pre>
-
 <p>It's possible to manually manage a managed pointer:</p>
 <pre><code>Foo* f2 = createFoo().retain();
 f2.release(); // Required to prevent leaks.
 </code></pre>
-
 <p>A managed pointer may safely assigned to a regular pointer as long as it's not retained outside of the scope.</p>
 <pre><code>{
     Foo* f3 = createFoo(); 
@@ -477,7 +459,6 @@ Foo* unsafeFoo;
 }
 // &lt;- access to unsafeFoo at this point will likely break things.
 </code></pre>
-
 <h3 id="managed-variables-not-pointers">Managed variables not pointers</h3>
 <p>Managed variables should not be confused with automatic reference counting and similar. It is not possible to – for example – to make a struct member a "managed" pointer. It is strictly limited to variables and return values.</p>
 <h2 id="c-interop">C interop</h2>
@@ -496,7 +477,6 @@ Foo* unsafeFoo;
         module = &quot;stdlib&quot;
         header = &quot;stdlib.h&quot;
 </code></pre>
-
 <h2 id="unsorted">Unsorted</h2>
 <h2 id="halloc">Halloc</h2>
 <p>Hierarchal memory allocation http://swapped.cc/#!/halloc support it?</p>
@@ -516,7 +496,6 @@ Foo* unsafeFoo;
         ...
 }
 </code></pre>
-
 <h5 id="case-as-a-range">Case as a range</h5>
 <pre><code>switch (x) 
 {
@@ -526,7 +505,6 @@ Foo* unsafeFoo;
         ...
 }
 </code></pre>
-
 <h5 id="easy-to-get-properties">Easy to get properties</h5>
 <ul>
 <li>Endianness</li>
@@ -547,7 +525,6 @@ funct void test()
     printf(&quot;%d\n&quot;, State.END.bit); // Prints &quot;16&quot;
 }
 </code></pre>
-
 <h5 id="tagged-unions">Tagged unions</h5>
 <pre><code>tagged union Foo {
     int i;
@@ -570,7 +547,6 @@ switch(@tag(foo))
         printf(&quot;Was %s\n&quot;, foo.c);
 }
 </code></pre>
-
 <p>Alternative syntax etc:</p>
 <pre><code>struct Shape
 {
@@ -585,7 +561,6 @@ switch(@tag(foo))
     }
 }
 </code></pre>
-
 <p>And another...</p>
 <pre><code>struct Shape
 {
@@ -612,7 +587,6 @@ switch(@tag(foo))
 
 
 </code></pre>
-
 <p>And yet another...</p>
 <pre><code>struct Shape
 {
@@ -631,7 +605,6 @@ switch(@tag(foo))
     byte kind;
 }
 </code></pre>
-
 <h2 id="removal-of-the-volatile-type-qualifier">Removal of the volatile type qualifier</h2>
 <p>The volatile type qualifier is replaced by volatile stores and loads.</p>
 <pre><code>\\ C volatile
@@ -658,7 +631,6 @@ func void test()
     }
 }
 </code></pre>
-
 <h2 id="interfaces">Interfaces</h2>
 <pre><code>func void Foo.renderPage(Foo* foo, Page* info)
 {
@@ -713,7 +685,6 @@ func void test()
 //     Renderer__render(renderer, page);
 // }
 </code></pre>
-
 <h2 id="built-in-maps">Built in maps</h2>
 <p>Same reasoning as arrays. Question about memory management is the same.</p>
 <pre><code>int[int] map; // Built-in maps
@@ -735,7 +706,6 @@ func bool int[int].remove_if_negative(int[int] *map, int index)
 // The underlying C function becomes:
 // bool module_name__map_int_int__remove_if_negative(struct _map_int_int *map, int32_t index);
 </code></pre>
-
 <h2 id="built-in-string-type">Built in string type</h2>
 <p>Strings are built-in, refcounted(?) null-terminated character arrays.</p>
 <p>Take a long hard look at memory management (here too)</p>
@@ -743,7 +713,6 @@ func bool int[int].remove_if_negative(int[int] *map, int index)
 string += &quot; World&quot;;
 char* data = &amp;string; // Taking a pointer to the string, which may later be invalid.
 </code></pre>
-
 <h2 id="built-in-managed-pointers">Built in managed pointers</h2>
 <p>Taking a hint from Cyclone, Rust etc one could consider managed pointers / objects. There are several possibilities:</p>
 <ol>
@@ -765,7 +734,6 @@ char* data = &amp;string; // Taking a pointer to the string, which may later be 
     b = a;
 }
 </code></pre>
-
 <p>The example above is a bit contrived as in the above example we could simply have:</p>
 <pre><code>macro swap(a, b) 
 {
@@ -775,7 +743,6 @@ char* data = &amp;string; // Taking a pointer to the string, which may later be 
     b = a;
 }
 </code></pre>
-
 <p>But still, it serves as an example on how to use it.</p>
 <h3 id="capturing-trailing-compound-statement">Capturing trailing compound statement</h3>
 <pre><code>public macro foreach(thelist, @body(Element *) ) 
@@ -788,7 +755,6 @@ char* data = &amp;string; // Taking a pointer to the string, which may later be 
     }
 }
 </code></pre>
-
 <p>Or a version that is more flexible:</p>
 <pre><code>public macro foreach(thelist, @body(typeof(thelist.first)) ) 
 { 
@@ -807,7 +773,6 @@ foreach(list, Element *i) // &lt;- Note type declaration!
     i.print();
 }
 </code></pre>
-
 <p>Since type is going to appear very often, we could make a shortcut for it, like $@ as prefix meaning "typeof".</p>
 <p>We then get</p>
 <pre><code>public macro foreach(thelist, @body($@thelist.first)) 
@@ -820,7 +785,6 @@ foreach(list, Element *i) // &lt;- Note type declaration!
     }
 }
 </code></pre>
-
 <p>Possibly one could even write the code like this:</p>
 <pre><code>public macro foreach(thelist, @body($element_type) ) 
 { 
@@ -831,7 +795,6 @@ foreach(list, Element *i) // &lt;- Note type declaration!
     }
 }
 </code></pre>
-
 <p>In this case <code>$element_type</code> works like "auto", but is also assigned the type, which then can be referred to in the signature.</p>
 <h4 id="stepwise-from-c-macros-into-c3-macros">Stepwise from C macros into C3 macros</h4>
 <pre><code>#define ADD_TO(x, y) {
@@ -840,7 +803,6 @@ foreach(list, Element *i) // &lt;- Note type declaration!
 
 ADD_TO(x, 1)
 </code></pre>
-
 <p>The { } introduces a multiline macro that does not need explicit linebreaks.</p>
 <p>Now, add the "$" symbol to introduce hygienic temporaries:</p>
 <pre><code>#define SWAP(x, y) {
@@ -849,7 +811,6 @@ ADD_TO(x, 1)
     y = $tmp;
 }
 </code></pre>
-
 <p>Here $tmp will actually be replaced by <code>__&lt;macro&gt;_&lt;variable_name&gt;_&lt;instance&gt;</code> when translating to C, so <code>__SWAP_tmp_1</code>, <code>__SWAP_tmp_2</code> etc.</p>
 <p>We then introduce the syntax macros using:</p>
 <pre><code>macro swap(&amp;a, &amp;b) 
@@ -859,7 +820,6 @@ ADD_TO(x, 1)
     a = $tmp;
 }
 </code></pre>
-
 <p>(Note the different use of $ here as compared to previous macro ideas where $ is a compile time evaluated variable!)</p>
 <p>The use of &amp;a follows C++ standard: it simply refers to a variable OR EXPRESSION that is imported into its scope. Using the unadorned variable name as evaluated expression allows us to write this code:</p>
 <pre><code>macro max(a, b) 
@@ -867,7 +827,6 @@ ADD_TO(x, 1)
     return (a &gt; b ? a : b)
 }
 </code></pre>
-
 <p>The above code is equivalent to:</p>
 <pre><code>macro max(&amp;a, &amp;b) 
 {
@@ -876,14 +835,12 @@ ADD_TO(x, 1)
     $tmp_a &gt; $tmp_b ? $tmp_a : $tmp_b
 }
 </code></pre>
-
 <p>Or in (GNU) C:</p>
 <pre><code>#define max(a,b) \
    ({ __typeof__ (a) _a = (a); \
        __typeof__ (b) _b = (b); \
      _a &gt; _b ? _a : _b; })
 </code></pre>
-
 <p>To recap:</p>
 <ol>
 <li>Add the { } format to #define for multiline defines.</li>
@@ -901,7 +858,6 @@ ADD_TO(x, 1)
 FOO // adds printf(&quot;foo&quot;);
 BAR; // Error, define not available in scope;
 </code></pre>
-
 <p>This also means that a define can be declared public to be accessed as if defined from the top of the file scope:</p>
 <pre><code>// file 1
 module foo
@@ -914,7 +870,6 @@ func void test() {
   foo.FOO
 }
 </code></pre>
-
 <p>Only defines in the file scope that exists in the file scope may be public and used in other modules.</p>
 <h3 id="yet-another-macro-proposal-i-found">Yet another macro proposal I found</h3>
 <p>Simple macros</p>
@@ -937,7 +892,6 @@ func void test()
 }
 
 </code></pre>
-
 <p>Macro with compile time values:</p>
 <pre><code>macro @foo($x, &amp;b)
 {
@@ -957,7 +911,6 @@ func void test()
     x += 10;
 }
 </code></pre>
-
 <p>Macro with string capture</p>
 <pre><code>macro @foo($x, #f)
 {
@@ -995,7 +948,6 @@ funct void test2()
     printf(&quot;%s was %d\n&quot;, &quot;x&quot;, x);
 }
 </code></pre>
-
 <p>Macro with conditional compile time values</p>
 <pre><code>macro @foo($x, &amp;b)
 {
@@ -1027,7 +979,6 @@ func void test()
 }
 
 </code></pre>
-
 <p>Nested macros (don't do this, but an example)</p>
 <pre><code>macro @foo($a)
 {
@@ -1051,7 +1002,6 @@ func void test()
     printf(&quot;%d\n&quot;, 0);
 }
 </code></pre>
-
 <p>The above suggests macro sugar of loops:</p>
 <pre><code>macro @foo($a)
 {
@@ -1089,14 +1039,12 @@ func void test()
     printf(&quot;%d\n&quot;, cast(FOO as int));
 }
 </code></pre>
-
 <p>Each may iterate over: struct members (returned as string), enums (returned as the enum value)</p>
 <p>Type group helper</p>
 <pre><code>macro @foo(int&amp; a) // Macro only valid for a is any type of signed integer
 macro @foo(integer&amp; a) // Valid for unsigned and signed integers
 macro @foo(number&amp; a) // Valid for any float or integer
 </code></pre>
-
 <p>Macros may force non local return</p>
 <pre><code>macro @foo()        
 {
@@ -1116,7 +1064,6 @@ func int test()
     return 1;
 }
 </code></pre>
-
 <p>Normal return creates a statement expression</p>
 <pre><code>macro @foo(&amp;a)
 {
@@ -1156,7 +1103,6 @@ func int test()
     int y = __macro_ret_1;
 }
 </code></pre>
-
 <p>Bodies in macros</p>
 <pre><code>macro @foo(&amp;a, @body)
 {
@@ -1191,7 +1137,6 @@ func void test()
     }
 }
 </code></pre>
-
 <p>Bodies in macros with parameters</p>
 <pre><code>macro @foo(&amp;a, @body(&amp;x, $y))
 {
@@ -1226,7 +1171,6 @@ func void test()
     }
 }
 </code></pre>
-
 <p>Expression is extended to parse:</p>
 <p>MACRO_IDENT =&gt; lookup $x in current macro scope and replace it with literal. Error if not in macro.
 MACRO_REPLACEMENT =&gt; invoke lexer on code inside, after doing a replace of any <code>#</code> inside. </p>

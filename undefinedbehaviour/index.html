@@ -90,6 +90,14 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#list-of-implementation-dependent-behaviours">List of implementation dependent behaviours</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#list-of-undefined-behaviour-in-c-which-is-defined-in-c3">List of undefined behaviour in C, which is defined in C3</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#signed-integer-overflow">Signed Integer Overflow</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#modifying-the-intermediate-results-of-an-expression">Modifying the intermediate results of an expression</a>
+    </li>
+        </ul>
+    </li>
     </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
@@ -188,19 +196,16 @@ uint z = 255 / x;
 if (x == 0 || z &gt; 10) return bar();
 return 1;
 </code></pre>
-
 <p>The case of <code>x == 0</code> would invoke undefined behaviour for <code>255/x</code>. For that reason, 
 the compiler may assume that <code>x != 0</code> and compile it into the following code: </p>
 <pre><code>foo();
 return 1;
 </code></pre>
-
 <p>As a contrast, the safe build will compile code equivalent to the following.</p>
 <pre><code>uint x = foo();
 if (x == 0) trap(&quot;Division by zero&quot;)
 return 1;
 </code></pre>
-
 <h2 id="list-of-undefined-behaviours">List of undefined behaviours</h2>
 <p>The following operations cause undefined behaviour in release builds of C3:</p>
 <table>
@@ -221,7 +226,7 @@ return 1;
 </tr>
 <tr>
 <td>using explicitly uninitialized memory</td>
-<td align="center">Implementation dependent</td>
+<td align="center">Possible*</td>
 </tr>
 <tr>
 <td>array index out of bounds</td>
@@ -233,15 +238,15 @@ return 1;
 </tr>
 <tr>
 <td>dereferencing memory not allocated</td>
-<td align="center">Implementation dependent</td>
+<td align="center">Possible*</td>
 </tr>
 <tr>
 <td>dereferencing memory outside of its lifetime</td>
-<td align="center">Implementation dependent</td>
+<td align="center">Possible*</td>
 </tr>
 <tr>
 <td>casting pointer to the incorrect array or vararray</td>
-<td align="center">Implementation dependent</td>
+<td align="center">Possible*</td>
 </tr>
 <tr>
 <td>violating pre or post conditions</td>
@@ -257,29 +262,65 @@ return 1;
 </tr>
 </tbody>
 </table>
+<p>* "Possible" indicates trapping is implementation dependent.</p>
 <h2 id="list-of-implementation-dependent-behaviours">List of implementation dependent behaviours</h2>
-<p>Some behaviour is allowed to differ between implementations.</p>
+<p>Some behaviour is allowed to differ between implementations and platforms.</p>
 <table>
 <thead>
 <tr>
 <th>operation</th>
 <th align="center">will trap in safe builds</th>
-<th>possible behaviour</th>
+<th align="center">possible behaviour</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>comparing pointers of different provenance</td>
-<td align="center">No</td>
-<td>Any result</td>
+<td align="center">Optional</td>
+<td align="center">Any result</td>
 </tr>
 <tr>
-<td>shifting by more than bit width</td>
+<td>subtracting pointers of different provenance</td>
+<td align="center">Optional</td>
+<td align="center">Any result</td>
+</tr>
+<tr>
+<td>shifting by more or equal to the bit width</td>
 <td align="center">Yes</td>
-<td>Any result</td>
+<td align="center">Any result</td>
+</tr>
+<tr>
+<td>conversion floating point &lt;-&gt; integer type is out of range</td>
+<td align="center">Optional</td>
+<td align="center">Any result</td>
+</tr>
+<tr>
+<td>conversion between pointer types produces one with incorrect alignment</td>
+<td align="center">Optional</td>
+<td align="center">Any result / Error</td>
+</tr>
+<tr>
+<td>calling a function through a function pointer that does not match the function</td>
+<td align="center">Optional</td>
+<td align="center">Any result / Error</td>
+</tr>
+<tr>
+<td>attempt to modify a string literal</td>
+<td align="center">Optional</td>
+<td align="center">Partial modification / Error</td>
+</tr>
+<tr>
+<td>modifying a <code>const</code> variable</td>
+<td align="center">Optional</td>
+<td align="center">Partial modification / Error</td>
 </tr>
 </tbody>
 </table>
+<h2 id="list-of-undefined-behaviour-in-c-which-is-defined-in-c3">List of undefined behaviour in C, which is defined in C3</h2>
+<h3 id="signed-integer-overflow">Signed Integer Overflow</h3>
+<p>Signed integer is always wrapped using 2s complement.</p>
+<h3 id="modifying-the-intermediate-results-of-an-expression">Modifying the intermediate results of an expression</h3>
+<p>Behaves as if the intermediate result was stored in a variable on the stack.</p>
               
             </div>
           </div>

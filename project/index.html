@@ -195,7 +195,7 @@
               
                 <h1 id="customizing-a-project">Customizing A Project</h1>
 <p>A new project is provided with a barebone structure:</p>
-<pre><code class="toml">[[executable]]
+<pre><code class="language-toml">[[executable]]
 # name of the target
 name = &quot;hello_world&quot;
 # version using semantic versioning
@@ -211,9 +211,8 @@ sources = [&quot;src/**&quot;]
 # libraries to use
 libs = [&quot;lib/**&quot;]
 </code></pre>
-
 <p>Libraries look a little different:</p>
-<pre><code class="toml">[[static-lib]]
+<pre><code class="language-toml">[[static-lib]]
 name = &quot;graphics&quot;
 version = &quot;0.1.0&quot;
 authors = [&quot;John Doe &lt;john.doe@example.com&gt;&quot;]
@@ -223,7 +222,6 @@ sources = [&quot;src/**&quot;]
 # exported modules
 export = [&quot;api&quot;]
 </code></pre>
-
 <h2 id="target-options">Target options</h2>
 <h4 id="config">config</h4>
 <p>Under the config you define external constants ("key = value") that will be included in compilation as if they were global macro constants.</p>

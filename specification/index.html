@@ -297,14 +297,12 @@ group       ::= '(' expression ')'
 option      ::= expression '?'
 repetition  ::= expression '*'
 </code></pre>
-
 <p>Productions are expressions constructed from terms and the following operators, in increasing precedence:</p>
 <pre><code>|   alternation
 ()  grouping
 ?  option (0 or 1 times)
 *  repetition (0 to n times)
 </code></pre>
-
 <p>Uppercase production names are used to identify lexical tokens. Non-terminals are in lower case. Lexical tokens are enclosed in single quotes ''.</p>
 <p>The form a..b represents the set of characters from a through b as alternatives.</p>
 <h2 id="source-code-representation">Source code representation</h2>
@@ -346,7 +344,6 @@ repetition  ::= expression '*'
 <p>White space is defined as the ASCII CR (U+000D), the ASCII horizontal tab character (U+0009) and the space character (U+0020) and the line terminator character.</p>
 <pre><code>WHITESPACE      ::= [ \t\v\n\f]
 </code></pre>
-
 <h3 id="letters-and-digits">Letters and digits</h3>
 <pre><code>UC_LETTER       ::= [A-Z]
 LC_LETTER       ::= [a-z]
@@ -360,7 +357,6 @@ ALPHANUM        ::= LETTER | DIGIT
 ALPHANUM_US     ::= ALPHANUM | &quot;_&quot;
 UC_ALPHANUM_US  ::= UC_LETTER_US | DIGIT
 </code></pre>
-
 <h3 id="comments">Comments</h3>
 <p>Thre are three types of regular comments:</p>
 <ol>
@@ -385,7 +381,6 @@ CT_IDENT        ::=  &quot;$&quot; IDENTIFIER
 CT_CONST_IDENT  ::=  &quot;$&quot; CONST_IDENT
 CT_TYPE_IDENT   ::=  &quot;$&quot; TYPE_IDENT
 </code></pre>
-
 <h3 id="keywords">Keywords</h3>
 <p>The following keywords are reserved and may not be used as identifiers:</p>
 <pre><code>alias       as          asm
@@ -417,7 +412,6 @@ $foreach    $endswitch  $endif
 $endforeach $unreachable     
 
 </code></pre>
-
 <h3 id="operators-and-punctuation">Operators and punctuation</h3>
 <p>The following character sequences represent operators and punctuation.</p>
 <pre><code>&amp;       @       ~       |       ^       :
@@ -431,7 +425,6 @@ $endforeach $unreachable
 !=      ||      ::      &lt;&lt;      &gt;&gt;      !!
 ...     *%=     +%=     -%=     &lt;&lt;=     &gt;&gt;=
 </code></pre>
-
 <h3 id="integer-literals">Integer literals</h3>
 <p>An integer literal is a sequence of digits representing an integer constant. 
 An optional prefix sets a non-decimal base: 0b or 0B for binary, 
@@ -454,7 +447,6 @@ BINARY_DIGITS   ::= BINARY_DIGIT ('_'* BINARY_DIGIT)*
 OCTAL_DIGITS    ::= OCTAL_DIGIT ('_'* OCTAL_DIGIT)*
 HEX_DIGITS      ::= HEX_DIGIT ('_'* HEX_DIGIT)*
 </code></pre>
-
 <pre><code>42
 4_2
 0_600
@@ -471,7 +463,6 @@ _42             // an identifier, not an integer literal
 42_             // invalid: _ must separate successive digits
 0_xBadFace      // invalid: _ must separate successive digits
 </code></pre>
-
 <h3 id="floating-point-literals">Floating point literals</h3>
 <p>A floating-point literal is a decimal or hexadecimal representation of a floating-point constant.</p>
 <p>A decimal floating-point literal consists of an integer part (decimal digits), a decimal point, 
@@ -498,7 +489,6 @@ HEX_MANTISSA    ::= HEX_DIGITS '.' HEX_DIGITS?
                     | '.' HEX_DIGITS 
 HEX_EXPONENT    ::= [pP] [+-] DECIMAL_DIGITS                    
 </code></pre>
-
 <h3 id="character-literals">Character literals</h3>
 <p>A character literal represents a constant value of 1, 2, 4 or 8 bytes, and may only be printable ASCII characters (U+0020 - U+007F). Each character is intepreted as part of an 1, 2, 4 or 8 byte integer constant. Escape sequences can be used to represent byte values 0-31 and 128-255.</p>
 <p>A 2 byte literal is referred to as a 2cc literal, a 4 byte literal 4cc and an eight byte literal is called 8cc. We will commonly refer to a single byte character literal as just "character literal".</p>
@@ -519,7 +509,6 @@ HEX_EXPONENT    ::= [pP] [+-] DECIMAL_DIGITS
 \u      Escapes a two byte hex value
 \U      Escapes a four byte hex value
 </code></pre>
-
 <pre><code>CHAR_ELEMENT    ::= [\x20-\x26] | [\x28-\x5B] | [\x5D-\x7F]
 CHAR_LIT_BYTE   ::= CHAR_ELEMENT | \x5C CHAR_ESCAPE
 CHAR_ESCAPE     ::= [abefnrtv\'\&quot;\\] 
@@ -533,7 +522,6 @@ FOURCC_LIT      ::= &quot;'&quot; CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR
 EIGHTCC_LIT     ::= &quot;'&quot; CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE
                         CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE &quot;'&quot;
 </code></pre>
-
 <h3 id="string-literals">String literals</h3>
 <p>A string literal represents a string constant obtained from concatenating a sequence of characters. String literals are character sequences between double quotes, as in "bar". Within the quotes, any character may appear except newline and unescaped double quote. The text between the quotes forms the value of the literal, with backslash escapes interpreted as they are in rune literals, with the same restrictions. The two-digit hexadecimal (\xnn) escapes represent individual bytes of the resulting string; all other escapes represent the (possibly multi-byte) UTF-8 encoding of individual characters. Thus inside a string literal \xFF represent a single byte of value 0xFF=255, while ÿ, \u00FF, \U000000FF and \xc3\xbf represent the two bytes 0xc3 0xbf of the UTF-8 encoding of character U+00FF.</p>
 <p>STRING_LIT      ::= \x22 CHAR_LIT_BYTE* \x22</p>
@@ -550,7 +538,6 @@ EIGHTCC_LIT     ::= &quot;'&quot; CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR
     float imaginary;
 }
 </code></pre>
-
 <h3 id="string-types">String types</h3>
 <h3 id="array-types">Array types</h3>
 <p>An array has the alignment of its element. Zero sized arrays are allowed and have the size 0.</p>
@@ -580,7 +567,6 @@ int* b = cast(a as int*); // Invalid, pointer type is &gt; 8 bits.
 int* c = cast(1 as int*); // Valid, but runtime value.
 int* d = cast(0 as int*); // Valid and constant value.
 </code></pre>
-
 <h4 id="pointer-to-integer-cast">Pointer to integer cast</h4>
 <p>A pointer may be cast to any integer, truncating the pointer value if the size of the pointer is larger than the pointer size. A pointer to integer cast is considered non-constant, except in the special case of a null pointer, where it is equal to the integer value 0.</p>
 <p>Example:</p>
@@ -592,7 +578,6 @@ int b = cast(null as int);
 int c = cast(a as int); // Invalid, not constant
 int d = cast(cast(1 as int*) as int); // Invalid, not constant
 </code></pre>
-
 <h3 id="subscript-operator">Subscript operator</h3>
 <p>The subscript operator may take as its left side a pointer, array, subarray or vararray. The index may be of any integer type. TODO
 <em>NOTE</em> The subscript operator is not symmetrical as in C. For example in C3 <code>array[n] = 33</code> is allowed, but not <code>n[array] = 33</code>. This is a change from C. </p>
@@ -609,7 +594,6 @@ field_designator   ::= IDENTIFIER
 range_expression   ::= (range_index)? '..' (range_index)?
 range_index        ::= expression | '^' expression
 </code></pre>
-
 <p>Taking the address of a compound literal will yield a pointer to stack allocated temporary.</p>
 <h3 id="function-calls">Function calls</h3>
 <h4 id="varargs">Varargs</h4>

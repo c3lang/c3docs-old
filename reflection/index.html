@@ -233,7 +233,6 @@
 <p>Returns the typeid for the given type. Typedefs will return the typeid of the underlying type.</p>
 <pre><code>typeid x = Foo.typeid; 
 </code></pre>
-
 <h4 id="nameof">nameof</h4>
 <p>The basic name of the type without module prefixes.</p>
 <pre><code>struct Foo { ... }
@@ -242,7 +241,6 @@ string a = int[4].nameof; // =&gt; &quot;int[4]&quot;
 string b = Foo.nameof; // =&gt; &quot;Foo&quot;
 string c = Bar.nameof; // =&gt; &quot;Foo&quot; 
 </code></pre>
-
 <h4 id="qnameof">qnameof</h4>
 <p>Same as the name, but includes the full module path: e.g. "baz::bar::Foo".</p>
 <pre><code>module bar;
@@ -251,21 +249,18 @@ string a = int[4].qnameof; // =&gt; &quot;int[4]&quot;
 string b = Foo.qnameof; // =&gt; &quot;bar::Foo&quot;
 string c = Foo[4].qnameof; // =&gt; &quot;bar::Foo[4]&quot; 
 </code></pre>
-
 <h4 id="sizeof">sizeof</h4>
 <p>Returns the size in bytes needed to store the type.</p>
 <pre><code>struct Foo { long a; long b; }
 usize x = Foo.sizeof; // 16
 usize y = int.sizeof; // 4
 </code></pre>
-
 <h4 id="alignof">alignof</h4>
 <p>Returns the alignment in bytes needed for the type.</p>
 <pre><code>struct Foo { long a; int b; }
 usize x = Foo.alignof; // 8
 usize y = int.alignof; // 4
 </code></pre>
-
 <h4 id="kindof">kindof</h4>
 <p>Returns the TypeKind of the variable.</p>
 <pre><code>struct Foo { ... }
@@ -274,7 +269,6 @@ TypeKind a = Foo.kindof; // STRUCT
 TypeKind b = Bar.kindof; // BAR
 TypeKind c = int.kindof; // INTEGER
 </code></pre>
-
 <h4 id="elementtype">elementType</h4>
 <p><em>Only available for array, vararray and subarray types.</em>
 Returns the element (underlying) type of an array, vararray or subarray.</p>
@@ -283,14 +277,12 @@ string x = Foo[].elementType.name; // &quot;Foo&quot;
 string y = Foo[4].elementType.name; // &quot;Foo&quot;
 string z = Foo[*].elementType.name; // &quot;Foo&quot;
 </code></pre>
-
 <h4 id="basetype">baseType</h4>
 <p><em>Only available for pointer types and failables.</em>
 Returns the type the pointer points to. E.g. for <code>int*</code> the base type is <code>int</code>.</p>
 <pre><code>struct Foo { ... }
 string x = (Foo*).baseType.name; // &quot;Foo&quot;
 </code></pre>
-
 <h4 id="elements">elements</h4>
 <p><em>Only available for enum types.</em>
 Returns an array containing the enum values in an enum.</p>
@@ -301,7 +293,6 @@ Returns an array containing the enum values in an enum.</p>
 }
 string x = Foo.elements[0].name; // &quot;BAR&quot;
 </code></pre>
-
 <h4 id="errors">errors</h4>
 <p><em>Only available for error types.</em>
 Returns an array containing the error values in an enum.</p>
@@ -312,7 +303,6 @@ Returns an array containing the error values in an enum.</p>
 }
 string x = Foo.errors[0].name; // &quot;BAD_BAR&quot;
 </code></pre>
-
 <h4 id="fields">fields</h4>
 <p><em>Only available for struct types.</em>
 Returns an array containing the fields in a struct.</p>
@@ -323,7 +313,6 @@ Returns an array containing the fields in a struct.</p>
 }
 string x = Foo.fields[1].name; // &quot;z&quot;
 </code></pre>
-
 <h4 id="variants">variants</h4>
 <p><em>Only available for union types.</em>
 Returns an array of types representing the possible variants of the union.</p>
@@ -335,20 +324,17 @@ Returns an array of types representing the possible variants of the union.</p>
 }
 string x = Foo.variants[2].name; // &quot;d&quot;
 </code></pre>
-
 <h4 id="signed">signed</h4>
 <p><em>Only available for integer types.</em>
 Returns true for a signed number.</p>
 <pre><code>bool s1 = int.signed; // =&gt; true
 bool s2 = uint.signed; // =&gt; false
 </code></pre>
-
 <h4 id="length">length</h4>
 <p><em>Only available for array types.</em>
 Returns the length of the array.</p>
 <pre><code>usize len = int[4].length
 </code></pre>
-
 <h4 id="associatedvalues">associatedValues</h4>
 <p><em>Only available for enums.</em>
 Returns an array containing the types of associated values if any.</p>
@@ -359,21 +345,18 @@ Returns an array containing the types of associated values if any.</p>
 }
 string s = Foo.associatedValues[0].name; // &quot;double&quot;
 </code></pre>
-
 <h4 id="returntype">returnType</h4>
 <p><em>Only available for function types.</em>
 Returns the type of the return type.</p>
 <pre><code>typedef func int(int, double) as TestFunc;
 string s = TestFunc.returnType.name; // &quot;int&quot;
 </code></pre>
-
 <h4 id="params">params</h4>
 <p><em>Only available for function types.</em>
 Returns a list of all parameters.</p>
 <pre><code>typedef func int(int, double) as TestFunc;
 string s = TestFunc.params[1].name; // &quot;double&quot;
 </code></pre>
-
 <h4 id="errors_1">errors</h4>
 <p><em>Only available for functions.</em>
 Returns a list containing all errors returned, or nil otherwise. An empty list
@@ -394,7 +377,6 @@ func void! bar()
 string s = foo.errors[1].name; // &quot;SomeOtherError&quot;
 int errors = bar.errors.size == 1;
 </code></pre>
-
 <h2 id="runtime-reflection">Runtime reflection</h2>
 <p>During runtime it's also possible to retrieve information by way of a typeid. Using typeid may implicitly cast into a <code>TypeInfo *</code>. This is a struct that contains data for the underlying type:</p>
 <pre><code>struct TypeData
@@ -407,7 +389,6 @@ int errors = bar.errors.size == 1;
     char* fullName;
 }
 </code></pre>
-
 <p>This structure is the base type, and the actual struct will can be <code>TypeError</code>, <code>TypeArray</code>, <code>TypeInteger</code> and so on. The definition of these are found in the module <code>system::builtin</code>.</p>
 <p>The <code>builtin</code> module further offers several ways to search for different types, returning the <code>TypeData *</code> directly:</p>
 <ul>

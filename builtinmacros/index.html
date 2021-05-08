@@ -206,7 +206,6 @@
 int i = @bitcast(f, int);
 printf(&quot;%x&quot;, i); // Prints 4144cccd
 </code></pre>
-
 <h3 id="describe">@describe</h3>
 <p>Creates a runtime description of a value.</p>
 <pre><code>enum FooEnum
@@ -233,13 +232,11 @@ func char[] test_struct()
     return @describe(x); // Returns &quot;Foo { x: 2, y: &quot;bar&quot; }&quot;
 }
 </code></pre>
-
 <h3 id="elements">@elements</h3>
 <p>Returns an array of an error set or enum set.</p>
 <pre><code>FooEnum[] values = @elements(FooEnum); 
 // Same as FooEnum[] values = { FooEnum.A, FooEnum.B };
 </code></pre>
-
 <h3 id="name">@name</h3>
 <p>Creates a runtime name of a value.</p>
 <pre><code>func char[] test()
@@ -254,12 +251,10 @@ func char[] test_struct()
     return @name(x); // Returns &quot;Foo&quot;
 }
 </code></pre>
-
 <h3 id="offset">@offset</h3>
 <p>Returns the byte offset in a structure, like <code>offsetof</code> in C</p>
 <pre><code>@offset(Foo, y); // =&gt; returns 4 or 8
 </code></pre>
-
 <h3 id="sizeof">@sizeof</h3>
 <p>Returns the size of a type or an expression</p>
 <pre><code>func usize size_test()
@@ -272,7 +267,6 @@ func usize size_test2()
     return @sizeof(size_test()); // Usually returns 8 (the size of usize)
 }
 </code></pre>
-
 <h3 id="typeof">@typeof</h3>
 <p>Returns the type of an expression</p>
 <pre><code>@typeof(size_test()) x = size_test();

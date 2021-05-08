@@ -244,7 +244,6 @@
 
 func CInt stat(const char* pathname, Stat* buf);
 </code></pre>
-
 <h5 id="differences-from-c">Differences from C</h5>
 <p>Unlike C, C3 does not use type qualifiers. <code>const</code> exists, but is a storage class modifier, not a type qualifier. Instead of <code>volatile</code>, volatile blocks are used. In order to signal restrictions on variable usage, like const-ness <a href="../preconditions/">preconditions</a> are used.</p>
 <h2 id="basic-types">Basic types</h2>
@@ -315,6 +314,30 @@ func CInt stat(const char* pathname, Stat* buf);
 <td align="center">no</td>
 </tr>
 <tr>
+<td>iptr**</td>
+<td align="right">-</td>
+<td align="right">varies</td>
+<td align="center">yes</td>
+</tr>
+<tr>
+<td>uptr**</td>
+<td align="right">-</td>
+<td align="right">varies</td>
+<td align="center">no</td>
+</tr>
+<tr>
+<td>iptrdiff**</td>
+<td align="right">-</td>
+<td align="right">varies</td>
+<td align="center">yes</td>
+</tr>
+<tr>
+<td>uptrdiff**</td>
+<td align="right">-</td>
+<td align="right">varies</td>
+<td align="center">no</td>
+</tr>
+<tr>
 <td>isize**</td>
 <td align="right">-</td>
 <td align="right">varies</td>
@@ -328,10 +351,8 @@ func CInt stat(const char* pathname, Stat* buf);
 </tr>
 </tbody>
 </table>
-<ul>
-<li><code>bool</code> will be stored as a byte.
-** <code>isize</code> and <code>usize</code> are pointer sized.</li>
-</ul>
+<p>* <code>bool</code> will be stored as a byte.<br />
+** size, pointer and pointer sized types depend on platform.</p>
 <h5 id="integer-arithmetics">Integer arithmetics</h5>
 <p>All signed integer arithmetics uses 2's complement.</p>
 <h5 id="integer-constants">Integer constants</h5>
@@ -358,7 +379,6 @@ func CInt stat(const char* pathname, Stat* buf);
 <pre><code>byte[] hello_world_base64 = &quot;SGVsbG8gV29ybGQh&quot;b64;
 char[] hello_world_hex = &quot;4865 6c6c 6f20 776f 726c 6421&quot;x;
 </code></pre>
-
 <h5 id="floating-point-types">Floating point types</h5>
 <table>
 <thead>
@@ -369,6 +389,11 @@ char[] hello_world_hex = &quot;4865 6c6c 6f20 776f 726c 6421&quot;x;
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>half*</td>
+<td align="right">f16</td>
+<td align="right">16</td>
+</tr>
 <tr>
 <td>float</td>
 <td align="right">f32</td>
@@ -463,7 +488,6 @@ char[] hello_world_hex = &quot;4865 6c6c 6f20 776f 726c 6421&quot;x;
     TERMINATED
 }
 </code></pre>
-
 <p>Enum constants are namespaces by default, just like C++'s class enums. So accessing the enums above would for example use <code>State.PENDING</code> rather than <code>PENDING</code>.</p>
 <h3 id="enum-type-inference">Enum type inference</h3>
 <p>When an enum is used in where the type can be inferred, like in case-clauses or in variable assignment, it is allowed to drop the enum name:</p>
@@ -482,7 +506,6 @@ func void test(State s) { ... }
 
 test(RUNNING); // State.RUNNING is inferred
 </code></pre>
-
 <p>In the case that it collides with a global in the same scope, it needs the qualifier:</p>
 <pre><code>module test;
 
@@ -496,7 +519,6 @@ test(RUNNING); // Ambiguous
 test(test::RUNNING); // Uses global.
 test(State.RUNNING); // Uses enum constant.
 </code></pre>
-
 <h2 id="error">Error</h2>
 <p>Error types are similar to enums, and are used for error returns.</p>
 <pre><code>error IOError;
@@ -506,41 +528,35 @@ error ParseError
     int col;
 }
 </code></pre>
-
 <p>An error is similar to a struct and is initialized the same way. One exception is that simple errors without a body does not need to be
 created using a <code>()</code>:</p>
 <pre><code>return IOError!; 
 return IOError()!; // Same as above
 return ParseError(line, col)!;
 </code></pre>
-
 <h2 id="failable">Failable</h2>
 <p>A failable is created by taking a type and appending <code>!</code>. A failable is a tagged union containing either the given type or an error.</p>
 <pre><code>int! i;
 i = 5; // Assigning a real value to i.
 i = IOError!; // Assigning an error to i.
 </code></pre>
-
 <p>Only variables and return variables may be of the <em>failable</em> type. Function and macro parameters may not be failable types.</p>
 <pre><code>func Foo*! getFoo() { ... } // Ok!
 func void processFoo(Foo*! f) { ... } // Error!
 int! x = 0; // Ok!
 </code></pre>
-
 <p>Read more about the errors on the page about <a href="../errorhandling">error handling</a>.</p>
 <h2 id="alias-and-function-types">Alias and function types</h2>
 <p>Alias types are used to give an alias to a different type, like:</p>
 <pre><code>typedef char* as CharPtr;
 typedef int[10] as Numbers;
 </code></pre>
-
 <p>Function pointers <em>must</em> be aliased in C3. The syntax is simpler than that of C:</p>
 <p><code>public typedef func void(int a, bool b) as Callback;</code></p>
 <p>This defines an alias to function pointer type of a function that returns nothing and requires two arguments: an int and a bool. Here is a sample usage:</p>
 <pre><code>Callback cb = my_callback;
 cb(10, false);
 </code></pre>
-
 <h2 id="distinct-types">Distinct types</h2>
 <p><code>typedef</code> may also be used to create distinct new types. They do not implicitly convert to any other type, but may be used as the underlying type.</p>
 <pre><code>typedef int as distinct Foo;
@@ -550,7 +566,6 @@ int i = 1;
 // f = f + i Error!
 f = f + cast(i as Foo); // Valid
 </code></pre>
-
 <h2 id="struct-types">Struct types</h2>
 <p>Structs are always named:</p>
 <pre><code>struct Person  
@@ -559,7 +574,6 @@ f = f + cast(i as Foo); // Valid
     char* name;
 }
 </code></pre>
-
 <p>A struct's members may be accessed using dot notation, even for pointers to structs.</p>
 <pre><code>Person p;
 p.age = 21;
@@ -572,7 +586,6 @@ pPtr.age = 20; // Ok!
 
 io.printf(&quot;%s is %d years old.&quot;, pPtr.age, pPtr.name);
 </code></pre>
-
 <p>(One might wonder whether it's possible to take a <code>Person**</code> and use dot access. – It's not, only one level of deref is done)</p>
 <h2 id="struct-subtyping">Struct subtyping</h2>
 <p>C3 allows creating struct subtypes:</p>
@@ -594,7 +607,6 @@ important_person.name = &quot;Jane Doe&quot;;
 important_person.title = &quot;Rockstar&quot;;
 printPerson(important_person); // Only the first part of the struct is copied.
 </code></pre>
-
 <h2 id="union-types">Union types</h2>
 <p>Union types are defined just like structs.</p>
 <pre><code>union Integral  
@@ -605,7 +617,6 @@ printPerson(important_person); // Only the first part of the struct is copied.
     long as_long;
 }
 </code></pre>
-
 <p>As usual unions are used to hold one of many possible values:</p>
 <pre><code>Integral i;
 i.as_byte = 40; // Setting the active member to as_byte
@@ -616,7 +627,6 @@ i.as_int = 500; // Changing the active member to as_int
 // so this will probably print garbage.
 io.printf(&quot;%d&quot;, i.as_byte); 
 </code></pre>
-
 <p>Note that unions only take up as much space as their largest member, so <code>sizeof(Integral)</code> is equivalent to <code>sizeof(long)</code>.</p>
 <h2 id="anonymous-sub-structs-unions">Anonymous sub-structs / unions</h2>
 <p>Just like in later versions of C, anonymous sub-structs / unions are allowed.</p>
@@ -636,7 +646,6 @@ io.printf(&quot;%d&quot;, i.as_byte);
     }
 }
 </code></pre>
-
 <h2 id="tagged-unions">Tagged unions</h2>
 <p>In C, using structs with an enum value to indicate type is common practice. C3 also offers tagged unions, which is formalizing this within the language:</p>
 <p>TBD: Exact syntax (see the <a href="../ideas">ideas</a> page)</p>
@@ -645,7 +654,6 @@ io.printf(&quot;%d&quot;, i.as_byte);
 <pre><code>float f = 2.0;
 int i = cast(f as int);
 </code></pre>
-
 <h2 id="conversion-to-symbol-to-type-and-back-with-type">Conversion to symbol to type and back with <code>type</code></h2>
 <p>Macros and compile time constants may occasionally contain type <em>symbols</em>. To convert back and forth, the <code>type</code> operator is used.</p>
 <pre><code>macro @test($i)
@@ -658,7 +666,6 @@ $foo = type(int*);
 type($foo) i = nil;
 type(@test(4)) = 100;
 </code></pre>
-
 <h2 id="anonymous-structs">Anonymous structs</h2>
 <p>It's possible to use anonymous structs (structs without name) as arguments. These will only be checked for structural equivalence.</p>
 <pre><code>func void set_coordinates(struct { int i; int j; } coord) { ... }
@@ -686,7 +693,7 @@ func void test()
 {
     Vec2 v2 = { 1, 2 };
     Vector v = { 1, 4 };
-    Vec3 v3 = { 1, 2, 3};
+    Vec3 v3 = { 1, 2, 3 };
     set_coordinates(v2);  // valid
     set_coordinates(v);   // valid
     set_coordinates(v3);  // ERROR, no structural equivalence.

@@ -221,7 +221,6 @@ a | b ^ c &amp; d
 a | ((b ^ c) &amp; d)  // C  (All bitwise operators have different precedence)
 ((a | b) ^ c) &amp; d  // C3 (Same precedence, left-to-right evaluation)
 </code></pre>
-
 <p>The change in precedence of the bitwise operators corrects a long standing issue in the C specification. The change in precedence for shift operations goes towards making the precedence less surprising.</p>
 <p>Conflating the precedence of || and &amp;&amp;, relational and equality operations, and all bitwise operations was motivated by simplification: few remember the exact internal differences in precedence between bitwise operators.</p>
 <p>Left-to-right offers a very simple model to think about the internal order of operations, and encourages use of explicit ordering, as best practice in C is to use parentheses anyway.</p>

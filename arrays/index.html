@@ -228,12 +228,10 @@ func int foo(int *a) { ... }
 int x[3] = { 1, 2, 3 };
 foo(&amp;x);
 </code></pre>
-
 <p>When you want to initialize a fixed array without specififying the size, use the [+] array syntax:</p>
 <pre><code>int[3] a = { 1, 2, 3};
 int[+] b = { 4, 5, 6}; // Type inferred to be int[3]
 </code></pre>
-
 <h2 id="variable-arrays">Variable arrays</h2>
 <p>Variable arrays are specially allocated arrays that are prefixed with both a size and a capacity. If allocated on the heap, they cannot expand, but heap allocated variable arrays will do so automatically using whatever memory allocator was used to create it. </p>
 <p><em>THIS PART WILL BE SUBJECT TO REVISION</em></p>
@@ -243,12 +241,10 @@ x += 11;
 x.size; // =&gt; 2
 x[1]; // =&gt; 11
 </code></pre>
-
 <p>A variable array can implicitly convert to a pointer:</p>
 <pre><code>int[*] x = @malloc(int[*]);
 int *z = x;
 </code></pre>
-
 <p>A variable array's reference is not <em>stable</em> under expansion, so any alias may be invalidated if appending occurs.</p>
 <pre><code>int[*] x = @malloc(int[*]);
 int[*] *y = &amp;x;
@@ -258,13 +254,11 @@ assert(y != &amp;x);
 int *w = x;
 assert(z != w);
 </code></pre>
-
 <p>Assigning a fixed array to a variable array will copy the contents:</p>
 <pre><code>int[3] b = { 1, 2, 3};
 int[*] a = @malloc(int[*]);
 a = b;
 </code></pre>
-
 <h4 id="built-in-functions-on-variable-arrays">Built-in functions on variable arrays</h4>
 <h6 id="pop">pop()</h6>
 <p>Removes the last element.</p>
@@ -297,14 +291,12 @@ d = e; // ERROR! Not allowed
 d = cast(e as int[4]*); // Fine
 b = e; // Implicit conversion ok
 </code></pre>
-
 <h3 id="slicing-arrays">Slicing arrays</h3>
 <p>It's possible to use a range syntax to create subarrays from pointers, arrays, vararrays and other subarrays. The usual syntax is <code>arr[&lt;start index&gt;..&lt;end index&gt;]</code>. The end index is included in the final result.</p>
 <pre><code>int[5] a = { 1, 20, 50, 100, 200 };
 int[] b = a[0..4]; // The whole array as a slice.
 int[] c = a[1..2]; // { 20, 50 }
 </code></pre>
-
 <p>It's possible to omit the first and last index, in which case the start and the len is inferred. Note that omitting the last index is not allowed for pointers.</p>
 <p>The following are all equivalent:</p>
 <pre><code>int[5] a = { 1, 20, 50, 100, 200 };
@@ -313,24 +305,20 @@ int[] c = a[..4];
 int[] d = a[0..];
 int[] e = a[..];
 </code></pre>
-
 <p>One may also slice from the end. Again this is not allowed for pointers.</p>
 <pre><code>int[5] a = { 1, 20, 50, 100, 200 };
 int[] b = a[1..^2]; // { 20, 50, 100 }
 int[] c = a[^3..]; // { 50, 100, 200 }
 </code></pre>
-
 <p>One may also use assign to slices:</p>
 <pre><code>int[3] a = { 1, 20, 50 };
 a[1..2] = 0; // a = { 1, 0, 0}
 </code></pre>
-
 <p>Or copy slices to slices:</p>
 <pre><code>int[3] a = { 1, 20, 50 };
 int[3] b = { 2, 4, 5 }
 a[1..2] = b[0..1]; // a = { 1, 2, 4}
 </code></pre>
-
 <p>Copying overlapping ranges, e.g. <code>a[1..2] = a[0..1]</code> is undefined behaviour.</p>
 <h3 id="conversion-list">Conversion list</h3>
 <table>
@@ -397,7 +385,6 @@ int[4]* d = cast(c as int[4]*);
 // Faulty code with undefined behaviour:
 int[*] e = cast(c as int[*]*); 
 </code></pre>
-
 <pre><code>int[*] a = @malloc(int[*]);
 a += 11;
 a += 12;
@@ -408,7 +395,6 @@ int[2]* b = cast(a as int[2]*);
 // (4 is greater than the dynamic size of a)
 int[4]* c = cast(a as int[4]*);
 </code></pre>
-
 <h4 id="internals">Internals</h4>
 <p>Internally the layout of a slice is guaranteed to be <code>struct { &lt;type&gt;* ptrToArray; usize arraySize; }</code>.</p>
 <p>There is a built in struct <code>__ArrayType_C3</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
@@ -418,7 +404,6 @@ int[4]* c = cast(a as int[4]*);
     usize arraySize;
 }
 </code></pre>
-
 <h2 id="iteration-over-arrays">Iteration over arrays</h2>
 <p>Slices, fixed and variable arrays may all be iterated over using <code>for (Type x : array)</code>:</p>
 <pre><code>int[4] a = { 1, 2, 3, 5 };
@@ -427,7 +412,6 @@ for (int x : a)
     ...
 }
 </code></pre>
-
 <p>It is possible for any type to get this iteration by implementing the macro <code>iterator(&lt;Type&gt; *type : value)</code>:</p>
 <pre><code>struct Vector
 {

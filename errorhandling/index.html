@@ -208,11 +208,9 @@
 <p>C3 code:</p>
 <pre><code>func int! getValue();
 </code></pre>
-
 <p>Corresponding C code:</p>
-<pre><code class="c">int getValue(Error *error);
+<pre><code class="language-c">int getValue(Error *error);
 </code></pre>
-
 <p>The <code>int!</code> here is the failable return type, which is a tagged union: it might hold either the error or an int.</p>
 <pre><code>// Open a file, we will get a failable:
 // Either a File* or an error.
@@ -241,7 +239,6 @@ if (file2)
     // Inside here file2 is a regular File*
 }
 </code></pre>
-
 <p>A function, method or macro call with one or more parameters will only execute if the failable has no error. This makes error returns composable. </p>
 <pre><code>func int! fooMayError() { ... }
 func int mult(int i) { ... }
@@ -263,7 +260,6 @@ func void test()
     }    
 )
 </code></pre>
-
 <p>If a <code>catch</code> returns or jumps out of the current scope in a different way, then the variable becomes
 unwrapped to it's non-failable type. </p>
 <h4 id="some-simple-examples">Some simple examples.</h4>
@@ -276,7 +272,6 @@ error ParseError
     int col;
 }
 </code></pre>
-
 <h5 id="returning-an-error">Returning an error</h5>
 <p>Returning an error looks like a normal return but with the <code>!</code></p>
 <pre><code>func void! findFile()
@@ -285,7 +280,6 @@ error ParseError
     /* ... */
 }
 </code></pre>
-
 <h5 id="calling-a-function-automatically-returning-any-error">Calling a function automatically returning any error</h5>
 <p>The <code>!!</code> suffix will create an implicit return on error.</p>
 <pre><code>func void! findFileAndTest()
@@ -295,7 +289,6 @@ error ParseError
     // catch (err = findFile()) return err!;
 }
 </code></pre>
-
 <h5 id="catching-errors">Catching errors</h5>
 <p>Catching an error and returning will implicitly unwrap the checked variable.</p>
 <pre><code>func void findFileAndNoErr()
@@ -310,7 +303,6 @@ error ParseError
     // and have an effective type of File* here.
 }
 </code></pre>
-
 <h5 id="only-do-if-no-error">Only do if no error</h5>
 <pre><code>func void doSomethingToFile()
 {
@@ -321,7 +313,6 @@ error ParseError
     }
 }
 </code></pre>
-
 <h5 id="catching-some-errors">Catching some errors</h5>
 <pre><code>func void! findFileAndParse2()
 {
@@ -334,7 +325,6 @@ error ParseError
     }
 }
 </code></pre>
-
 <h5 id="default-values">Default values</h5>
 <p>A function returning an error may be followed by an <code>else</code> and an expression. The call then executes and returns the expression.</p>
 <pre><code>func int testDefault()
@@ -352,7 +342,6 @@ func int testDefault()
 }
 
 </code></pre>
-
 <h5 id="default-jump">Default jump</h5>
 <p>The else can also be followed by a jump statement: <code>return</code>, <code>break</code> or <code>continue</code>.</p>
 <pre><code>func int testBreak(int times)
@@ -369,7 +358,6 @@ func int testDefault()
     return index;
 }
 </code></pre>
-
 <h4 id="check-for-error-or-success">Check for error or success</h4>
 <p><code>try</code> and <code>catch</code> without a statements returns a boolean true / false:</p>
 <pre><code>func int testResult()

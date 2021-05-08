@@ -207,7 +207,6 @@
     }
 }
 </code></pre>
-
 <h3 id="function-arguments">Function arguments</h3>
 <p>C3 allows use of default arguments as well as named arguments.</p>
 <pre><code>func int testWithDefault(int foo = 1)
@@ -221,7 +220,6 @@ func void test()
     testWithDefault(100);
 }
 </code></pre>
-
 <p>Named arguments</p>
 <pre><code>func void testNamed(int times, double data)
 {
@@ -237,7 +235,6 @@ func void test()
     testNamed(3, 4.0);
 }
 </code></pre>
-
 <p>Named arguments with defaults:</p>
 <pre><code>func void testNamedDefault(int times = 1, double data = 3.0, bool dummy = false)
 {
@@ -258,7 +255,6 @@ func void test()
     testNamed(,,false, .times = 1);
 }
 </code></pre>
-
 <h4 id="varargs">Varargs</h4>
 <p>There are two types of varargs: the usual C-style untyped varargs and typed varargs. Untyped varargs will always send arguments as-is, whereas typed arguments will do normal conversions.</p>
 <pre><code>func void varargsUntyped(string foo, ...)
@@ -278,7 +274,6 @@ func void test()
     // The second parameter will be converted to an int implicitly.
 }
 </code></pre>
-
 <h3 id="functions-and-failables">Functions and failables</h3>
 <p>The return parameter may be a <em>failable</em> – a type suffixed by <code>!</code> indicating that this function might either return a regular value or an error.</p>
 <p>The below example might throw errors from both the <code>SomeError</code> error domain as well as the <code>OtherError</code> error domain.</p>
@@ -290,7 +285,6 @@ func void test()
     return val;
 }
 </code></pre>
-
 <p><em>A function</em> that is passed a <em>failable</em> value will only conditionally execute if and only if all failable values evaluate to true, otherwise <em>the first</em> error is returned.</p>
 <pre><code>func void test()
 {
@@ -304,7 +298,6 @@ func void test()
     printf(&quot;%d\n&quot;, x);
 }
 </code></pre>
-
 <p>This allows us to chain functions:</p>
 <pre><code>
 func void printInputWithExplicitChecks()
@@ -333,7 +326,6 @@ func void printInputWithChaining()
     printf(&quot;You didn't type an integer :(\n&quot;);    
 }
 </code></pre>
-
 <h2 id="methods">Methods</h2>
 <p>Methods look exactly like functions, but are prefixed with the struct, union or enum name and is (usually) invoked using dot syntax:</p>
 <pre><code>struct Point
@@ -358,7 +350,6 @@ func void example()
     Point.add(&amp;p, 10);
 }
 </code></pre>
-
 <p>If a method does not take the type as the first parameter, then it may only be invoked qualified with the type name:</p>
 <pre><code>func Point* Point.new(int x, int y) 
 {
@@ -373,7 +364,6 @@ func void example2()
     Point* p = Point.new(1, 2);
 }
 </code></pre>
-
 <p>Struct and unions will always take pointer, whereas enums take the enum value.</p>
 <pre><code>enum State
 {
@@ -390,7 +380,6 @@ func bool State.mayOpen(State state)
     }
 }
 </code></pre>
-
 <h3 id="restrictions-on-methods">Restrictions on methods</h3>
 <ul>
 <li>Methods on a struct/union may not have the same name as a member.</li>
@@ -412,7 +401,6 @@ func int testFoo(int foo)
     return foo * 10;
 }
 </code></pre>
-
 <p>Will in debug builds be compiled into something like this:</p>
 <pre><code>func int testFoo(int foo)
 {
@@ -424,7 +412,6 @@ func int testFoo(int foo)
     return _return;
 }
 </code></pre>
-
 <p>The compiler is allowed to use the pre and post conditions for optimizations. For example this:</p>
 <pre><code>func int testExample(int bar)
 {
@@ -432,14 +419,12 @@ func int testFoo(int foo)
     return 1;
 }
 </code></pre>
-
 <p>May be optimized to:</p>
 <pre><code>func int testExample(int bar)
 {
     return 1;
 }
 </code></pre>
-
 <p>In this case the compiler can look at the post condition of <code>result &gt; 0</code> to determine that <code>testFoo(foo) == 0</code> must always be false.</p>
 <p>Looking closely at this code, we not that nothing guarantees that <code>bar</code> is not violating the preconditions. In debug builds this will usually be checked in runtime, but a sufficiently smart compiler will warn about the lack of checks on <code>bar</code>. Execution of code violating pre and post conditions has undefined behaviour.</p>
               

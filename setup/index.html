@@ -192,22 +192,18 @@ Using apt-get on Linux should work fine as well.</p>
 <p>This should be as simple as doing:</p>
 <pre><code>git clone https://github.com/c3lang/c3c.git
 </code></pre>
-
 <p>... from the command line.</p>
 <h2 id="3-build-the-compiler">3. Build the compiler</h2>
 <p>Create the build directory:</p>
 <pre><code>MyMachine:c3c$ mkdir build
 MyMachine:c3c$ cd build/
 </code></pre>
-
 <p>Use CMake to set up:</p>
 <pre><code>MyMachine:c3c/build$ cmake ../
 </code></pre>
-
 <p>Build the compiler:</p>
 <pre><code>MyMachine:c3c/build$ make
 </code></pre>
-
 <h2 id="4-test-it-out">4. Test it out</h2>
 <pre><code>MyMachine:c3c/build$ ./c3c compile ../resources/testfragments/helloworld.c3
 </code></pre>

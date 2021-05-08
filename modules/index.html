@@ -75,18 +75,10 @@
     <li class="toctree-l2"><a class="reference internal" href="#details">Details</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#importing-modules">Importing modules</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#restricted-imports">Restricted imports</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#aliased-imports">Aliased imports</a>
-    </li>
-        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#visibility">Visibility</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#visibility-in-sub-modules">Visibility in sub modules</a>
     </li>
-        </ul>
+    <li class="toctree-l2"><a class="reference internal" href="#overriding-symbol-visibility-rules">Overriding symbol visibility rules</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#using-functions-and-types-from-other-modules">Using functions and types from other modules</a>
     </li>
@@ -203,19 +195,16 @@
 
 /* ... */
 </code></pre>
-
 <p><code>file_b.c3</code></p>
 <pre><code>module foo;
 
 /* ... */
 </code></pre>
-
 <p><code>file_c.c3</code></p>
 <pre><code>module bar;
 
 /* ... */
 </code></pre>
-
 <p>Here <code>file_a.c3</code> and <code>file_b.c3</code> belong to the same module, <strong>foo</strong> while <code>file_c.c3</code> belongs to to <strong>bar</strong>.</p>
 <h2 id="details">Details</h2>
 <p>Some details about the C3 module system:</p>
@@ -235,7 +224,6 @@ import stdio;
 
 /* ... */
 </code></pre>
-
 <p><code>file_b.c3</code></p>
 <pre><code>module foo;
 
@@ -245,26 +233,6 @@ import networking;
 
 /* ... */
 </code></pre>
-
-<h3 id="restricted-imports">Restricted imports</h3>
-<p>It is possible to restrict imports to sub modules or individual functions.</p>
-<pre><code>module foo;
-
-import bar::baz; // Only import the baz sub module.
-import some_module : some_function; // Only import some_function
-import some_module : SomeType, SomeOtherType, aFunc; // Import multiple symbols.
-</code></pre>
-
-<h3 id="aliased-imports">Aliased imports</h3>
-<p>To avoid name collisions, it's possible to alias names. This will completely hide their old name in the file scope.</p>
-<pre><code>module foo;
-
-import bar::io as bio;
-import baz::io;
-import some_module : SomeType as FooType;
-import foo : funcA as fooFuncA, funcB as fooFuncB;
-</code></pre>
-
 <h2 id="visibility">Visibility</h2>
 <p>All files in the same module share the same global declaration namespace. However, by default a function is not visible outside the module. To make the symbol visible outside the module, use the keyword <code>public</code>.</p>
 <pre><code>module foo;
@@ -273,47 +241,68 @@ public func void init() { .. }
 
 func void open() { .. }
 </code></pre>
-
 <p>In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it isn't specified as public.</p>
-<h3 id="visibility-in-sub-modules">Visibility in sub modules</h3>
-<p>For declarations in sub modules, the rule is that a sub module may see any parent name, and any children name. However, other children sub modules are hidden.</p>
-<p>Consider the modules <code>foo</code>, <code>foo::bar</code>, <code>foo::baz</code> and <code>foo::bar::xyzzy</code>. </p>
-<ol>
-<li>From <code>foo::bar</code> the symbols of <code>foo</code>, <code>foo::bar</code> and <code>foo::bar::xyzzy</code> are visible. </li>
-<li>From <code>foo::baz</code> only <code>foo</code> and <code>foo::baz</code> are visibile. </li>
-<li>Finally from <code>foo</code>, all the symbols of <code>foo</code>, <code>foo::bar</code>, <code>foo::baz</code> and <code>foo::bar::xyzzy</code> are visibile.</li>
-</ol>
+<h2 id="overriding-symbol-visibility-rules">Overriding symbol visibility rules</h2>
+<p>By using <code>as module</code> after an import, it's possible to access another module´s private symbols.
+Many other module systems have hierarchal visibility rules, but the <code>as module</code> feature allows 
+visibility to be manipulated in a more ad-hoc manner without imposing hard rules.</p>
+<p>For example, you may provide a library with two modules: "mylib::net" and "mylib::file" - which both use functions
+and types from a common "mylib::internals" module. The two libraries use <code>import mylib::internals as module</code>
+to access this module's private functions and type. To an external user of the library, the "mylib::internals"
+does not seem to exist, but inside of your library you use it as a shared dependency.</p>
+<p>A simple example:</p>
+<pre><code class="language-c">// File a.c3
+module a;
+
+func void aFunction() { ... }
+
+// File b.c3
+module b;
+
+func void bFunction() { ... }
+
+// File c.c3
+module c;
+import a;
+import b as module;
+
+func void test() 
+{
+  a::aFunction(); // &lt;-- error, aFunction not public
+  b::bFunction(); // Allowed since import was &quot;as module&quot;
+}
+</code></pre>
 <h2 id="using-functions-and-types-from-other-modules">Using functions and types from other modules</h2>
-<p>As a rule, functions, macros, constants, variables and types in the same module do not need any namespace prefix. For imported modules, and for parent or child modules the following rules hold:</p>
+<p>As a rule, functions, macros, constants, variables and types in the same module do not need any namespace prefix. For imported modules the following rules hold:</p>
 <ol>
 <li>Functions, macros, constants and variables require <em>at least</em> the (sub-) module name.</li>
-<li>Types do not require the module name except if the name is ambiguous.</li>
+<li>Types do not require the module name unless the name is ambiguous.</li>
 <li>In case of ambiguity, only so many levels of module names are needed as to make the symbol unambiguous.</li>
 </ol>
 <pre><code>// File a.c3
 
 module a;
 
-struct Foo { ... }
-struct Bar { ... }
-struct TheAStruct { ... }
+public struct Foo { ... }
+public struct Bar { ... }
+public struct TheAStruct { ... }
 
-func void anAFunction() { ... }
+public func void anAFunction() { ... }
 
 // File b.c3
 
 module b;
 
-struct Foo { ... }
-struct Bar { ... }
-struct TheBStruct { ... }
+public struct Foo { ... }
+public struct Bar { ... }
+public struct TheBStruct { ... }
 
-func void aBFunction() { ... }
+public func void aBFunction() { ... }
 
 // File c.c3
-
-module b::c;
+module c;
 import a;
+import b;
 
 struct TheCStruct { ... }
 struct Bar { ... }
@@ -337,31 +326,28 @@ func void test()
     aCFunction(); 
 }
 </code></pre>
-
 <p>This means that the rule for the common case can be summarized as</p>
 <blockquote>
-<p>Types without prefix, functions, variables, macros and constants prefixed with the sub module name.</p>
+<p>Types are used without prefix; functions, variables, macros and constants are prefixed with the sub module name.</p>
 </blockquote>
 <h2 id="textual-includes">Textual includes</h2>
-<p>It's sometimes useful to include an entire file, doing so employs the <code>@include</code> macro.</p>
+<p>It's sometimes useful to include an entire file, doing so employs the <code>$include</code> function.</p>
 <p>File <code>Foo.c3</code></p>
 <pre><code>module foo;
 
-@include(&quot;Foo.x&quot;);
+$include(&quot;Foo.x&quot;);
 
 func void test() 
 {
     printf(&quot;%d&quot;, testX(2));
 }    
 </code></pre>
-
 <p>File <code>Foo.x</code></p>
 <pre><code>public func testX(int i) 
 { 
     return i + 1; 
 }
 </code></pre>
-
 <p>The result is as if <code>Foo.c3</code> contained the following:</p>
 <pre><code>module foo;
 
@@ -375,7 +361,6 @@ func void test()
     printf(&quot;%d&quot;, testX(2));
 }    
 </code></pre>
-
 <p>The include may use an absolute or relative path, the relative path is always relative to the source file in which the include appears.</p>
               
             </div>

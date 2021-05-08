@@ -250,7 +250,6 @@ $if ($defined(x) &amp;&amp; y &gt; 3):
     int z;
 $endif;
 </code></pre>
-
 <h3 id="macros_1">Macros</h3>
 <pre><code>// C
 #define M(x) ((x) + 2)
@@ -278,7 +277,6 @@ int y = @m(foo() + 2);
 @ret!(bar());
 u32 b = y;
 </code></pre>
-
 <h3 id="dynamic-scoping">Dynamic scoping</h3>
 <pre><code>// C
 #define Z() ptr-&gt;x-&gt;y-&gt;z
@@ -291,7 +289,6 @@ macro z(implicit ptr)
 }
 int z = @z();
 </code></pre>
-
 <h3 id="reference-arguments">Reference arguments</h3>
 <pre><code>// C
 #define M(x, y) x = 2 * (y);
@@ -302,7 +299,6 @@ macro m(int &amp;x, int y)
     x = 2 * y;
 }
 </code></pre>
-
 <h3 id="first-class-types">First class types</h3>
 <pre><code>// C
 #define SIZE(T) (sizeof(T) + sizeof(int))
@@ -313,7 +309,6 @@ macro size($Type)
     return sizeof($Type) + sizeof(int);
 }
 </code></pre>
-
 <h3 id="first-class-statements">First class statements</h3>
 <pre><code>// C
 #define FOR_EACH(x, list) \
@@ -338,7 +333,6 @@ macro for_each(list, macro void(it) @body)
   if (!process(x)) return;
 }
 </code></pre>
-
 <h3 id="first-class-names">First class names</h3>
 <pre><code>// C
 #define offsetof(T, field) (size_t)(&amp;((T*)0)-&gt;field)
@@ -349,7 +343,6 @@ macro offsetof($Type, $field)
     return (size_t)(&amp;((T*)0)-&gt;field);
 }
 </code></pre>
-
 <h3 id="declaration-attributes">Declaration attributes</h3>
 <pre><code>// C
 #define NONNULL(args...) __attribute__((nonnull(args)))
@@ -357,7 +350,6 @@ macro offsetof($Type, $field)
 // C3
 ... currently no corresponding functionality ...
 </code></pre>
-
 <h3 id="declaration-macros">Declaration macros</h3>
 <pre><code>// C
 #define DECLARE_LIST(name) List name = { .head = NULL };
@@ -367,14 +359,12 @@ DECLARE_LIST(hello)
 // C3
 ... currently no corresponding functionality ...
 </code></pre>
-
 <h3 id="stringingification">Stringingification</h3>
 <pre><code>#define DECLARE_STRING(name, s) char *name##_str = #s;
 
 // C3
 ... currently no corresponding functionality ...
 </code></pre>
-
 <h2 id="top-level-evaluation">Top level evaluation</h2>
 <p>Script languages, and also upcoming languages like <em>Jai</em>, usually have unbounded top level evaluation. The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. </p>
 <p>In C3, top level compile time evaluation is limited to <code>$if</code> and <code>$switch</code> constructs. This makes the code easier to read by sacrificing flexibility. However, the incremental structs, enums and arrays provided by the compiler offers a way to build compile time structures without the necessity for full meta programming capabilities.</p>
@@ -392,7 +382,6 @@ macro void swap($a, $b)
     b = temp;
 }
 </code></pre>
-
 <p>This expands on usage like this:</p>
 <pre><code>func void test()
 {
@@ -412,7 +401,6 @@ func void test()
     }
 }
 </code></pre>
-
 <p>Note the necessary <code>$</code>. Here is an incorrect swap and what it would expand to:</p>
 <pre><code>macro void badswap(auto a, auto b)
 {
@@ -441,7 +429,6 @@ func void test()
     }
 }
 </code></pre>
-
 <h2 id="method-macros">Method macros</h2>
 <p>Similar to <em>method functions</em> a macro may also be associated with a particular type:</p>
 <pre><code>struct Foo { ... }
@@ -450,7 +437,6 @@ macro Foo.generate(Foo *foo) { ... }
 Foo f;
 @f.generate();
 </code></pre>
-
 <h2 id="capturing-a-macro-body">Capturing a macro body</h2>
 <p>It is often useful for a macro to take a trailing compound statement as an argument. In C++ the pattern is usually expressed with a lambda, but in C3 this is completely inlined.</p>
 <p>Any macro that takes a macro in the last position may be expressed as a trailing body instead. When the call puts the parameters for the trailing macro after <code>;</code>.</p>
@@ -491,7 +477,6 @@ func void test()
     }
 }
 </code></pre>
-
 <h2 id="macros-returning-values">Macros returning values</h2>
 <p>A macro may return a value, it is then considered an expression rather than a statement:</p>
 <pre><code>macro auto square(auto x)
@@ -509,7 +494,6 @@ double getTheSquare2(double x)
     return square(x);
 }
 </code></pre>
-
 <h2 id="calling-macros">Calling macros</h2>
 <p>It's perfectly fine for a macro to invoke another macro or itself.</p>
 <pre><code>macro @square(x) { return x * x; }
@@ -519,7 +503,6 @@ macro @squarePlusOne(x)
     return @square(x) + 1; // Expands to &quot;return x * x + 1;&quot;
 }
 </code></pre>
-
 <p>The maximum recursion depth is limited to the <code>macro-recursion-depth</code> build setting.</p>
 <h2 id="macro-directives">Macro directives</h2>
 <p>Inside of a macro, we can use the compile time statements <code>$if</code>, <code>$each</code> and <code>$switch</code>. Macros may also be recursively invoked. As previously mentioned, <code>$if</code> and <code>$switch</code> may also be invoked on the top level.</p>
@@ -545,7 +528,6 @@ func void test()
     @foo(FOO, a); // Allowed, expands to a += FOO * FOO;
 }
 </code></pre>
-
 <h3 id="loops-using-foreach">Loops using $foreach</h3>
 <p><code>$foreach (&lt;range&gt; as &lt;variable&gt;): ... $endforeach;</code> allows compile time recursion. <code>$each</code> may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.</p>
 <p>Looping over ranges:</p>
@@ -564,7 +546,6 @@ func void test()
     // printf(&quot;%d\n&quot;, 1);         
 }
 </code></pre>
-
 <p>Looping over enums:</p>
 <pre><code>macro @foo_enum($some_enum)
 {
@@ -587,7 +568,6 @@ func void test()
     // printf(&quot;%d\n&quot;, cast(MyEnum.B as int));    
 }
 </code></pre>
-
 <p>An important thing to note is that the content of the <code>$each</code> body must be a complete statement.
 It's not possible to compile partial statements.</p>
 <h3 id="switching-on-type-with-switch">Switching on type with $switch</h3>
@@ -601,7 +581,6 @@ It's not possible to compile partial statements.</p>
     return a + b;
 }
 </code></pre>
-
 <h2 id="escape-macros">Escape macros</h2>
 <p>Usually macro will generate its own scope, so that break, return, continue and next only stays valid inside of the macro's "scope". A <code>return</code> from inside a macro does not normally escape the scope into which it's called:</p>
 <pre><code>macro void @foo() { return; }
@@ -612,7 +591,6 @@ func void test()
     printf(&quot;Test\n&quot;);
 }
 </code></pre>
-
 <p>However, sometimes macros are needed that does not create its own scope, allowing return, break etc work as if it was part of the included scope. Escape macros does exactly that. An escape macro adds a "!" to the macro name. Note that this becomes part of the macro name.</p>
 <pre><code>macro void @foo!() 
 { 
@@ -625,7 +603,6 @@ func void test()
     printf(&quot;Test\n&quot;); // Never printed!
 }
 </code></pre>
-
 <p>This is not limited to return: <code>break</code>, <code>continue</code> and <code>next</code> is allowed.</p>
 <pre><code>macro next!($f) 
 { 
@@ -645,7 +622,6 @@ func void test()
     }
 }
 </code></pre>
-
 <p>The above code will print "Bar!"</p>
 <h2 id="conditional-macros-at-the-top-level">Conditional macros at the top level</h2>
 <p>A limitation with the macros is that they are only used <em>within</em> functions. 
@@ -667,7 +643,6 @@ func void doSomethingWin32Specific()
 
 $endif;
 </code></pre>
-
 <h3 id="global-compile-time-variables">Global compile time variables</h3>
 <p>Variables on the top level work like compile time variables in macros – with the exception
 that they must always be declared constant. They are always evaluated in order, which 
@@ -684,7 +659,6 @@ const Z = @foo(); // Z = 1
 const A = @foo(); // A = 1
 const B = @foo(); // B = 2
 </code></pre>
-
 <h3 id="attributes">Attributes</h3>
 <p>Attributes are tags placed on functions, types and variables. 
 They may take a type as argument, much like a function. It's possible
@@ -702,7 +676,6 @@ struct Test @foo
     int i;
 }
 </code></pre>
-
 <p>What's useful about attributes is that they can be accessed during compile
 time:</p>
 <pre><code>macro @fooCheck($a)
@@ -732,7 +705,6 @@ func void test()
     // Check TestB: Was fooed
 }
 </code></pre>
-
 <p>It's also possible to get hold of the values:</p>
 <pre><code>attribute func @myvar(int i = 0);
 func void test() @myvar(200) { ... }
@@ -742,7 +714,6 @@ func void test()
     printf(&quot;%d&quot;, test.@myvar.i); // Prints 200
 }
 </code></pre>
-
 <h3 id="incremental-arrays">Incremental arrays</h3>
 <p>Incremental arrays allows compile time arrays to be constructed piecemeal within a single source file. An incremental array uses the <code>[+]</code> ending, but will be considered to be a fixed size array for all other purposes.
 Append to an incremental array using <code>+=</code> which done during compile time.</p>
@@ -756,7 +727,6 @@ a += 2;
 
 // Equivalent to the declaration int[3] a = { 1, 1, 2 };
 </code></pre>
-
 <p>This can be especially useful in conjuction with <code>$each</code>:</p>
 <pre><code>enum MyEnum { A, B }
 
@@ -771,7 +741,6 @@ macro type @foo_enum($theEnum)
 // allMyEnum will contain { &quot;A&quot;, &quot;B&quot; }
 const string[] allMyEnum = @foo_enum(MyEnum);
 </code></pre>
-
 <p>Here is a similar example but for attributes:</p>
 <pre><code>attribute struct @special;
 

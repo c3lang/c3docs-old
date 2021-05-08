@@ -218,7 +218,6 @@ error Err
     LOTS_OF_OOPS
 }
 </code></pre>
-
 <h3 id="variables-and-parameters">Variables and parameters</h3>
 <p>All variables and parameters <em>except for</em> global constant variables must start with a-z after any optional initial <code>_</code>. <code>___a</code> <code>fooBar</code> and <code>_test_</code> are all valid variable / parameter names. <code>_</code>, <code>_Bar</code>, <code>X</code> are not.</p>
 <pre><code>int theGlobal = 1;
@@ -229,12 +228,10 @@ func void foo(int x)
     theGlobal++;
 }
 </code></pre>
-
 <h3 id="global-constants">Global constants</h3>
 <p>Global constants must start with A-Z after any optional initial <code>_</code>. <code>_FOO2</code>, <code>BAR_FOO</code>, <code>X</code> are all valid global constants, <code>_</code>, <code>_bar</code>, <code>x</code> are not. </p>
 <pre><code>const int A_VALUE = 12;
 </code></pre>
-
 <h3 id="enum-error-values">Enum / error values</h3>
 <p>Enum and error values follow the same naming standard as global constants.</p>
 <pre><code>enum Baz 
@@ -249,14 +246,12 @@ error Err
     LOTS_OF_OOPS
 }
 </code></pre>
-
 <h3 id="struct-union-members">Struct / union members</h3>
 <p>Struct and union members follow the same naming rules as variables.</p>
 <h3 id="modules">Modules</h3>
 <p>Module names may contain a-z, 0-9 and <code>_</code>, no upper case characters are allowed.</p>
 <pre><code>module foo;
 </code></pre>
-
 <h3 id="functions-and-macros">Functions and macros</h3>
 <p>Functions and macros must start with a-z after any optional initial <code>_</code>.</p>
 <pre><code>func void theMostAmazingFunction() 
