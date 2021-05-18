@@ -564,7 +564,7 @@ Foo f = 0;
 f = f + 1;
 int i = 1;
 // f = f + i Error!
-f = f + cast(i as Foo); // Valid
+f = f + (Foo)(i); // Valid
 </code></pre>
 <h2 id="struct-types">Struct types</h2>
 <p>Structs are always named:</p>
@@ -650,9 +650,9 @@ io.printf(&quot;%d&quot;, i.as_byte);
 <p>In C, using structs with an enum value to indicate type is common practice. C3 also offers tagged unions, which is formalizing this within the language:</p>
 <p>TBD: Exact syntax (see the <a href="../ideas">ideas</a> page)</p>
 <h2 id="casting">Casting</h2>
-<p>Casting does not use the C-style <code>(NewType) var</code> instead uses <code>cast(&lt;expression&gt; as &lt;Type&gt;)</code></p>
+<p>Casting does not use the C-style <code>(&lt;NewType&gt;) &lt;expression&gt;</code> instead uses <code>(&lt;NewType&gt;)(&lt;expression&gt;)</code></p>
 <pre><code>float f = 2.0;
-int i = cast(f as int);
+int i = (int)(f);
 </code></pre>
 <h2 id="conversion-to-symbol-to-type-and-back-with-type">Conversion to symbol to type and back with <code>type</code></h2>
 <p>Macros and compile time constants may occasionally contain type <em>symbols</em>. To convert back and forth, the <code>type</code> operator is used.</p>
@@ -698,7 +698,7 @@ func void test()
     set_coordinates(v);   // valid
     set_coordinates(v3);  // ERROR, no structural equivalence.
     struct { int i; int j; } xy = v2;
-    v = cast(v2 as struct { int, int });
+    v = (struct { int, int })(v2);
 }
 </code></pre>
               

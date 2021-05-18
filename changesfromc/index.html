@@ -88,6 +88,10 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#locals-variables-are-implictly-zeroed">Locals variables are implictly zeroed</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mandatory-around-casts">Mandatory () around casts</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compound-literal-syntax-changed">Compound literal syntax changed</a>
+    </li>
     </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../compare/">Comparisons with other languages</a>
@@ -266,6 +270,27 @@ the code is harder to understand as well. The replacements together with <code>d
 Another alternative that was considered for C3 was mandatory initialization,
 but this adds a lot of extra boilerplate. 
 C3 also offers a way to opt out of zero-initialization, so the change comes at no performance loss.</em></p>
+<h5 id="mandatory-around-casts">Mandatory () around casts</h5>
+<pre><code class="language-c">// C style casts:
+int x = (int) c;
+
+// C3
+int x = (int)(c);
+</code></pre>
+<p><em>Rationale: removes visual ambiguity for casts.</em></p>
+<h5 id="compound-literal-syntax-changed">Compound literal syntax changed</h5>
+<pre><code class="language-c">// C style:
+callFoo((Foo) { 1, 2, 3 });
+
+// C++ style (1):
+callFoo(Foo(1, 2, 3));
+
+// C++ style (2):
+callFoo(Foo { 1, 2, 3 });
+
+// C3:
+callFoo(Foo({ 1, 2, 3 }));
+</code></pre>
               
             </div>
           </div>

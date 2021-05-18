@@ -550,7 +550,7 @@ func void test()
 <pre><code>macro @foo_enum($some_enum)
 {
     $foreach($some_enum as $x):
-        printf(&quot;%d\n&quot;, cast($x as int));     
+        printf(&quot;%d\n&quot;, (int)($x));     
     $endforeach;
 }
 
@@ -564,8 +564,8 @@ func void test()
 {
     @foo_enum(MyEnum);
     // Expands to -&gt;
-    // printf(&quot;%d\n&quot;, cast(MyEnum.A as int));
-    // printf(&quot;%d\n&quot;, cast(MyEnum.B as int));    
+    // printf(&quot;%d\n&quot;, (int)(MyEnum.A));
+    // printf(&quot;%d\n&quot;, (int)(MyEnum.B));    
 }
 </code></pre>
 <p>An important thing to note is that the content of the <code>$each</code> body must be a complete statement.

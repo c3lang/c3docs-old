@@ -1015,7 +1015,7 @@ macro @foo_enum(&amp;a)
 {
     $EACH(a AS $x)  
     {
-        printf(&quot;%d\n&quot;, cast($x as int));        
+        printf(&quot;%d\n&quot;, (int)($x));      
     }
 }
 
@@ -1034,9 +1034,9 @@ func void test()
 // Expands to
 func void test()
 {
-    printf(&quot;%d\n&quot;, cast(A as int));
-    printf(&quot;%d\n&quot;, cast(B as int));
-    printf(&quot;%d\n&quot;, cast(FOO as int));
+    printf(&quot;%d\n&quot;, (int)(A));
+    printf(&quot;%d\n&quot;, (int)(B));
+    printf(&quot;%d\n&quot;, (int)(FOO));
 }
 </code></pre>
 <p>Each may iterate over: struct members (returned as string), enums (returned as the enum value)</p>
