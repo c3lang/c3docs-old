@@ -374,9 +374,9 @@ Any integer of pointer size or larger may be explicitly cast to a pointer. An in
 Example:
 ```
 byte a = 1;
-int* b = cast(a as int*); // Invalid, pointer type is > 8 bits.
-int* c = cast(1 as int*); // Valid, but runtime value.
-int* d = cast(0 as int*); // Valid and constant value.
+int* b = (int*)(a); // Invalid, pointer type is > 8 bits.
+int* c = (int*)(1); // Valid, but runtime value.
+int* d = (int*)(0); // Valid and constant value.
 ```
 
 #### Pointer to integer cast
@@ -389,9 +389,9 @@ func void test() { ... }
 typedef func void test() as VoidFunc;
 
 VoidFunc a = &test;
-int b = cast(null as int);
-int c = cast(a as int); // Invalid, not constant
-int d = cast(cast(1 as int*) as int); // Invalid, not constant
+int b = (int)(null);
+int c = (int)(a); // Invalid, not constant
+int d = (int)((int*)(1)); // Invalid, not constant
 ```
 
 ### Subscript operator

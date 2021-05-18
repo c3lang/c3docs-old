@@ -1,5 +1,8 @@
 # Change log
 
+##### Revision 2020-05-18
+- Change cast to (type)(expression)
+
 ##### Revision 2020-05-08
 - Added rationale for some changes from C.
 - Updated undefined and [undefined behaviour](../undefinedbehaviour).

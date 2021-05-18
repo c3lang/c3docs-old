@@ -92,8 +92,8 @@ The final type is the subarray `<type>[]`  e.g. `int[]`. A subarray is a view in
 ```
 int[4] a = { 1, 2, 3, 4};
 int[] b = &a; // Implicit conversion is always ok.
-int[4] c = cast(b as int[4]); // Will copy the value of b into c.
-int[4]* d = cast(b as int[4]); // Equivalent to d = &a
+int[4] c = (int[4])(b); // Will copy the value of b into c.
+int[4]* d = (int[4])(a); // Equivalent to d = &a
 int[*] e = @malloc(int[]);
 b.size; // Returns 4
 e.size; // Returns 0
@@ -104,7 +104,7 @@ int* f = b; // Equivalent to e = &a
 f = d; // implicit conversion ok.
 f = e; // implicit conversion ok.
 d = e; // ERROR! Not allowed
-d = cast(e as int[4]*); // Fine
+d = (int[4]*)(e); // Fine
 b = e; // Implicit conversion ok
 ```
 
@@ -175,9 +175,9 @@ int[4] a;
 int[4]* b = &a;
 int* c = b;
 // Safe cast:
-int[4]* d = cast(c as int[4]*); 
+int[4]* d = (int[4]*)(c); 
 // Faulty code with undefined behaviour:
-int[*] e = cast(c as int[*]*); 
+int[*] e = (int[*])(c); 
 ```
 
 ```
@@ -186,10 +186,10 @@ a += 11;
 a += 12;
 a += 13;
 // Safe (2 is less than the dynamic size of a)
-int[2]* b = cast(a as int[2]*);
+int[2]* b =(int[2]*)(a);
 // Faulty code with undefined behaviour
 // (4 is greater than the dynamic size of a)
-int[4]* c = cast(a as int[4]*);
+int[4]* c = (int[4]*)(a);
 ```
 
 #### Internals

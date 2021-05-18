@@ -104,3 +104,31 @@ In C global variables are implicitly zeroed out, but local variables aren't. In 
 Another alternative that was considered for C3 was mandatory initialization,
 but this adds a lot of extra boilerplate. 
 C3 also offers a way to opt out of zero-initialization, so the change comes at no performance loss.*
+
+##### Mandatory () around casts
+
+```c
+// C style casts:
+int x = (int) c;
+
+// C3
+int x = (int)(c);
+```
+
+*Rationale: removes visual ambiguity for casts.*
+
+##### Compound literal syntax changed
+
+```c
+// C style:
+callFoo((Foo) { 1, 2, 3 });
+
+// C++ style (1):
+callFoo(Foo(1, 2, 3));
+
+// C++ style (2):
+callFoo(Foo { 1, 2, 3 });
+
+// C3:
+callFoo(Foo({ 1, 2, 3 }));
+```

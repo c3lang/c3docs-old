@@ -396,7 +396,7 @@ Looping over enums:
 macro @foo_enum($some_enum)
 {
     $foreach($some_enum as $x):
-        printf("%d\n", cast($x as int));     
+        printf("%d\n", (int)($x));     
     $endforeach;
 }
 
@@ -410,8 +410,8 @@ func void test()
 {
     @foo_enum(MyEnum);
     // Expands to ->
-    // printf("%d\n", cast(MyEnum.A as int));
-    // printf("%d\n", cast(MyEnum.B as int));    
+    // printf("%d\n", (int)(MyEnum.A));
+    // printf("%d\n", (int)(MyEnum.B));    
 }
 ```
 

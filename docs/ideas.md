@@ -978,7 +978,7 @@ macro @foo_enum(&a)
 {
     $EACH(a AS $x)  
     {
-        printf("%d\n", cast($x as int));		
+        printf("%d\n", (int)($x));		
     }
 }
 
@@ -997,9 +997,9 @@ func void test()
 // Expands to
 func void test()
 {
-	printf("%d\n", cast(A as int));
-	printf("%d\n", cast(B as int));
-	printf("%d\n", cast(FOO as int));
+	printf("%d\n", (int)(A));
+	printf("%d\n", (int)(B));
+	printf("%d\n", (int)(FOO));
 }
 ```
 

@@ -262,7 +262,7 @@ error DivisionByZero;
 func double divide(int a, int b)
 {
     if (b == 0) return DivisionByZero!;
-    return cast(a as double) / cast(b as double);
+    return (double)(a) / (double)(b);
 
 }
 

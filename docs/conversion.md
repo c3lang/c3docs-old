@@ -71,13 +71,13 @@ short y = -3;
 int z = 0xFFFFF;
 ulong w = -0xFFFFFFF;
 
-x = x + x; // => calculated as x = cast(cast(x as int) + cast(x as int), char);
+x = x + x; // => calculated as x = (char)((int)(x) + (int)(x));
 x = y + x; // => error
-w = x + y; // => calculated as w = cast(cast(cast(x as long) + cast(y as long) as ulong);
+w = x + y; // => calculated as w = (ulong)((long)(x) + (long)(x));
 
-h = x * h; // => calculated as h = cast(cast(x as float) * cast(h as float) as half);
+h = x * h; // => calculated as h = (half)((float)(x) * (float)(h));
 h = f + x; // => error
-d = f * h; // => calculated as d = cast(f as double) * cast(h as double);
+d = f * h; // => calculated as d = (double)(f) * (double)(h);
 ```
 
 ## Binary conversions
@@ -227,7 +227,7 @@ short b = bar();
 long c = baz() ? a : b;
 
 // The above will compile to:
-long c = baz() ? cast(a as long) : cast(c as long);
+long c = baz() ? (long)(a) : (long)(c);
 
 char d = foobar();
 
@@ -236,5 +236,5 @@ char d = foobar();
 baz() ? a : b;
 
 // The above will compile to:
-baz() ? a : cast(b as int);               
+baz() ? a : (int)(b);               
 ```

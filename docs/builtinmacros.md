@@ -20,7 +20,6 @@ int i = @bitcast(f, int);
 printf("%x", i); // Prints 4144cccd
 ```
 
-
 ### @describe
 
 Creates a runtime description of a value.

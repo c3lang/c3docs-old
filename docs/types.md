@@ -253,7 +253,7 @@ Foo f = 0;
 f = f + 1;
 int i = 1;
 // f = f + i Error!
-f = f + cast(i as Foo); // Valid
+f = f + (Foo)(i); // Valid
 ```
 
 ## Struct types
@@ -369,11 +369,11 @@ TBD: Exact syntax (see the [ideas](../ideas) page)
 
 ## Casting
 
-Casting does not use the C-style `(NewType) var` instead uses `cast(<expression> as <Type>)`
+Casting does not use the C-style `(<NewType>) <expression>` instead uses `(<NewType>)(<expression>)`
     
 ```
 float f = 2.0;
-int i = cast(f as int);
+int i = (int)(f);
 ```
 
 ## Conversion to symbol to type and back with `type`
@@ -427,6 +427,6 @@ func void test()
     set_coordinates(v);   // valid
     set_coordinates(v3);  // ERROR, no structural equivalence.
     struct { int i; int j; } xy = v2;
-    v = cast(v2 as struct { int, int });
+    v = (struct { int, int })(v2);
 }
 ```

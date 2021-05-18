@@ -33,7 +33,7 @@ catch (err = file)
     printf("Error was %s\n", err.fullName()); 
     
     // Might print "Error code: 931938210"
-    printf("Error code: %ull\n", cast(err as ulong)); 
+    printf("Error code: %ull\n", (ulong)(err)); 
     return;
 }
 
@@ -41,7 +41,7 @@ catch (err = file)
 File*! file2 = openFile("bar.txt");
 
 // Only true if there is no error.
-if (file2)
+try (file2)
 {
     // Inside here file2 is a regular File*
 }
