@@ -74,6 +74,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
@@ -193,8 +195,8 @@
 <p>C3 introduces fairly strict naming rules to reduce ambiguity. </p>
 <p>As a basic rule, all identifiers are limited to a-z, A-Z, 0-9 and <code>_</code>. The initial character can not be a number. Furthermore, all identifiers are limited to 31 character.</p>
 <h3 id="structs-unions-enums-and-errors">Structs, unions, enums and errors</h3>
-<p>All user defined types must start with A-Z after any optional initial <code>_</code> and include at least 1 lower case letter. <code>Bar</code>, <code>_T_i12</code> and <code>TTi</code> are all valid names. <code>_1</code>, <code>bAR</code> and <code>BAR</code> are not. For C-compatibility it's possible to alias the type to a C name using the attribute "cname".</p>
-<pre><code>struct Foo @cname(&quot;foo&quot;)
+<p>All user defined types must start with A-Z after any optional initial <code>_</code> and include at least 1 lower case letter. <code>Bar</code>, <code>_T_i12</code> and <code>TTi</code> are all valid names. <code>_1</code>, <code>bAR</code> and <code>BAR</code> are not. For C-compatibility it's possible to alias the type to a external name using the attribute "externname".</p>
+<pre><code>struct Foo @externname(&quot;foo&quot;)
 {
     int x;
     Bar bar;

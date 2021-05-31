@@ -74,6 +74,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
@@ -270,7 +272,7 @@ return 1;
 <tr>
 <th>operation</th>
 <th align="center">will trap in safe builds</th>
-<th align="center">possible behaviour</th>
+<th align="center">permitted behaviour</th>
 </tr>
 </thead>
 <tbody>
@@ -286,6 +288,11 @@ return 1;
 </tr>
 <tr>
 <td>shifting by more or equal to the bit width</td>
+<td align="center">Yes</td>
+<td align="center">Any result</td>
+</tr>
+<tr>
+<td>shifting by negative amount</td>
 <td align="center">Yes</td>
 <td align="center">Any result</td>
 </tr>

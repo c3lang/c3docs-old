@@ -74,6 +74,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Functions</a>
@@ -208,7 +210,8 @@
 }
 </code></pre>
 <h3 id="function-arguments">Function arguments</h3>
-<p>C3 allows use of default arguments as well as named arguments.</p>
+<p>C3 allows use of default arguments as well as named arguments. Note that
+named and unnamed arguments cannot be combined.</p>
 <pre><code>func int testWithDefault(int foo = 1)
 {
     return foo;
@@ -251,8 +254,8 @@ func void test()
     // Mixing named and defaults:
     testNamed(3, .dummy = false);
 
-    // Mixing named and defaults leaving out initial values:
-    testNamed(,,false, .times = 1);
+    // Not allowed:
+    testNamed(1, .data = 1.0); // ERROR
 }
 </code></pre>
 <h4 id="varargs">Varargs</h4>
@@ -327,7 +330,8 @@ func void printInputWithChaining()
 }
 </code></pre>
 <h2 id="methods">Methods</h2>
-<p>Methods look exactly like functions, but are prefixed with the struct, union or enum name and is (usually) invoked using dot syntax:</p>
+<p>Methods look exactly like functions, but are prefixed with the type name and is (usually) 
+invoked using dot syntax:</p>
 <pre><code>struct Point
 {
     int x;
@@ -348,20 +352,6 @@ func void example()
 
     // Also callable as:
     Point.add(&amp;p, 10);
-}
-</code></pre>
-<p>If a method does not take the type as the first parameter, then it may only be invoked qualified with the type name:</p>
-<pre><code>func Point* Point.new(int x, int y) 
-{
-    Point* p = malloc(@sizeof(Point));
-    p.x = x;
-    p.y = y;
-    return p;
-}
-
-func void example2() 
-{
-    Point* p = Point.new(1, 2);
 }
 </code></pre>
 <p>Struct and unions will always take pointer, whereas enums take the enum value.</p>

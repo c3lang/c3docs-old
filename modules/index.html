@@ -80,6 +80,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#overriding-symbol-visibility-rules">Overriding symbol visibility rules</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#private-modules">Private modules</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#using-functions-and-types-from-other-modules">Using functions and types from other modules</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#textual-includes">Textual includes</a>
@@ -87,6 +89,8 @@
     </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
@@ -234,43 +238,59 @@ import networking;
 /* ... */
 </code></pre>
 <h2 id="visibility">Visibility</h2>
-<p>All files in the same module share the same global declaration namespace. However, by default a function is not visible outside the module. To make the symbol visible outside the module, use the keyword <code>public</code>.</p>
+<p>All files in the same module share the same global declaration namespace.
+By default a symbol is visible to anyone importing a module.
+To make a symbol only visible inside the module, use the keyword 
+<code>private</code>.</p>
 <pre><code>module foo;
 
-public func void init() { .. }
+func void init() { .. }
 
-func void open() { .. }
+private func void open() { .. }
 </code></pre>
-<p>In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it isn't specified as public.</p>
+<p>In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it is specified as <code>private</code>.</p>
 <h2 id="overriding-symbol-visibility-rules">Overriding symbol visibility rules</h2>
-<p>By using <code>as module</code> after an import, it's possible to access another module´s private symbols.
-Many other module systems have hierarchal visibility rules, but the <code>as module</code> feature allows 
+<p>By using <code>private</code> after <code>import</code>, it's possible to access another module´s private symbols.
+Many other module systems have hierarchal visibility rules, but the <code>import private</code> feature allows 
 visibility to be manipulated in a more ad-hoc manner without imposing hard rules.</p>
 <p>For example, you may provide a library with two modules: "mylib::net" and "mylib::file" - which both use functions
-and types from a common "mylib::internals" module. The two libraries use <code>import mylib::internals as module</code>
+and types from a common "mylib::internals" module. The two libraries use <code>import private mylib::internals</code>
 to access this module's private functions and type. To an external user of the library, the "mylib::internals"
 does not seem to exist, but inside of your library you use it as a shared dependency.</p>
 <p>A simple example:</p>
 <pre><code class="language-c">// File a.c3
 module a;
 
-func void aFunction() { ... }
+private func void aFunction() { ... }
 
 // File b.c3
 module b;
 
-func void bFunction() { ... }
+private func void bFunction() { ... }
 
 // File c.c3
 module c;
 import a;
-import b as module;
+import private b;
 
 func void test() 
 {
-  a::aFunction(); // &lt;-- error, aFunction not public
-  b::bFunction(); // Allowed since import was &quot;as module&quot;
+  a::aFunction(); // &lt;-- error, aFunction is private
+  b::bFunction(); // Allowed since import was &quot;private&quot;
 }
+</code></pre>
+<h2 id="private-modules">Private modules</h2>
+<p>Modules may be declared using <code>private</code>, this makes the whole module private. Such a module must
+always be imported using <code>import private</code>.</p>
+<pre><code>module private foo;
+...
+
+module bar;
+import private foo; // Allowed
+...
+
+module baz;
+import foo; // Error, trying to import private module. 
 </code></pre>
 <h2 id="using-functions-and-types-from-other-modules">Using functions and types from other modules</h2>
 <p>As a rule, functions, macros, constants, variables and types in the same module do not need any namespace prefix. For imported modules the following rules hold:</p>
@@ -283,21 +303,21 @@ func void test()
 
 module a;
 
-public struct Foo { ... }
-public struct Bar { ... }
-public struct TheAStruct { ... }
+struct Foo { ... }
+struct Bar { ... }
+struct TheAStruct { ... }
 
-public func void anAFunction() { ... }
+func void anAFunction() { ... }
 
 // File b.c3
 
 module b;
 
-public struct Foo { ... }
-public struct Bar { ... }
-public struct TheBStruct { ... }
+struct Foo { ... }
+struct Bar { ... }
+struct TheBStruct { ... }
 
-public func void aBFunction() { ... }
+func void aBFunction() { ... }
 
 // File c.c3
 module c;
@@ -343,7 +363,7 @@ func void test()
 }    
 </code></pre>
 <p>File <code>Foo.x</code></p>
-<pre><code>public func testX(int i) 
+<pre><code>func testX(int i) 
 { 
     return i + 1; 
 }
@@ -351,7 +371,7 @@ func void test()
 <p>The result is as if <code>Foo.c3</code> contained the following:</p>
 <pre><code>module foo;
 
-public func testX(int i) 
+func testX(int i) 
 { 
     return i + 1; 
 }

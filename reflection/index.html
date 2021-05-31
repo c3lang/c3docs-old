@@ -74,6 +74,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
@@ -236,7 +238,7 @@
 <h4 id="nameof">nameof</h4>
 <p>The basic name of the type without module prefixes.</p>
 <pre><code>struct Foo { ... }
-typedef Foo as Bar;
+define Bar = Foo;
 string a = int[4].nameof; // =&gt; &quot;int[4]&quot;
 string b = Foo.nameof; // =&gt; &quot;Foo&quot;
 string c = Bar.nameof; // =&gt; &quot;Foo&quot; 
@@ -348,13 +350,13 @@ string s = Foo.associatedValues[0].name; // &quot;double&quot;
 <h4 id="returntype">returnType</h4>
 <p><em>Only available for function types.</em>
 Returns the type of the return type.</p>
-<pre><code>typedef func int(int, double) as TestFunc;
+<pre><code>define TestFunc = func int(int, double);
 string s = TestFunc.returnType.name; // &quot;int&quot;
 </code></pre>
 <h4 id="params">params</h4>
 <p><em>Only available for function types.</em>
 Returns a list of all parameters.</p>
-<pre><code>typedef func int(int, double) as TestFunc;
+<pre><code>define TestFunc = func int(int, double);
 string s = TestFunc.params[1].name; // &quot;double&quot;
 </code></pre>
 <h4 id="errors_1">errors</h4>

@@ -74,6 +74,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
@@ -149,10 +151,6 @@
     <li class="toctree-l3"><a class="reference internal" href="#conditional-compilation_1">Conditional compilation</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#global-compile-time-variables">Global compile time variables</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#attributes">Attributes</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#incremental-arrays">Incremental arrays</a>
     </li>
         </ul>
     </li>
@@ -270,7 +268,7 @@ macro ret!(x)
 {
     return x;
 }
-typedef uint as u32;
+define u32 = uint;
 
 // Use:
 int y = @m(foo() + 2);
@@ -658,110 +656,6 @@ has to be taken into account when used in conjunction with @defined.</p>
 const Z = @foo(); // Z = 1
 const A = @foo(); // A = 1
 const B = @foo(); // B = 2
-</code></pre>
-<h3 id="attributes">Attributes</h3>
-<p>Attributes are tags placed on functions, types and variables. 
-They may take a type as argument, much like a function. It's possible
-iterate over all the objects that have an attribute of a particular type.</p>
-<pre><code>attribute func @myvar(int i = 0);
-attribute struct, union, enum @foo;
-
-func void test() @myvar(2)
-{
-    /** ... */
-}
-
-struct Test @foo
-{
-    int i;
-}
-</code></pre>
-<p>What's useful about attributes is that they can be accessed during compile
-time:</p>
-<pre><code>macro @fooCheck($a)
-{
-    $if ($defined($a.@foo)):
-        return &quot;Was fooed&quot;;
-    endif;
-    return &quot;Ok&quot;;
-}
-
-struct TestA
-{
-    int i;
-}
-
-struct TestB @Foo
-{
-    float f;
-}
-
-func void test()
-{
-    printf(&quot;Check TestA: &quot; @fooCheck(TestA) &quot;\n&quot;);    
-    printf(&quot;Check TestB: &quot; @fooCheck(TestB) &quot;\n&quot;);
-    // Prints:
-    // Check TestA: Ok
-    // Check TestB: Was fooed
-}
-</code></pre>
-<p>It's also possible to get hold of the values:</p>
-<pre><code>attribute func @myvar(int i = 0);
-func void test() @myvar(200) { ... }
-
-func void test()
-{
-    printf(&quot;%d&quot;, test.@myvar.i); // Prints 200
-}
-</code></pre>
-<h3 id="incremental-arrays">Incremental arrays</h3>
-<p>Incremental arrays allows compile time arrays to be constructed piecemeal within a single source file. An incremental array uses the <code>[+]</code> ending, but will be considered to be a fixed size array for all other purposes.
-Append to an incremental array using <code>+=</code> which done during compile time.</p>
-<pre><code>int[+] a = { 1 };
-
-a += 1;
-
-/* ... other code .. */
-
-a += 2;
-
-// Equivalent to the declaration int[3] a = { 1, 1, 2 };
-</code></pre>
-<p>This can be especially useful in conjuction with <code>$each</code>:</p>
-<pre><code>enum MyEnum { A, B }
-
-macro type @foo_enum($theEnum)
-{
-    string[+] arr = {};
-    $foreach ($theEnum as $x):
-        arr += @name($x);     
-    $endif;
-}
-
-// allMyEnum will contain { &quot;A&quot;, &quot;B&quot; }
-const string[] allMyEnum = @foo_enum(MyEnum);
-</code></pre>
-<p>Here is a similar example but for attributes:</p>
-<pre><code>attribute struct @special;
-
-struct TestA @special { int i; }
-struct TestB { float f; }
-struct TestC @special { float f; }
-
-macro void @specialStructs()
-{
-    string[+] res = {};
-    $foreach (@special as $x):
-        res += @name($x);
-    endif;
-    // The above expands to:
-    // res += &quot;TestA&quot;;
-    // res += &quot;TestC&quot;;    
-    return res;
-}
-
-// SPECIAL_STRUCTS = { &quot;TestA&quot;, &quot;TestB&quot; }
-const string[] SPECIAL_STRUCTS = @specialStructs();
 </code></pre>
               
             </div>

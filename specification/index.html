@@ -74,6 +74,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
@@ -395,7 +397,7 @@ in          local       macro
 module      nextcase    nil
 public      return      struct
 switch      true        try
-typeid      typeof      typedef
+typeid      typeof      define
 var         volatile    void
 while
 
@@ -571,7 +573,7 @@ int* d = (int*)(0); // Valid and constant value.
 <p>A pointer may be cast to any integer, truncating the pointer value if the size of the pointer is larger than the pointer size. A pointer to integer cast is considered non-constant, except in the special case of a null pointer, where it is equal to the integer value 0.</p>
 <p>Example:</p>
 <pre><code>func void test() { ... }
-typedef func void test() as VoidFunc;
+define VoidFunc = func void test();
 
 VoidFunc a = &amp;test;
 int b = (int)(null);

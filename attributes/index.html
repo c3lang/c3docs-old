@@ -74,6 +74,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
@@ -128,19 +130,7 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#new-attributes">New attributes</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#multi-type-attributes">Multi type attributes</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#arguments">Arguments</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#compile-time-attribute-access">Compile time attribute access</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#bundled-attributes">Bundled attributes</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#iterating-over-attributes">Iterating over attributes</a>
+    <li class="toctree-l2"><a class="reference internal" href="#user-defined-attributes">User defined attributes</a>
     </li>
     </ul>
                     </li>
@@ -225,127 +215,16 @@
 <h3 id="opaque-struct-union-enum"><code>opaque</code> (struct, union, enum)</h3>
 <p>Prevents the union or struct from being statically allocated by other modules. In the case of enums,
 prevents the enum from being converted to a value.</p>
-<h2 id="new-attributes">New attributes</h2>
-<p>The basic syntax for creating a new attribute is <code>attribute &lt;declaration type&gt; @&lt;name&gt;</code>. The type category is one of <code>var</code>, <code>const</code>, <code>func</code>, <code>union</code>, <code>struct</code>, <code>enum</code>, <code>typedef</code> and <code>error</code>.</p>
-<p>For example:</p>
-<pre><code>attribute func myattribute;
+<h2 id="user-defined-attributes">User defined attributes</h2>
+<p>User defined attributes are intended for conditional application of built-in attributes.</p>
+<pre><code>define @MyAttribute = @noreturn @inline;
 
-func void foo() myattribute
-{ ...  }
+// The following two are equivalent:
+func void foo() @MyAttribute { ... }
+func void foo() @noreturn @inline { ... }
 </code></pre>
-<h3 id="multi-type-attributes">Multi type attributes</h3>
-<p>It's possible to make an attribute match more than a single declaration type, by separating them using comma:</p>
-<pre><code>attribute func, enum, struct fooattribute;
-
-func void foo() @fooattribute
-{ 
-    /* ... */  
-}
-
-struct Bar @fooattribute
-{ 
-    int i;
-}
-</code></pre>
-<h3 id="arguments">Arguments</h3>
-<p>An attribute may take a number of arguments, similar to a function. All such arguments must be compile time constants.</p>
-<pre><code>attribute func intdec(int i)
-
-void foo() @intdec(2)
-{ ... }
-</code></pre>
-<p>Just like for function calls, the arguments may have defaults, use named arguments etc. However, varargs are not allowed.</p>
-<pre><code>attribute func dec(int d, int i = 0, float f = 1.0)
-
-void foo() @dec(2)
-{ ... }
-
-void bar() @dec(7, f = 3.0)
-{ ... }
-</code></pre>
-<h2 id="compile-time-attribute-access">Compile time attribute access</h2>
-<p>What's useful about attributes is that they can be accessed during compile
-time:</p>
-<pre><code>macro fooCheck($a)
-{
-    $if (@defined($a.foo)
-    {
-        return &quot;Was fooed&quot;;
-    }
-    return &quot;Ok&quot;;
-}
-
-struct TestA
-{
-    int i;
-}
-
-struct TestB @foo
-{
-    float f;
-}
-
-func void test()
-{
-    printf(&quot;Check TestA: &quot; @fooCheck(TestA) &quot;\n&quot;);    
-    printf(&quot;Check TestB: &quot; @fooCheck(TestB) &quot;\n&quot;);
-    // Prints:
-    // Check TestA: Ok
-    // Check TestB: Was fooed
-}
-</code></pre>
-<p>The values may be recovered:</p>
-<p>It's also possible to get hold of the values:</p>
-<pre><code>attribute func myvar(int i = 0);
-
-func void test() @myvar(200) 
-{ 
-    /* ... */
-}
-
-func void test()
-{
-    printf(&quot;%d&quot;, test.myvar.i); // Prints 200
-}
-</code></pre>
-<h2 id="bundled-attributes">Bundled attributes</h2>
-<p>It's also possible to create bundles of attributes, that simply contain other attributes. Unlike a normal attribute, an attribute bundle is a simple alias, so it has no real compile time information.</p>
-<pre><code>attribute func foodec;
-attribute func bardec(int i = 0);
-
-attribute mixdec alias foodec, bardec(3);
-
-// As if we had added foodec, bardec(3)
-func void test() @mixdec
-{
-    /* ... */
-}
-</code></pre>
-<p>A attribute bundle might also be completely empty.</p>
-<h2 id="iterating-over-attributes">Iterating over attributes</h2>
-<p>Within a macro it's possible to iterate in compile time over all non-alias attributes 
-using <code>$each</code>.</p>
-<pre><code>attribute struct special;
-
-struct TestA @special { int i; }
-struct TestB { float f; }
-struct TestC @special { float f; }
-
-macro @specialStructs()
-{
-    string[+] res = {};
-    $each(@special as $x)
-    {
-        res += @name($x);
-    }
-    // The above expands to:
-    // res += &quot;TestA&quot;;
-    // res += &quot;TestC&quot;;    
-    return res;
-}
-
-// SPECIAL_STRUCTS = { &quot;TestA&quot;, &quot;TestB&quot; }
-const string[] SPECIAL_STRUCTS = @specialStructs();
+<p>A user defined attribute may also be completely empty:</p>
+<pre><code>define @MyAttributeEmpty = void;
 </code></pre>
               
             </div>

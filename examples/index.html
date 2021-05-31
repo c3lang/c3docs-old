@@ -76,6 +76,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
@@ -189,7 +191,8 @@
 }
 </code></pre>
 <h5 id="for-loop">for-loop</h5>
-<pre><code>func void example_for() {
+<pre><code>func void example_for() 
+{
     // the for-loop is the same as C99. 
     for (int i = 0; i &lt; 10; i++) 
     {
@@ -567,44 +570,47 @@ func void test()
 </code></pre>
 <h5 id="generic-modules">Generic modules</h5>
 <p>Generic modules implements a generic system.</p>
-<pre><code>module stack(Type)
+<pre><code>module stack &lt;Type&gt;
+import std::mem;
 
 struct Stack
 {
-    Type[] elems;
+    usize capacity;
+    usize size;
+    Type* elems;
 }
 
-func Stack.init(Stack* this)
-{
-    this.elems = nil;
-}
 
 func void Stack.push(Stack* this, Type element)
 {
-    this.elems.add(element);
+    if (this.capacity == this.size)
+    {
+        this.capacity *= 2;
+        this.elems = mem::realloc(this.elems, Type.sizeof * this.capacity);
+    }
+    this.elems[this.size++] = element;
 }
 
-func $A Stack.pop(Stack* this)
+func Type Stack.pop(Stack* this)
 {
-    assert(this.elems.size &gt; 0);
-    this.elems.removeLast();
+    assert(this.size &gt; 0);
+    return this.elems[--this.size];
 }
 
 func bool Stack.empty(Stack* this)
 {
-    return this.elems.size == 0;
+    return !this.size;
 }
 </code></pre>
 <p>Testing it out:</p>
 <pre><code>import stack;
 
-define Stack(int) as IntStack;
-define Stack(double) as DoubleStack;
+define IntStack = Stack&lt;int&gt;;
+define DoubleStack = Stack&lt;double&gt;;
 
 func void test()
 {
     IntStack stack;
-    stack.init();
     stack.push(1);
     stack.push(2);
     // Prints pop: 2
@@ -613,7 +619,6 @@ func void test()
     printf(&quot;pop: %d\n&quot;, stack.pop())
 
     DoubleStack dstack;
-    dstack.init();
     dstack.push(2.3);
     dstack.push(3.141);
     dstack.push(1.1235)

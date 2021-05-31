@@ -74,6 +74,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
@@ -214,8 +216,7 @@ test3(&amp;&amp;int[3]({ 1, 2, 3 }));
 <h2 id="array-literals">Array literals</h2>
 <p><em>Syntax and implementation under consideration!</em></p>
 <p>Arrays can be initialized using compound literals, but there is also a special format for array initialization using <code>[]</code>. In this case, the type is inferred. It allows uniform initialization of all types of arrays:</p>
-<pre><code>int[*] x = [1, 2, 3]; // Variable array allocated on the stack
-int[3] y = [1, 2, 3]; // Fixed array allocated on the stack
+<pre><code>int[3] y = [1, 2, 3]; // Fixed array allocated on the stack
 int[] z = [1, 2, 3]; // Slice pointing at literal allocated on the stack
 </code></pre>
 <p>It offers some convenience when calling functions taking arrays:</p>
@@ -232,14 +233,15 @@ test3([ 1, 2, 3 ]);
 <p>Associative arrays are mappings between keys and values:</p>
 <pre><code>IntStringMap x = { &quot;a&quot;: 2, &quot;b&quot;: { &quot;3&quot; : &quot;foo&quot; } };
 </code></pre>
-<p>To use an associative array, the struct needs to define the following method macros: <code>@map_init()</code> <code>@map_init_add()</code>. In the example above, the actual code is compiled to:</p>
+<p>To use an associative array, the struct needs to define
+the following generics: <code>_map_init()</code> and <code>_map_init_add</code>. In the example above, the actual code is compiled to:</p>
 <pre><code>IntStringMap x;
-x.@map_init();
-x.@map_init_add(&quot;a&quot;, 2);
+_map_init(&amp;x);
+_map_init_add(&amp;x, &quot;a&quot;, 2);
 IntStringMap _temp;
-_temp.@map_init();
-_temp.@map_init_add(&quot;3&quot;, &quot;foo&quot;);
-x.@map_init_add(&quot;b&quot;, _temp);
+_map_init(&amp;_temp);
+_map_init_add(&amp;x, &quot;3&quot;, &quot;foo&quot;);
+_map_init_add(&amp;x, &quot;b&quot;, _temp);
 </code></pre>
               
             </div>

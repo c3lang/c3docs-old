@@ -112,10 +112,6 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#failable">Failable</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#alias-and-function-types">Alias and function types</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#distinct-types">Distinct types</a>
-    </li>
     <li class="toctree-l2"><a class="reference internal" href="#struct-types">Struct types</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#struct-subtyping">Struct subtyping</a>
@@ -133,6 +129,8 @@
     <li class="toctree-l2"><a class="reference internal" href="#anonymous-structs">Anonymous structs</a>
     </li>
     </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
@@ -253,7 +251,6 @@ func CInt stat(const char* pathname, Stat* buf);
 <thead>
 <tr>
 <th>Name</th>
-<th align="right">alias</th>
 <th align="right">bit size</th>
 <th align="center">signed</th>
 </tr>
@@ -261,91 +258,76 @@ func CInt stat(const char* pathname, Stat* buf);
 <tbody>
 <tr>
 <td>bool*</td>
-<td align="right">u1</td>
 <td align="right">1</td>
 <td align="center">no</td>
 </tr>
 <tr>
 <td>char</td>
-<td align="right">i8</td>
 <td align="right">8</td>
 <td align="center">yes</td>
 </tr>
 <tr>
 <td>byte</td>
-<td align="right">u8</td>
 <td align="right">8</td>
 <td align="center">no</td>
 </tr>
 <tr>
 <td>short</td>
-<td align="right">i16</td>
 <td align="right">16</td>
 <td align="center">yes</td>
 </tr>
 <tr>
 <td>ushort</td>
-<td align="right">u16</td>
 <td align="right">16</td>
 <td align="center">no</td>
 </tr>
 <tr>
 <td>int</td>
-<td align="right">i32</td>
 <td align="right">32</td>
 <td align="center">yes</td>
 </tr>
 <tr>
 <td>uint</td>
-<td align="right">u32</td>
 <td align="right">32</td>
 <td align="center">no</td>
 </tr>
 <tr>
 <td>long</td>
-<td align="right">i64</td>
 <td align="right">64</td>
 <td align="center">yes</td>
 </tr>
 <tr>
 <td>ulong</td>
-<td align="right">u64</td>
 <td align="right">64</td>
 <td align="center">no</td>
 </tr>
 <tr>
 <td>iptr**</td>
-<td align="right">-</td>
 <td align="right">varies</td>
 <td align="center">yes</td>
 </tr>
 <tr>
 <td>uptr**</td>
-<td align="right">-</td>
 <td align="right">varies</td>
 <td align="center">no</td>
 </tr>
 <tr>
 <td>iptrdiff**</td>
-<td align="right">-</td>
 <td align="right">varies</td>
 <td align="center">yes</td>
 </tr>
 <tr>
 <td>uptrdiff**</td>
-<td align="right">-</td>
 <td align="right">varies</td>
 <td align="center">no</td>
 </tr>
 <tr>
 <td>isize**</td>
-<td align="right">-</td>
 <td align="right">varies</td>
 <td align="center">yes</td>
 </tr>
 <tr>
 <td>usize**</td>
-<td align="right">-</td>
 <td align="right">varies</td>
 <td align="center">no</td>
 </tr>
@@ -546,26 +528,6 @@ func void processFoo(Foo*! f) { ... } // Error!
 int! x = 0; // Ok!
 </code></pre>
 <p>Read more about the errors on the page about <a href="../errorhandling">error handling</a>.</p>
-<h2 id="alias-and-function-types">Alias and function types</h2>
-<p>Alias types are used to give an alias to a different type, like:</p>
-<pre><code>typedef char* as CharPtr;
-typedef int[10] as Numbers;
-</code></pre>
-<p>Function pointers <em>must</em> be aliased in C3. The syntax is simpler than that of C:</p>
-<p><code>public typedef func void(int a, bool b) as Callback;</code></p>
-<p>This defines an alias to function pointer type of a function that returns nothing and requires two arguments: an int and a bool. Here is a sample usage:</p>
-<pre><code>Callback cb = my_callback;
-cb(10, false);
-</code></pre>
-<h2 id="distinct-types">Distinct types</h2>
-<p><code>typedef</code> may also be used to create distinct new types. They do not implicitly convert to any other type, but may be used as the underlying type.</p>
-<pre><code>typedef int as distinct Foo;
-Foo f = 0;
-f = f + 1;
-int i = 1;
-// f = f + i Error!
-f = f + (Foo)(i); // Valid
-</code></pre>
 <h2 id="struct-types">Struct types</h2>
 <p>Structs are always named:</p>
 <pre><code>struct Person  
@@ -708,7 +670,7 @@ func void test()
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../arrays/" class="btn btn-neutral float-right" title="Arrays">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../define/" class="btn btn-neutral float-right" title="Define">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../modules/" class="btn btn-neutral" title="Modules"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -740,7 +702,7 @@ func void test()
         <span><a href="../modules/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../arrays/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../define/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
