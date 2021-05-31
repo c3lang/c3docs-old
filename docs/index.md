@@ -12,7 +12,6 @@ Last updated: [Revision 2020-05-31](changes).
 
 ## Features
 
-- Compile directly using LLVM
 - Full C ABI compatibility  
 - Module system 
 - Generic modules
@@ -22,6 +21,7 @@ Last updated: [Revision 2020-05-31](changes).
 - Zero cost simple gradual & opt-in pre/post conditions. [IN PROGRESS]
 - High level containers and string handling. [IN PROGRESS]
 - C to C3 conversion (for a subset of C) *TODO*
+- LLVM backend
 
 ## Design principles
 
