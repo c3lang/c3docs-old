@@ -18,7 +18,8 @@ func void test(int times)
 
 ### Function arguments
 
-C3 allows use of default arguments as well as named arguments.
+C3 allows use of default arguments as well as named arguments. Note that
+named and unnamed arguments cannot be combined.
 
 ```
 func int testWithDefault(int foo = 1)
@@ -69,8 +70,8 @@ func void test()
     // Mixing named and defaults:
     testNamed(3, .dummy = false);
     
-    // Mixing named and defaults leaving out initial values:
-    testNamed(,,false, .times = 1);
+    // Not allowed:
+    testNamed(1, .data = 1.0); // ERROR
 }
 ```
 
@@ -163,7 +164,8 @@ func void printInputWithChaining()
 
 ## Methods
 
-Methods look exactly like functions, but are prefixed with the struct, union or enum name and is (usually) invoked using dot syntax:
+Methods look exactly like functions, but are prefixed with the type name and is (usually) 
+invoked using dot syntax:
 
 ```
 struct Point
@@ -189,22 +191,6 @@ func void example()
 }
 ```
 
-If a method does not take the type as the first parameter, then it may only be invoked qualified with the type name:
-
-```
-func Point* Point.new(int x, int y) 
-{
-    Point* p = malloc(@sizeof(Point));
-    p.x = x;
-    p.y = y;
-    return p;
-}
-
-func void example2() 
-{
-    Point* p = Point.new(1, 2);
-}
-```
 
 Struct and unions will always take pointer, whereas enums take the enum value.
 

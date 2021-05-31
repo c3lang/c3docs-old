@@ -24,7 +24,7 @@ The basic name of the type without module prefixes.
 
 ```
 struct Foo { ... }
-typedef Foo as Bar;
+define Bar = Foo;
 string a = int[4].nameof; // => "int[4]"
 string b = Foo.nameof; // => "Foo"
 string c = Bar.nameof; // => "Foo" 
@@ -192,7 +192,7 @@ string s = Foo.associatedValues[0].name; // "double"
 Returns the type of the return type.
 
 ```
-typedef func int(int, double) as TestFunc;
+define TestFunc = func int(int, double);
 string s = TestFunc.returnType.name; // "int"
 ```
 
@@ -202,7 +202,7 @@ string s = TestFunc.returnType.name; // "int"
 Returns a list of all parameters.
 
 ```
-typedef func int(int, double) as TestFunc;
+define TestFunc = func int(int, double);
 string s = TestFunc.params[1].name; // "double"
 ```
 

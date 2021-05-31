@@ -3,25 +3,6 @@
 **WARNING** Unfinished ideas / brain dumps
 
 
-## Simpler casts
-
-Use the type-call style casts:
-
-```
-int i = int(2.0);
-Foo* f = Foo*(getBar());
-```
-Or explore some more exotic casts:
-```
-int i = 2.0->int;
-Foo* f = getBar()->Foo*;
-
-int i = 2.0 as int;
-Foo* f = getBar() as Foo*;
-
-int i = 2.0::int;
-Foo* f = getBar()::Foo*;
-```
 
 ## Static initializers
 
@@ -55,45 +36,6 @@ Follow Go Modules:
 2. First number is major version number and is considered incompatible (basically a different module completely)
 3. Dependency resolution per major library version is done by picking the minimal version. E.g. module Foo requires Bar 1.5+ and module Baz requires 1.3+. Our module using Bar and Baz will resolve the minimal version to 1.3. This is the version that will be used. Note that if Foo used 2.5+, then both Bar 2.5 and 1.3 would be required.
 
-## Polymorphic functions
-
-It would theoretically be possible to replace the generics with ad hoc polymorphic functions.
-
-
-```
-module adding(TypeA, TypeB, TypeC)
-
-func TypeC add_module(TypeA a, TypeB b)
-{
-    return a + b;
-}
-```
-
-```
-generic func $c add_poly($a, $b)
-{
-    return $a + $b;
-}
-```
-
-
-Usage:
-
-```
-// Module:
-import adding;
-define add_module(int, float, float) as int_float_add;
-define add_module(int, double, double) as int_double_add;
-
-func void test()
-{
-    float f = int_float_add(2, 3.0)
-    float f2 = add_poly(2, 3.0);
-    
-    double d = int_double_add(2, 3.0);
-    double d2 = add_poly(2, 3.0);
-}
-```
 
 ## Allow narrowing conversions for floats
 
@@ -315,11 +257,6 @@ Steps:
 
 
 ## Unsorted
-
-## Halloc
-
-Hierarchal memory allocation http://swapped.cc/#!/halloc support it?
-
 
 ##### Tagged any
 
@@ -872,14 +809,14 @@ macro @foo($x, #f)
 
 func void test()
 {
-    i32 x = 1;
+    int x = 1;
     @foo(4, "x += ");
 }
 
 // Expands to
 func void test()
 {
-    i32 x = 1;
+    int x = 1;
     x += 4 * 4;	
 }
 

@@ -148,7 +148,7 @@ in          local       macro
 module      nextcase    nil
 public      return      struct
 switch      true        try
-typeid      typeof      typedef
+typeid      typeof      define
 var         volatile    void
 while
 
@@ -386,7 +386,7 @@ Example:
 
 ```
 func void test() { ... }
-typedef func void test() as VoidFunc;
+define VoidFunc = func void test();
 
 VoidFunc a = &test;
 int b = (int)(null);

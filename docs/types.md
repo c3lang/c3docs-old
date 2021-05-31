@@ -25,23 +25,23 @@ Basic types are divided into floating point types, and integer types. Integer ty
 
 ##### Integer types
 
-| Name         | alias | bit size | signed |
-| ------------ | -----:| --------:|:------:|
-| bool*        | u1    | 1        | no     |
-| char         | i8    | 8        | yes    |
-| byte         | u8    | 8        | no     |
-| short        | i16   | 16       | yes    |
-| ushort       | u16   | 16       | no     |
-| int          | i32   | 32       | yes    |
-| uint         | u32   | 32       | no     |
-| long         | i64   | 64       | yes    |
-| ulong        | u64   | 64       | no     |
-| iptr**       | -     | varies   | yes    |
-| uptr**       | -     | varies   | no     |
-| iptrdiff**   | -     | varies   | yes    |
-| uptrdiff**   | -     | varies   | no     |
-| isize**      | -     | varies   | yes    |
-| usize**      | -     | varies   | no     |
+| Name         | bit size | signed |
+| ------------ | --------:|:------:|
+| bool*        | 1        | no     |
+| char         | 8        | yes    |
+| byte         | 8        | no     |
+| short        | 16       | yes    |
+| ushort       | 16       | no     |
+| int          | 32       | yes    |
+| uint         | 32       | no     |
+| long         | 64       | yes    |
+| ulong        | 64       | no     |
+| iptr**       | varies   | yes    |
+| uptr**       | varies   | no     |
+| iptrdiff**   | varies   | yes    |
+| uptrdiff**   | varies   | no     |
+| isize**      | varies   | yes    |
+| usize**      | varies   | no     |
 
 \* `bool` will be stored as a byte.  
 \*\* size, pointer and pointer sized types depend on platform.
@@ -223,38 +223,8 @@ int! x = 0; // Ok!
 
 Read more about the errors on the page about [error handling](../errorhandling).
 
-## Alias and function types
 
-Alias types are used to give an alias to a different type, like:
 
-```
-typedef char* as CharPtr;
-typedef int[10] as Numbers;
-```
-
-Function pointers _must_ be aliased in C3. The syntax is simpler than that of C:
-
-`public typedef func void(int a, bool b) as Callback;`
-
-This defines an alias to function pointer type of a function that returns nothing and requires two arguments: an int and a bool. Here is a sample usage:
-
-```
-Callback cb = my_callback;
-cb(10, false);
-```
-
-## Distinct types
-
-`typedef` may also be used to create distinct new types. They do not implicitly convert to any other type, but may be used as the underlying type.
-
-```
-typedef int as distinct Foo;
-Foo f = 0;
-f = f + 1;
-int i = 1;
-// f = f + i Error!
-f = f + (Foo)(i); // Valid
-```
 
 ## Struct types
 

@@ -1,5 +1,7 @@
 # Built-in macros
 
+*This has changed and needs a revision.*
+
 There are several built-in macros to inspect the code during compile and runtime.
 
 - @bitcast

@@ -118,20 +118,22 @@ Generic modules are parameterized modules that allow functionality for arbitrary
 For generic modules, the generic parameters follows the module name:
 
 ```
-module vector (A, B, C); // A, B, C are generic parameters.
+// TypeA, TypeB, TypeC are generic parameters.
+module vector (TypeA, TypeB, TypeC);
 ```
 
 The code inside of the module can use the generic parameters as if they were well defined symbols:
 
 ```
-module foo_test (A, B);
+module foo_test <Type1, Type2>;
 
-struct Foo {
-   A a;
+struct Foo 
+{
+   Type1 a;
 }
 
-func C test(B b, Foo *foo) {
-   return a + b;
+func Type2 test(Type2 b, Foo *foo) {
+   return foo.a + b;
 }
 ```
 
@@ -140,8 +142,8 @@ Including a generic module works as usual, but to use a type, it must be *define
 ```
 import foo_test;
 
-define Foo(float, double) as FooFloat;
-define foo_test::test(float, double) as testFloat;
+define FooFloat = Foo<float, double>;
+define testFloat = foo_test::test<float, double>;
 
 ...
 
@@ -149,7 +151,7 @@ FooFloat f;
 
 ...
 
-testFloat(1.0, f);
+testFloat(1.0, &f);
 
 ```
 
@@ -159,15 +161,17 @@ Just like for macros, optional constraints may be added to improve compile error
 /**
  * @require c = a + b
  */ 
-module vector (A, B, C);
+module vector <TypeA, TypeB, TypeC>;
 
 /* .. code * ../
 ```
 
 ```
-import vector(Bar, f32, i32) as gen_test;
+import vector;
+
+define testFunction = vector::testFunc<Bar, float, int>;
 
 // This would give the error 
-// --> Illegal arguments for generic module vector, breaks requirement 'Bar' = 'f32' + 'i32'
+// --> Illegal arguments for generic module vector, breaks requirement 'Bar' = 'float' + 'int'
 ```
 

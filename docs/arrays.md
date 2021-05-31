@@ -1,6 +1,6 @@
 # Arrays
 
-Arrays has a central role in programming. C3 offers 3 types of arrays:
+Arrays has a central role in programming. C3 offers 2 built-in types of arrays:
 
 ## Fixed arrays
 
@@ -29,61 +29,6 @@ int[3] a = { 1, 2, 3};
 int[+] b = { 4, 5, 6}; // Type inferred to be int[3]
 ```
 
-## Variable arrays
-
-Variable arrays are specially allocated arrays that are prefixed with both a size and a capacity. If allocated on the heap, they cannot expand, but heap allocated variable arrays will do so automatically using whatever memory allocator was used to create it. 
-
-*THIS PART WILL BE SUBJECT TO REVISION*
-
-```
-int[*] x = @malloc(int[*]);
-x += 10;
-x += 11;
-x.size; // => 2
-x[1]; // => 11
-```
-
-A variable array can implicitly convert to a pointer:
-
-```
-int[*] x = @malloc(int[*]);
-int *z = x;
-```
-
-A variable array's reference is not *stable* under expansion, so any alias may be invalidated if appending occurs.
-
-```
-int[*] x = @malloc(int[*]);
-int[*] *y = &x;
-int *z = x;
-for (int i = 0; i < 33; i++)  x += 10;
-assert(y != &x);
-int *w = x;
-assert(z != w);
-```
-
-Assigning a fixed array to a variable array will copy the contents:
-
-```
-int[3] b = { 1, 2, 3};
-int[*] a = @malloc(int[*]);
-a = b;
-```
-
-#### Built-in functions on variable arrays
-
-###### pop()
-Removes the last element.
-###### last()
-Retrieves the last element.
-###### remove(index)
-Removes an element in the array in O(n) time.
-###### capacity
-Return the capacity of the array.
-###### size
-return the size of the array.
-###### resize(size)
-Resize the array to the given size.
 
 ## Subarray
 
@@ -94,18 +39,10 @@ int[4] a = { 1, 2, 3, 4};
 int[] b = &a; // Implicit conversion is always ok.
 int[4] c = (int[4])(b); // Will copy the value of b into c.
 int[4]* d = (int[4])(a); // Equivalent to d = &a
-int[*] e = @malloc(int[]);
 b.size; // Returns 4
-e.size; // Returns 0
 e += 1;
-e += 2;
-e.size; // Returns 2 
 int* f = b; // Equivalent to e = &a
 f = d; // implicit conversion ok.
-f = e; // implicit conversion ok.
-d = e; // ERROR! Not allowed
-d = (int[4]*)(e); // Fine
-b = e; // Implicit conversion ok
 ```
 
 ### Slicing arrays
@@ -158,13 +95,12 @@ Copying overlapping ranges, e.g. `a[1..2] = a[0..1]` is undefined behaviour.
     
 ### Conversion list
 
-|  |       int[4] | int[*] | int[] | int[4]* | int* |
-|:-:|:-:|:-:|:-:|:-:|:-:|
-| int[4] | copy | - | - | - | - |
-| int[*] | copy | assign | cast | cast | cast |
-| int[] | - | assign | assign | assign | - |
-| int[4]* | - | cast | cast | assign | cast |
-| int* | - | assign | assign | assign | assign |
+| | int[4] | int[] | int[4]* | int* |
+|:-:|:-:|:-:|:-:|:-:|
+| int[4] | copy | - | - | - |
+| int[] | - | assign | assign | - |
+| int[4]* | - | cast | assign | cast |
+| int* | - | assign | assign | assign |
 
 Note that all casts above are inherently unsafe and will only work if the type cast is indeed compatible.
 
@@ -176,21 +112,14 @@ int[4]* b = &a;
 int* c = b;
 // Safe cast:
 int[4]* d = (int[4]*)(c); 
-// Faulty code with undefined behaviour:
-int[*] e = (int[*])(c); 
+int e = 12;
+int* f = &e;
+// Incorrect, but not checked
+int[4]* g = (int[4]*)(f);
+// Also incorrect but not checked.
+int[] h = f[0..2];
 ```
 
-```
-int[*] a = @malloc(int[*]);
-a += 11;
-a += 12;
-a += 13;
-// Safe (2 is less than the dynamic size of a)
-int[2]* b =(int[2]*)(a);
-// Faulty code with undefined behaviour
-// (4 is greater than the dynamic size of a)
-int[4]* c = (int[4]*)(a);
-```
 
 #### Internals
 
@@ -218,7 +147,9 @@ for (int x : a)
 }
 ```
 
-It is possible for any type to get this iteration by implementing the macro `iterator(<Type> *type : value)`:
+*NOTE THAT THE SYNTAX WILL BE REVISED*
+
+It is possible for any type to get this iteration by implementing the generic `foreach(<Type> *type; @body(value))`:
 
 ```
 struct Vector
@@ -227,15 +158,15 @@ struct Vector
     int* elements;
 }
 
-macro Vector.iterator(Vector *vector : value)
+generic foreach(Vector* vector; @body)
 {
-    for (int i = 0; i < vector.size; i++)
+    for (usize i = 0; i < vector.size; i++)
     {
-        yield value;
+        @body(vector.elements[i]);
     }
 }
 
-Vector v = Vector.new();
+Vector v;
 v.add(3);
 v.add(7);
 

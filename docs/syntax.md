@@ -6,17 +6,16 @@
 The following are 73 reserved keywords used by C3:
 
 as, auto, asm, attribute, break, case, cast, catch, const, continue,
-default, defer, do, else, enum, error, false, for, func,
+default, defer, define, do, else, enum, error, false, for, func,
 generic, if, import, local, macro, module, nextcase, nil,
-public, return, struct, switch, throw, throws, true, 
-try, type, typedef, union, until, var, void, volatile, while,
-f32, f64, float, double, 
-u1, i8, i16, i32, i64, u8, u16, u32, u64, 
+private, return, struct, switch, throw, throws, true, 
+try, type, union, until, var, void, volatile, while,
+float, double 
 char, bool, byte, short, ushort, int, uint, long, ulong, isize, usize,
 
 
 In addition to those, the following 12 are reserved but currently not used:
-f16, f128, f256, half, quad, i128, i256, u128, u256, alias
+half, quad
  
 For macros the the following 9 `@` identifiers are reserved as keywords:
 @param, @throws, @return, @ensure, @require, @pure, @const, @reqparse, @deprecated

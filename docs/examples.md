@@ -15,7 +15,8 @@ func void if_example(int a)
 
 #####for-loop
 ```
-func void example_for() {
+func void example_for() 
+{
     // the for-loop is the same as C99. 
     for (int i = 0; i < 10; i++) 
     {
@@ -443,32 +444,36 @@ func void test()
 Generic modules implements a generic system.
 
 ```
-module stack(Type)
+module stack <Type>
+import std::mem;
 
 struct Stack
 {
-    Type[] elems;
+    usize capacity;
+    usize size;
+    Type* elems;
 }
 
-func Stack.init(Stack* this)
-{
-    this.elems = nil;
-}
 
 func void Stack.push(Stack* this, Type element)
 {
-    this.elems.add(element);
+    if (this.capacity == this.size)
+    {
+        this.capacity *= 2;
+        this.elems = mem::realloc(this.elems, Type.sizeof * this.capacity);
+    }
+    this.elems[this.size++] = element;
 }
 
-func $A Stack.pop(Stack* this)
+func Type Stack.pop(Stack* this)
 {
-    assert(this.elems.size > 0);
-    this.elems.removeLast();
+    assert(this.size > 0);
+    return this.elems[--this.size];
 }
 
 func bool Stack.empty(Stack* this)
 {
-    return this.elems.size == 0;
+    return !this.size;
 }
 ```
 
@@ -477,13 +482,12 @@ Testing it out:
 ```
 import stack;
 
-define Stack(int) as IntStack;
-define Stack(double) as DoubleStack;
+define IntStack = Stack<int>;
+define DoubleStack = Stack<double>;
 
 func void test()
 {
     IntStack stack;
-    stack.init();
     stack.push(1);
     stack.push(2);
     // Prints pop: 2
@@ -492,7 +496,6 @@ func void test()
     printf("pop: %d\n", stack.pop())
     
     DoubleStack dstack;
-    dstack.init();
     dstack.push(2.3);
     dstack.push(3.141);
     dstack.push(1.1235)

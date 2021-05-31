@@ -33,158 +33,20 @@ Emits a weak symbol rather than a global.
 Prevents the union or struct from being statically allocated by other modules. In the case of enums,
 prevents the enum from being converted to a value.
 
-## New attributes
+## User defined attributes
 
-The basic syntax for creating a new attribute is `attribute <declaration type> @<name>`. The type category is one of `var`, `const`, `func`, `union`, `struct`, `enum`, `typedef` and `error`.
-   
-For example:
+User defined attributes are intended for conditional application of built-in attributes.
  
 ```
-attribute func myattribute;
+define @MyAttribute = @noreturn @inline;
 
-func void foo() myattribute
-{ ...  }
+// The following two are equivalent:
+func void foo() @MyAttribute { ... }
+func void foo() @noreturn @inline { ... }
 ```
 
-### Multi type attributes
-
-It's possible to make an attribute match more than a single declaration type, by separating them using comma:
+A user defined attribute may also be completely empty:
 
 ```
-attribute func, enum, struct fooattribute;
-
-func void foo() @fooattribute
-{ 
-    /* ... */  
-}
-
-struct Bar @fooattribute
-{ 
-    int i;
-}
-```
-
-### Arguments
-
-An attribute may take a number of arguments, similar to a function. All such arguments must be compile time constants.
-
-```
-attribute func intdec(int i)
-
-void foo() @intdec(2)
-{ ... }
-```
-
-Just like for function calls, the arguments may have defaults, use named arguments etc. However, varargs are not allowed.
-
-```
-attribute func dec(int d, int i = 0, float f = 1.0)
-
-void foo() @dec(2)
-{ ... }
-
-void bar() @dec(7, f = 3.0)
-{ ... }
-```
-
-    
-## Compile time attribute access
-
-What's useful about attributes is that they can be accessed during compile
-time:
-
-```
-macro fooCheck($a)
-{
-    $if (@defined($a.foo)
-    {
-        return "Was fooed";
-    }
-    return "Ok";
-}
-
-struct TestA
-{
-    int i;
-}
-
-struct TestB @foo
-{
-    float f;
-}
-
-func void test()
-{
-    printf("Check TestA: " @fooCheck(TestA) "\n");    
-    printf("Check TestB: " @fooCheck(TestB) "\n");
-    // Prints:
-    // Check TestA: Ok
-    // Check TestB: Was fooed
-}
-```
-
-The values may be recovered:
-
-It's also possible to get hold of the values:
-
-```
-attribute func myvar(int i = 0);
-
-func void test() @myvar(200) 
-{ 
-    /* ... */
-}
-
-func void test()
-{
-    printf("%d", test.myvar.i); // Prints 200
-}
-```
-
-## Bundled attributes
-
-It's also possible to create bundles of attributes, that simply contain other attributes. Unlike a normal attribute, an attribute bundle is a simple alias, so it has no real compile time information.
-
-```
-attribute func foodec;
-attribute func bardec(int i = 0);
-
-attribute mixdec alias foodec, bardec(3);
-
-// As if we had added foodec, bardec(3)
-func void test() @mixdec
-{
-    /* ... */
-}
-```
-
-A attribute bundle might also be completely empty.
-
-## Iterating over attributes
-
-Within a macro it's possible to iterate in compile time over all non-alias attributes 
-using `$each`.
-
-```
-attribute struct special;
-
-struct TestA @special { int i; }
-struct TestB { float f; }
-struct TestC @special { float f; }
-
-macro @specialStructs()
-{
-    string[+] res = {};
-    $each(@special as $x)
-    {
-        res += @name($x);
-    }
-    // The above expands to:
-    // res += "TestA";
-    // res += "TestC";    
-    return res;
-}
-
-// SPECIAL_STRUCTS = { "TestA", "TestB" }
-const string[] SPECIAL_STRUCTS = @specialStructs();
+define @MyAttributeEmpty = void;
 ```

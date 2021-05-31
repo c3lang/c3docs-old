@@ -1,5 +1,12 @@
 # Change log
 
+##### Revision 2020-05-31
+- Removal of vararray type.
+- Updated user defined attributes.
+- Removed incremental arrays.
+- Added information on `define`.
+- Added private modules and import.
+
 ##### Revision 2020-05-18
 - Change cast to (type)(expression)
 

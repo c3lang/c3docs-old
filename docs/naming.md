@@ -6,10 +6,10 @@ As a basic rule, all identifiers are limited to a-z, A-Z, 0-9 and `_`. The initi
 
 ### Structs, unions, enums and errors
 
-All user defined types must start with A-Z after any optional initial `_` and include at least 1 lower case letter. `Bar`, `_T_i12` and `TTi` are all valid names. `_1`, `bAR` and `BAR` are not. For C-compatibility it's possible to alias the type to a C name using the attribute "cname".
+All user defined types must start with A-Z after any optional initial `_` and include at least 1 lower case letter. `Bar`, `_T_i12` and `TTi` are all valid names. `_1`, `bAR` and `BAR` are not. For C-compatibility it's possible to alias the type to a external name using the attribute "externname".
 
 ```
-struct Foo @cname("foo")
+struct Foo @externname("foo")
 {
     int x;
     Bar bar;

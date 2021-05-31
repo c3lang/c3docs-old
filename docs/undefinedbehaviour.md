@@ -53,11 +53,12 @@ The following operations cause undefined behaviour in release builds of C3:
 
 Some behaviour is allowed to differ between implementations and platforms.
 
-| operation | will trap in safe builds | possible behaviour |
+| operation | will trap in safe builds | permitted behaviour |
 | --------- | :----------------------: | :----------------: |
 | comparing pointers of different provenance | Optional | Any result |
 | subtracting pointers of different provenance | Optional | Any result |
 | shifting by more or equal to the bit width | Yes | Any result |
+| shifting by negative amount | Yes | Any result |
 | conversion floating point <-> integer type is out of range | Optional | Any result |
 | conversion between pointer types produces one with incorrect alignment | Optional | Any result / Error  |
 | calling a function through a function pointer that does not match the function | Optional | Any result / Error |

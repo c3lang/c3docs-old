@@ -67,26 +67,29 @@ import networking;
 
 ## Visibility
 
-All files in the same module share the same global declaration namespace. However, by default a function is not visible outside the module. To make the symbol visible outside the module, use the keyword `public`.
+All files in the same module share the same global declaration namespace.
+By default a symbol is visible to anyone importing a module.
+To make a symbol only visible inside the module, use the keyword 
+`private`.
 
 ```
 module foo;
 
-public func void init() { .. }
+func void init() { .. }
 
-func void open() { .. }
+private func void open() { .. }
 ```
 
-In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it isn't specified as public.
+In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it is specified as `private`.
 
 ## Overriding symbol visibility rules
 
-By using `as module` after an import, it's possible to access another module´s private symbols.
-Many other module systems have hierarchal visibility rules, but the `as module` feature allows 
+By using `private` after `import`, it's possible to access another module´s private symbols.
+Many other module systems have hierarchal visibility rules, but the `import private` feature allows 
 visibility to be manipulated in a more ad-hoc manner without imposing hard rules.
 
 For example, you may provide a library with two modules: "mylib::net" and "mylib::file" - which both use functions
-and types from a common "mylib::internals" module. The two libraries use `import mylib::internals as module`
+and types from a common "mylib::internals" module. The two libraries use `import private mylib::internals`
 to access this module's private functions and type. To an external user of the library, the "mylib::internals"
 does not seem to exist, but inside of your library you use it as a shared dependency.
 
@@ -95,23 +98,40 @@ A simple example:
 // File a.c3
 module a;
 
-func void aFunction() { ... }
+private func void aFunction() { ... }
 
 // File b.c3
 module b;
 
-func void bFunction() { ... }
+private func void bFunction() { ... }
 
 // File c.c3
 module c;
 import a;
-import b as module;
+import private b;
 
 func void test() 
 {
-  a::aFunction(); // <-- error, aFunction not public
-  b::bFunction(); // Allowed since import was "as module"
+  a::aFunction(); // <-- error, aFunction is private
+  b::bFunction(); // Allowed since import was "private"
 }
+```
+
+## Private modules
+
+Modules may be declared using `private`, this makes the whole module private. Such a module must
+always be imported using `import private`.
+
+```
+module private foo;
+...
+
+module bar;
+import private foo; // Allowed
+...
+
+module baz;
+import foo; // Error, trying to import private module. 
 ```
 
 ## Using functions and types from other modules
@@ -128,21 +148,21 @@ As a rule, functions, macros, constants, variables and types in the same module 
 
 module a;
 
-public struct Foo { ... }
-public struct Bar { ... }
-public struct TheAStruct { ... }
+struct Foo { ... }
+struct Bar { ... }
+struct TheAStruct { ... }
 
-public func void anAFunction() { ... }
+func void anAFunction() { ... }
 
 // File b.c3
 
 module b;
 
-public struct Foo { ... }
-public struct Bar { ... }
-public struct TheBStruct { ... }
+struct Foo { ... }
+struct Bar { ... }
+struct TheBStruct { ... }
 
-public func void aBFunction() { ... }
+func void aBFunction() { ... }
 
 // File c.c3
 module c;
@@ -195,7 +215,7 @@ func void test()
 
 File `Foo.x`
 ```
-public func testX(int i) 
+func testX(int i) 
 { 
     return i + 1; 
 }
@@ -206,7 +226,7 @@ The result is as if `Foo.c3` contained the following:
 ```
 module foo;
 
-public func testX(int i) 
+func testX(int i) 
 { 
     return i + 1; 
 }
