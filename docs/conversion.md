@@ -23,7 +23,7 @@ The left hand side of an assignment, or the parameter type in a call is known as
 Like C, C3 uses implicit promotion of integer and floating point variables:
 
 1. For any floating point type with a bit width smaller than 32 bits, widen to `float`. E.g. `half -> float`
-2. After 1, for any floatimg point type with a bit width smaller than the *target type* widen to the target type.
+2. After 1, for any floating point type with a bit width smaller than the *target type* widen to the target type.
 3. For an integer type smaller than the *minimum arithmetic width*, promote the value to a signed integer of the *minimum arithmetic width* (this usually corresponds to a c int). E.g. `uchar -> int`
 4. After 3, for an integer type smaller than the *target type*, promote the value to an integer of the the same bit width. E.g. `ulong = int + int -> ulong = long + long`
 
@@ -59,7 +59,7 @@ Pointer conversion between types usually need explicit casts. The exception is `
 Implicit narrowing is only allowed for floating point values and integer types. The following must hold:
 
 1. To narrow to a floating point type, all sub expressions must be integers or a floating point as narrow or more narrow than the target type.
-2. To narrow to an integer type, all sub expressions must be integers and as narrow or mor narrow than the target type, ignoring signedness.
+2. To narrow to an integer type, all sub expressions must be integers and as narrow or narrower than the target type, ignoring signedness.
 
 ```
 half h = 12.0;
