@@ -65,6 +65,8 @@ macro z(implicit ptr)
 int z = @z();
 ```
 
+*NOTE* This is not currenctly implemented and pay possibly not be included.
+
 ### Reference arguments
 
 ```
@@ -106,7 +108,7 @@ FOR_EACH(it, list)
 
 
 // C3
-macro for_each(list, macro void(it) @body)
+macro for_each(list; @body(it))
 {
     for (typeof(list) x = list; x; x = x->next) @body(x);
 }
@@ -124,9 +126,9 @@ macro for_each(list, macro void(it) @body)
 #define offsetof(T, field) (size_t)(&((T*)0)->field)
 
 // C3
-macro offsetof($Type, $field)
+macro offsetof($Type, #field)
 {
-    return (size_t)(&((T*)0)->field);
+    return (size_t)(&((T*)0)->#field);
 }
 ```
 
@@ -269,7 +271,7 @@ Here's an example to illustrate it the use:
  *
  * @ensure parse(int i = a.len), parse(value2 = a[i])
  */
-macro foreach(auto a, macro void(value, value) foo)
+macro foreach(a; @body(value, value))
 {
     for (int i = 0; i < a.len; i++)
     {
@@ -340,7 +342,7 @@ The maximum recursion depth is limited to the `macro-recursion-depth` build sett
 
 ## Macro directives
 
-Inside of a macro, we can use the compile time statements `$if`, `$each` and `$switch`. Macros may also be recursively invoked. As previously mentioned, `$if` and `$switch` may also be invoked on the top level.
+Inside of a macro, we can use the compile time statements `$if`, `$for` and `$switch`. Macros may also be recursively invoked. As previously mentioned, `$if` and `$switch` may also be invoked on the top level.
 
 ### $if, $else and $elif
 
@@ -368,18 +370,18 @@ func void test()
 }
 ```
 
-### Loops using $foreach
+### Loops using $foreach and $for
 
-`$foreach (<range> as <variable>): ... $endforeach;` allows compile time recursion. `$each` may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.
+`$foreach (<range> : <variable>): ... $endforeach;` allows compile time recursion. `$foreach` may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.
 
 
-Looping over ranges:
+Compile time looping:
 ```
 macro @foo($a)
 {
-    $foreach (0..$a as $x):
+    $for ($x = 0; $x < $a; $x++):
         printf("%d\n", $x);     
-    $endforeach;
+    $endfor;
 }
 
 func void test()
@@ -393,9 +395,9 @@ func void test()
 
 Looping over enums:
 ```
-macro @foo_enum($some_enum)
+macro @foo_enum($SomeEnum)
 {
-    $foreach($some_enum as $x):
+    $foreach ($x : $SomeEnum.elements):
         printf("%d\n", (int)($x));     
     $endforeach;
 }
@@ -420,7 +422,7 @@ It's not possible to compile partial statements.
 
 ### Switching on type with $switch
 
-It's possible to switch on type, similar to generic functions, but used internal to the macro:
+It's possible to switch on type:
 
 ```
 macro void foo(a, b)
@@ -505,7 +507,7 @@ Conditional compilation is done with $if and $else, which works just like
 inside of functions.
 
 ```
-$if (@defined($os) && $os == 'WIN32'):
+$if ($defined($os) && $os == 'WIN32'):
 
 func void doSomethingWin32Specific()
 {

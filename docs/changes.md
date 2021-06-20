@@ -1,5 +1,13 @@
 # Change log
 
+##### Revision 2020-06-20
+- Updated array layout.
+- Revised macros for foreach.
+- Removed old generic functions. 
+- Added new ideas around generic, macros
+- Changed macro body definition syntax.
+- Introduced both $for and $foreach.
+
 ##### Revision 2020-05-31
 - Removal of vararray type.
 - Updated user defined attributes.

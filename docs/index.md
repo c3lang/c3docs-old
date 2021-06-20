@@ -8,7 +8,7 @@ It has since departed substantially in regard to error handling, macros, generic
 
 The C3 compiler can be found on github: [https://github.com/c3lang/c3c](https://github.com/c3lang/c3c).
 
-Last updated: [Revision 2020-05-31](changes).
+Last updated: [Revision 2020-06-20](changes).
 
 ## Features
 
@@ -17,7 +17,7 @@ Last updated: [Revision 2020-05-31](changes).
 - Generic modules
 - Zero overhead errors
 - Struct subtyping 
-- Built-in safe arrays
+- Safe array access using sub arrays
 - Zero cost simple gradual & opt-in pre/post conditions. [IN PROGRESS]
 - High level containers and string handling. [IN PROGRESS]
 - C to C3 conversion (for a subset of C) *TODO*

@@ -28,8 +28,8 @@ Basic types are divided into floating point types, and integer types. Integer ty
 | Name         | bit size | signed |
 | ------------ | --------:|:------:|
 | bool*        | 1        | no     |
-| char         | 8        | yes    |
-| byte         | 8        | no     |
+| ichar        | 8        | yes    |
+| char         | 8        | no     |
 | short        | 16       | yes    |
 | ushort       | 16       | no     |
 | int          | 32       | yes    |

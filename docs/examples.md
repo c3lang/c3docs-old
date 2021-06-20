@@ -413,7 +413,7 @@ func void test()
 }
 ```
 
-##### Value functions
+##### Type methods
 
 It's possible to namespace functions with a union, struct or enum type to enable "dot syntax" calls:
 

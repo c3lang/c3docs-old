@@ -106,7 +106,7 @@ The return parameter may be a *failable* – a type suffixed by `!` indicating t
 The below example might throw errors from both the `SomeError` error domain as well as the `OtherError` error domain.
 
 ```
-func double! testError() throws
+func double! testError()
 {
     double val = random_value();_
     if (val >= 0.2) return BadJossError!;

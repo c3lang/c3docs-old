@@ -37,6 +37,200 @@ Follow Go Modules:
 3. Dependency resolution per major library version is done by picking the minimal version. E.g. module Foo requires Bar 1.5+ and module Baz requires 1.3+. Our module using Bar and Baz will resolve the minimal version to 1.3. This is the version that will be used. Note that if Foo used 2.5+, then both Bar 2.5 and 1.3 would be required.
 
 
+## Limited operator overloading
+
+Use method macros to introduce some operator overloading and related functionality:
+
+```
+macro Foo._foreach_index(Foo *f; index, value)
+{
+    $IndexType = typeof(index);
+    usize len = f.len;
+    for (usize i = 0; i < len; i++)
+    {
+        yield ($IndexType)(i), f.values[i];
+    }
+}
+
+macro Foo._initializer_list(Foo *f, $list)
+{
+    $foreach ($i : $list):
+        f.add($i);
+    $endforeach;    
+}
+```
+
+The above would allow:
+```c
+Foo f = { "a", "b", "c" };
+foreach(int i, value : f)
+{
+    printf("%d: %s\n", i, f);
+}
+```
+Which is transformed during macro expansion to:
+
+```c
+Foo f;
+f.add("a");
+f.add("b");
+f.add("c");
+usize len = f.len;
+for (usize i = 0; i < len; i++)
+{
+    printf("%d: %s\n", (int)i, f.values[i]);
+}
+```
+
+## Generic as keyword for polymorphic functions
+
+For macros that essentially are polymorphic functions, we could use the keyword "generic" instead:
+
+```c
+macro swap(&a, &b) { ... } // Cannot be generic, captures are not allowed.
+macro max(a, b) { ... } // Can be generic
+macro doSomething(a, #a) { ... } // Cannot be generic, uses unevaluated expressions
+macro malloc($Type) { ... } // Can be generic.
+
+// Example of "max":
+generic max(a, b)
+{
+    return a > b ? b : a;
+}
+// Example of "malloc"
+generic malloc($Type)
+{
+    _builtin_malloc($Type.sizeof);
+}
+```
+
+Invocation changes:
+```c
+int max_value = @max(foo(), bar()); // macro
+int max_value = max(foo(), bar()); // generic
+```
+
+This would furthermore remove the "!" addition for escaping macros, adding it as an attribute:
+
+```c
+macro returnme() @escaping
+{
+    return;
+}
+```
+
+Macros could then also more natural invoke defer:
+
+```c
+macro deferclose() @scopeless
+{
+    defer close();    
+}
+```
+
+Both would be invoked:
+
+```c
+@deferclose();
+@returnme();
+```
+
+It would be possible to define a generic, such a generic could be taken the address of:
+
+```c
+#define intmax = max(int, int);
+#define TwoIntFunc = func int(int, int);
+TwoIntFunc x = &intmax;
+```
+
+## Change the nested comment
+
+Only allow nested comments to start a new line, and change the syntax:
+
+```
+// Old:
+int x; /+
+int y; /+
+y = y + 1;
+x = x + 1; +/
+foo(x); +/
+
+// New
+int x;
+/--->
+int y;
+/-->
+y = y + 1; 
+x = x + 1; 
+/<--
+foo();
+/<---
+
+// or
+int x;
+/+++
+int y;
+/+++
+y = y + 1; 
+x = x + 1; 
++++/
+foo();
++++/
+
+// or
+int x;
+/++++
+int y;
+/++
+y = y + 1; 
+x = x + 1; 
+++/
+foo();
+++++/
+
+// or
+
+int x;
+
+/$ FOO:
+int y;
+
+/$ BAR:
+y = y + 1; 
+x = x + 1; 
+/$$ BAR;
+
+foo();
+
+/$$ FOO;
+```
+
+## Allow slicing of user defined containers
+
+```c
+// Supporting the full set.
+macro Foo._slice(Foo* foo, a, b, $a_from_end, $b_from_end)
+{
+    $if ($a_from_end):
+        $if ($b_from_end):
+            return foo.values[^a..^b];
+        $endif:
+        return foo.values[^a..b];
+    $endif;    
+    $if ($b_from_end):
+        return foo.values[a..^b];
+    $endif;
+    return foo.values[a..b];    
+}
+
+// Not supporting reverse
+macro Bar._slice(Bar *bar, a, b, $a_from_end, $b_from_end)
+{
+    $assert(!$a_from_end && !$b_from_end, "Slicing from the end is not possible for Bar types.");
+    return bar.valyes[a..b];
+}
+```
+
 ## Allow narrowing conversions for floats
 
 Narrowing conversions for double -> float are common and might not be sufficiently important to do explicitly.
@@ -44,10 +238,6 @@ Narrowing conversions for double -> float are common and might not be sufficient
 ## Tests built in
 
 Unit tests built in as an integral part of the language like D.
-
-## Allow variable alias
-
-Possibility to alias a variable name.
 
 ## Attribute to ensure alignment
 
@@ -77,28 +267,6 @@ The ability to run a piece of code at compile time and include the result in the
 ```
 @run_include("foo.sh", $some_param, "-x", $another_param);
 ```
-
-## Type functions
-
-Since static methods are out, it's natural to allow static values from the type, e.g.
-
-```
-struct Foo { ... }
-
-...
-
-Foo *foo = malloc(Foo.sizeof)
-```
-
-There are a lot of type functions possible:
-
-- sizeof
-- offsetof
-- name
-- description
-- elements
-
-There doesn't seem to be a need for applying this to non base type, but it should probably be allowed, e.g. `(Foo*).sizeof`
 
 
 ## Macro text interpolation
@@ -168,71 +336,6 @@ func Foo.next(Foo*)
     i++;
 }
 ```
-
-
-## Managed pointer variables
-
-Managed pointer variables are introduced using `@` after the type, rather than `*` e.g. `Foo@ f`. A managed variable will automatically call the type's `release` member function on its value when the variable goes out of scope or is reassigned. If there is no `release` function, then `free` is called.
-
-
-```
-Foo@ f = Foo.alloc(); // * -> @ no retain.
-Foo@ b = f;           // => f.retain(); b = f;
-f = nil;              // => f.release(); f = nil;
-```
-
-Any managed variable that goes out of the scope will automatically invoke `release`, as if the pointer was set to `nil`.
-
-```
-{
-    Foo@ b = Foo.alloc();
-} // Automatic invocation of b.release();
-```
-
-In order to return a managed pointer that can be used as a temporary, it's often convenient to mark the return value as managed.
-
-```
-func Foo@ createFoo()
-{
-    return Foo.alloc();
-}
-
-createFoo(); // Implicitly introduces a deferred release.
-```
-
-If we assign a managed pointer to a variable, the release/retain is elided
-
-```
-// The following becomes f1 = createFoo() - no deferred release or retains.
-Foo@ f1 = createFoo(); 
-```
-
-It's possible to manually manage a managed pointer:
-
-```
-Foo* f2 = createFoo().retain();
-f2.release(); // Required to prevent leaks.
-```
-
-A managed pointer may safely assigned to a regular pointer as long as it's not retained outside of the scope.
-
-```
-{
-    Foo* f3 = createFoo(); 
-    printf("%d", f3.someValue);
-    // Safe, since f3 isn't actually used after the scope.
-}
-
-Foo* unsafeFoo;
-{
-    unsafeFoo = createFoo();
-}
-// <- access to unsafeFoo at this point will likely break things.
-```
-
-### Managed variables not pointers
-
-Managed variables should not be confused with automatic reference counting and similar. It is not possible to – for example – to make a struct member a "managed" pointer. It is strictly limited to variables and return values.
 
 
 ## C interop

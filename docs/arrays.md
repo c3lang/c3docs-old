@@ -123,21 +123,21 @@ int[] h = f[0..2];
 
 #### Internals
 
-Internally the layout of a slice is guaranteed to be `struct { <type>* ptrToArray; usize arraySize; }`.
+Internally the layout of a slice is guaranteed to be `struct { usize arraySize; <type>* ptrToArray; }`.
 
 There is a built in struct `__ArrayType_C3` which has the exact data layout of the fat array pointers. It is defined to be
 
 ```
 struct __ArrayType_C3 
 { 
-    void* ptrToArray;
     usize arraySize;
+    void* ptrToArray;
 }
 ```
 
 ## Iteration over arrays
 
-Slices, fixed and variable arrays may all be iterated over using `for (Type x : array)`:
+Slices, fixed and variable arrays may all be iterated over using `foreach (Type x : array)`:
 
 ```
 int[4] a = { 1, 2, 3, 5 };
@@ -149,7 +149,7 @@ for (int x : a)
 
 *NOTE THAT THE SYNTAX WILL BE REVISED*
 
-It is possible for any type to get this iteration by implementing the generic `foreach(<Type> *type; @body(value))`:
+It is possible for any type to get this iteration by implementing the method macros `_foreach` `_foreach_index`:
 
 ```
 struct Vector
@@ -158,12 +158,30 @@ struct Vector
     int* elements;
 }
 
-generic foreach(Vector* vector; @body)
+macro Vector._foreach_index(Vector* vector, $by_ref, $reverse; @body(index, value))
 {
-    for (usize i = 0; i < vector.size; i++)
-    {
-        @body(vector.elements[i]);
-    }
+    usize size = vector.size;
+    $IndexTyoe = typeof(index);
+    $if ($reverse):
+        usize i = size;
+        while (i-- >= 0)
+        {
+            $if ($by_ref):
+                @body(($IndexType)(i), &vector.elements[i]));
+            $else:
+                @body(($IndexType)(i), vector.elements[i]));
+            $endif;    
+        }
+    $else:
+        for (usize i = 0; i < size; i++)
+        {
+            $if ($by_ref):
+                @body(($IndexType)(i), &vector.elements[i]));
+            $else:
+                @body(($IndexType)(i), vector.elements[i]));
+            $endif;    
+        }
+    $endif;    
 }
 
 Vector v;
