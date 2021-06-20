@@ -96,14 +96,6 @@
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Generics</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#generic-functions">Generic functions</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#shorthand">Shorthand</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#generic-modules">Generic modules</a>
-    </li>
     </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../macros/">Macros</a>
@@ -186,96 +178,6 @@
             <div class="section">
               
                 <h1 id="generics">Generics</h1>
-<p>Generic functionality is mostly provided by macros and generic modules. Bridging the gap is generic functions, that allow a limited for of overloading.</p>
-<h2 id="generic-functions">Generic functions</h2>
-<p>Generic functions is a specialized type of macros. They allow overloading using a common symbol, just like C11's <code>_Generic</code>:</p>
-<pre><code>generic abs(x)
-{
-    case double:
-        return fabs(x);
-    case int:
-        return abs(x); // Redefining abs(!)
-}
-</code></pre>
-<p>Unlike a regular macro, a generic function is not invoked with @. It may also be extended by other packages / files:</p>
-<pre><code>// File 1
-module foo;
-generic abs(x)
-{
-    case double:
-        return fabs(x);
-    case int:
-        return abs(x);
-}
-
-// File 2
-module bar;
-generic foo::abs(x)
-{
-    case long:
-        return absl(x);
-    case int: // Compile time error, already defined
-        return abs(x);
-}
-</code></pre>
-<p>It is possible to dispatch on multiple arguments:</p>
-<pre><code>module foo;
-generic add(x, y)
-{
-    case double, double:
-        return x + y;
-    case int, double:
-        return (double)x + y;
-}
-</code></pre>
-<p>Generics can also be used for overloading operators:</p>
-<pre><code>generic operator_add(x, y)
-{
-    case vector3, vector3:
-        return vector_add(x, y);
-}
-
-generic operator_index(x, y)
-{
-    case DynArray, int:
-        return x.get(y); // Enables foo[12]
-}
-
-generic operator_index_assign(x, y, z)
-{
-    case DynArray, int:
-        return x.set(y, z); // Enables foo[12] = 2
-}
-</code></pre>
-<p>Note that generics is actually a macro expansion. Consequently this is possible:</p>
-<pre><code>generic weird_fun(x)
-{
-    case int:
-        printf(&quot;%d&quot;, x);
-    case Foo:
-        while (foo.bar &gt; 0)
-        {
-            foo.bar--;
-            printf(&quot;Hi&quot;);
-        }
-}
-
-void func test()
-{
-    Foo foo;
-    weird_fun(2); // Prints &quot;2&quot;
-    foo.bar = 4;
-    wierd_fun(foo);  // Prints &quot;HiHiHiHi&quot;
-}
-</code></pre>
-<h4 id="shorthand">Shorthand</h4>
-<p>There is also a shorthand for declaring generics that only match a single type – it's done by declaring the types directly in the header:</p>
-<pre><code>generic add(double x, double y)
-{
-    return x + y;
-}
-</code></pre>
-<h2 id="generic-modules">Generic modules</h2>
 <p>Generic modules are parameterized modules that allow functionality for arbitrary types.</p>
 <p>For generic modules, the generic parameters follows the module name:</p>
 <pre><code>// TypeA, TypeB, TypeC are generic parameters.
@@ -321,7 +223,8 @@ module vector &lt;TypeA, TypeB, TypeC&gt;;
 define testFunction = vector::testFunc&lt;Bar, float, int&gt;;
 
 // This would give the error 
-// --&gt; Illegal arguments for generic module vector, breaks requirement 'Bar' = 'float' + 'int'
+// --&gt; Illegal arguments for generic module vector, 
+// breaks requirement 'Bar' = 'float' + 'int'
 </code></pre>
               
             </div>

@@ -248,7 +248,7 @@ int a;    // Fine
 </code></pre>
 <h5 id="integer-promotions-rules-and-safe-signed-unsigned-comparisons">Integer promotions rules and safe signed-unsigned comparisons</h5>
 <p>Promotion rules for integer types are different from C. Most prominently, C3 does left side widening in the case of <code>long x = intValue1 + intValue2</code>. In C this becomes:
-<code>long x = (long)(intValue1 + intValue2), whereas in C3 it would behaves as</code>long x = (long)intValue1 + (long)intValue2` to minimize chance of overflow. (read more on the <a href="../conversion">conversion page</a>. C3 also adds <em>safe signed-unsigned comparisons</em>, this means that comparing signed and unsigned values will always yield the correct result:</p>
+<code>long x = (long)(intValue1 + intValue2)</code>, whereas in C3 it would behaves as <code>long x = (long)intValue1 + (long)intValue2</code> to minimize chance of overflow. (read more on the <a href="../conversion">conversion page</a>. C3 also adds <em>safe signed-unsigned comparisons</em>: this means that comparing signed and unsigned values will always yield the correct result:</p>
 <pre><code>// The code below will print &quot;Hello C3!&quot; on C3 and &quot;Hello C!&quot; in C.
 int i = -1;
 uint j = 1;

@@ -138,7 +138,7 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#if-else-and-elif">$if, $else and $elif</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#loops-using-foreach">Loops using $foreach</a>
+    <li class="toctree-l3"><a class="reference internal" href="#loops-using-foreach-and-for">Loops using $foreach and $for</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#switching-on-type-with-switch">Switching on type with $switch</a>
     </li>
@@ -287,6 +287,7 @@ macro z(implicit ptr)
 }
 int z = @z();
 </code></pre>
+<p><em>NOTE</em> This is not currenctly implemented and pay possibly not be included.</p>
 <h3 id="reference-arguments">Reference arguments</h3>
 <pre><code>// C
 #define M(x, y) x = 2 * (y);
@@ -321,7 +322,7 @@ FOR_EACH(it, list)
 
 
 // C3
-macro for_each(list, macro void(it) @body)
+macro for_each(list; @body(it))
 {
     for (typeof(list) x = list; x; x = x-&gt;next) @body(x);
 }
@@ -336,9 +337,9 @@ macro for_each(list, macro void(it) @body)
 #define offsetof(T, field) (size_t)(&amp;((T*)0)-&gt;field)
 
 // C3
-macro offsetof($Type, $field)
+macro offsetof($Type, #field)
 {
-    return (size_t)(&amp;((T*)0)-&gt;field);
+    return (size_t)(&amp;((T*)0)-&gt;#field);
 }
 </code></pre>
 <h3 id="declaration-attributes">Declaration attributes</h3>
@@ -445,7 +446,7 @@ Foo f;
  *
  * @ensure parse(int i = a.len), parse(value2 = a[i])
  */
-macro foreach(auto a, macro void(value, value) foo)
+macro foreach(a; @body(value, value))
 {
     for (int i = 0; i &lt; a.len; i++)
     {
@@ -503,7 +504,7 @@ macro @squarePlusOne(x)
 </code></pre>
 <p>The maximum recursion depth is limited to the <code>macro-recursion-depth</code> build setting.</p>
 <h2 id="macro-directives">Macro directives</h2>
-<p>Inside of a macro, we can use the compile time statements <code>$if</code>, <code>$each</code> and <code>$switch</code>. Macros may also be recursively invoked. As previously mentioned, <code>$if</code> and <code>$switch</code> may also be invoked on the top level.</p>
+<p>Inside of a macro, we can use the compile time statements <code>$if</code>, <code>$for</code> and <code>$switch</code>. Macros may also be recursively invoked. As previously mentioned, <code>$if</code> and <code>$switch</code> may also be invoked on the top level.</p>
 <h3 id="if-else-and-elif">$if, $else and $elif</h3>
 <p><code>$if (&lt;const expr&gt;):</code> takes a compile time constant value and evaluates it to true or false.</p>
 <pre><code>macro @foo($x, $y)
@@ -526,14 +527,14 @@ func void test()
     @foo(FOO, a); // Allowed, expands to a += FOO * FOO;
 }
 </code></pre>
-<h3 id="loops-using-foreach">Loops using $foreach</h3>
-<p><code>$foreach (&lt;range&gt; as &lt;variable&gt;): ... $endforeach;</code> allows compile time recursion. <code>$each</code> may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.</p>
-<p>Looping over ranges:</p>
+<h3 id="loops-using-foreach-and-for">Loops using $foreach and $for</h3>
+<p><code>$foreach (&lt;range&gt; : &lt;variable&gt;): ... $endforeach;</code> allows compile time recursion. <code>$foreach</code> may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.</p>
+<p>Compile time looping:</p>
 <pre><code>macro @foo($a)
 {
-    $foreach (0..$a as $x):
+    $for ($x = 0; $x &lt; $a; $x++):
         printf(&quot;%d\n&quot;, $x);     
-    $endforeach;
+    $endfor;
 }
 
 func void test()
@@ -545,9 +546,9 @@ func void test()
 }
 </code></pre>
 <p>Looping over enums:</p>
-<pre><code>macro @foo_enum($some_enum)
+<pre><code>macro @foo_enum($SomeEnum)
 {
-    $foreach($some_enum as $x):
+    $foreach ($x : $SomeEnum.elements):
         printf(&quot;%d\n&quot;, (int)($x));     
     $endforeach;
 }
@@ -569,7 +570,7 @@ func void test()
 <p>An important thing to note is that the content of the <code>$each</code> body must be a complete statement.
 It's not possible to compile partial statements.</p>
 <h3 id="switching-on-type-with-switch">Switching on type with $switch</h3>
-<p>It's possible to switch on type, similar to generic functions, but used internal to the macro:</p>
+<p>It's possible to switch on type:</p>
 <pre><code>macro void foo(a, b)
 {
     $switch(a, b):
@@ -632,7 +633,7 @@ global compile time varibles, attributes and incremental arrays.</p>
 <h3 id="conditional-compilation_1">Conditional compilation</h3>
 <p>Conditional compilation is done with $if and $else, which works just like
 inside of functions.</p>
-<pre><code>$if (@defined($os) &amp;&amp; $os == 'WIN32'):
+<pre><code>$if ($defined($os) &amp;&amp; $os == 'WIN32'):
 
 func void doSomethingWin32Specific()
 {

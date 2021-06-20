@@ -311,16 +311,16 @@ int[4]* g = (int[4]*)(f);
 int[] h = f[0..2];
 </code></pre>
 <h4 id="internals">Internals</h4>
-<p>Internally the layout of a slice is guaranteed to be <code>struct { &lt;type&gt;* ptrToArray; usize arraySize; }</code>.</p>
+<p>Internally the layout of a slice is guaranteed to be <code>struct { usize arraySize; &lt;type&gt;* ptrToArray; }</code>.</p>
 <p>There is a built in struct <code>__ArrayType_C3</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
 <pre><code>struct __ArrayType_C3 
 { 
-    void* ptrToArray;
     usize arraySize;
+    void* ptrToArray;
 }
 </code></pre>
 <h2 id="iteration-over-arrays">Iteration over arrays</h2>
-<p>Slices, fixed and variable arrays may all be iterated over using <code>for (Type x : array)</code>:</p>
+<p>Slices, fixed and variable arrays may all be iterated over using <code>foreach (Type x : array)</code>:</p>
 <pre><code>int[4] a = { 1, 2, 3, 5 };
 for (int x : a)
 {
@@ -328,19 +328,37 @@ for (int x : a)
 }
 </code></pre>
 <p><em>NOTE THAT THE SYNTAX WILL BE REVISED</em></p>
-<p>It is possible for any type to get this iteration by implementing the generic <code>foreach(&lt;Type&gt; *type; @body(value))</code>:</p>
+<p>It is possible for any type to get this iteration by implementing the method macros <code>_foreach</code> <code>_foreach_index</code>:</p>
 <pre><code>struct Vector
 {
     usize size;
     int* elements;
 }
 
-generic foreach(Vector* vector; @body)
+macro Vector._foreach_index(Vector* vector, $by_ref, $reverse; @body(index, value))
 {
-    for (usize i = 0; i &lt; vector.size; i++)
-    {
-        @body(vector.elements[i]);
-    }
+    usize size = vector.size;
+    $IndexTyoe = typeof(index);
+    $if ($reverse):
+        usize i = size;
+        while (i-- &gt;= 0)
+        {
+            $if ($by_ref):
+                @body(($IndexType)(i), &amp;vector.elements[i]));
+            $else:
+                @body(($IndexType)(i), vector.elements[i]));
+            $endif;    
+        }
+    $else:
+        for (usize i = 0; i &lt; size; i++)
+        {
+            $if ($by_ref):
+                @body(($IndexType)(i), &amp;vector.elements[i]));
+            $else:
+                @body(($IndexType)(i), vector.elements[i]));
+            $endif;    
+        }
+    $endif;    
 }
 
 Vector v;
