@@ -188,7 +188,6 @@
                 <h1 id="statements">Statements</h1>
 <p>Statements largely work like in C, but with some additions.</p>
 <h2 id="expression-blocks">Expression blocks</h2>
-<p><em>NOTE: This syntax may be subject to change</em></p>
 <p>Expression blocks (delimited using <code>{| |}</code>) are compound statements that opens its own function scope. Jumps cannot be done into or out of a function block, and <code>return</code> exits the block, rather than the function as a whole.</p>
 <p>The function below prints <code>World!</code></p>
 <pre><code>func void test()
@@ -196,10 +195,10 @@
     int a = 0;
     {|
         if (a != 0) return;
-        printf(&quot;Hello &quot;);
+        io::printf(&quot;Hello &quot;);
         return;
     |};
-    printf(&quot;World!\n&quot;);
+    io::printf(&quot;World!\n&quot;);
 }
 </code></pre>
 <p>Expression blocks may also return values:</p>
@@ -210,7 +209,7 @@
         if (x == 0) return 100;
         return -x;
     |};            
-    printf(&quot;The result was %d\n&quot;, a);
+    io::printf(&quot;The result was %d\n&quot;, a);
 }
 </code></pre>
 <h2 id="labelled-break-and-continue">Labelled break and continue</h2>
@@ -222,7 +221,7 @@
     {
         while (1)
         {
-            printf(&quot;%d\n&quot;, i);
+            io::printf(&quot;%d\n&quot;, i);
             // Break out of the top if statement.
             if (i++ &gt; 10) break FOO;
         }
@@ -233,13 +232,13 @@
 <p>Do-while statements can skip the ending <code>while</code>. In that case it acts as if the <code>while</code> was <code>while(0)</code>:</p>
 <pre><code>do 
 {
-    printf(&quot;FOO\n&quot;);
+    io::printf(&quot;FOO\n&quot;);
 } while (0);
 
 // Equivalent to the above.
 do 
 {
-    printf(&quot;FOO\n&quot;);
+    io::printf(&quot;FOO\n&quot;);
 }
 </code></pre>
 <h2 id="nextcase-and-labelled-nextcase">Nextcase and labelled nextcase</h2>
@@ -264,7 +263,7 @@ do
     case 3:
         nextcase rand(); // Jump to random case
     default:
-        printf(&quot;Ended\n&quot;);
+        io::printf(&quot;Ended\n&quot;);
 }  
 </code></pre>
 <p>Which can be used as structured <code>goto</code> when creating state machines.</p>

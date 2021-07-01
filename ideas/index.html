@@ -114,7 +114,9 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#generic-as-keyword-for-polymorphic-functions">Generic as keyword for polymorphic functions</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#change-the-nested-comment">Change the nested comment</a>
+    <li class="toctree-l2"><a class="reference internal" href="#associative-array-literals">Associative array literals</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#array-literals">Array literals</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#allow-slicing-of-user-defined-containers">Allow slicing of user defined containers</a>
     </li>
@@ -357,63 +359,34 @@ int max_value = max(foo(), bar()); // generic
 #define TwoIntFunc = func int(int, int);
 TwoIntFunc x = &amp;intmax;
 </code></pre>
-<h2 id="change-the-nested-comment">Change the nested comment</h2>
-<p>Only allow nested comments to start a new line, and change the syntax:</p>
-<pre><code>// Old:
-int x; /+
-int y; /+
-y = y + 1;
-x = x + 1; +/
-foo(x); +/
+<h2 id="associative-array-literals">Associative array literals</h2>
+<p><em>Syntax and implementation under consideration!</em></p>
+<p>Associative arrays are mappings between keys and values:</p>
+<pre><code>IntStringMap x = { &quot;a&quot;: 2, &quot;b&quot;: { &quot;3&quot; : &quot;foo&quot; } };
+</code></pre>
+<p>To use an associative array, the struct needs to define
+the following generics: <code>_map_init()</code> and <code>_map_init_add</code>. In the example above, the actual code is compiled to:</p>
+<pre><code>IntStringMap x;
+_map_init(&amp;x);
+_map_init_add(&amp;x, &quot;a&quot;, 2);
+IntStringMap _temp;
+_map_init(&amp;_temp);
+_map_init_add(&amp;x, &quot;3&quot;, &quot;foo&quot;);
+_map_init_add(&amp;x, &quot;b&quot;, _temp);
+</code></pre>
+<h2 id="array-literals">Array literals</h2>
+<p>Arrays can be initialized using compound literals, but there is also a special format for array initialization using <code>[]</code>. In this case, the type is inferred. It allows uniform initialization of all types of arrays:</p>
+<pre><code>int[3] y = [1, 2, 3]; // Fixed array allocated on the stack
+int[] z = [1, 2, 3]; // Slice pointing at literal allocated on the stack
+</code></pre>
+<p>It offers some convenience when calling functions taking arrays:</p>
+<pre><code>func void test1(int[3] x) { ... }
+func void test2(int[] y) { ... }
+func void test2(int[3]* z) { ... }
 
-// New
-int x;
-/---&gt;
-int y;
-/--&gt;
-y = y + 1; 
-x = x + 1; 
-/&lt;--
-foo();
-/&lt;---
-
-// or
-int x;
-/+++
-int y;
-/+++
-y = y + 1; 
-x = x + 1; 
-+++/
-foo();
-+++/
-
-// or
-int x;
-/++++
-int y;
-/++
-y = y + 1; 
-x = x + 1; 
-++/
-foo();
-++++/
-
-// or
-
-int x;
-
-/$ FOO:
-int y;
-
-/$ BAR:
-y = y + 1; 
-x = x + 1; 
-/$$ BAR;
-
-foo();
-
-/$$ FOO;
+test1([ 1, 2, 3 ]);
+test2([ 1, 2, 3 ]);
+test3([ 1, 2, 3 ]);
 </code></pre>
 <h2 id="allow-slicing-of-user-defined-containers">Allow slicing of user defined containers</h2>
 <pre><code class="language-c">// Supporting the full set.

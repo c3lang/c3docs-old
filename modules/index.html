@@ -231,7 +231,7 @@ import stdio;
 <p><code>file_b.c3</code></p>
 <pre><code>module foo;
 
-//import bar and networking imported, but not storage
+//import bar and networking imported, but not stdio
 import bar;
 import networking;
 
@@ -352,6 +352,7 @@ func void test()
 </blockquote>
 <h2 id="textual-includes">Textual includes</h2>
 <p>It's sometimes useful to include an entire file, doing so employs the <code>$include</code> function.</p>
+<p><em>NOTE: This feature may significantly change.</em></p>
 <p>File <code>Foo.c3</code></p>
 <pre><code>module foo;
 

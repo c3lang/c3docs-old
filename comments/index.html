@@ -187,9 +187,8 @@
 <p>C3 uses three distinct comment types:</p>
 <ol>
 <li>The normal <code>//</code> line comment, which is terminated at the end of the line.</li>
-<li>The classic <code>/* ... */</code> C style comment.</li>
+<li>The classic <code>/* ... */</code> C style comment, but unlike in C they are allowed to nest.</li>
 <li>Documentation comments <code>/** ... **/</code> the text within these comments will be parsed as documentation and optional contracts on the following code.</li>
-<li>Nested comments <code>/+ ... +/</code>. Like C style comments, but they are allowed to nest.</li>
 </ol>
 <h2 id="documentation">Documentation</h2>
 <p>Documentation comments start with <code>/**</code> and must be terminated using <code>*/</code>. Note that any number of <code>*</code> may follow <code>/**</code> and any number of stars may preceed <code>*/</code>. Any space and <code>*</code> in the beginning of each line will be ignored.</p>

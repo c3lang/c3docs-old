@@ -200,12 +200,12 @@
                 <h1 id="functions">Functions</h1>
 <p>C3 has both regular functions and member functions. Member functions are name spaced using a type name, and allows invocations using the dot syntax.</p>
 <h2 id="regular-functions">Regular functions</h2>
-<p>Regular functions looks similar to C. It starts with the keyword <code>func</code>, followed by the conventional C declaration of <code>&lt;return type&gt; &lt;name&gt;(&lt;parameter list&gt;)</code>. C3 adds a <code>throws</code> declaration, that will declare that the function might return an error instead of its usual return value.</p>
+<p>Regular functions looks similar to C. It starts with the keyword <code>func</code>, followed by the conventional C declaration of <code>&lt;return type&gt; &lt;name&gt;(&lt;parameter list&gt;)</code>.</p>
 <pre><code>func void test(int times)
 {
     for (int i = 0; i &lt; times; i++)
     {
-        printf(&quot;Hello %d\n&quot;, i);
+        io::printf(&quot;Hello %d\n&quot;, i);
     }
 }
 </code></pre>
@@ -302,6 +302,7 @@ func void test()
 }
 </code></pre>
 <p>This allows us to chain functions:</p>
+<p><em>NOTE: The compiler is not fully tested with all failable conditionals yet.</em></p>
 <pre><code>
 func void printInputWithExplicitChecks()
 {
@@ -321,7 +322,7 @@ func void printInputWithExplicitChecks()
 
 func void printInputWithChaining()
 {
-    if (int val = atoi(readLine()))
+    try (int val = atoi(readLine()))
     {
         printf(&quot;You typed the number %d\n&quot;, val);
         return;
@@ -416,7 +417,7 @@ func int testFoo(int foo)
 }
 </code></pre>
 <p>In this case the compiler can look at the post condition of <code>result &gt; 0</code> to determine that <code>testFoo(foo) == 0</code> must always be false.</p>
-<p>Looking closely at this code, we not that nothing guarantees that <code>bar</code> is not violating the preconditions. In debug builds this will usually be checked in runtime, but a sufficiently smart compiler will warn about the lack of checks on <code>bar</code>. Execution of code violating pre and post conditions has undefined behaviour.</p>
+<p>Looking closely at this code, we not that nothing guarantees that <code>bar</code> is not violating the preconditions. In Safe builds this will usually be checked in runtime, but a sufficiently smart compiler will warn about the lack of checks on <code>bar</code>. Execution of code violating pre and post conditions has unspecified behaviour.</p>
               
             </div>
           </div>

@@ -110,7 +110,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#first-class-types">First class types</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#first-class-statements">First class statements</a>
+    <li class="toctree-l3"><a class="reference internal" href="#trailing-blocks-for-macros">Trailing blocks for macros</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#first-class-names">First class names</a>
     </li>
@@ -126,9 +126,9 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#macro-declarations">Macro declarations</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#method-macros">Method macros</a>
+    <li class="toctree-l2"><a class="reference internal" href="#macro-methods">Macro methods</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#capturing-a-macro-body">Capturing a macro body</a>
+    <li class="toctree-l2"><a class="reference internal" href="#capturing-a-trailing-block">Capturing a trailing block</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#macros-returning-values">Macros returning values</a>
     </li>
@@ -150,7 +150,7 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#conditional-compilation_1">Conditional compilation</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#global-compile-time-variables">Global compile time variables</a>
+    <li class="toctree-l3"><a class="reference internal" href="#global-constants">Global constants</a>
     </li>
         </ul>
     </li>
@@ -234,17 +234,16 @@
             <div class="section">
               
                 <h1 id="macros">Macros</h1>
-<p><strong>WILL be subject to later revision!</strong></p>
-<p>The macro capabilities of C3 reaches across several constructs: macros (prefixed with <code>@</code> at invocation), <a href="../generics/#generic-functions">generic functions</a>, <a href="../generics/#generic-modules">generic modules</a>, compile time variables (prefixed with <code>$e</code>), macro compile time execution (using <code>$if</code>, <code>$each</code>, <code>$switch</code>), attributes and incremental structs, enums and arrays.</p>
+<p>The macro capabilities of C3 reaches across several constructs: macros (prefixed with <code>@</code> at invocation), <a href="../generics/#generic-functions">generic functions</a>, <a href="../generics/#generic-modules">generic modules</a>, compile time variables (prefixed with <code>$</code>), macro compile time execution (using <code>$if</code>, <code>$for</code>, <code>$foreach</code>, <code>$switch</code>) and attributes.</p>
 <h2 id="a-quick-comparison-of-c-and-c3-macros">A quick comparison of C and C3 macros</h2>
 <h3 id="conditional-compilation">Conditional compilation</h3>
 <pre><code>// C
-#if defined(x) &amp;&amp; y &gt; 3
+#if defined(x) &amp;&amp; Y &gt; 3
 int z;
 #endif
 
 // C3
-$if ($defined(x) &amp;&amp; y &gt; 3):
+$if ($defined(x) &amp;&amp; $y &gt; 3):
     int z;
 $endif;
 </code></pre>
@@ -264,7 +263,7 @@ macro m(x)
 {
     return x + 2;
 }
-macro ret!(x)
+macro ret(x) @escape
 {
     return x;
 }
@@ -272,23 +271,25 @@ define u32 = uint;
 
 // Use:
 int y = @m(foo() + 2);
-@ret!(bar());
+@ret(bar());
 u32 b = y;
 </code></pre>
 <h3 id="dynamic-scoping">Dynamic scoping</h3>
+<p><em>Note This is not currenctly implemented and pay possibly not be included.</em></p>
 <pre><code>// C
 #define Z() ptr-&gt;x-&gt;y-&gt;z
-int z = Z();
+int x = Z();
 
 // C3
 macro z(implicit ptr)
 {
     return ptr-&gt;x-&gt;y-&gt;z;
 }
-int z = @z();
+int x = @z();
 </code></pre>
-<p><em>NOTE</em> This is not currenctly implemented and pay possibly not be included.</p>
 <h3 id="reference-arguments">Reference arguments</h3>
+<p>Use <code>&amp;</code> in front of a parameter to capture the a variable and pass it by reference without having to explicitly use <code>&amp;</code> and pass a pointer. 
+(Note that in C++ this is allowed for normal functions, whereas for C3 it is only permitted with macros.)</p>
 <pre><code>// C
 #define M(x, y) x = 2 * (y);
 
@@ -305,13 +306,13 @@ macro m(int &amp;x, int y)
 // C3
 macro size($Type)
 {
-    return sizeof($Type) + sizeof(int);
+    return $Type.sizeof + int.sizeof;
 }
 </code></pre>
-<h3 id="first-class-statements">First class statements</h3>
+<h3 id="trailing-blocks-for-macros">Trailing blocks for macros</h3>
 <pre><code>// C
 #define FOR_EACH(x, list) \
- for (x = (list); x; x = x-&gt;next)
+for (x = (list); x; x = x-&gt;next)
 
 // Use:
 Foo *it;
@@ -324,12 +325,16 @@ FOR_EACH(it, list)
 // C3
 macro for_each(list; @body(it))
 {
-    for (typeof(list) x = list; x; x = x-&gt;next) @body(x);
+    for (typeof(list) x = list; x; x = x.next)
+    {
+        @body(x);
+    }    
 }
+
 // Use:
 @for_each(list; Foo* x)
 {
-  if (!process(x)) return;
+    if (!process(x)) return;
 }
 </code></pre>
 <h3 id="first-class-names">First class names</h3>
@@ -337,17 +342,17 @@ macro for_each(list; @body(it))
 #define offsetof(T, field) (size_t)(&amp;((T*)0)-&gt;field)
 
 // C3
-macro offsetof($Type, #field)
-{
-    return (size_t)(&amp;((T*)0)-&gt;#field);
-}
+... Currently no corresponding functionality ...
 </code></pre>
 <h3 id="declaration-attributes">Declaration attributes</h3>
+<p><em>Note: this is not implemented yet</em></p>
 <pre><code>// C
-#define NONNULL(args...) __attribute__((nonnull(args)))
+#define PURE_INLINE __attribute__((pure)) __attribute__((always_inline))
+int foo(int x) PURE_INLINE { ... }
 
 // C3
-... currently no corresponding functionality ...
+attribute pure_inline = @pure, @inline;
+func int foo(int) @pure_inline { ... }
 </code></pre>
 <h3 id="declaration-macros">Declaration macros</h3>
 <pre><code>// C
@@ -366,15 +371,15 @@ DECLARE_LIST(hello)
 </code></pre>
 <h2 id="top-level-evaluation">Top level evaluation</h2>
 <p>Script languages, and also upcoming languages like <em>Jai</em>, usually have unbounded top level evaluation. The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. </p>
-<p>In C3, top level compile time evaluation is limited to <code>$if</code> and <code>$switch</code> constructs. This makes the code easier to read by sacrificing flexibility. However, the incremental structs, enums and arrays provided by the compiler offers a way to build compile time structures without the necessity for full meta programming capabilities.</p>
+<p>In C3, top level compile time evaluation is limited to <code>$if</code> and <code>$switch</code> constructs + macros with constant expression evaluation. This makes the code easier to read, but at the cost of expressive power.</p>
 <h2 id="macro-declarations">Macro declarations</h2>
 <p>A macro is defined using <code>macro &lt;name&gt;(&lt;parameters&gt;)</code>. All user defined macros use the @ symbol.</p>
-<p>The parameters have different sigils: <code>$</code> means compile time evaluated (captured variable, symbol or expression). Any parameters without sigils are passed by <em>value</em>, as if it was a normal function parameter.</p>
+<p>The parameters have different sigils: <code>$</code> means compile time evaluated (constant expression or type). <code>#</code> indicates an expression that is not yet evaluated, but is bound to where it was defined. Finally <code>&amp;</code> is used to <em>implicitly</em> pass a parameter by reference.</p>
 <p>A basic swap:</p>
 <pre><code>/**
- * @ensure parse(a = b), parse(b = a)
+ * @checked a = b, b = a
  */
-macro void swap($a, $b)
+macro void swap(&amp;a, &amp;b)
 {
     typeof(a) temp = a;
     a = b;
@@ -400,8 +405,8 @@ func void test()
     }
 }
 </code></pre>
-<p>Note the necessary <code>$</code>. Here is an incorrect swap and what it would expand to:</p>
-<pre><code>macro void badswap(auto a, auto b)
+<p>Note the necessary <code>&amp;</code>. Here is an incorrect swap and what it would expand to:</p>
+<pre><code>macro void badswap(a, b)
 {
     typeof(a) temp = a;
     a = b;
@@ -428,25 +433,25 @@ func void test()
     }
 }
 </code></pre>
-<h2 id="method-macros">Method macros</h2>
-<p>Similar to <em>method functions</em> a macro may also be associated with a particular type:</p>
+<h2 id="macro-methods">Macro methods</h2>
+<p>Similar to regular <em>methods</em> a macro may also be associated with a particular type:</p>
 <pre><code>struct Foo { ... }
 
 macro Foo.generate(Foo *foo) { ... }
 Foo f;
-@f.generate();
+f.@generate();
 </code></pre>
-<h2 id="capturing-a-macro-body">Capturing a macro body</h2>
-<p>It is often useful for a macro to take a trailing compound statement as an argument. In C++ the pattern is usually expressed with a lambda, but in C3 this is completely inlined.</p>
-<p>Any macro that takes a macro in the last position may be expressed as a trailing body instead. When the call puts the parameters for the trailing macro after <code>;</code>.</p>
-<p>Here's an example to illustrate it the use:</p>
+<h2 id="capturing-a-trailing-block">Capturing a trailing block</h2>
+<p>It is often useful for a macro to take a trailing compound statement as an argument. In C++ this pattern is usually expressed with a lambda, but in C3 this is completely inlined.</p>
+<p>To accept a trailing block, <code>; @name(param1, ...)</code> is placed after declaring the regular macro parameters.</p>
+<p>Here's an example to illustrate its use:</p>
 <pre><code>/**
  * A macro looping through a list of values, executing the body once
  * every pass.
  *
- * @ensure parse(int i = a.len), parse(value2 = a[i])
- */
-macro foreach(a; @body(value, value))
+ * @checked { int i = a.len; value2 = a[i]; }
+ **/
+macro foreach(a; @body(index, value))
 {
     for (int i = 0; i &lt; a.len; i++)
     {
@@ -459,7 +464,7 @@ func void test()
     double[] a = { 1.0, 2.0, 3.0 };
     @foreach(a; int index, double value)
     {
-        printf(&quot;a[%d] = %f\n&quot;, index, value);
+        io::printf("a[%d] = %f\n", index, value);
     }
 }
 
@@ -471,35 +476,35 @@ func void test()
         int[] __a = a;
         for (int __i = 0; i &lt; __a.len; i++)
         {
-            printf(&quot;Value: %d, x2: %d\n&quot;, __value1, __value2);
+            io::printf("Value: %d, x2: %d\n", __value1, __value2);
         }
     }
 }
 </code></pre>
 <h2 id="macros-returning-values">Macros returning values</h2>
 <p>A macro may return a value, it is then considered an expression rather than a statement:</p>
-<pre><code>macro auto square(auto x)
+<pre><code>macro square(x)
 {
     return x * x;
 }
 
 int getTheSquare(int x)
 {
-    return square(x);
+    return @square(x);
 }
 
 double getTheSquare2(double x)
 {
-    return square(x);
+    return @square(x);
 }
 </code></pre>
 <h2 id="calling-macros">Calling macros</h2>
 <p>It's perfectly fine for a macro to invoke another macro or itself.</p>
-<pre><code>macro @square(x) { return x * x; }
+<pre><code>macro square(x) { return x * x; }
 
-macro @squarePlusOne(x)
+macro squarePlusOne(x)
 {
-    return @square(x) + 1; // Expands to &quot;return x * x + 1;&quot;
+    return @square(x) + 1; // Expands to "return x * x + 1;"
 }
 </code></pre>
 <p>The maximum recursion depth is limited to the <code>macro-recursion-depth</code> build setting.</p>
@@ -507,7 +512,7 @@ macro @squarePlusOne(x)
 <p>Inside of a macro, we can use the compile time statements <code>$if</code>, <code>$for</code> and <code>$switch</code>. Macros may also be recursively invoked. As previously mentioned, <code>$if</code> and <code>$switch</code> may also be invoked on the top level.</p>
 <h3 id="if-else-and-elif">$if, $else and $elif</h3>
 <p><code>$if (&lt;const expr&gt;):</code> takes a compile time constant value and evaluates it to true or false.</p>
-<pre><code>macro @foo($x, $y)
+<pre><code>macro foo($x, $y)
 {
     $if ($x &gt; 3):
         $y += $x * $x;
@@ -530,10 +535,10 @@ func void test()
 <h3 id="loops-using-foreach-and-for">Loops using $foreach and $for</h3>
 <p><code>$foreach (&lt;range&gt; : &lt;variable&gt;): ... $endforeach;</code> allows compile time recursion. <code>$foreach</code> may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.</p>
 <p>Compile time looping:</p>
-<pre><code>macro @foo($a)
+<pre><code>macro foo($a)
 {
     $for ($x = 0; $x &lt; $a; $x++):
-        printf(&quot;%d\n&quot;, $x);     
+        io::printf("%d\n", $x);     
     $endfor;
 }
 
@@ -541,15 +546,15 @@ func void test()
 {
     @foo(2);
     // Expands to -&gt;
-    // printf(&quot;%d\n&quot;, 0);     
-    // printf(&quot;%d\n&quot;, 1);         
+    // io::printf("%d\n", 0);     
+    // io::printf("%d\n", 1);         
 }
 </code></pre>
 <p>Looping over enums:</p>
-<pre><code>macro @foo_enum($SomeEnum)
+<pre><code>macro foo_enum($SomeEnum)
 {
     $foreach ($x : $SomeEnum.elements):
-        printf(&quot;%d\n&quot;, (int)($x));     
+        io::printf("%d\n", (int)($x));     
     $endforeach;
 }
 
@@ -563,11 +568,11 @@ func void test()
 {
     @foo_enum(MyEnum);
     // Expands to -&gt;
-    // printf(&quot;%d\n&quot;, (int)(MyEnum.A));
-    // printf(&quot;%d\n&quot;, (int)(MyEnum.B));    
+    // io::printf("%d\n", (int)(MyEnum.A));
+    // io::printf("%d\n", (int)(MyEnum.B));    
 }
 </code></pre>
-<p>An important thing to note is that the content of the <code>$each</code> body must be a complete statement.
+<p>An important thing to note is that the content of the <code>$foreeach</code> or <code>$for</code> body must be a complete statement.
 It's not possible to compile partial statements.</p>
 <h3 id="switching-on-type-with-switch">Switching on type with $switch</h3>
 <p>It's possible to switch on type:</p>
@@ -576,7 +581,7 @@ It's not possible to compile partial statements.</p>
     $switch(a, b):
         $case int, int: 
             return a * b;
-    endswitch;
+    $endswitch;
     return a + b;
 }
 </code></pre>
@@ -587,25 +592,25 @@ It's not possible to compile partial statements.</p>
 func void test()
 {
     @foo(); // Doesn't do anything.
-    printf(&quot;Test\n&quot;);
+    io::printf("Test");
 }
 </code></pre>
-<p>However, sometimes macros are needed that does not create its own scope, allowing return, break etc work as if it was part of the included scope. Escape macros does exactly that. An escape macro adds a "!" to the macro name. Note that this becomes part of the macro name.</p>
-<pre><code>macro void @foo!() 
+<p>However, sometimes macros are needed that does not create its own scope, allowing return, break etc work as if it was part of the included scope. Escape macros does exactly that. Adding the attribute <code>@escape</code> removes capturing return.</p>
+<pre><code>macro void @foo() @escape 
 { 
     return; 
 }
 
 func void test()
 {
-    @foo!(); // The function returns here.
-    printf(&quot;Test\n&quot;); // Never printed!
+    @foo(); // The function returns here.
+    io::printf("Test"); // Never printed!
 }
 </code></pre>
 <p>This is not limited to return: <code>break</code>, <code>continue</code> and <code>next</code> is allowed.</p>
-<pre><code>macro next!($f) 
+<pre><code>macro next($f) @escape
 { 
-     nextcase $f;
+    nextcase $f;
 }
 
 func void test()
@@ -614,10 +619,10 @@ func void test()
     switch (i)
     {
         case 1:
-            @next!(3);
-            printf(&quot;Foo\n&quot;);
+            @next(3);
+            io::println("Foo");
         case 3:
-            printf(&quot;Bar!\n&quot;)
+            io::println("Bar!")
     }
 }
 </code></pre>
@@ -628,12 +633,12 @@ This is deliberate – macros expanding at the top level are much harder to
 reason about since they should be able to define new types or change the
 meaning of the code that follows.</p>
 <p>Still, the usefulness of top level macros is great, which is why C3 offers 
-four pieces of functionality for the top level: conditional compilation,
-global compile time varibles, attributes and incremental arrays.</p>
+three pieces of functionality for the top level: conditional compilation,
+global constants and attributes</p>
 <h3 id="conditional-compilation_1">Conditional compilation</h3>
-<p>Conditional compilation is done with $if and $else, which works just like
+<p>Conditional compilation is done with <code>$if</code> and <code>$else</code>, which works just like
 inside of functions.</p>
-<pre><code>$if ($defined($os) &amp;&amp; $os == 'WIN32'):
+<pre><code>$if ($defined(platform::OS) &amp;&amp; platform::OS == WIN32):
 
 func void doSomethingWin32Specific()
 {
@@ -642,12 +647,12 @@ func void doSomethingWin32Specific()
 
 $endif;
 </code></pre>
-<h3 id="global-compile-time-variables">Global compile time variables</h3>
-<p>Variables on the top level work like compile time variables in macros – with the exception
+<h3 id="global-constants">Global constants</h3>
+<p>Global constant on the top level work like compile time variables in macros – with the exception
 that they must always be declared constant. They are always evaluated in order, which 
 has to be taken into account when used in conjunction with @defined.</p>
 <p>Consider this code:</p>
-<pre><code>macro @foo()
+<pre><code>macro foo()
 {
     $if ($defined(A)): 
         return A + 1; 

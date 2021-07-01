@@ -210,9 +210,9 @@ func int foo(int *a) { ... }
 int x[3] = { 1, 2, 3 };
 foo(&amp;x);
 </code></pre>
-<p>When you want to initialize a fixed array without specififying the size, use the [+] array syntax:</p>
-<pre><code>int[3] a = { 1, 2, 3};
-int[+] b = { 4, 5, 6}; // Type inferred to be int[3]
+<p>When you want to initialize a fixed array without specififying the size, use the [*] array syntax:</p>
+<pre><code>int[3] a = { 1, 2, 3 };
+int[*] b = { 4, 5, 6 }; // Type inferred to be int[3]
 </code></pre>
 <h2 id="subarray">Subarray</h2>
 <p>The final type is the subarray <code>&lt;type&gt;[]</code>  e.g. <code>int[]</code>. A subarray is a view into either a fixed or variable array. Internally it is represented as a struct containing a pointer and a size. Both fixed and variable arrays may be converted into slices, and slices may be implicitly converted to pointers:</p>
@@ -322,7 +322,7 @@ int[] h = f[0..2];
 <h2 id="iteration-over-arrays">Iteration over arrays</h2>
 <p>Slices, fixed and variable arrays may all be iterated over using <code>foreach (Type x : array)</code>:</p>
 <pre><code>int[4] a = { 1, 2, 3, 5 };
-for (int x : a)
+foreach (int x : a)
 {
     ...
 }
@@ -366,7 +366,7 @@ v.add(3);
 v.add(7);
 
 // Will print 3 and 7
-for (int i : v)
+foreach (int i : v)
 {
     printf(&quot;%d\n&quot;);
 }

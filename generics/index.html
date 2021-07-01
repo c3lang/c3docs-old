@@ -181,7 +181,7 @@
 <p>Generic modules are parameterized modules that allow functionality for arbitrary types.</p>
 <p>For generic modules, the generic parameters follows the module name:</p>
 <pre><code>// TypeA, TypeB, TypeC are generic parameters.
-module vector (TypeA, TypeB, TypeC);
+module vector &lt;TypeA, TypeB, TypeC&gt;;
 </code></pre>
 <p>The code inside of the module can use the generic parameters as if they were well defined symbols:</p>
 <pre><code>module foo_test &lt;Type1, Type2&gt;;
@@ -191,7 +191,8 @@ struct Foo
    Type1 a;
 }
 
-func Type2 test(Type2 b, Foo *foo) {
+func Type2 test(Type2 b, Foo *foo) 
+{
    return foo.a + b;
 }
 </code></pre>
@@ -211,8 +212,9 @@ testFloat(1.0, &amp;f);
 
 </code></pre>
 <p>Just like for macros, optional constraints may be added to improve compile errors:</p>
+<p><em>Note: constraints are not feature complete yet.</em></p>
 <pre><code>/**
- * @require c = a + b
+ * @check TypeA a = (TypeB)(1) + (TypeC)(1)
  */ 
 module vector &lt;TypeA, TypeB, TypeC&gt;;
 
@@ -224,7 +226,7 @@ define testFunction = vector::testFunc&lt;Bar, float, int&gt;;
 
 // This would give the error 
 // --&gt; Illegal arguments for generic module vector, 
-// breaks requirement 'Bar' = 'float' + 'int'
+// breaks check 'Bar a = (float)(1) + (int)(1)'
 </code></pre>
               
             </div>

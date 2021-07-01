@@ -92,8 +92,6 @@
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Built-in Macros</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#bitcast">@bitcast</a>
-    </li>
     <li class="toctree-l2"><a class="reference internal" href="#describe">@describe</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#elements">@elements</a>
@@ -196,19 +194,12 @@
 <p>There are several built-in macros to inspect the code during compile and runtime.</p>
 <ul>
 <li>@bitcast</li>
-<li>@cast</li>
 <li>@describe</li>
 <li>@elements</li>
 <li>@name</li>
 <li>@sizeof</li>
 <li>@typeof</li>
 </ul>
-<h3 id="bitcast">@bitcast</h3>
-<p>Bitcast reinterprets the contents of a variable without any conversion. Bitsize must be the same for both types.</p>
-<pre><code>float f = 12.3;
-int i = @bitcast(f, int);
-printf(&quot;%x&quot;, i); // Prints 4144cccd
-</code></pre>
 <h3 id="describe">@describe</h3>
 <p>Creates a runtime description of a value.</p>
 <pre><code>enum FooEnum

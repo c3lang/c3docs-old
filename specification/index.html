@@ -362,9 +362,8 @@ UC_ALPHANUM_US  ::= UC_LETTER_US | DIGIT
 <h3 id="comments">Comments</h3>
 <p>Thre are three types of regular comments:</p>
 <ol>
-<li><code>/* text */</code> block comments. The text between <code>/*</code> and <code>*/</code> is ignored.</li>
 <li><code>// text</code> a line comment. The text between <code>//</code> and line end is ignored.</li>
-<li><code>/+ text +/</code> nesting comments. The text between <code>/+</code> and <code>+/</code> is ignored. Unlike <code>/* text */</code> it has nesting behaviour, so for every <code>/+</code> discovered between the first <code>/+</code> and the last <code>+/</code> a corresponding <code>+/</code> must be found.</li>
+<li><code>/* text */</code> block comments. The text between <code>/*</code> and <code>*/</code> is ignored. It has nesting behaviour, so for every <code>/*</code> discovered between the first <code>/*</code> and the last <code>*/</code> a corresponding <code>*/</code> must be found.</li>
 </ol>
 <h3 id="doc-comments">Doc comments</h3>
 <ol>

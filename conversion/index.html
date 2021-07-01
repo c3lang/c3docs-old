@@ -96,7 +96,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#maximum-type">Maximum type</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#sub-struct-conversions">Sub struct conversions</a>
+    <li class="toctree-l2"><a class="reference internal" href="#substruct-conversions">Substruct conversions</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#pointer-conversions">Pointer conversions</a>
     </li>
@@ -260,7 +260,7 @@
 <ol>
 <li>For any floating point type with a bit width smaller than 32 bits, widen to <code>float</code>. E.g. <code>half -&gt; float</code></li>
 <li>After 1, for any floating point type with a bit width smaller than the <em>target type</em> widen to the target type.</li>
-<li>For an integer type smaller than the <em>minimum arithmetic width</em>, promote the value to a signed integer of the <em>minimum arithmetic width</em> (this usually corresponds to a c int). E.g. <code>uchar -&gt; int</code></li>
+<li>For an integer type smaller than the <em>minimum arithmetic width</em>, promote the value to a signed integer of the <em>minimum arithmetic width</em> (this usually corresponds to a c int). E.g. <code>ushort -&gt; int</code></li>
 <li>After 3, for an integer type smaller than the <em>target type</em>, promote the value to an integer of the the same bit width. E.g. <code>ulong = int + int -&gt; ulong = long + long</code></li>
 </ol>
 <h2 id="maximum-type">Maximum type</h2>
@@ -275,7 +275,7 @@
 <li>If at least one side is a struct or a pointer to a struct with an <code>inline</code> directive on a member, check recursively check if the type of the inline member can be used to find a maximum type (see below under sub struct conversions)</li>
 <li>All other cases are errors.</li>
 </ol>
-<h2 id="sub-struct-conversions">Sub struct conversions</h2>
+<h2 id="substruct-conversions">Substruct conversions</h2>
 <p>Substructs may be used in place of its parent structs in many cases. The rule is as follows:</p>
 <ol>
 <li>A substruct pointer may implicitly convert to a parent struct.</li>
