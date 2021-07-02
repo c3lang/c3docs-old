@@ -282,7 +282,7 @@ func void test()
 <p>The below example might throw errors from both the <code>SomeError</code> error domain as well as the <code>OtherError</code> error domain.</p>
 <pre><code>func double! testError()
 {
-    double val = random_value();_
+    double val = random_value();
     if (val &gt;= 0.2) return BadJossError!;
     if (val &gt; 0.5) return BadLuckError!;
     return val;
@@ -293,41 +293,40 @@ func void test()
 {
     // The following line is either prints a value less than 0.2
     // or does not print at all:
-    printf(&quot;%d\n&quot;, testError());
+    printf("%d\n", testError());
 
     double x = (testError() + testError()) else 100;
 
     // This prints either a value less than 0.4 or 100:
-    printf(&quot;%d\n&quot;, x);
+    printf("%d\n", x);
 }
 </code></pre>
 <p>This allows us to chain functions:</p>
 <p><em>NOTE: The compiler is not fully tested with all failable conditionals yet.</em></p>
-<pre><code>
-func void printInputWithExplicitChecks()
+<pre><code>func void printInputWithExplicitChecks()
 {
     string! line = readLine();
-    if (line)
+    try (line)
     {
-        // line is a regular &quot;string&quot; here.
+        // line is a regular "string" here.
         int! val = atoi(line);
-        if (val)
+        try (val)
         {
-            printf(&quot;You typed the number %d\n&quot;, val);
+            printf("You typed the number %d\n", val);
             return;
         }
     }
-    printf(&quot;You didn't type an integer :(\n&quot;);    
+    printf("You didn't type an integer :(\n");    
 }
 
 func void printInputWithChaining()
 {
     try (int val = atoi(readLine()))
     {
-        printf(&quot;You typed the number %d\n&quot;, val);
+        printf("You typed the number %d\n", val);
         return;
     }
-    printf(&quot;You didn't type an integer :(\n&quot;);    
+    printf("You didn't type an integer :(\n");    
 }
 </code></pre>
 <h2 id="methods">Methods</h2>

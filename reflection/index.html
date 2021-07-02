@@ -227,13 +227,14 @@
               
                 <h1 id="reflection">Reflection</h1>
 <p>C3 allows both compile time and runtime reflection.</p>
-<p>During compile time the type information may be directly used as compile time constants, the same data is then available dynamically.</p>
+<p>During compile time the type information may be directly used as compile time constants, the same data is then available dynamically at runtime.</p>
+<p><em>Note that not all reflection is implemented in the compiler at this point in time.</em></p>
 <h2 id="compile-time-reflection">Compile time reflection</h2>
 <p>During compile time there are a number of compile time fields that may be accessed directly.</p>
 <h3 id="compile-time-variables">Compile time variables</h3>
 <h4 id="typeid">typeid</h4>
-<p>Returns the typeid for the given type. Typedefs will return the typeid of the underlying type.</p>
-<pre><code>typeid x = Foo.typeid; 
+<p>Returns the typeid for the given type. Typedefs will return the typeid of the underlying type. The typeid size is the same as that of an <code>iptr</code>.</p>
+<pre><code>typeid x = Foo.typeid;
 </code></pre>
 <h4 id="nameof">nameof</h4>
 <p>The basic name of the type without module prefixes.</p>

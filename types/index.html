@@ -355,9 +355,9 @@ func CInt stat(const char* pathname, Stat* buf);
 <h5 id="base64-and-hex-data-literals">Base64 and hex data literals</h5>
 <p>Base64 encoded values work like TwoCC/FourCC/EightCC, in that is it laid out in byte order in memory. It uses the format <code>'&lt;base64&gt;'b64</code>. Hex encoded values work as base64 but with the format <code>'&lt;hex&gt;'x</code>. In data literals any whitespace is ignored, so <code>'00 00 11'x</code> encodes to the same value as <code>'000011'x</code>.</p>
 <p>In our case we could encode <code>'Rk9PQkFSMTE='b64</code> as <code>'FOOBAR11'</code>.</p>
-<p>Base64 and hex data literals also has a form to allow initializing byte and char arrays, instead of enclosing the data in <code>''</code>, enclose the data in <code>""</code></p>
-<pre><code>byte[] hello_world_base64 = &quot;SGVsbG8gV29ybGQh&quot;b64;
-char[] hello_world_hex = &quot;4865 6c6c 6f20 776f 726c 6421&quot;x;
+<p>Base64 and hex data literals also has a form to allow initializing char arrays, instead of enclosing the data in <code>''</code>, enclose the data in <code>""</code></p>
+<pre><code>char[*] hello_world_base64 = &quot;SGVsbG8gV29ybGQh&quot;b64;
+char[*] hello_world_hex = &quot;4865 6c6c 6f20 776f 726c 6421&quot;x;
 </code></pre>
 <h5 id="floating-point-types">Floating point types</h5>
 <table>
