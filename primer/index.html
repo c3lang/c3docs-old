@@ -63,6 +63,38 @@
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">A quick primer on C3</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#struct-enum-and-union-declarations">Struct, enum and union declarations</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#arrays">Arrays</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#undefined-behaviour">Undefined behaviour</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#identifiers">Identifiers</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#variable-declaration">Variable declaration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#casts">Casts</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compound-literals">Compound literals</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#typedef">Typedef</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#basic-types">Basic types</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#instead-of-include-modules-and-import">Instead of #include: Modules and import</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#comments">Comments</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#type-qualifiers">Type qualifiers</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#goto-removed">Goto removed</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#changes-in-switch">Changes in switch</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#other-changes">Other changes</a>
+    </li>
     </ul>
                     </li>
                 </ul>
@@ -180,79 +212,21 @@
             <div class="section">
               
                 <h2 id="a-quick-primer-on-c3-for-c-programmers">A quick primer on C3 for C programmers</h2>
-<p>Functions are declared like C, but you need to put <code>func</code> in front:</p>
-<pre><code>// C:
-int foo(Foo *b, int x, void *z) { ... }
-
-// C3
-func int foo(Foo* b, int x, void *z) { ... }
-</code></pre>
-<p>Name standards are enforced:</p>
-<pre><code>// Starting with uppercase and followed somewhere by at least
-// one lower case is a user defined type:
-Foo x;
-M____y y;
-
-// Starting with lowercase is a variable or a function or a member name:
-
-x.myval = 1;
-int z = 123;
-func void fooBar(int x) { ... }
-
-// Only upper case is a constant or an enum value:
-
-const int FOOBAR = 123;
-enum Test 
-{
-  STATE_A = 0,
-  STATE_B = 2
-}
-</code></pre>
-<p>Declaring more than one variable at a time is not allowed:</p>
-<pre><code>// C
-int a, b; // Not allowed in C3
-
-// C3
-int a;
-int b;
-</code></pre>
-<p>Cast syntax is slightly different:</p>
-<pre><code>// C
-int a = (int)foo();
-
-// C3
-int a = (int)(foo());
-</code></pre>
-<p>Compound literals look different, but assigning to a struct will infer the type even if
-it's not the initializer.</p>
-<pre><code>// C
-Foo f = { 1, 2 };
-f = (Foo) { 1, 2 };
-callFoo((Foo) { 2, 3 });
-
-// C3
-Foo f = { 1, 2 };
-f = { 1, 2 };
-callFoo(Foo({ 2, 3 }));
-</code></pre>
-<p>Instead of <code>typedef</code>, use <code>define</code></p>
-<pre><code>// C
-typedef Foo* FooPtr;
-
-// C3
-define FooPtr = Foo*;
-</code></pre>
-<p>Don't add a <code>;</code> after enum, struct and union declarations, and note the slightly 
+<p>This primer is intended as a guide to how the C syntax – and in some cases C semantics
+– is different in C3. It is intended to help you take a piece of C code and understand
+how it can be converted manually to C3.</p>
+<h4 id="struct-enum-and-union-declarations">Struct, enum and union declarations</h4>
+<p>Don't add a <code>;</code> after enum, struct and union declarations, and note the slightly
 different syntax for declaring a named struct inside of a struct.</p>
 <pre><code>// C
-struct Foo
+typedf struct
 {
   int a;
   struct 
   {
     double x;
   } bar;
-};
+} Foo;
 
 // C3
 struct Foo
@@ -264,7 +238,10 @@ struct Foo
   }
 }
 </code></pre>
-<p>Array sizes are written next to the type and arrays do not decay to pointers, 
+<p>Also, user defined types are used without a <code>struct</code>, <code>union</code> or <code>enum</code> keyword, as 
+if the name was a C typedef.</p>
+<h4 id="arrays">Arrays</h4>
+<p>Array sizes are written next to the type and arrays do not decay to pointers,
 you need to do it manually:</p>
 <pre><code>// C
 int x[2] = { 1, 2 }; 
@@ -308,6 +285,114 @@ for (int i = 0; i &lt; 3; i++) y[i] = x[i];
 int[3] x = ...;
 int[3] y = x;
 </code></pre>
+<p>See more <a href="../arrays">here</a>.</p>
+<h4 id="undefined-behaviour">Undefined behaviour</h4>
+<p>C3 has less undefined behaviour, in particular integers are defined as using 2s
+complement and signed overflow is wrapping. See more <a href="../undefinedbehaviour">here</a>.</p>
+<h4 id="functions">Functions</h4>
+<p>Functions are declared like C, but you need to put <code>func</code> in front:</p>
+<pre><code>// C:
+int foo(Foo *b, int x, void *z) { ... }
+
+// C3
+func int foo(Foo* b, int x, void *z) { ... }
+</code></pre>
+<p>See more about functions, like named and default arguments <a href="../functions">here</a>.</p>
+<h4 id="identifiers">Identifiers</h4>
+<p>Name standards are enforced:</p>
+<pre><code>// Starting with uppercase and followed somewhere by at least
+// one lower case is a user defined type:
+Foo x;
+M____y y;
+
+// Starting with lowercase is a variable or a function or a member name:
+
+x.myval = 1;
+int z = 123;
+func void fooBar(int x) { ... }
+
+// Only upper case is a constant or an enum value:
+
+const int FOOBAR = 123;
+enum Test 
+{
+  STATE_A = 0,
+  STATE_B = 2
+}
+</code></pre>
+<h4 id="variable-declaration">Variable declaration</h4>
+<p>Declaring more than one variable at a time is not allowed:</p>
+<pre><code>// C
+int a, b; // Not allowed in C3
+
+// C3
+int a;
+int b;
+</code></pre>
+<p>In C3, variables are always zero initialized, unless you explicitly opt out using <code>void</code>:</p>
+<pre><code>// C
+int a = 0;
+int b;
+
+// C3
+int a;
+int b = void;
+</code></pre>
+<h4 id="casts">Casts</h4>
+<p>Cast syntax is slightly different:</p>
+<pre><code>// C
+int a = (int)foo();
+
+// C3
+int a = (int)(foo());
+</code></pre>
+<p>You can also one struct to another as long as they are structurally equivalent:</p>
+<pre><code>struct Foo { int a; int b; }
+struct Bar { int x; int y; }
+
+Foo f = { 1, 2 };
+Bar b = (Bar)(f);
+</code></pre>
+<h4 id="compound-literals">Compound literals</h4>
+<p>Compound literals look different, but assigning to a struct will infer the type even if
+it's not the initializer.</p>
+<pre><code>// C
+Foo f = { 1, 2 };
+f = (Foo) { 1, 2 };
+callFoo((Foo) { 2, 3 });
+
+// C3
+Foo f = { 1, 2 };
+f = { 1, 2 };
+callFoo(Foo({ 2, 3 }));
+</code></pre>
+<h4 id="typedef">Typedef</h4>
+<p>Instead of <code>typedef</code>, use <code>define</code></p>
+<pre><code>// C
+typedef Foo* FooPtr;
+
+// C3
+define FooPtr = Foo*;
+</code></pre>
+<p><code>define</code> also allows you to do things that otherwise you'd use <code>#define</code> for:</p>
+<pre><code>// C
+#define puts println
+#define my_string my_excellent_string
+
+char *my_string = "Party on";
+...
+println(my_excellent_string);
+
+// C3
+define println = puts;
+define my_excellent_string = my_string;
+
+char* my_string = "Party on";
+...
+println(my_excellent_string);
+</code></pre>
+<p>Read more about <code>define</code> <a href="../define">here</a>.</p>
+<h4 id="basic-types">Basic types</h4>
 <p>Several C types that would be variable sized are fixed size, and others changed names:</p>
 <pre><code>// C
 int16_t a;
@@ -330,6 +415,8 @@ iptrdiff g; // Same as C ptrdiff_t depends on target
 iptr h;     // Same as intptr_t depends on target
 ireg i;     // Register sized integer
 </code></pre>
+<p>Read more about types <a href="../types">here</a>.</p>
+<h4 id="instead-of-include-modules-and-import">Instead of #include: Modules and import</h4>
 <p>Modules are not mandatory but create a namespace, to import the names from a module, 
 use <code>import</code>:</p>
 <pre><code>module mylib::foo;
@@ -348,9 +435,13 @@ func void myCheck()
   mylib::foo::FooStruct y; // But it is allowed.
 }
 </code></pre>
+<h4 id="comments">Comments</h4>
 <p>The /<em> </em>/ comments are nesting:</p>
 <pre><code>/* This /* will all */ be commented out */
 </code></pre>
+<p>Note that doc comments, starting with <code>/**</code> has special rules for parsing it, and is
+not considered a regular comment. See <a href="../contracts">preconditions</a> for more information.</p>
+<h4 id="type-qualifiers">Type qualifiers</h4>
 <p>Qualifiers like <code>const</code> and <code>volatile</code> are removed, but <code>const</code> before a constant
 will make it treated as a compile time constant. The constant does not need to be typed.</p>
 <pre><code>const A = false;
@@ -361,8 +452,33 @@ $else:
   // This will be compiled
 $endif
 </code></pre>
-<p><code>goto</code> is removed, but there are labelled <code>break</code> and <code>continue</code> as well as <code>defer</code>
+<p><code>volatile</code> is replaced by macros for volatile load and store.</p>
+<h4 id="goto-removed">Goto removed</h4>
+<p><code>goto</code> is removed, but there is labelled <code>break</code> and <code>continue</code> as well as <code>defer</code>
 to handle the cases when it is commonly used in C.</p>
+<pre><code>// C
+Foo *foo = malloc(sizeof(Foo));
+
+if (tryFoo(foo)) goto FAIL;
+if (modifyFoo(foo)) goto FAIL;
+
+free(foo);
+return true;
+
+FAIL:
+free(foo);
+return false;
+
+// C3
+Foo *foo = @mem::malloc(Foo);
+defer free(foo);
+
+if (tryFoo(foo)) return false;
+if (modifyFoo(foo)) return false;
+
+return true;
+</code></pre>
+<h4 id="changes-in-switch">Changes in <code>switch</code></h4>
 <p><code>case</code> statements automatically break. Use <code>nextcase</code> to fallthrough to the 
 next statement, but empty case statements have implicit fallthrough:</p>
 <pre><code>// C
@@ -433,16 +549,18 @@ switch (a)
     return false;
 }
 </code></pre>
-<p>Things that doesn't exist in C at all, but which aren't essential to get started:</p>
+<h4 id="other-changes">Other changes</h4>
+<p>The following things are enhancements to C, that does not have a direct counterpart in
+C. </p>
 <ul>
-<li>Expression blocks</li>
+<li><a href="../statements">Expression blocks</a></li>
 <li>Defer</li>
-<li>Methods  </li>
-<li>Errors</li>
-<li>Semantic macros</li>
-<li>Generic modules</li>
-<li>Contracts</li>
-<li>Reflection</li>
+<li><a href="../functions">Methods</a></li>
+<li><a href="../errorhandling">Errors</a></li>
+<li><a href="../macros">Semantic macros</a></li>
+<li><a href="../generics">Generic modules</a></li>
+<li><a href="../preconditions">Contracts</a></li>
+<li><a href="../reflection">Reflection</a></li>
 <li>Macro methods</li>
 </ul>
               
