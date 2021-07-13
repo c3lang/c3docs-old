@@ -1,86 +1,23 @@
 ## A quick primer on C3 for C programmers
 
-Functions are declared like C, but you need to put `func` in front:
-   
-    // C:
-    int foo(Foo *b, int x, void *z) { ... }
+This primer is intended as a guide to how the C syntax – and in some cases C semantics
+– is different in C3. It is intended to help you take a piece of C code and understand
+how it can be converted manually to C3.
 
-    // C3
-    func int foo(Foo* b, int x, void *z) { ... }
+#### Struct, enum and union declarations
 
-Name standards are enforced:
-
-    // Starting with uppercase and followed somewhere by at least
-    // one lower case is a user defined type:
-    Foo x;
-    M____y y;
-    
-    // Starting with lowercase is a variable or a function or a member name:
-
-    x.myval = 1;
-    int z = 123;
-    func void fooBar(int x) { ... }
-
-    // Only upper case is a constant or an enum value:
-
-    const int FOOBAR = 123;
-    enum Test 
-    {
-      STATE_A = 0,
-      STATE_B = 2
-    }    
-
-Declaring more than one variable at a time is not allowed:
-
-    // C
-    int a, b; // Not allowed in C3
-
-    // C3
-    int a;
-    int b;
-
-Cast syntax is slightly different:
-
-    // C
-    int a = (int)foo();
-
-    // C3
-    int a = (int)(foo());
-
-Compound literals look different, but assigning to a struct will infer the type even if
-it's not the initializer.
-
-    // C
-    Foo f = { 1, 2 };
-    f = (Foo) { 1, 2 };
-    callFoo((Foo) { 2, 3 });
-
-    // C3
-    Foo f = { 1, 2 };
-    f = { 1, 2 };
-    callFoo(Foo({ 2, 3 }));
-
-
-Instead of `typedef`, use `define`
-
-    // C
-    typedef Foo* FooPtr;
-
-    // C3
-    define FooPtr = Foo*;
-
-Don't add a `;` after enum, struct and union declarations, and note the slightly 
+Don't add a `;` after enum, struct and union declarations, and note the slightly
 different syntax for declaring a named struct inside of a struct.
 
     // C
-    struct Foo
+    typedf struct
     {
       int a;
       struct 
       {
         double x;
       } bar;
-    };
+    } Foo;
 
     // C3
     struct Foo
@@ -92,7 +29,12 @@ different syntax for declaring a named struct inside of a struct.
       }
     }
 
-Array sizes are written next to the type and arrays do not decay to pointers, 
+Also, user defined types are used without a `struct`, `union` or `enum` keyword, as 
+if the name was a C typedef.
+
+#### Arrays
+
+Array sizes are written next to the type and arrays do not decay to pointers,
 you need to do it manually:
 
     // C
@@ -140,6 +82,136 @@ Arrays are trivially copyable:
     int[3] x = ...;
     int[3] y = x;
 
+See more [here](../arrays).
+
+#### Undefined behaviour
+
+C3 has less undefined behaviour, in particular integers are defined as using 2s
+complement and signed overflow is wrapping. See more [here](../undefinedbehaviour).
+
+#### Functions
+
+Functions are declared like C, but you need to put `func` in front:
+   
+    // C:
+    int foo(Foo *b, int x, void *z) { ... }
+
+    // C3
+    func int foo(Foo* b, int x, void *z) { ... }
+
+See more about functions, like named and default arguments [here](../functions).
+
+#### Identifiers
+
+Name standards are enforced:
+
+    // Starting with uppercase and followed somewhere by at least
+    // one lower case is a user defined type:
+    Foo x;
+    M____y y;
+    
+    // Starting with lowercase is a variable or a function or a member name:
+
+    x.myval = 1;
+    int z = 123;
+    func void fooBar(int x) { ... }
+
+    // Only upper case is a constant or an enum value:
+
+    const int FOOBAR = 123;
+    enum Test 
+    {
+      STATE_A = 0,
+      STATE_B = 2
+    }    
+
+#### Variable declaration
+
+Declaring more than one variable at a time is not allowed:
+
+    // C
+    int a, b; // Not allowed in C3
+
+    // C3
+    int a;
+    int b;
+
+In C3, variables are always zero initialized, unless you explicitly opt out using `void`:
+
+    // C
+    int a = 0;
+    int b;
+
+    // C3
+    int a;
+    int b = void;
+
+#### Casts
+
+Cast syntax is slightly different:
+
+    // C
+    int a = (int)foo();
+
+    // C3
+    int a = (int)(foo());
+
+You can also one struct to another as long as they are structurally equivalent:
+
+    struct Foo { int a; int b; }
+    struct Bar { int x; int y; }
+
+    Foo f = { 1, 2 };
+    Bar b = (Bar)(f);
+
+#### Compound literals
+
+Compound literals look different, but assigning to a struct will infer the type even if
+it's not the initializer.
+
+    // C
+    Foo f = { 1, 2 };
+    f = (Foo) { 1, 2 };
+    callFoo((Foo) { 2, 3 });
+
+    // C3
+    Foo f = { 1, 2 };
+    f = { 1, 2 };
+    callFoo(Foo({ 2, 3 }));
+
+
+#### Typedef
+
+Instead of `typedef`, use `define`
+
+    // C
+    typedef Foo* FooPtr;
+
+    // C3
+    define FooPtr = Foo*;
+
+`define` also allows you to do things that otherwise you'd use `#define` for:
+
+    // C
+    #define puts println
+    #define my_string my_excellent_string 
+    
+    char *my_string = "Party on";
+    ...
+    println(my_excellent_string);
+
+    // C3
+    define println = puts;
+    define my_excellent_string = my_string;
+    
+    char* my_string = "Party on";
+    ...
+    println(my_excellent_string);
+
+Read more about `define` [here](../define).
+
+#### Basic types
+
 Several C types that would be variable sized are fixed size, and others changed names:
 
     // C
@@ -163,6 +235,10 @@ Several C types that would be variable sized are fixed size, and others changed 
     iptr h;     // Same as intptr_t depends on target
     ireg i;     // Register sized integer
 
+Read more about types [here](../types).
+
+#### Instead of #include: Modules and import
+
 Modules are not mandatory but create a namespace, to import the names from a module, 
 use `import`:
 
@@ -182,9 +258,17 @@ use `import`:
       mylib::foo::FooStruct y; // But it is allowed.
     }
 
+
+#### Comments
+
 The /* */ comments are nesting:
 
     /* This /* will all */ be commented out */
+
+Note that doc comments, starting with `/**` has special rules for parsing it, and is
+not considered a regular comment. See [preconditions](../contracts) for more information.
+
+#### Type qualifiers
 
 Qualifiers like `const` and `volatile` are removed, but `const` before a constant
 will make it treated as a compile time constant. The constant does not need to be typed.
@@ -197,8 +281,37 @@ will make it treated as a compile time constant. The constant does not need to b
       // This will be compiled
     $endif
 
-`goto` is removed, but there are labelled `break` and `continue` as well as `defer`
+`volatile` is replaced by macros for volatile load and store.
+
+#### Goto removed
+
+`goto` is removed, but there is labelled `break` and `continue` as well as `defer`
 to handle the cases when it is commonly used in C.
+
+    // C
+    Foo *foo = malloc(sizeof(Foo));
+    
+    if (tryFoo(foo)) goto FAIL;
+    if (modifyFoo(foo)) goto FAIL;
+
+    free(foo);
+    return true;
+
+    FAIL:
+    free(foo);
+    return false; 
+
+    // C3
+    Foo *foo = @mem::malloc(Foo);
+    defer free(foo);
+
+    if (tryFoo(foo)) return false;
+    if (modifyFoo(foo)) return false;
+
+    return true;
+
+
+#### Changes in `switch` 
 
 `case` statements automatically break. Use `nextcase` to fallthrough to the 
 next statement, but empty case statements have implicit fallthrough:
@@ -273,14 +386,17 @@ Note that we can jump to an arbitrary case using C3:
     }
 
 
-Things that doesn't exist in C at all, but which aren't essential to get started:
+#### Other changes
 
-- Expression blocks
+The following things are enhancements to C, that does not have a direct counterpart in
+C. 
+
+- [Expression blocks](../statements)
 - Defer
-- Methods  
-- Errors
-- Semantic macros
-- Generic modules
-- Contracts
-- Reflection
+- [Methods](../functions)
+- [Errors](../errorhandling)
+- [Semantic macros](../macros)
+- [Generic modules](../generics)
+- [Contracts](../preconditions)
+- [Reflection](../reflection)
 - Macro methods
