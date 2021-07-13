@@ -24,7 +24,7 @@ Like C, C3 uses implicit promotion of integer and floating point variables:
 
 1. For any floating point type with a bit width smaller than 32 bits, widen to `float`. E.g. `half -> float`
 2. After 1, for any floating point type with a bit width smaller than the *target type* widen to the target type.
-3. For an integer type smaller than the *minimum arithmetic width*, promote the value to a signed integer of the *minimum arithmetic width* (this usually corresponds to a c int). E.g. `uchar -> int`
+3. For an integer type smaller than the *minimum arithmetic width*, promote the value to a signed integer of the *minimum arithmetic width* (this usually corresponds to a c int). E.g. `ushort -> int`
 4. After 3, for an integer type smaller than the *target type*, promote the value to an integer of the the same bit width. E.g. `ulong = int + int -> ulong = long + long`
 
 ## Maximum type
@@ -41,7 +41,7 @@ The *maximum type* is a concept used when unifying two or more types. The algori
 9. All other cases are errors.
 
 
-## Sub struct conversions
+## Substruct conversions
 
 Substructs may be used in place of its parent structs in many cases. The rule is as follows:
 

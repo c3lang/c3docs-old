@@ -5,22 +5,12 @@
 There are several built-in macros to inspect the code during compile and runtime.
 
 - @bitcast
-- @cast
 - @describe
 - @elements
 - @name
 - @sizeof
 - @typeof
 
-### @bitcast
-
-Bitcast reinterprets the contents of a variable without any conversion. Bitsize must be the same for both types.
-
-```
-float f = 12.3;
-int i = @bitcast(f, int);
-printf("%x", i); // Prints 4144cccd
-```
 
 ### @describe
 

@@ -4,14 +4,14 @@ C3 has both regular functions and member functions. Member functions are name sp
 
 ## Regular functions
 
-Regular functions looks similar to C. It starts with the keyword `func`, followed by the conventional C declaration of `<return type> <name>(<parameter list>)`. C3 adds a `throws` declaration, that will declare that the function might return an error instead of its usual return value.
+Regular functions looks similar to C. It starts with the keyword `func`, followed by the conventional C declaration of `<return type> <name>(<parameter list>)`.
 
 ```
 func void test(int times)
 {
     for (int i = 0; i < times; i++)
     {
-        printf("Hello %d\n", i);
+        io::printf("Hello %d\n", i);
     }
 }
 ```
@@ -105,111 +105,102 @@ The return parameter may be a *failable* – a type suffixed by `!` indicating t
 
 The below example might throw errors from both the `SomeError` error domain as well as the `OtherError` error domain.
 
-```
-func double! testError()
-{
-    double val = random_value();_
-    if (val >= 0.2) return BadJossError!;
-    if (val > 0.5) return BadLuckError!;
-    return val;
-}
-```
+    func double! testError()
+    {
+        double val = random_value();
+        if (val >= 0.2) return BadJossError!;
+        if (val > 0.5) return BadLuckError!;
+        return val;
+    }
 
 *A function* that is passed a *failable* value will only conditionally execute if and only if all failable values evaluate to true, otherwise *the first* error is returned.
 
-```
-func void test()
-{
-    // The following line is either prints a value less than 0.2
-    // or does not print at all:
-    printf("%d\n", testError());
-    
-    double x = (testError() + testError()) else 100;
-    
-    // This prints either a value less than 0.4 or 100:
-    printf("%d\n", x);
-}
-```
+    func void test()
+    {
+        // The following line is either prints a value less than 0.2
+        // or does not print at all:
+        printf("%d\n", testError());
+        
+        double x = (testError() + testError()) else 100;
+        
+        // This prints either a value less than 0.4 or 100:
+        printf("%d\n", x);
+    }
 
 This allows us to chain functions:
 
-```
+_NOTE: The compiler is not fully tested with all failable conditionals yet._
 
-func void printInputWithExplicitChecks()
-{
-    string! line = readLine();
-    if (line)
+    func void printInputWithExplicitChecks()
     {
-        // line is a regular "string" here.
-        int! val = atoi(line);
-        if (val)
+        string! line = readLine();
+        try (line)
+        {
+            // line is a regular "string" here.
+            int! val = atoi(line);
+            try (val)
+            {
+                printf("You typed the number %d\n", val);
+                return;
+            }
+        }
+        printf("You didn't type an integer :(\n");    
+    }
+    
+    func void printInputWithChaining()
+    {
+        try (int val = atoi(readLine()))
         {
             printf("You typed the number %d\n", val);
             return;
         }
+        printf("You didn't type an integer :(\n");    
     }
-    printf("You didn't type an integer :(\n");    
-}
-
-func void printInputWithChaining()
-{
-    if (int val = atoi(readLine()))
-    {
-        printf("You typed the number %d\n", val);
-        return;
-    }
-    printf("You didn't type an integer :(\n");    
-}
-```
 
 ## Methods
 
 Methods look exactly like functions, but are prefixed with the type name and is (usually) 
 invoked using dot syntax:
 
-```
-struct Point
-{
-    int x;
-    int y;
-}
-
-func void Point.add(Point* p, int x) 
-{
-    p.x = x;
-}
-
-func void example() 
-{
-    Point p = { 1, 2 }
-
-    // with struct-functions
-    p.add(10);
-
-    // Also callable as:
-    Point.add(&p, 10);
-}
-```
+    struct Point
+    {
+        int x;
+        int y;
+    }
+    
+    func void Point.add(Point* p, int x) 
+    {
+        p.x = x;
+    }
+    
+    func void example() 
+    {
+        Point p = { 1, 2 }
+        
+        // with struct-functions
+        p.add(10);
+        
+        // Also callable as:
+        Point.add(&p, 10);
+    }
 
 
 Struct and unions will always take pointer, whereas enums take the enum value.
 
-```
-enum State
-{
-    STOPPED,
-    RUNNING
-}
-
-func bool State.mayOpen(State state) 
-{
-    switch (state)
+    enum State
     {
-        case State.STOPPED: return true;
-        case State.RUNNING: return false;
+        STOPPED,
+        RUNNING
     }
-}
-```
+    
+    func bool State.mayOpen(State state) 
+    {
+        switch (state)
+        {
+            case State.STOPPED: return true;
+            case State.RUNNING: return false;
+        }
+    }
 
 
 ### Restrictions on methods
@@ -224,52 +215,45 @@ func bool State.mayOpen(State state)
 C3's error handling is not intended to use errors to signal invalid data or to check invariants and post conditions. Instead C3's approach is to add annotations to the function, that conditionally will be compiled into asserts.
 
 As an example, the following code:
-```
-/**
- * @param foo : the number of foos 
- * @require foo > 0, foo < 1000
- * @return number of foos x 10
- * @ensure return < 10000, return > 0
- **/
-func int testFoo(int foo)
-{
-    return foo * 10;
-}
-```
+
+    /**
+     * @param foo : the number of foos 
+     * @require foo > 0, foo < 1000
+     * @return number of foos x 10
+     * @ensure return < 10000, return > 0
+     **/
+    func int testFoo(int foo)
+    {
+        return foo * 10;
+    }
 
 Will in debug builds be compiled into something like this:
 
-```
-func int testFoo(int foo)
-{
-    assert(foo > 0);
-    assert(foo < 1000);
-    int _return = foo * 10;
-    assert(_return < 10000);
-    assert(_return > 0);
-    return _return;
-}
-```
+    func int testFoo(int foo)
+    {
+        assert(foo > 0);
+        assert(foo < 1000);
+        int _return = foo * 10;
+        assert(_return < 10000);
+        assert(_return > 0);
+        return _return;
+    }
 
 The compiler is allowed to use the pre and post conditions for optimizations. For example this:
 
-```
-func int testExample(int bar)
-{
-    if (testFoo(bar) == 0) return -1;
-    return 1;
-}
-```
+    func int testExample(int bar)
+    {
+        if (testFoo(bar) == 0) return -1;
+        return 1;
+    }
 
 May be optimized to:
 
-```
-func int testExample(int bar)
-{
-    return 1;
-}
-```
+    func int testExample(int bar)
+    {
+        return 1;
+    }
 
 In this case the compiler can look at the post condition of `result > 0` to determine that `testFoo(foo) == 0` must always be false.
 
-Looking closely at this code, we not that nothing guarantees that `bar` is not violating the preconditions. In debug builds this will usually be checked in runtime, but a sufficiently smart compiler will warn about the lack of checks on `bar`. Execution of code violating pre and post conditions has undefined behaviour.
+Looking closely at this code, we not that nothing guarantees that `bar` is not violating the preconditions. In Safe builds this will usually be checked in runtime, but a sufficiently smart compiler will warn about the lack of checks on `bar`. Execution of code violating pre and post conditions has unspecified behaviour.

@@ -4,10 +4,10 @@ As usual, types are divided into basic types and user defined types (enum, union
 
 ##### Naming
 
-All user defined types in C3 starts with upper case. So `MyStruct` or `Mystruct` would be fine, `mystruct_t` or `mystruct` would not. Since this runs into probles with C compatibility, it is possible to use attributes to change the c name of a type, as well as control whether a C typedef should be emitted for the type.
+All user defined types in C3 starts with upper case. So `MyStruct` or `Mystruct` would be fine, `mystruct_t` or `mystruct` would not. Since this affects C compatibility, it is possible to use attributes to change the external name of a type:
 
 ```
-struct Stat @cname("stat") @notypedef
+struct Stat @extname("stat")
 {
     // ...
 } 
@@ -17,7 +17,7 @@ func CInt stat(const char* pathname, Stat* buf);
 
 ##### Differences from C
 
-Unlike C, C3 does not use type qualifiers. `const` exists, but is a storage class modifier, not a type qualifier. Instead of `volatile`, volatile blocks are used. In order to signal restrictions on variable usage, like const-ness [preconditions](../preconditions/) are used.
+Unlike C, C3 does not use type qualifiers. `const` exists, but is a storage class modifier, not a type qualifier. Instead of `volatile`, volatile loads and stores are used. In order to signal restrictions on variable usage, like const-ness [preconditions](../preconditions/) are used.
 
 ## Basic types
 
@@ -26,7 +26,7 @@ Basic types are divided into floating point types, and integer types. Integer ty
 ##### Integer types
 
 | Name         | bit size | signed |
-| ------------ | --------:|:------:|
+| :----------- | --------:|:------:|
 | bool*        | 1        | no     |
 | ichar        | 8        | yes    |
 | char         | 8        | no     |
@@ -78,11 +78,11 @@ Base64 encoded values work like TwoCC/FourCC/EightCC, in that is it laid out in 
 
 In our case we could encode `'Rk9PQkFSMTE='b64` as `'FOOBAR11'`.
 
-Base64 and hex data literals also has a form to allow initializing byte and char arrays, instead of enclosing the data in `''`, enclose the data in `""`
+Base64 and hex data literals also has a form to allow initializing char arrays, instead of enclosing the data in `''`, enclose the data in `""`
 
 ```
-byte[] hello_world_base64 = "SGVsbG8gV29ybGQh"b64;
-char[] hello_world_hex = "4865 6c6c 6f20 776f 726c 6421"x;
+char[*] hello_world_base64 = "SGVsbG8gV29ybGQh"b64;
+char[*] hello_world_hex = "4865 6c6c 6f20 776f 726c 6421"x;
 ```
 
 ##### Floating point types
@@ -104,7 +104,7 @@ Floating point values may be written in decimal or hexadecimal. For decimal, the
 
 ### C compatibility
 
-For C compatibility the following types are also defined when including std.cinterop
+For C compatibility the following types are also defined when including std::cinterop
 
 | Name         | c type             |
 | ------------ | ------------------:|
@@ -121,13 +121,17 @@ For C compatibility the following types are also defined when including std.cint
 | CDouble      | double             |
 | CLongDouble  | long double        |
 
+    
+Note that signed C char and unsigned char will correspond to `ichar` and `char`. `CChar` is only available to match the default signedness of `char` on the platform.
+
 ### Pointer types
 
 Pointers mirror C: `Foo*` is a pointer to a `Foo`, while `Foo**` is a pointer to a pointer of Foo.
 
 ### Array types
 
-Arrays are indicated by `[]` after the type, optionally with the size given, e.g. `int[4]`. Unlike C, the "empty" array (without size), is a variable array that may be queried about its size. There is also array slices with using the `[:]` suffix. See the chapter on [arrays](../arrays).
+Arrays are indicated by `[<size>]` after the type, e.g. `int[4]`. Subarrays use the `type[]`. For initialization the wildcard `type[*]` can be used to infer the size
+from the initializer. See the chapter on [arrays](../arrays).
 
 ## Enum
 
@@ -194,14 +198,19 @@ error ParseError
 }
 ```
 
+The data inside of an error cannot exceed the size of an `iptr` that is pointer sized.
+
 An error is similar to a struct and is initialized the same way. One exception is that simple errors without a body does not need to be
 created using a `()`:
 
 ```
 return IOError!; 
-return IOError()!; // Same as above
-return ParseError(line, col)!;
+return IOError({})!; // Same as above
+return ParseError({ line, col })!;
 ```
+
+In order to pass the error on the error side channel instead of as a value, the `!`.
+
 
 ## Failable
 
@@ -224,8 +233,6 @@ int! x = 0; // Ok!
 Read more about the errors on the page about [error handling](../errorhandling).
 
 
-
-
 ## Struct types
 
 Structs are always named:
@@ -245,15 +252,15 @@ Person p;
 p.age = 21;
 p.name = "John Doe";
 
-io.printf("%s is %d years old.", p.age, p.name);
+io::printf("%s is %d years old.", p.age, p.name);
 
 Person* pPtr = &p;
 pPtr.age = 20; // Ok!
 
-io.printf("%s is %d years old.", pPtr.age, pPtr.name);
+io::printf("%s is %d years old.", pPtr.age, pPtr.name);
 ```
 
-(One might wonder whether it's possible to take a `Person**` and use dot access. – It's not, only one level of deref is done)
+(One might wonder whether it's possible to take a `Person**` and use dot access. – It's not, only one level of dereference is done.)
 
 ## Struct subtyping
 
@@ -268,7 +275,7 @@ struct ImportantPerson
 
 func printPerson(Person p)
 {
-    io.printf("%s is %d years old.", p.age, p.name);
+    io::printf("%s is %d years old.", p.age, p.name);
 }
 
 
@@ -346,25 +353,12 @@ float f = 2.0;
 int i = (int)(f);
 ```
 
-## Conversion to symbol to type and back with `type`
-
-Macros and compile time constants may occasionally contain type *symbols*. To convert back and forth, the `type` operator is used.
-
-```
-macro @test($i)
-{
-    $if ($i < 2) return type(int);
-    return type(double);
-}
-
-$foo = type(int*);
-type($foo) i = nil;
-type(@test(4)) = 100;
-```
 
 ## Anonymous structs
 
 It's possible to use anonymous structs (structs without name) as arguments. These will only be checked for structural equivalence.
+
+_NOTE: This syntax is not final._
 
 ```
 func void set_coordinates(struct { int i; int j; } coord) { ... }

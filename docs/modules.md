@@ -57,7 +57,7 @@ import stdio;
 ```
 module foo;
 
-//import bar and networking imported, but not storage
+//import bar and networking imported, but not stdio
 import bar;
 import networking;
 
@@ -200,6 +200,8 @@ This means that the rule for the common case can be summarized as
 ## Textual includes
 
 It's sometimes useful to include an entire file, doing so employs the `$include` function.
+
+_NOTE: This feature may significantly change._
 
 File `Foo.c3`
 ```

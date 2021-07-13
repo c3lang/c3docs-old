@@ -3,9 +3,8 @@
 C3 uses three distinct comment types:
 
 1. The normal `//` line comment, which is terminated at the end of the line.
-2. The classic `/* ... */` C style comment.
+2. The classic `/* ... */` C style comment, but unlike in C they are allowed to nest.
 3. Documentation comments `/** ... **/` the text within these comments will be parsed as documentation and optional contracts on the following code.
-4. Nested comments `/+ ... +/`. Like C style comments, but they are allowed to nest.
 
 ## Documentation
 

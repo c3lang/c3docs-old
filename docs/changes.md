@@ -1,5 +1,10 @@
 # Change log
 
+
+##### Revision 2020-07-13
+- Added nesting to /* ... */ removed /+ ... +/
+- Added primer.
+
 ##### Revision 2020-06-20
 - Updated array layout.
 - Revised macros for foreach.

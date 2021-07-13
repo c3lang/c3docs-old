@@ -67,7 +67,8 @@ func void demo_enum(Height h)
 {
     switch (h) 
     {
-        case LOW, MEDIUM:
+        case LOW: 
+        case MEDIUM:
             io::printf("Not high");
             // Implicit break.
         case HIGH:
@@ -137,8 +138,8 @@ enum State : uint
     Stop,
 }
 
-const uint lowest = State.min;
-const uint highest = State.max;
+const uint LOWEST = State.min;
+const uint HIGHEST = State.max;
 
 State start = State.all[0];
 ```
@@ -171,7 +172,7 @@ func void! test(int x)
 {
     defer printf("A");
     defer catch printf("B")
-    defer catch (err) printf("%s", e.message);
+    defer catch (err) printf("%s", err.message);
     if (x = 1) return FooError!;
     printf("!")
 }
@@ -183,7 +184,7 @@ test(1); // Prints "FOOBA" and returns a FooError
 #####struct types
 
 ```
-type Callback func int(char c);
+define Callback = func int(char c);
 
 enum Status : int
 {
@@ -204,21 +205,21 @@ struct MyData
     {
         int value;
         int status;   // ok, no name clash with other status
-    }
+    };
 
     // anonymous sub-structs (x.value)
     struct 
     {
         int value;
         int status;   // error, name clash with other status in MyData
-    }
+    };
 
     // anonymous union (x.person)
     union 
     {
         Person* person;
         Company* company;
-    }
+    };
 
     // named sub-unions (x.either.this)
     union either 
@@ -226,7 +227,7 @@ struct MyData
         int this;
         bool  or;
         char* that;
-    }
+    };
 }
 ```
 
@@ -236,7 +237,7 @@ struct MyData
 ```
 module demo;
 
-type Callback func int(char* text, int value);
+define Callback = func int(char* text, int value);
 
 // also shows function attribute
 func int my_callback(char* text, int value) @(unused_params) 
@@ -244,7 +245,7 @@ func int my_callback(char* text, int value) @(unused_params)
     return 0;
 }
 
-Callback cb = demo.my_callback;
+Callback cb = &my_callback;
 
 func void example_cb() 
 {
@@ -267,10 +268,10 @@ func double divide(int a, int b)
 
 }
 
-// Rethrowing an error uses "try"
+// Rethrowing an error uses "!!" suffix
 func void! testMayError()
 {
-    try divide(foo(), bar()); 
+    divide(foo(), bar())!!; 
 }
 
 func void testHandlingError()
@@ -290,12 +291,13 @@ func void testHandlingError()
     }
     // Flow typing makes "ratio"
     // have the type double here.
-    printf("Ratio was %f\n", ratio);
+    io::printf("Ratio was %f\n", ratio);
 }
 ```
 
 ```
 import std::io;
+
 func void printFile(string filename)
 {
     string! file = io::load_file(filename);
@@ -321,7 +323,7 @@ Pre- and postconditions are optionally compiled into asserts helping to optimize
  * @param foo : the number of foos 
  * @require foo > 0, foo < 1000
  * @return number of foos x 10
- * @ensure testFoo < 10000, testFoo > 0
+ * @ensure return < 10000, return > 0
  **/
 func int testFoo(int foo)
 {
@@ -345,7 +347,7 @@ Macro arguments may be immediately evaluated.
 ```
 macro foo(a, b)
 {
-    return *a(b);
+    return a(b);
 }
 
 func int square(int x)
@@ -363,14 +365,15 @@ func int test()
 }
 ```
 
-Macro arguments may have deferred evaluation, which is basically text expansion.
+Macro arguments may have deferred evaluation, which is basically text expansion using `#var` syntax.
+
 ```
-macro foo($a, b, $c)
+macro foo(#a, b, #c)
 {
     c = a(b) * b;
 }
 
-macro foo2($a)
+macro foo2(#a)
 {
     return a * a;
 }
@@ -398,7 +401,7 @@ Improve macro errors with preconditions:
 ```
 /**
  * @param x : value to square
- * @require x * x >= 0 : "cannot multiply"
+ * @checked x * x >= 0 : "cannot multiply"
  **/
 macro square(x)
 {
@@ -413,7 +416,7 @@ func void test()
 }
 ```
 
-##### Type methods
+##### Methods
 
 It's possible to namespace functions with a union, struct or enum type to enable "dot syntax" calls:
 

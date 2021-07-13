@@ -2,7 +2,9 @@
 
 C3 allows both compile time and runtime reflection.
 
-During compile time the type information may be directly used as compile time constants, the same data is then available dynamically.
+During compile time the type information may be directly used as compile time constants, the same data is then available dynamically at runtime.
+
+*Note that not all reflection is implemented in the compiler at this point in time.*
 
 ## Compile time reflection
 
@@ -12,11 +14,9 @@ During compile time there are a number of compile time fields that may be access
 
 #### typeid
 
-Returns the typeid for the given type. Typedefs will return the typeid of the underlying type.
+Returns the typeid for the given type. Typedefs will return the typeid of the underlying type. The typeid size is the same as that of an `iptr`.
 
-```
-typeid x = Foo.typeid; 
-```
+    typeid x = Foo.typeid; 
 
 #### nameof
 

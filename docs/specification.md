@@ -104,9 +104,8 @@ UC_ALPHANUM_US  ::= UC_LETTER_US | DIGIT
 
 Thre are three types of regular comments:
 
-1. `/* text */` block comments. The text between `/*` and `*/` is ignored.
-2. `// text` a line comment. The text between `//` and line end is ignored.
-3. `/+ text +/` nesting comments. The text between `/+` and `+/` is ignored. Unlike `/* text */` it has nesting behaviour, so for every `/+` discovered between the first `/+` and the last `+/` a corresponding `+/` must be found.
+1. `// text` a line comment. The text between `//` and line end is ignored.
+2. `/* text */` block comments. The text between `/*` and `*/` is ignored. It has nesting behaviour, so for every `/*` discovered between the first `/*` and the last `*/` a corresponding `*/` must be found.
 
 ### Doc comments
 

@@ -1,10 +1,10 @@
 ## Error Handling
 
-Unlike usual exception handling, errors in C3 build on normal returns. A function returning errors add a `!` to the return type. In C3 this called a "failable" type.
+Unlike usual exception handling, errors in C3 build on normal returns. A function returning errors add a `!` to the return type. In C3 this called a *failable* type.
 
 ### Error returns
 
-From C, a function returning an error value will appear as an out parameter – if the function returns a union of error codes – or as the return parameter if the function would a single enum.:
+For C the interface to C, the error is returned as the normal value, and any return is instead returned on as an out parameter.
 
 C3 code:
 ```
@@ -13,11 +13,12 @@ func int! getValue();
 
 Corresponding C code:
 ```c
-int getValue(Error *error);
+Error getValue(int *value);
 ```
 
 The `int!` here is the failable return type, which is a tagged union: it might hold either the error or an int.
 
+*Note: reflection methods on errors are not complete yet.*
 ```
 // Open a file, we will get a failable:
 // Either a File* or an error.
@@ -71,14 +72,27 @@ func void test()
 )
 ```
 
-If a `catch` returns or jumps out of the current scope in a different way, then the variable becomes
-unwrapped to it's non-failable type. 
+If a `catch` returns or jumps out of the current scope in some way, then the variable becomes
+unwrapped to it's non-failable type in that scope:
 
-#### Some simple examples.
+```
+int! i = fooMayError();
+    
+catch (i)
+{
+    return;
+}
+
+// i is now considered an int:
+
+if (i > 10) doSomething();
+```
+
+### Some simple examples.
 
 ##### Defining an error
 
-Errors may either be flat or contain additional data.
+Errors may either be flat or contain additional data, however this data may not exceed the size of the `iptr` type.
 
 ```
 error FileNotFoundError;

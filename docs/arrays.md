@@ -22,11 +22,11 @@ int x[3] = { 1, 2, 3 };
 foo(&x);
 ```
 
-When you want to initialize a fixed array without specififying the size, use the [+] array syntax:
+When you want to initialize a fixed array without specififying the size, use the [*] array syntax:
 
 ```
-int[3] a = { 1, 2, 3};
-int[+] b = { 4, 5, 6}; // Type inferred to be int[3]
+int[3] a = { 1, 2, 3 };
+int[*] b = { 4, 5, 6 }; // Type inferred to be int[3]
 ```
 
 
@@ -141,13 +141,13 @@ Slices, fixed and variable arrays may all be iterated over using `foreach (Type 
 
 ```
 int[4] a = { 1, 2, 3, 5 };
-for (int x : a)
+foreach (int x : a)
 {
     ...
 }
 ```
 
-*NOTE THAT THE SYNTAX WILL BE REVISED*
+_NOTE THAT THE SYNTAX WILL BE REVISED_
 
 It is possible for any type to get this iteration by implementing the method macros `_foreach` `_foreach_index`:
 
@@ -189,7 +189,7 @@ v.add(3);
 v.add(7);
 
 // Will print 3 and 7
-for (int i : v)
+foreach (int i : v)
 {
     printf("%d\n");
 }
