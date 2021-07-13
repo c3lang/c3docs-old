@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Built-in Macros - C3 Documentation</title>
+  <title>A quick primer on C3 - C3 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Built-in Macros";
-    var mkdocs_page_input_path = "builtinmacros.md";
+    var mkdocs_page_name = "A quick primer on C3";
+    var mkdocs_page_input_path = "primer.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -56,16 +56,18 @@
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">Installing</span></p>
-                <ul>
+                <ul class="current">
                     <li class="toctree-l1"><a class="reference internal" href="../setup/">Setup</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../firstproject/">Your first project</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../primer/">A quick primer on C3</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">A quick primer on C3</a>
+    <ul class="current">
+    </ul>
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">Documentation</span></p>
-                <ul class="current">
+                <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../changesfromc/">Changes from C</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../compare/">Comparisons with other languages</a>
@@ -92,21 +94,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
                     </li>
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Built-in Macros</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#describe">@describe</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#elements">@elements</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#name">@name</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#offset">@offset</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#sizeof">@sizeof</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#typeof">@typeof</a>
-    </li>
-    </ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../builtinmacros/">Built-in Macros</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
                     </li>
@@ -176,11 +164,11 @@
     
       
         
-          <li>Documentation &raquo;</li>
+          <li>Installing &raquo;</li>
         
       
     
-    <li>Built-in Macros</li>
+    <li>A quick primer on C3</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -191,83 +179,272 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="built-in-macros">Built-in macros</h1>
-<p><em>This has changed and needs a revision.</em></p>
-<p>There are several built-in macros to inspect the code during compile and runtime.</p>
-<ul>
-<li>@bitcast</li>
-<li>@describe</li>
-<li>@elements</li>
-<li>@name</li>
-<li>@sizeof</li>
-<li>@typeof</li>
-</ul>
-<h3 id="describe">@describe</h3>
-<p>Creates a runtime description of a value.</p>
-<pre><code>enum FooEnum
-{
-    A,
-    B
-}
+                <h2 id="a-quick-primer-on-c3-for-c-programmers">A quick primer on C3 for C programmers</h2>
+<p>Functions are declared like C, but you need to put <code>func</code> in front:</p>
+<pre><code>// C:
+int foo(Foo *b, int x, void *z) { ... }
 
-func char[] test()
-{
-    FooEnum x = FooEnum.A;
-    return @describe(x); // Returns &quot;FooEnum.A&quot;
-}
+// C3
+func int foo(Foo* b, int x, void *z) { ... }
+</code></pre>
+<p>Name standards are enforced:</p>
+<pre><code>// Starting with uppercase and followed somewhere by at least
+// one lower case is a user defined type:
+Foo x;
+M____y y;
 
+// Starting with lowercase is a variable or a function or a member name:
+
+x.myval = 1;
+int z = 123;
+func void fooBar(int x) { ... }
+
+// Only upper case is a constant or an enum value:
+
+const int FOOBAR = 123;
+enum Test 
+{
+  STATE_A = 0,
+  STATE_B = 2
+}
+</code></pre>
+<p>Declaring more than one variable at a time is not allowed:</p>
+<pre><code>// C
+int a, b; // Not allowed in C3
+
+// C3
+int a;
+int b;
+</code></pre>
+<p>Cast syntax is slightly different:</p>
+<pre><code>// C
+int a = (int)foo();
+
+// C3
+int a = (int)(foo());
+</code></pre>
+<p>Compound literals look different, but assigning to a struct will infer the type even if
+it's not the initializer.</p>
+<pre><code>// C
+Foo f = { 1, 2 };
+f = (Foo) { 1, 2 };
+callFoo((Foo) { 2, 3 });
+
+// C3
+Foo f = { 1, 2 };
+f = { 1, 2 };
+callFoo(Foo({ 2, 3 }));
+</code></pre>
+<p>Instead of <code>typedef</code>, use <code>define</code></p>
+<pre><code>// C
+typedef Foo* FooPtr;
+
+// C3
+define FooPtr = Foo*;
+</code></pre>
+<p>Don't add a <code>;</code> after enum, struct and union declarations, and note the slightly 
+different syntax for declaring a named struct inside of a struct.</p>
+<pre><code>// C
 struct Foo
 {
-    int x;
-    char[] y;
+  int a;
+  struct 
+  {
+    double x;
+  } bar;
+};
+
+// C3
+struct Foo
+{
+  int a;
+  struct bar 
+  {
+    double x;
+  }
+}
+</code></pre>
+<p>Array sizes are written next to the type and arrays do not decay to pointers, 
+you need to do it manually:</p>
+<pre><code>// C
+int x[2] = { 1, 2 }; 
+int *y = x;
+
+// C3
+int[2] x = { 1, 2 };
+int *y = &amp;x;
+</code></pre>
+<p>You will probably prefer slices to pointers when passing data around:</p>
+<pre><code>// C
+int x[100] = ...;
+int y[30] = ...;
+int z[15] = ...;
+sortMyArray(x, 100);
+sortMyArray(y, 30);
+// Sort part of the array!
+sortMyArray(z + 1, 10);
+
+// C3
+int[100] x = ...;
+int[30] y = ...;
+sortMyArray(&amp;x); // Implicit conversion from int[100]* -&gt; int[] 
+sortMyArray(&amp;y); // Implicit conversion from int[30]* -&gt; int[]
+sortMyArray(z[1..10]; // Inclusive ranges!
+</code></pre>
+<p>Note that declaring an array of inferred size will look different in C3:</p>
+<pre><code>// C
+int x[] = { 1, 2, 3 }; // x is int[3]
+
+// C3
+int[*] x = { 1, 2, 3 }; // x is int[3]
+</code></pre>
+<p>Arrays are trivially copyable:</p>
+<pre><code>// C
+int x[3] = ...;
+int y[3];
+for (int i = 0; i &lt; 3; i++) y[i] = x[i];
+
+// C3
+int[3] x = ...;
+int[3] y = x;
+</code></pre>
+<p>Several C types that would be variable sized are fixed size, and others changed names:</p>
+<pre><code>// C
+int16_t a;
+int32_t b;
+int64_t c;
+uint64_t d;
+size_t e;
+ssize_t f;
+ptrdiff_t g;
+intptr_t h;
+
+// C3
+short a;    // Guaranteed 16 bits
+int b;      // Guaranteed 32 bits
+long c;     // Guaranteed 64 bits
+ulong d;    // Guaranteed 64 bits
+usize e;    // Same as C size_t, depends on target
+isize f;    // Same width as usize but signed
+iptrdiff g; // Same as C ptrdiff_t depends on target
+iptr h;     // Same as intptr_t depends on target
+ireg i;     // Register sized integer
+</code></pre>
+<p>Modules are not mandatory but create a namespace, to import the names from a module, 
+use <code>import</code>:</p>
+<pre><code>module mylib::foo;
+
+func void test() { ... }
+struct FooStruct { ... }
+
+module mylib::bar;
+import mylib::foo;
+
+func void myCheck()
+{
+  foo::test(); // foo prefix is mandatory.
+  mylib::foo::test(); // This also works;
+  FooStruct x; // But user defined types don't need the prefix.
+  mylib::foo::FooStruct y; // But it is allowed.
+}
+</code></pre>
+<p>The /<em> </em>/ comments are nesting:</p>
+<pre><code>/* This /* will all */ be commented out */
+</code></pre>
+<p>Qualifiers like <code>const</code> and <code>volatile</code> are removed, but <code>const</code> before a constant
+will make it treated as a compile time constant. The constant does not need to be typed.</p>
+<pre><code>const A = false;
+// Compile time 
+$if (A):
+  // This will not be compiled
+$else:
+  // This will be compiled
+$endif
+</code></pre>
+<p><code>goto</code> is removed, but there are labelled <code>break</code> and <code>continue</code> as well as <code>defer</code>
+to handle the cases when it is commonly used in C.</p>
+<p><code>case</code> statements automatically break. Use <code>nextcase</code> to fallthrough to the 
+next statement, but empty case statements have implicit fallthrough:</p>
+<pre><code>// C
+switch (a)
+{
+  case 1:
+  case 2:
+    doOne();
+    break;
+  case 3:
+    i = 0;
+  case 4:
+    doFour();
+    break;
+  case 5:
+    doFive();
+  default:
+    return false;
 }
 
-func char[] test_struct()
+// C3
+switch (a)
 {
-    Foo foo = { .x = 2, y = &quot;bar&quot; }
-    return @describe(x); // Returns &quot;Foo { x: 2, y: &quot;bar&quot; }&quot;
+  case 1:
+  case 2:
+    doOne();
+  case 3:
+    i = 0;
+    nextcase;
+  case 4:
+    doFour();
+  case 5:
+    doFive();
+    nextcase;
+  default:
+    return false;
 }
 </code></pre>
-<h3 id="elements">@elements</h3>
-<p>Returns an array of an error set or enum set.</p>
-<pre><code>FooEnum[] values = @elements(FooEnum); 
-// Same as FooEnum[] values = { FooEnum.A, FooEnum.B };
-</code></pre>
-<h3 id="name">@name</h3>
-<p>Creates a runtime name of a value.</p>
-<pre><code>func char[] test()
+<p>Note that we can jump to an arbitrary case using C3:</p>
+<pre><code>// C
+switch (a)
 {
-    FooEnum x = FooEnum.B;
-    return @name(x); // Returns &quot;B&quot;
+  case 1:
+    doOne();
+    goto LABEL3;
+  case 2:
+    doTwo();
+    break; 
+  case 3:
+LABEL3:
+    doThree();
+  default:
+    return false;
 }
 
-func char[] test_struct()
+// C3
+switch (a)
 {
-    Foo foo = { .x = 2, y = &quot;bar&quot; }
-    return @name(x); // Returns &quot;Foo&quot;
+  case 1:
+    doOne();
+    nextcase 3;
+  case 2:
+    doTwo();
+  case 3:
+    doThree();
+    nextcase;
+  default:
+    return false;
 }
 </code></pre>
-<h3 id="offset">@offset</h3>
-<p>Returns the byte offset in a structure, like <code>offsetof</code> in C</p>
-<pre><code>@offset(Foo, y); // =&gt; returns 4 or 8
-</code></pre>
-<h3 id="sizeof">@sizeof</h3>
-<p>Returns the size of a type or an expression</p>
-<pre><code>func usize size_test()
-{
-    return @sizeof(Foo); // Might compile to 16
-}
-
-func usize size_test2()
-{
-    return @sizeof(size_test()); // Usually returns 8 (the size of usize)
-}
-</code></pre>
-<h3 id="typeof">@typeof</h3>
-<p>Returns the type of an expression</p>
-<pre><code>@typeof(size_test()) x = size_test();
-@typeof(x) y = x + 1;
-</code></pre>
+<p>Things that doesn't exist in C at all, but which aren't essential to get started:</p>
+<ul>
+<li>Expression blocks</li>
+<li>Defer</li>
+<li>Methods  </li>
+<li>Errors</li>
+<li>Semantic macros</li>
+<li>Generic modules</li>
+<li>Contracts</li>
+<li>Reflection</li>
+<li>Macro methods</li>
+</ul>
               
             </div>
           </div>
@@ -275,10 +452,10 @@ func usize size_test2()
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../precedence/" class="btn btn-neutral float-right" title="Precedence">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../changesfromc/" class="btn btn-neutral float-right" title="Changes from C">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../conversion/" class="btn btn-neutral" title="Conversions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../firstproject/" class="btn btn-neutral" title="Your first project"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -304,10 +481,10 @@ func usize size_test2()
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../conversion/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../firstproject/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../precedence/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../changesfromc/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
