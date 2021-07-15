@@ -71,6 +71,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#calling-c-functions">Calling C functions</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#identifiers">Identifiers</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#variable-declaration">Variable declaration</a>
@@ -298,6 +300,23 @@ int foo(Foo *b, int x, void *z) { ... }
 func int foo(Foo* b, int x, void *z) { ... }
 </code></pre>
 <p>See more about functions, like named and default arguments <a href="../functions">here</a>.</p>
+<h4 id="calling-c-functions">Calling C functions</h4>
+<p>Declare a function (or variable) with <code>extern</code> and it will be possible to
+access it from C3:</p>
+<pre><code>// To access puts:
+extern func int puts(char*);
+...
+puts("Hello world");
+</code></pre>
+<p>Note that currently only the C standard library is automatically passed to the linker. 
+In order to link with other libraries, you either need to explicitly tell 
+the compiler to link them.</p>
+<p>If you want to use a different identifier inside of your C3 code compared to
+the function or variable's external name – use the <code>@extname</code> attribute:</p>
+<pre><code>extern func int _puts(char* message) @extname("puts");
+...
+_puts("Hello world"); // &lt;- calls the puts function in libc
+</code></pre>
 <h4 id="identifiers">Identifiers</h4>
 <p>Name standards are enforced:</p>
 <pre><code>// Starting with uppercase and followed somewhere by at least
