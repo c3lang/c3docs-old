@@ -101,6 +101,26 @@ Functions are declared like C, but you need to put `func` in front:
 
 See more about functions, like named and default arguments [here](../functions).
 
+#### Calling C functions
+
+Declare a function (or variable) with `extern` and it will be possible to
+access it from C3:
+
+    // To access puts:
+    extern func int puts(char*);
+    ...
+    puts("Hello world");
+
+Note that currently only the C standard library is automatically passed to the linker. 
+In order to link with other libraries, you either need to explicitly tell 
+the compiler to link them.
+
+If you want to use a different identifier inside of your C3 code compared to
+the function or variable's external name – use the `@extname` attribute:
+
+    extern func int _puts(char* message) @extname("puts");
+    ...
+    _puts("Hello world"); // <- calls the puts function in libc
 #### Identifiers
 
 Name standards are enforced:
