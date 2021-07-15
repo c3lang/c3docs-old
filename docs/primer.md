@@ -121,6 +121,7 @@ the function or variable's external name – use the `@extname` attribute:
     extern func int _puts(char* message) @extname("puts");
     ...
     _puts("Hello world"); // <- calls the puts function in libc
+
 #### Identifiers
 
 Name standards are enforced:
