@@ -189,7 +189,8 @@
 <li><code>^</code>, <code>|</code>, infix <code>&amp;</code></li>
 <li><code>+</code>, <code>+%</code>, infix <code>-</code>, infix <code>-%</code></li>
 <li><code>==</code>, <code>!=</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&lt;</code></li>
-<li><code>&amp;&amp;</code>, <code>||</code></li>
+<li><code>&amp;&amp;</code></li>
+<li><code>||</code></li>
 <li>ternary <code>?:</code></li>
 <li><code>=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>+=</code>, <code>-=</code>, <code>&lt;&lt;=</code>, <code>&gt;&gt;=</code>, <code>&amp;=</code>, <code>^=</code>, <code>|=</code></li>
 </ol>
@@ -207,25 +208,19 @@ a &amp; (b == c)       // C  (bitwise operators are evaluated after relational)
 (a &amp; b) == c       // C3 (bitwise operators are evaluated before relational)
 
 
-a || b &amp;&amp; c
-
-a || (b &amp;&amp; c)      // C  (&amp;&amp; binds tighter than ||)
-(a || b) &amp;&amp; c      // C3 (Same precedence, left-to-right evaluation)
-
-
 a &gt; b == c &lt; d
 
 (a &gt; b) == (c &lt; d) // C  (&lt; &gt; binds tighter than ==)
-((a &gt; b) == c) &lt; d // C3 (Same precedence, left-to-right evaluation)
+((a &gt; b) == c) &lt; d // C3 Error, requires parenthesis!
 
 
 a | b ^ c &amp; d
 
 a | ((b ^ c) &amp; d)  // C  (All bitwise operators have different precedence)
-((a | b) ^ c) &amp; d  // C3 (Same precedence, left-to-right evaluation)
+((a | b) ^ c) &amp; d  // C3 Error, requires parenthesis!
 </code></pre>
 <p>The change in precedence of the bitwise operators corrects a long standing issue in the C specification. The change in precedence for shift operations goes towards making the precedence less surprising.</p>
-<p>Conflating the precedence of || and &amp;&amp;, relational and equality operations, and all bitwise operations was motivated by simplification: few remember the exact internal differences in precedence between bitwise operators.</p>
+<p>Conflating the precedence of relational and equality operations, and all bitwise operations was motivated by simplification: few remember the exact internal differences in precedence between bitwise operators. Parenthesis are required for those conflated levels of precedence.</p>
 <p>Left-to-right offers a very simple model to think about the internal order of operations, and encourages use of explicit ordering, as best practice in C is to use parentheses anyway.</p>
               
             </div>
