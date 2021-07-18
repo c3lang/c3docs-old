@@ -259,7 +259,7 @@ func void example_cb()
 Errors are sent as a result value, called a "failable":
 
 ```
-error DivisionByZero;
+errtype DivisionByZero;
 
 func double divide(int a, int b)
 {

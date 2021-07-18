@@ -136,12 +136,13 @@ The following keywords are reserved and may not be used as identifiers:
 
 ```
 alias       as          asm
+anyerr
 assert      attribute   break
 case        cast        catch
 const       continue    default
 defer       define      do
 else        enum        extern
-error       false       func
+errtype     false       func
 generic     if          import
 in          local       macro
 module      nextcase    nil

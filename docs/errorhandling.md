@@ -95,8 +95,8 @@ if (i > 10) doSomething();
 Errors may either be flat or contain additional data, however this data may not exceed the size of the `iptr` type.
 
 ```
-error FileNotFoundError;
-error ParseError
+errtype FileNotFoundError;
+errtype ParseError
 {
     int line;
     int col;

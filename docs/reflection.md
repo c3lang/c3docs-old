@@ -116,7 +116,7 @@ string x = Foo.elements[0].name; // "BAR"
 Returns an array containing the error values in an enum.
 
 ```
-error FooErr
+errtype FooErr
 {
     BAD_BAR,
     NO_BAZ
@@ -213,8 +213,8 @@ Returns a list containing all errors returned, or nil otherwise. An empty list
 is returned on not returning. 
 
 ```
-error SomeError { ... }
-error SomeOtherError { ... }
+errtype SomeError { ... }
+errtype SomeOtherError { ... }
 
 func void! foo()
 {

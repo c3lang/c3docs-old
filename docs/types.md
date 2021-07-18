@@ -1,6 +1,6 @@
 # Types
 
-As usual, types are divided into basic types and user defined types (enum, union, struct, error, aliases). All types are defined on a global level. Using the `public` prefix is necessary for any type that is to be exposed outside of the current module.
+As usual, types are divided into basic types and user defined types (enum, union, struct, errtypes, aliases). All types are defined on a global level. Using the `public` prefix is necessary for any type that is to be exposed outside of the current module.
 
 ##### Naming
 
@@ -190,8 +190,8 @@ test(State.RUNNING); // Uses enum constant.
 Error types are similar to enums, and are used for error returns.
 
 ```
-error IOError;
-error ParseError
+errtype IOError;
+errtype ParseError
 {
     int line;
     int col;
