@@ -19,7 +19,7 @@ func int main(int argc, char** argv)
 Now in the terminal type:
 
 ```
-$ c3c hello_world.c3
+$ c3c compile hello_world.c3
 $ ./hello_world.a
 Hello World
 $ 
