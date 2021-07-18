@@ -301,7 +301,7 @@ string x = Foo.elements[0].name; // &quot;BAR&quot;
 <h4 id="errors">errors</h4>
 <p><em>Only available for error types.</em>
 Returns an array containing the error values in an enum.</p>
-<pre><code>error FooErr
+<pre><code>errtype FooErr
 {
     BAD_BAR,
     NO_BAZ
@@ -366,8 +366,8 @@ string s = TestFunc.params[1].name; // &quot;double&quot;
 <p><em>Only available for functions.</em>
 Returns a list containing all errors returned, or nil otherwise. An empty list
 is returned on not returning. </p>
-<pre><code>error SomeError { ... }
-error SomeOtherError { ... }
+<pre><code>errtype SomeError { ... }
+errtype SomeOtherError { ... }
 
 func void! foo()
 {

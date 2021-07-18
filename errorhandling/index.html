@@ -279,8 +279,8 @@ if (i &gt; 10) doSomething();
 <h3 id="some-simple-examples">Some simple examples.</h3>
 <h5 id="defining-an-error">Defining an error</h5>
 <p>Errors may either be flat or contain additional data, however this data may not exceed the size of the <code>iptr</code> type.</p>
-<pre><code>error FileNotFoundError;
-error ParseError
+<pre><code>errtype FileNotFoundError;
+errtype ParseError
 {
     int line;
     int col;

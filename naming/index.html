@@ -110,7 +110,7 @@
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Naming rules</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#structs-unions-enums-and-errors">Structs, unions, enums and errors</a>
+    <li class="toctree-l2"><a class="reference internal" href="#structs-unions-enums-and-errtypes">Structs, unions, enums and errtypes</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#variables-and-parameters">Variables and parameters</a>
     </li>
@@ -196,7 +196,7 @@
                 <h1 id="naming-rules">Naming rules</h1>
 <p>C3 introduces fairly strict naming rules to reduce ambiguity. </p>
 <p>As a basic rule, all identifiers are limited to a-z, A-Z, 0-9 and <code>_</code>. The initial character can not be a number. Furthermore, all identifiers are limited to 31 character.</p>
-<h3 id="structs-unions-enums-and-errors">Structs, unions, enums and errors</h3>
+<h3 id="structs-unions-enums-and-errtypes">Structs, unions, enums and errtypes</h3>
 <p>All user defined types must start with A-Z after any optional initial <code>_</code> and include at least 1 lower case letter. <code>Bar</code>, <code>_T_i12</code> and <code>TTi</code> are all valid names. <code>_1</code>, <code>bAR</code> and <code>BAR</code> are not. For C-compatibility it's possible to alias the type to a external name using the attribute "externname".</p>
 <pre><code>struct Foo @externname(&quot;foo&quot;)
 {
@@ -216,7 +216,7 @@ enum Baz
     VALUE_2
 }
 
-error Err 
+errtype Err 
 {
     OOPS,
     LOTS_OF_OOPS
@@ -244,7 +244,7 @@ func void foo(int x)
     VALUE_2
 }
 
-error Err 
+errtype Err 
 {
     OOPS,
     LOTS_OF_OOPS

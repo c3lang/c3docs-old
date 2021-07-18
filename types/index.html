@@ -232,7 +232,7 @@
             <div class="section">
               
                 <h1 id="types">Types</h1>
-<p>As usual, types are divided into basic types and user defined types (enum, union, struct, error, aliases). All types are defined on a global level. Using the <code>public</code> prefix is necessary for any type that is to be exposed outside of the current module.</p>
+<p>As usual, types are divided into basic types and user defined types (enum, union, struct, errtypes, aliases). All types are defined on a global level. Using the <code>public</code> prefix is necessary for any type that is to be exposed outside of the current module.</p>
 <h5 id="naming">Naming</h5>
 <p>All user defined types in C3 starts with upper case. So <code>MyStruct</code> or <code>Mystruct</code> would be fine, <code>mystruct_t</code> or <code>mystruct</code> would not. Since this affects C compatibility, it is possible to use attributes to change the external name of a type:</p>
 <pre><code>struct Stat @extname(&quot;stat&quot;)
@@ -505,8 +505,8 @@ test(State.RUNNING); // Uses enum constant.
 </code></pre>
 <h2 id="error">Error</h2>
 <p>Error types are similar to enums, and are used for error returns.</p>
-<pre><code>error IOError;
-error ParseError
+<pre><code>errtype IOError;
+errtype ParseError
 {
     int line;
     int col;
