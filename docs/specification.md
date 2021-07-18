@@ -78,10 +78,10 @@ Those input elements that are not white space or comments are tokens. The tokens
 
 ### White Space
 
-White space is defined as the ASCII CR (U+000D), the ASCII horizontal tab character (U+0009) and the space character (U+0020) and the line terminator character.
+White space is defined as the ASCII horizontal tab character (U+0009), form feed character (U+000A), vertical tab (U+000B), carriage return (U+000D), space character (U+0020) and the line terminator character (U+000D).
 
 ```
-WHITESPACE      ::= [ \t\v\n\f]
+WHITESPACE      ::= [ \t\f\v\r\n]
 ```
 
 ### Letters and digits
