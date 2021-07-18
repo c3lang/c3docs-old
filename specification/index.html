@@ -345,8 +345,8 @@ repetition  ::= expression '*'
 </ol>
 <p>Those input elements that are not white space or comments are tokens. The tokens are the terminal symbols of the syntactic grammar. Whitespace and comments can serve to separate tokens that might be tokenized in another manner. For example the characters <code>+</code> and <code>=</code> may form the operator token <code>+=</code> only if there is no intervening white space or comment.</p>
 <h3 id="white-space">White Space</h3>
-<p>White space is defined as the ASCII CR (U+000D), the ASCII horizontal tab character (U+0009) and the space character (U+0020) and the line terminator character.</p>
-<pre><code>WHITESPACE      ::= [ \t\v\n\f]
+<p>White space is defined as the ASCII horizontal tab character (U+0009), form feed character (U+000A), vertical tab (U+000B), carriage return (U+000D), space character (U+0020) and the line terminator character (U+000D).</p>
+<pre><code>WHITESPACE      ::= [ \t\f\v\r\n]
 </code></pre>
 <h3 id="letters-and-digits">Letters and digits</h3>
 <pre><code>UC_LETTER       ::= [A-Z]
