@@ -163,7 +163,7 @@ the language. For error handling it relies on Go style tuple returns.
 - Optional contracts
 - Error handling support
 
-### D
+## D
 
 D is a *huge* language. Where C++ is big, D provides all that C++ does and adds anything 
 else you might think of. There is very little you can't do in D that isn't supported
