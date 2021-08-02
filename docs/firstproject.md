@@ -27,7 +27,7 @@ $
 
 ## A real project
 
-Once you go beyond simple files, you want to create a real project. Do so by entering `c3c -new hello_world`.
+Once you go beyond simple files, you want to create a real project. Do so by entering `c3c `init` hello_world`.
 
 You will get the following structure:
 
