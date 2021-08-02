@@ -17,9 +17,10 @@ C3 adds features, but also removes a few.
 - Defer
 - Value methods
 - Associated enum data
-- Subtypes
+- Distinct types and subtypes
 - Optional contracts
-- Built-in strings, maps, subarrays and vararrays
+- Built-in subarrays
+- Foreach for iteration over arrays and types
 
 ##### In C but not in C3
 
@@ -51,7 +52,7 @@ different from how C++ does things.
 - Error handling
 - Defer
 - Associated enum data
-- Built-in strings, maps, subarrays and vararrays
+- Built-in subarrays
 
 ## Rust
 
@@ -78,7 +79,6 @@ but they are not built in. Subarrays are the same as Rust's slices.
 ##### In C3 but not in Rust
 
 - Same ease of programming as C
-- Built-in strings, maps, vararrays
 - Optional contracts
 - Familiar C syntax and behaviour
 
@@ -89,7 +89,7 @@ enable polymorphic functions and parameterized types. It aims to be a C replacem
 
 Compared to C3, Zig tries to be a completely new language in terms of syntax and feel. 
 C3 uses macros to a modest degree where it is more pervasive in Zig, and 
-does not depart from C in the same degree. Like Rust it features slices as a first
+does not depart from C in the same degree. Like Rust, it features slices as a first
 class type. The standard library uses an explicit allocator to allow it to work
 with many different allocation strategies.
 
@@ -107,11 +107,11 @@ possible.
 
 ##### In C3 but not in Zig
 
-- Module system
-- Integrated build system
-- Built-in strings, maps, vararrays
-- Optional contracts
-- Familiar C syntax and behaviour
+- Module system.
+- Integrated build system.
+- C ABI compatibility by default.
+- Optional contracts.
+- Familiar C syntax and behaviour.
 
 ## Jai
 
@@ -126,14 +126,13 @@ an implicit context system to switch allocation schemes.
 - Pervasive compile time execution.
 - Jai's compile time execution is the build system.
 - Different syntax and behaviour compared to C.
-- More poweful macro system than C3.
+- More powerful macro system than C3.
 - Implicit constructors
 
 ##### In C3 but not in Jai
 
 - Module system
 - Integrated build system
-- Built-in strings and maps
 - Optional contracts
 - Familiar C syntax and behaviour
 - Fairly small language
@@ -174,7 +173,7 @@ one way or the other.
 - Objects and classes
 - RAII
 - Exceptions
-... and almost any other feature in the universe ...
+... and a huge amount of features ...
 
 ##### In C3 but not in D
 
