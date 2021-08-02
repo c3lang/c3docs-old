@@ -251,9 +251,10 @@ C3 adds features, but also removes a few.</p>
 <li>Defer</li>
 <li>Value methods</li>
 <li>Associated enum data</li>
-<li>Subtypes</li>
+<li>Distinct types and subtypes</li>
 <li>Optional contracts</li>
-<li>Built-in strings, maps, subarrays and vararrays</li>
+<li>Built-in subarrays</li>
+<li>Foreach for iteration over arrays and types</li>
 </ul>
 <h5 id="in-c-but-not-in-c3">In C but not in C3</h5>
 <ul>
@@ -282,7 +283,7 @@ different from how C++ does things. </p>
 <li>Error handling</li>
 <li>Defer</li>
 <li>Associated enum data</li>
-<li>Built-in strings, maps, subarrays and vararrays</li>
+<li>Built-in subarrays</li>
 </ul>
 <h2 id="rust">Rust</h2>
 <p>Rust is a safe systems programming language. While not quite as complex as C++,
@@ -305,7 +306,6 @@ but they are not built in. Subarrays are the same as Rust's slices.</p>
 <h5 id="in-c3-but-not-in-rust">In C3 but not in Rust</h5>
 <ul>
 <li>Same ease of programming as C</li>
-<li>Built-in strings, maps, vararrays</li>
 <li>Optional contracts</li>
 <li>Familiar C syntax and behaviour</li>
 </ul>
@@ -314,7 +314,7 @@ but they are not built in. Subarrays are the same as Rust's slices.</p>
 enable polymorphic functions and parameterized types. It aims to be a C replacement.</p>
 <p>Compared to C3, Zig tries to be a completely new language in terms of syntax and feel. 
 C3 uses macros to a modest degree where it is more pervasive in Zig, and 
-does not depart from C in the same degree. Like Rust it features slices as a first
+does not depart from C in the same degree. Like Rust, it features slices as a first
 class type. The standard library uses an explicit allocator to allow it to work
 with many different allocation strategies.</p>
 <p>Zig is a very ambitious project, aiming to support as many types of platforms as
@@ -330,11 +330,11 @@ possible.</p>
 </ul>
 <h5 id="in-c3-but-not-in-zig">In C3 but not in Zig</h5>
 <ul>
-<li>Module system</li>
-<li>Integrated build system</li>
-<li>Built-in strings, maps, vararrays</li>
-<li>Optional contracts</li>
-<li>Familiar C syntax and behaviour</li>
+<li>Module system.</li>
+<li>Integrated build system.</li>
+<li>C ABI compatibility by default.</li>
+<li>Optional contracts.</li>
+<li>Familiar C syntax and behaviour.</li>
 </ul>
 <h2 id="jai">Jai</h2>
 <p>Jai is a programming language aimed at high performance game programming.
@@ -347,14 +347,13 @@ an implicit context system to switch allocation schemes.</p>
 <li>Pervasive compile time execution.</li>
 <li>Jai's compile time execution is the build system.</li>
 <li>Different syntax and behaviour compared to C.</li>
-<li>More poweful macro system than C3.</li>
+<li>More powerful macro system than C3.</li>
 <li>Implicit constructors</li>
 </ul>
 <h5 id="in-c3-but-not-in-jai">In C3 but not in Jai</h5>
 <ul>
 <li>Module system</li>
 <li>Integrated build system</li>
-<li>Built-in strings and maps</li>
 <li>Optional contracts</li>
 <li>Familiar C syntax and behaviour</li>
 <li>Fairly small language</li>
@@ -391,7 +390,7 @@ one way or the other.</p>
 <li>Objects and classes</li>
 <li>RAII</li>
 <li>Exceptions
-... and almost any other feature in the universe ...</li>
+... and a huge amount of features ...</li>
 </ul>
 <h5 id="in-c3-but-not-in-d">In C3 but not in D</h5>
 <ul>
