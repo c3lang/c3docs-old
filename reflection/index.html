@@ -366,20 +366,27 @@ string s = TestFunc.params[1].name; // &quot;double&quot;
 <p><em>Only available for functions.</em>
 Returns a list containing all errors returned, or nil otherwise. An empty list
 is returned on not returning. </p>
-<pre><code>errtype SomeError { ... }
-errtype SomeOtherError { ... }
+<p><em>NOTE: This may change.</em></p>
+<pre><code>errtype SomeError 
+{
+    FOO 
+}
+errtype SomeOtherError 
+{ 
+    BAR
+}
 
 func void! foo()
 {
-    if (someReason()) return SomeError!;
-    try bar();
+    if (someReason()) return SomeError.FOO!;
+    bar()!!;
 }
 func void! bar()
 {
-    return SomeOtherError!;
+    return SomeOtherError.BAR!;
 }
 
-string s = foo.errors[1].name; // &quot;SomeOtherError&quot;
+string s = foo.errors[1].name; // &quot;SomeOtherError.FOO&quot;
 int errors = bar.errors.size == 1;
 </code></pre>
 <h2 id="runtime-reflection">Runtime reflection</h2>

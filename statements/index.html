@@ -216,7 +216,7 @@
 </code></pre>
 <h2 id="labelled-break-and-continue">Labelled break and continue</h2>
 <p>Labelled <code>break</code> and <code>continue</code> lets you break out of an outer scope. Labels can be put on <code>if</code>, 
-<code>switch</code>, <code>catch</code>, <code>while</code> and <code>do</code> statements.</p>
+<code>switch</code>, <code>while</code> and <code>do</code> statements.</p>
 <pre><code>func void test(int i)
 {
     if FOO: (i &gt; 0)
@@ -244,7 +244,7 @@ do
 }
 </code></pre>
 <h2 id="nextcase-and-labelled-nextcase">Nextcase and labelled nextcase</h2>
-<p>The <code>nextcase</code> statement is used in <code>switch</code> and <code>catch</code> to jump to the next statement:</p>
+<p>The <code>nextcase</code> statement is used in <code>switch</code> and <code>if-catch</code> to jump to the next statement:</p>
 <pre><code>switch (i)
 {
    case 1:

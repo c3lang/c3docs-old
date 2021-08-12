@@ -89,6 +89,10 @@
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Errors</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#error-returns">Error returns</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#implicit-unwrapping">Implicit unwrapping</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#some-simple-examples">Some simple examples.</a>
         <ul>
@@ -107,8 +111,6 @@
     <li class="toctree-l3"><a class="reference internal" href="#default-values">Default values</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#default-jump">Default jump</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#check-for-error-or-success">Check for error or success</a>
     </li>
         </ul>
     </li>
@@ -220,7 +222,7 @@
 File*! file = openFile(&quot;foo.txt&quot;);
 
 // We can extract the error using &quot;catch&quot;
-catch (err = file)
+if (catch err = file)
 {
     // Might print &quot;Error was FILE_NOT_FOUND&quot;
     printf(&quot;Error was %s\n&quot;, err.name()); 
@@ -237,7 +239,7 @@ catch (err = file)
 File*! file2 = openFile(&quot;bar.txt&quot;);
 
 // Only true if there is no error.
-try (file2)
+if (try file2)
 {
     // Inside here file2 is a regular File*
 }
@@ -256,18 +258,19 @@ func void test()
     int! j = mult(fooMayError());
 
     int! k = save(mult(fooMAyError()));
-    catch (err = k)
+    if (catch err = k)
     {
         // The error may be from fooMayError
         // or save!
     }    
 )
 </code></pre>
-<p>If a <code>catch</code> returns or jumps out of the current scope in some way, then the variable becomes
+<h4 id="implicit-unwrapping">Implicit unwrapping</h4>
+<p>If a <code>if-catch</code> returns or jumps out of the current scope in some way, then the variable becomes
 unwrapped to it's non-failable type in that scope:</p>
 <pre><code>int! i = fooMayError();
 
-catch (i)
+if (catch i)
 {
     return;
 }
@@ -278,19 +281,18 @@ if (i &gt; 10) doSomething();
 </code></pre>
 <h3 id="some-simple-examples">Some simple examples.</h3>
 <h5 id="defining-an-error">Defining an error</h5>
-<p>Errors may either be flat or contain additional data, however this data may not exceed the size of the <code>iptr</code> type.</p>
-<pre><code>errtype FileNotFoundError;
-errtype ParseError
+<p>An error if effectively an enum, and is defined in the same way:</p>
+<pre><code>errtype IoError
 {
-    int line;
-    int col;
-}
+    FILE_NOT_FOUND,
+    FILE_NOT_READABLE,
+}    
 </code></pre>
 <h5 id="returning-an-error">Returning an error</h5>
 <p>Returning an error looks like a normal return but with the <code>!</code></p>
 <pre><code>func void! findFile()
 {
-    if (File.doesFileExist(&quot;foo.txt&quot;)) return FileNotFoundError!;
+    if (File.doesFileExist(&quot;foo.txt&quot;)) return IoError.FILE_NOT_FOUND!;
     /* ... */
 }
 </code></pre>
@@ -308,7 +310,7 @@ errtype ParseError
 <pre><code>func void findFileAndNoErr()
 {
     File*! res = findFile();    
-    catch (res)
+    if (catch res)
     {
         printf(&quot;An error occurred!\n&quot;);
         return;
@@ -321,7 +323,7 @@ errtype ParseError
 <pre><code>func void doSomethingToFile()
 {
     void! res = findFile();    
-    try (res)
+    if (try res)
     {
         printf(&quot;I found the file\n&quot;);
     }
@@ -330,9 +332,9 @@ errtype ParseError
 <h5 id="catching-some-errors">Catching some errors</h5>
 <pre><code>func void! findFileAndParse2()
 {
-    catch (err = findFileAndParse())
+    if (catch err = findFileAndParse())
     {
-        case FileNotFoundError:
+        case IOError.FILE_NOT_FOUND:
             printf(&quot;Error loading the file!\n&quot;);
         default:
             return err;
@@ -370,21 +372,6 @@ func int testDefault()
         printf(&quot;Aborted test at index: %d\n&quot;, index);
     }
     return index;
-}
-</code></pre>
-<h4 id="check-for-error-or-success">Check for error or success</h4>
-<p><code>try</code> and <code>catch</code> without a statements returns a boolean true / false:</p>
-<pre><code>func int testResult()
-{
-    int! result = getValue();
-    if (try(result))
-    {
-        printf(&quot;Success!\n&quot;);
-    }
-    if (catch(result))
-    {
-        printf(&quot;Failure\n&quot;);
-    }
 }
 </code></pre>
               
