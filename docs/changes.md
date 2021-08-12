@@ -1,6 +1,8 @@
 # Change log
 
-
+##### Revision 2020-08-12
+- Updated error type and error handling with try/catch
+ 
 ##### Revision 2020-07-13
 - Added nesting to /* ... */ removed /+ ... +/
 - Added primer.

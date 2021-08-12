@@ -212,21 +212,28 @@ string s = TestFunc.params[1].name; // "double"
 Returns a list containing all errors returned, or nil otherwise. An empty list
 is returned on not returning. 
 
+*NOTE: This may change.*
 ```
-errtype SomeError { ... }
-errtype SomeOtherError { ... }
+errtype SomeError 
+{
+    FOO 
+}
+errtype SomeOtherError 
+{ 
+    BAR
+}
 
 func void! foo()
 {
-    if (someReason()) return SomeError!;
-    try bar();
+    if (someReason()) return SomeError.FOO!;
+    bar()!!;
 }
 func void! bar()
 {
-    return SomeOtherError!;
+    return SomeOtherError.BAR!;
 }
 
-string s = foo.errors[1].name; // "SomeOtherError"
+string s = foo.errors[1].name; // "SomeOtherError.FOO"
 int errors = bar.errors.size == 1;
 ```
 

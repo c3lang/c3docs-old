@@ -592,7 +592,7 @@ Same reasoning as arrays. Question about memory management is the same.
 int[int] map; // Built-in maps
 map[1] = 11;
 // Retrieving a value
-int i = try map[0]; // Requires a try
+int i = map[0]!!; // Requires a rethrow
 
 // Retrive or use default
 int i = try map[12] else -1;

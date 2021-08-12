@@ -8,7 +8,7 @@ It has since departed substantially in regard to error handling, macros, generic
 
 The C3 compiler can be found on github: [https://github.com/c3lang/c3c](https://github.com/c3lang/c3c).
 
-Last updated: [Revision 2020-07-13](changes).
+Last updated: [Revision 2020-08-12](changes).
 
 ## Features
 
@@ -30,7 +30,7 @@ Last updated: [Revision 2020-07-13](changes).
 - Flawless C integration.
 - Learning C3 should be easy for a C programmer.
 - Dare add conveniences if the value is great.
-- Data is inert.
+- Data is inert and zero is initialization.
 - Avoid "big ideas".
 - Avoid the kitchen sink language trap.
 

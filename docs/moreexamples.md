@@ -39,7 +39,7 @@ func void main()
     HttpServer server;
     server.init();
     InetAddress! addr = server.bindPort(8080);
-    catch (addr)
+    if (catch addr)
     {
         printf("Failed to open server.\n");
         exit(-1);

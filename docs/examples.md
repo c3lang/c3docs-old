@@ -259,11 +259,14 @@ func void example_cb()
 Errors are sent as a result value, called a "failable":
 
 ```
-errtype DivisionByZero;
+errtype MathError
+{
+    DIVISION_BY_ZERO
+}
 
 func double divide(int a, int b)
 {
-    if (b == 0) return DivisionByZero!;
+    if (b == 0) return MathError.DIVISION_BY_ZERO!;
     return (double)(a) / (double)(b);
 
 }
@@ -280,9 +283,9 @@ func void testHandlingError()
     double! ratio = divide(foo(), bar());
     
     // Handle the error
-    catch (err = ratio)
+    switch (catch err = ratio)
     {
-        case DivisionByZero:
+        case MathError.DIVISION_BY_ZERO:
             io::printf("Division by zero\n");
             return;
         default:
@@ -305,9 +308,9 @@ func void printFile(string filename)
     // The following function is not executed on error.
     io::printf("Loaded %s and got:\n%s", filename, file);
 
-    catch (err = file)
+    switch (catch err = file)
     {
-        case FileNotFoundError:
+        case IoError.FILE_NOT_FOUND:
             printf("I could not find the file %s\n", filename);
         default:
             printf("Could not load %s: '%s'", filename, error.message());

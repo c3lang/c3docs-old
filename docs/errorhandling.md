@@ -25,7 +25,7 @@ The `int!` here is the failable return type, which is a tagged union: it might h
 File*! file = openFile("foo.txt");
 
 // We can extract the error using "catch"
-catch (err = file)
+if (catch err = file)
 {
     // Might print "Error was FILE_NOT_FOUND"
     printf("Error was %s\n", err.name()); 
@@ -42,7 +42,7 @@ catch (err = file)
 File*! file2 = openFile("bar.txt");
 
 // Only true if there is no error.
-try (file2)
+if (try file2)
 {
     // Inside here file2 is a regular File*
 }
@@ -64,7 +64,7 @@ func void test()
     int! j = mult(fooMayError());
     
     int! k = save(mult(fooMAyError()));
-    catch (err = k)
+    if (catch err = k)
     {
         // The error may be from fooMayError
         // or save!
@@ -72,13 +72,15 @@ func void test()
 )
 ```
 
-If a `catch` returns or jumps out of the current scope in some way, then the variable becomes
+#### Implicit unwrapping
+
+If a `if-catch` returns or jumps out of the current scope in some way, then the variable becomes
 unwrapped to it's non-failable type in that scope:
 
 ```
 int! i = fooMayError();
     
-catch (i)
+if (catch i)
 {
     return;
 }
@@ -92,15 +94,14 @@ if (i > 10) doSomething();
 
 ##### Defining an error
 
-Errors may either be flat or contain additional data, however this data may not exceed the size of the `iptr` type.
+An error if effectively an enum, and is defined in the same way:
 
 ```
-errtype FileNotFoundError;
-errtype ParseError
+errtype IoError
 {
-    int line;
-    int col;
-}
+    FILE_NOT_FOUND,
+    FILE_NOT_READABLE,
+}    
 ```
 
 ##### Returning an error
@@ -110,7 +111,7 @@ Returning an error looks like a normal return but with the `!`
 ```
 func void! findFile()
 {
-    if (File.doesFileExist("foo.txt")) return FileNotFoundError!;
+    if (File.doesFileExist("foo.txt")) return IoError.FILE_NOT_FOUND!;
     /* ... */
 }
 ```
@@ -136,7 +137,7 @@ Catching an error and returning will implicitly unwrap the checked variable.
 func void findFileAndNoErr()
 {
     File*! res = findFile();    
-    catch (res)
+    if (catch res)
     {
         printf("An error occurred!\n");
         return;
@@ -152,7 +153,7 @@ func void findFileAndNoErr()
 func void doSomethingToFile()
 {
     void! res = findFile();    
-    try (res)
+    if (try res)
     {
         printf("I found the file\n");
     }
@@ -164,9 +165,9 @@ func void doSomethingToFile()
 ```
 func void! findFileAndParse2()
 {
-    catch (err = findFileAndParse())
+    if (catch err = findFileAndParse())
     {
-        case FileNotFoundError:
+        case IOError.FILE_NOT_FOUND:
             printf("Error loading the file!\n");
         default:
             return err;
@@ -216,22 +217,4 @@ func int testBreak(int times)
 }
 ```
 
-#### Check for error or success
-
-`try` and `catch` without a statements returns a boolean true / false:
-
-```
-func int testResult()
-{
-    int! result = getValue();
-    if (try(result))
-    {
-        printf("Success!\n");
-    }
-    if (catch(result))
-    {
-        printf("Failure\n");
-    }
-}
-```
 

@@ -108,8 +108,8 @@ The below example might throw errors from both the `SomeError` error domain as w
     func double! testError()
     {
         double val = random_value();
-        if (val >= 0.2) return BadJossError!;
-        if (val > 0.5) return BadLuckError!;
+        if (val >= 0.2) return SomeError.BAD_JOSS_ERROR!;
+        if (val > 0.5) return OtherError.BAD_LUCK_ERROR!;
         return val;
     }
 
@@ -134,11 +134,11 @@ _NOTE: The compiler is not fully tested with all failable conditionals yet._
     func void printInputWithExplicitChecks()
     {
         string! line = readLine();
-        try (line)
+        if (try line)
         {
             // line is a regular "string" here.
             int! val = atoi(line);
-            try (val)
+            if (try val)
             {
                 printf("You typed the number %d\n", val);
                 return;
@@ -149,7 +149,7 @@ _NOTE: The compiler is not fully tested with all failable conditionals yet._
     
     func void printInputWithChaining()
     {
-        try (int val = atoi(readLine()))
+        if (try int val = atoi(readLine()))
         {
             printf("You typed the number %d\n", val);
             return;

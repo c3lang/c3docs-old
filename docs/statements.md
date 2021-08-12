@@ -35,7 +35,7 @@ Expression blocks may also return values:
 ## Labelled break and continue
 
 Labelled `break` and `continue` lets you break out of an outer scope. Labels can be put on `if`, 
-`switch`, `catch`, `while` and `do` statements.
+`switch`, `while` and `do` statements.
    
     func void test(int i)
     {
@@ -67,7 +67,7 @@ Do-while statements can skip the ending `while`. In that case it acts as if the 
 
 ## Nextcase and labelled nextcase
 
-The `nextcase` statement is used in `switch` and `catch` to jump to the next statement:
+The `nextcase` statement is used in `switch` and `if-catch` to jump to the next statement:
 
     switch (i)
     {
