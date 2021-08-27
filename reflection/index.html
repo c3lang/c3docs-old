@@ -110,9 +110,45 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#nameof">$nameof</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#qnameof">$qnameof</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#extnameof">$extnameof</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#sizeof">$sizeof</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#alignof">$alignof</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#kindof">kindof</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#elementtype">elementType</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#basetype">baseType</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#elements">elements</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#errors">errors</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#fields">fields</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#variants">variants</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#signed">signed</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#length">length</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#associatedvalues">associatedValues</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#returntype">returnType</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#params">params</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#errors_1">errors</a>
+    </li>
         </ul>
     </li>
         </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#runtime-reflection">Runtime reflection</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#typekind">TypeKind</a>
     </li>
@@ -214,204 +250,152 @@ string b = $nameof(Foo) // =&gt; "Foo"
 string c = $nameof(Bar); // =&gt; "Foo" 
 string d = $nameof(x); // =&gt; "x"
 </code></pre>
-<pre><code>
-#### $qnameof
-
-Same as $nameof, but includes the full module path: e.g. &quot;baz::bar::Foo&quot;.
-
-</code></pre>
-<p>module bar;
+<h4 id="qnameof">$qnameof</h4>
+<p>Same as $nameof, but includes the full module path: e.g. "baz::bar::Foo".</p>
+<pre><code>module bar;
 struct Foo { ... }
 int x;
 string a = $qnameof(int[4]); // =&gt; "int[4]"
 string b = $qnameof(Foo); // =&gt; "bar::Foo"
 string c = $qnameof(Foo[4]); // =&gt; "bar::Foo[4]" 
-string d = $nameof(x); // =&gt; "bar::x"</p>
-<pre><code>
-#### $extnameof
-
-Similar to $qnameof, this give the name of the type or variable or function 
-as exported by the linker.
-
+string d = $nameof(x); // =&gt; "bar::x"
 </code></pre>
-<p>module bar;
+<h4 id="extnameof">$extnameof</h4>
+<p>Similar to $qnameof, this give the name of the type or variable or function 
+as exported by the linker.</p>
+<pre><code>module bar;
 int x;
 func void test(int x) { }
 string a = $extnameof(x); // =&gt; "bar.x";
 string b = $extnameof(test); // =&gt; "bar.test"
-string c = $extnameof("test"); // =&gt; "bar.test"</p>
-<pre><code>
-#### $sizeof
-
-Returns the size in bytes needed to store the type.
-
+string c = $extnameof("test"); // =&gt; "bar.test"
 </code></pre>
-<p>struct Foo { long a; long b; }
+<h4 id="sizeof">$sizeof</h4>
+<p>Returns the size in bytes needed to store the type.</p>
+<pre><code>struct Foo { long a; long b; }
 usize x = $sizeof(Foo); // 16
 usize y = $sizeof(int); // 4
-usize z = $sizeof(Foo, a); // 8</p>
-<pre><code>
-#### $alignof
-
-Returns the alignment in bytes needed for the type.
-
+usize z = $sizeof(Foo, a); // 8
 </code></pre>
-<p>struct Foo { long a; long b; }
+<h4 id="alignof">$alignof</h4>
+<p>Returns the alignment in bytes needed for the type.</p>
+<pre><code>struct Foo { long a; long b; }
 usize x = $alignof(Foo); // 16
 usize y = $alignof(int); // 4
-usize z = $alignof(Foo, a); // 8</p>
-<pre><code>
-** The following are not yet implemented **
-
-#### kindof
-
-Returns the TypeKind of the variable.
-
+usize z = $alignof(Foo, a); // 8
 </code></pre>
-<p>struct Foo { ... }
+<p><strong> The following are not yet implemented </strong></p>
+<h4 id="kindof">kindof</h4>
+<p>Returns the TypeKind of the variable.</p>
+<pre><code>struct Foo { ... }
 union Bar { ... }
 TypeKind a = Foo.kindof; // STRUCT
 TypeKind b = Bar.kindof; // BAR
-TypeKind c = int.kindof; // INTEGER</p>
-<pre><code>
-#### elementType
-
-*Only available for array, vararray and subarray types.*
-Returns the element (underlying) type of an array, vararray or subarray.
-
+TypeKind c = int.kindof; // INTEGER
 </code></pre>
-<p>struct Foo { ... }
-string x = Foo[].elementType.name; // "Foo"
-string y = Foo[4].elementType.name; // "Foo"
-string z = Foo[*].elementType.name; // "Foo"</p>
-<pre><code>
-#### baseType
-
-*Only available for pointer types and failables.*
-Returns the type the pointer points to. E.g. for `int*` the base type is `int`.
-
+<h4 id="elementtype">elementType</h4>
+<p><em>Only available for array, vararray and subarray types.</em>
+Returns the element (underlying) type of an array, vararray or subarray.</p>
+<pre><code>struct Foo { ... }
+string x = Foo[].elementType.name; // &quot;Foo&quot;
+string y = Foo[4].elementType.name; // &quot;Foo&quot;
+string z = Foo[*].elementType.name; // &quot;Foo&quot;
 </code></pre>
-<p>struct Foo { ... }
-string x = (Foo*).baseType.name; // "Foo"</p>
-<pre><code>
-#### elements
-
-*Only available for enum types.*
-Returns an array containing the enum values in an enum.
-
+<h4 id="basetype">baseType</h4>
+<p><em>Only available for pointer types and failables.</em>
+Returns the type the pointer points to. E.g. for <code>int*</code> the base type is <code>int</code>.</p>
+<pre><code>struct Foo { ... }
+string x = (Foo*).baseType.name; // &quot;Foo&quot;
 </code></pre>
-<p>enum Foo
+<h4 id="elements">elements</h4>
+<p><em>Only available for enum types.</em>
+Returns an array containing the enum values in an enum.</p>
+<pre><code>enum Foo
 {
     BAR,
     BAZ
 }
-string x = Foo.elements[0].name; // "BAR"</p>
-<pre><code>
-#### errors
-
-*Only available for error types.*
-Returns an array containing the error values in an enum.
-
+string x = Foo.elements[0].name; // &quot;BAR&quot;
 </code></pre>
-<p>errtype FooErr
+<h4 id="errors">errors</h4>
+<p><em>Only available for error types.</em>
+Returns an array containing the error values in an enum.</p>
+<pre><code>errtype FooErr
 {
     BAD_BAR,
     NO_BAZ
 }
-string x = Foo.errors[0].name; // "BAD_BAR"</p>
-<pre><code>
-#### fields
-
-*Only available for struct types.*
-Returns an array containing the fields in a struct.
-
+string x = Foo.errors[0].name; // &quot;BAD_BAR&quot;
 </code></pre>
-<p>struct Foo
+<h4 id="fields">fields</h4>
+<p><em>Only available for struct types.</em>
+Returns an array containing the fields in a struct.</p>
+<pre><code>struct Foo
 {
     int x;
     Foo* z;
 }
-string x = Foo.fields[1].name; // "z"</p>
-<pre><code>
-#### variants
-
-*Only available for union types.*
-Returns an array of types representing the possible variants of the union.
-
+string x = Foo.fields[1].name; // &quot;z&quot;
 </code></pre>
-<p>union Foo
+<h4 id="variants">variants</h4>
+<p><em>Only available for union types.</em>
+Returns an array of types representing the possible variants of the union.</p>
+<pre><code>union Foo
 {
     int x;
     Foo* z;
     double d;
 }
-string x = Foo.variants[2].name; // "d"</p>
-<pre><code>
-#### signed
-
-*Only available for integer types.*
-Returns true for a signed number.
-
+string x = Foo.variants[2].name; // &quot;d&quot;
 </code></pre>
-<p>bool s1 = int.signed; // =&gt; true
-bool s2 = uint.signed; // =&gt; false</p>
-<pre><code>
-#### length
-
-*Only available for array types.*
-Returns the length of the array.
-
+<h4 id="signed">signed</h4>
+<p><em>Only available for integer types.</em>
+Returns true for a signed number.</p>
+<pre><code>bool s1 = int.signed; // =&gt; true
+bool s2 = uint.signed; // =&gt; false
 </code></pre>
-<p>usize len = int[4].length</p>
-<pre><code>
-#### associatedValues
-
-*Only available for enums.*
-Returns an array containing the types of associated values if any.
-
+<h4 id="length">length</h4>
+<p><em>Only available for array types.</em>
+Returns the length of the array.</p>
+<pre><code>usize len = int[4].length
 </code></pre>
-<p>enum Foo : int(double d, string s)
+<h4 id="associatedvalues">associatedValues</h4>
+<p><em>Only available for enums.</em>
+Returns an array containing the types of associated values if any.</p>
+<pre><code>enum Foo : int(double d, string s)
 {
-    BAR(1.0, "normal"),
-    BAZ(2.0, "exceptional")
+    BAR(1.0, &quot;normal&quot;),
+    BAZ(2.0, &quot;exceptional&quot;)
 }
-string s = Foo.associatedValues[0].name; // "double"</p>
-<pre><code>
-#### returnType
-
-*Only available for function types.*
-Returns the type of the return type.
-
+string s = Foo.associatedValues[0].name; // &quot;double&quot;
 </code></pre>
-<p>define TestFunc = func int(int, double);
-string s = TestFunc.returnType.name; // "int"</p>
-<pre><code>
-#### params
-
-*Only available for function types.*
-Returns a list of all parameters.
-
+<h4 id="returntype">returnType</h4>
+<p><em>Only available for function types.</em>
+Returns the type of the return type.</p>
+<pre><code>define TestFunc = func int(int, double);
+string s = TestFunc.returnType.name; // &quot;int&quot;
 </code></pre>
-<p>define TestFunc = func int(int, double);
-string s = TestFunc.params[1].name; // "double"</p>
-<pre><code>
-#### errors
-
-*Only available for functions.*
+<h4 id="params">params</h4>
+<p><em>Only available for function types.</em>
+Returns a list of all parameters.</p>
+<pre><code>define TestFunc = func int(int, double);
+string s = TestFunc.params[1].name; // &quot;double&quot;
+</code></pre>
+<h4 id="errors_1">errors</h4>
+<p><em>Only available for functions.</em>
 Returns a list containing all errors returned, or nil otherwise. An empty list
-is returned on not returning. 
-
-*NOTE: This may change.*
-</code></pre>
-<p>errtype SomeError 
+is returned on not returning. </p>
+<p><em>NOTE: This may change.</em></p>
+<pre><code>errtype SomeError 
 {
     FOO 
 }
 errtype SomeOtherError 
 { 
     BAR
-}</p>
-<p>func void! foo()
+}
+
+func void! foo()
 {
     if (someReason()) return SomeError.FOO!;
     bar()!!;
@@ -419,26 +403,23 @@ errtype SomeOtherError
 func void! bar()
 {
     return SomeOtherError.BAR!;
-}</p>
-<p>string s = foo.errors[1].name; // "SomeOtherError.FOO"
-int errors = bar.errors.size == 1;</p>
-<pre><code>
+}
 
-## Runtime reflection
-
-During runtime it's also possible to retrieve information by way of a typeid. Using typeid may implicitly cast into a `TypeInfo *`. This is a struct that contains data for the underlying type:
-
+string s = foo.errors[1].name; // &quot;SomeOtherError.FOO&quot;
+int errors = bar.errors.size == 1;
 </code></pre>
-<p>struct TypeData
+<h2 id="runtime-reflection">Runtime reflection</h2>
+<p>During runtime it's also possible to retrieve information by way of a typeid. Using typeid may implicitly cast into a <code>TypeInfo *</code>. This is a struct that contains data for the underlying type:</p>
+<pre><code>struct TypeData
 {
     typeid typeId;
     TypeKind kind;
     int size;
     int alignment;
-    char<em> name;
-    char</em> fullName;
+    char* name;
+    char* fullName;
 }
-```</p>
+</code></pre>
 <p>This structure is the base type, and the actual struct will can be <code>TypeError</code>, <code>TypeArray</code>, <code>TypeInteger</code> and so on. The definition of these are found in the module <code>system::builtin</code>.</p>
 <p>The <code>builtin</code> module further offers several ways to search for different types, returning the <code>TypeData *</code> directly:</p>
 <ul>
