@@ -197,18 +197,17 @@
 <p>In the example below:</p>
 <pre><code>uint x = foo();
 uint z = 255 / x;
-if (x == 0 || z &gt; 10) return bar();
-return 1;
+return x != 0;
 </code></pre>
 <p>The case of <code>x == 0</code> would invoke undefined behaviour for <code>255/x</code>. For that reason, 
 the compiler may assume that <code>x != 0</code> and compile it into the following code: </p>
 <pre><code>foo();
-return 1;
+return true;
 </code></pre>
 <p>As a contrast, the safe build will compile code equivalent to the following.</p>
 <pre><code>uint x = foo();
 if (x == 0) trap(&quot;Division by zero&quot;)
-return 1;
+return true;
 </code></pre>
 <h2 id="list-of-undefined-behaviours">List of undefined behaviours</h2>
 <p>The following operations cause undefined behaviour in release builds of C3:</p>
