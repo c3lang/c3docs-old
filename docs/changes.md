@@ -1,5 +1,10 @@
 # Change log
 
+##### Revision 2020-08-27
+- Updated reflection functionality.
+- Added documentation for multi-line strings.
+- Added documentation for base64 and hex array literals.
+
 ##### Revision 2020-08-12
 - Updated error type and error handling with try/catch
  

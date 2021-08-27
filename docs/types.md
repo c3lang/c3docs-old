@@ -74,17 +74,63 @@ Conversion is always done so that the character string has the correct ordering 
 
 ##### Base64 and hex data literals
 
-Base64 encoded values work like TwoCC/FourCC/EightCC, in that is it laid out in byte order in memory. It uses the format `'<base64>'b64`. Hex encoded values work as base64 but with the format `'<hex>'x`. In data literals any whitespace is ignored, so `'00 00 11'x` encodes to the same value as `'000011'x`.
+Base64 encoded values work like TwoCC/FourCC/EightCC, in that is it laid out in byte order in memory. It uses the format `b64'<base64>'`. Hex encoded values work as base64 but with the format `x'<hex>'`. In data literals any whitespace is ignored, so `'00 00 11'x` encodes to the same value as `x'000011'`.
 
-In our case we could encode `'Rk9PQkFSMTE='b64` as `'FOOBAR11'`.
+In our case we could encode `b64'Rk9PQkFSMTE='` as `'FOOBAR11'`.
 
-Base64 and hex data literals also has a form to allow initializing char arrays, instead of enclosing the data in `''`, enclose the data in `""`
+Base64 and hex data literals initializes to arrays of the char type:
 
 ```
-char[*] hello_world_base64 = "SGVsbG8gV29ybGQh"b64;
-char[*] hello_world_hex = "4865 6c6c 6f20 776f 726c 6421"x;
+char[*] hello_world_base64 = b64"SGVsbG8gV29ybGQh";
+char[*] hello_world_hex = x"4865 6c6c 6f20 776f 726c 6421";
 ```
 
+##### String literals, multi-line and raw strings
+
+Regular string literals is text enclosed in `" ... "` just like in C. C3 also offers two other types of literals: *multi-line strings* and *raw strings*.
+
+Multi-line strings start and end with `"""`. Newline after the initial `"""` are removed, and so is a trailing new line on the last line before `"""`. Initial whitespace will be trimmed to the
+leftmost character in a line:
+
+```
+char* foo = """
+    <html>
+      <body>
+        <p>Hello World</p>
+      </body>
+    </html>
+    """;
+// Same as:
+char* foo = "<html>\n"
+            "  <body>\n"
+            "    <p>Hello World</p>\n"
+            "  </body>\n"
+            "</html>";    
+```
+
+You can use `\|` (escapes to a zero length string) and `\s` (escapes to a space) to control the automatic trim:
+```
+char* foo = """
+  \|  <body>
+  \|    <p>Hello World</p>    \s
+  \|  </body>
+    """;
+// Same as:
+char* foo = " <body>\n"
+            "   <p>Hello World</p>     \n"
+            " </body>";
+```
+
+Raw strings uses text between \` \`. Inside of a raw string, no escapes are available. To write a \` double the character:
+
+```
+char* foo = `C:\foo\bar.dll`;
+char* bar = `"Say ``hello``"`;
+// Same as
+char* foo = "C:\\foo\\bar.dll";
+char* bar = "\"Say `hello`\"";
+```
+     
 ##### Floating point types
 
 | Name         | alias | bit size |

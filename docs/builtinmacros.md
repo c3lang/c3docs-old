@@ -1,15 +1,14 @@
-# Built-in macros
+# Compile time functions
 
 *This has changed and needs a revision.*
 
 There are several built-in macros to inspect the code during compile and runtime.
 
-- @bitcast
-- @describe
-- @elements
-- @name
-- @sizeof
-- @typeof
+- `$nameof`
+- `$qname`
+- `$extname`
+- `$sizeof`
+- `$typeof`
 
 
 ### @describe

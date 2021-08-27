@@ -9,8 +9,7 @@ In the example below:
 ```
 uint x = foo();
 uint z = 255 / x;
-if (x == 0 || z > 10) return bar();
-return 1;
+return x != 0;
 ```
 
 The case of `x == 0` would invoke undefined behaviour for `255/x`. For that reason, 
@@ -18,7 +17,7 @@ the compiler may assume that `x != 0` and compile it into the following code:
 
 ```
 foo();
-return 1;
+return true;
 ```
 
 As a contrast, the safe build will compile code equivalent to the following.
@@ -26,7 +25,7 @@ As a contrast, the safe build will compile code equivalent to the following.
 ```
 uint x = foo();
 if (x == 0) trap("Division by zero")
-return 1;
+return true;
 ```
 
 ## List of undefined behaviours
