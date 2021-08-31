@@ -308,7 +308,7 @@ macro m(int &amp;x, int y)
 // C3
 macro size($Type)
 {
-    return $Type.sizeof + int.sizeof;
+    return $sizeof($Type) + $sizeof(int);
 }
 </code></pre>
 <h3 id="trailing-blocks-for-macros">Trailing blocks for macros</h3>
@@ -327,7 +327,7 @@ FOR_EACH(it, list)
 // C3
 macro for_each(list; @body(it))
 {
-    for (typeof(list) x = list; x; x = x.next)
+    for ($typeof(list) x = list; x; x = x.next)
     {
         @body(x);
     }    
@@ -383,7 +383,7 @@ DECLARE_LIST(hello)
  */
 macro void swap(&amp;a, &amp;b)
 {
-    typeof(a) temp = a;
+    $typeof(a) temp = a;
     a = b;
     b = temp;
 }
@@ -539,7 +539,7 @@ func void test()
 <p>Compile time looping:</p>
 <pre><code>macro foo($a)
 {
-    $for ($x = 0; $x &lt; $a; $x++):
+    $for (var $x = 0; $x &lt; $a; $x++):
         io::printf("%d\n", $x);     
     $endfor;
 }
