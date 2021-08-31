@@ -29,58 +29,50 @@ The basic name of the type or variable without module prefixes.
     string b = $nameof(Foo) // => "Foo"
     string c = $nameof(Bar); // => "Foo" 
     string d = $nameof(x); // => "x"
-```
 
 #### $qnameof
 
 Same as $nameof, but includes the full module path: e.g. "baz::bar::Foo".
 
-```
-module bar;
-struct Foo { ... }
-int x;
-string a = $qnameof(int[4]); // => "int[4]"
-string b = $qnameof(Foo); // => "bar::Foo"
-string c = $qnameof(Foo[4]); // => "bar::Foo[4]" 
-string d = $nameof(x); // => "bar::x"
-```
+    module bar;
+    struct Foo { ... }
+    int x;
+    string a = $qnameof(int[4]); // => "int[4]"
+    string b = $qnameof(Foo); // => "bar::Foo"
+    string c = $qnameof(Foo[4]); // => "bar::Foo[4]" 
+    string d = $nameof(x); // => "bar::x"
+
 
 #### $extnameof
 
 Similar to $qnameof, this give the name of the type or variable or function 
 as exported by the linker.
 
-```
-module bar;
-int x;
-func void test(int x) { }
-string a = $extnameof(x); // => "bar.x";
-string b = $extnameof(test); // => "bar.test"
-string c = $extnameof("test"); // => "bar.test"
-```
+    module bar;
+    int x;
+    func void test(int x) { }
+    string a = $extnameof(x); // => "bar.x";
+    string b = $extnameof(test); // => "bar.test"
+    string c = $extnameof("test"); // => "bar.test"
+
 
 #### $sizeof
 
 Returns the size in bytes needed to store the type.
 
-```
-struct Foo { long a; long b; }
-usize x = $sizeof(Foo); // 16
-usize y = $sizeof(int); // 4
-usize z = $sizeof(Foo, a); // 8
-
-```
+    struct Foo { long a; long b; }
+    usize x = $sizeof(Foo); // 16
+    usize y = $sizeof(int); // 4
+    usize z = $sizeof(Foo, a); // 8
 
 #### $alignof
 
 Returns the alignment in bytes needed for the type.
 
-```
-struct Foo { long a; long b; }
-usize x = $alignof(Foo); // 16
-usize y = $alignof(int); // 4
-usize z = $alignof(Foo, a); // 8
-```
+    struct Foo { long a; long b; }
+    usize x = $alignof(Foo); // 16
+    usize y = $alignof(int); // 4
+    usize z = $alignof(Foo, a); // 8
 
 ** The following are not yet implemented **
 

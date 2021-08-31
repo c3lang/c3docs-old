@@ -83,7 +83,7 @@ Use `&` in front of a parameter to capture the a variable and pass it by referen
     // C3
     macro size($Type)
     {
-        return $Type.sizeof + int.sizeof;
+        return $sizeof($Type) + $sizeof(int);
     }
 
 ### Trailing blocks for macros
@@ -103,7 +103,7 @@ Use `&` in front of a parameter to capture the a variable and pass it by referen
     // C3
     macro for_each(list; @body(it))
     {
-        for (typeof(list) x = list; x; x = x.next)
+        for ($typeof(list) x = list; x; x = x.next)
         {
             @body(x);
         }    
@@ -174,7 +174,7 @@ A basic swap:
      */
     macro void swap(&a, &b)
     {
-        typeof(a) temp = a;
+        $typeof(a) temp = a;
         a = b;
         b = temp;
     }
@@ -353,7 +353,7 @@ Compile time looping:
 
     macro foo($a)
     {
-        $for ($x = 0; $x < $a; $x++):
+        $for (var $x = 0; $x < $a; $x++):
             io::printf("%d\n", $x);     
         $endfor;
     }
