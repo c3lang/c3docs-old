@@ -91,13 +91,13 @@ complement and signed overflow is wrapping. See more [here](../undefinedbehaviou
 
 #### Functions
 
-Functions are declared like C, but you need to put `func` in front:
+Functions are declared like C, but you need to put `fn` in front:
    
     // C:
     int foo(Foo *b, int x, void *z) { ... }
 
     // C3
-    func int foo(Foo* b, int x, void *z) { ... }
+    fn int foo(Foo* b, int x, void *z) { ... }
 
 See more about functions, like named and default arguments [here](../functions).
 
@@ -107,7 +107,7 @@ Declare a function (or variable) with `extern` and it will be possible to
 access it from C3:
 
     // To access puts:
-    extern func int puts(char*);
+    extern fn int puts(char*);
     ...
     puts("Hello world");
 
@@ -118,7 +118,7 @@ the compiler to link them.
 If you want to use a different identifier inside of your C3 code compared to
 the function or variable's external name – use the `@extname` attribute:
 
-    extern func int _puts(char* message) @extname("puts");
+    extern fn int _puts(char* message) @extname("puts");
     ...
     _puts("Hello world"); // <- calls the puts function in libc
 
@@ -135,7 +135,7 @@ Name standards are enforced:
 
     x.myval = 1;
     int z = 123;
-    func void fooBar(int x) { ... }
+    fn void fooBar(int x) { ... }
 
     // Only upper case is a constant or an enum value:
 
@@ -265,13 +265,13 @@ use `import`:
 
     module mylib::foo;
     
-    func void test() { ... }
+    fn void test() { ... }
     struct FooStruct { ... }
 
     module mylib::bar;
     import mylib::foo;
    
-    func void myCheck()
+    fn void myCheck()
     {
       foo::test(); // foo prefix is mandatory.
       mylib::foo::test(); // This also works;

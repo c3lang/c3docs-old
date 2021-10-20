@@ -8,23 +8,23 @@ Attributes are compile time annotations on functions, types, global constants an
 
 If used on a struct or enum: packs the type, including any components to minimum size. On an enum, it uses the smallest representation containing all its values.
 
-### `section(name)` (var, func)
+### `section(name)` (var, fn)
 
 Declares that a global variable or function should appear in a specific section.
 
-### `inline` (func)
+### `inline` (fn)
 
 Declares a function to always be inlined.
 
-### `aligned(alignment)` (struct, union, var, func)
+### `aligned(alignment)` (struct, union, var, fn)
 
 This attribute sets the minimum alignment for a field or a variable.
 
-### `noreturn` (func)
+### `noreturn` (fn)
 
 Declares that the function will never return.
 
-### `weak` (func, var)
+### `weak` (fn, var)
 
 Emits a weak symbol rather than a global. 
 
@@ -41,8 +41,8 @@ User defined attributes are intended for conditional application of built-in att
 define @MyAttribute = @noreturn @inline;
 
 // The following two are equivalent:
-func void foo() @MyAttribute { ... }
-func void foo() @noreturn @inline { ... }
+fn void foo() @MyAttribute { ... }
+fn void foo() @noreturn @inline { ... }
 ```
 
 A user defined attribute may also be completely empty:

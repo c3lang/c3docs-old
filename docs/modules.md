@@ -75,9 +75,9 @@ To make a symbol only visible inside the module, use the keyword
 ```
 module foo;
 
-func void init() { .. }
+fn void init() { .. }
 
-private func void open() { .. }
+private fn void open() { .. }
 ```
 
 In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it is specified as `private`.
@@ -98,19 +98,19 @@ A simple example:
 // File a.c3
 module a;
 
-private func void aFunction() { ... }
+private fn void aFunction() { ... }
 
 // File b.c3
 module b;
 
-private func void bFunction() { ... }
+private fn void bFunction() { ... }
 
 // File c.c3
 module c;
 import a;
 import private b;
 
-func void test() 
+fn void test() 
 {
   a::aFunction(); // <-- error, aFunction is private
   b::bFunction(); // Allowed since import was "private"
@@ -152,7 +152,7 @@ struct Foo { ... }
 struct Bar { ... }
 struct TheAStruct { ... }
 
-func void anAFunction() { ... }
+fn void anAFunction() { ... }
 
 // File b.c3
 
@@ -162,7 +162,7 @@ struct Foo { ... }
 struct Bar { ... }
 struct TheBStruct { ... }
 
-func void aBFunction() { ... }
+fn void aBFunction() { ... }
 
 // File c.c3
 module c;
@@ -172,9 +172,9 @@ import b;
 struct TheCStruct { ... }
 struct Bar { ... }
 
-func void aCFunction() { ... }
+fn void aCFunction() { ... }
 
-func void test()
+fn void test()
 {
     TheAStruct stA;
     TheBStruct stB;
@@ -209,7 +209,7 @@ module foo;
 
 $include("Foo.x");
 
-func void test() 
+fn void test() 
 {
     printf("%d", testX(2));
 }    
@@ -217,7 +217,7 @@ func void test()
 
 File `Foo.x`
 ```
-func testX(int i) 
+fn testX(int i) 
 { 
     return i + 1; 
 }
@@ -228,12 +228,12 @@ The result is as if `Foo.c3` contained the following:
 ```
 module foo;
 
-func testX(int i) 
+fn testX(int i) 
 { 
     return i + 1; 
 }
 
-func void test() 
+fn void test() 
 {
     printf("%d", testX(2));
 }    

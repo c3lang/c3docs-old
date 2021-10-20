@@ -101,7 +101,7 @@ void* Heap.alloc(Heap* heap, usize size)
 /**
  * @require p != nil
  */
-func void Heap.free(Heap* heap, void *p) 
+fn void Heap.free(Heap* heap, void *p) 
 {
     Bin* list;
     Footer& new_foot, old_foot;
@@ -149,17 +149,17 @@ func void Heap.free(Heap* heap, void *p)
     heap.bins[get_bin_index(head.size)].addNode(head);
 }
 
-func uint Heap.expand(Heap* heap, usize sz) 
+fn uint Heap.expand(Heap* heap, usize sz) 
 {
     return 0;
 }
 
-func void Heap.contract(Heap* heap, usize sz) 
+fn void Heap.contract(Heap* heap, usize sz) 
 {
     return;
 }
 
-func uint get_bin_index(usize sz) 
+fn uint get_bin_index(usize sz) 
 {
     uint index = 0;
     sz = sz < 4 ? 4 : sz;
@@ -171,18 +171,18 @@ func uint get_bin_index(usize sz)
     return index;
 }
 
-func void Node.createFoot(Node* head) 
+fn void Node.createFoot(Node* head) 
 {
     Footer* foot = head.getFoot();
     foot.header = head;
 }
 
-func Footer* Node.getFoot(Node* node) 
+fn Footer* Node.getFoot(Node* node) 
 {
     return (Footer*)((char*)(node) + Node.sizeof + node.size);
 }
 
-func Node* getWilderness(Heap* heap) 
+fn Node* getWilderness(Heap* heap) 
 {
     Footer* wild_foot = (Footer*)((char*)(heap.end) - Footer.sizeof);
     return wild_foot.header;

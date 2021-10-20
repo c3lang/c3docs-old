@@ -1,18 +1,25 @@
 # Change log
 
-##### Revision 2020-08-27
+##### Revision 2021-10-20
+- `func` replaced by `fn`
+- Compound literal now `Type { ... }` like C++.
+- Update of conversion rules
+- New error syntax
+- 
+
+##### Revision 2021-08-27
 - Updated reflection functionality.
 - Added documentation for multi-line strings.
 - Added documentation for base64 and hex array literals.
 
-##### Revision 2020-08-12
+##### Revision 2021-08-12
 - Updated error type and error handling with try/catch
  
-##### Revision 2020-07-13
+##### Revision 2021-07-13
 - Added nesting to /* ... */ removed /+ ... +/
 - Added primer.
 
-##### Revision 2020-06-20
+##### Revision 2021-06-20
 - Updated array layout.
 - Revised macros for foreach.
 - Removed old generic functions. 
@@ -20,17 +27,17 @@
 - Changed macro body definition syntax.
 - Introduced both $for and $foreach.
 
-##### Revision 2020-05-31
+##### Revision 2021-05-31
 - Removal of vararray type.
 - Updated user defined attributes.
 - Removed incremental arrays.
 - Added information on `define`.
 - Added private modules and import.
 
-##### Revision 2020-05-18
+##### Revision 2021-05-18
 - Change cast to (type)(expression)
 
-##### Revision 2020-05-08
+##### Revision 2021-05-08
 - Added rationale for some changes from C.
 - Updated undefined and [undefined behaviour](../undefinedbehaviour).
 - Removed many of the fine grained module features.
@@ -38,7 +45,7 @@
 - All modules are now distinct, parent modules do not have any special access to sub modules.
 - Added `as module` imports.
 
-##### Revision 2020-04-05
+##### Revision 2021-04-05
 - "next" is now "nextcase".
 - Added link to the C3 discord.
 - The [conversions](../conversion) page updated with new conversion rules.

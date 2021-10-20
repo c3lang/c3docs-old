@@ -22,7 +22,7 @@ enum FooEnum
     B
 }
 
-func char[] test()
+fn char[] test()
 {
     FooEnum x = FooEnum.A;
     return @describe(x); // Returns "FooEnum.A"
@@ -34,7 +34,7 @@ struct Foo
     char[] y;
 }
 
-func char[] test_struct()
+fn char[] test_struct()
 {
     Foo foo = { .x = 2, y = "bar" }
     return @describe(x); // Returns "Foo { x: 2, y: "bar" }"
@@ -55,13 +55,13 @@ FooEnum[] values = @elements(FooEnum);
 Creates a runtime name of a value.
 
 ```
-func char[] test()
+fn char[] test()
 {
     FooEnum x = FooEnum.B;
     return @name(x); // Returns "B"
 }
 
-func char[] test_struct()
+fn char[] test_struct()
 {
     Foo foo = { .x = 2, y = "bar" }
     return @name(x); // Returns "Foo"
@@ -80,12 +80,12 @@ Returns the byte offset in a structure, like `offsetof` in C
 Returns the size of a type or an expression
 
 ```
-func usize size_test()
+fn usize size_test()
 {
     return @sizeof(Foo); // Might compile to 16
 }
 
-func usize size_test2()
+fn usize size_test2()
 {
     return @sizeof(size_test()); // Usually returns 8 (the size of usize)
 }

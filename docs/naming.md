@@ -41,7 +41,7 @@ All variables and parameters *except for* global constant variables must start w
 ```
 int theGlobal = 1;
 
-func void foo(int x)
+fn void foo(int x)
 {
     Foo foo = getFoo(x);    
     theGlobal++;
@@ -91,7 +91,7 @@ module foo;
 Functions and macros must start with a-z after any optional initial `_`.
 
 ```
-func void theMostAmazingFunction() 
+fn void theMostAmazingFunction() 
 { 
     return;
 }

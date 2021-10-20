@@ -5,7 +5,7 @@ Expressions work like in C, with one example: it is possible to take the address
 Consequently this is valid:
 
 ```
-func void test(int* x) { ... }
+fn void test(int* x) { ... }
 
 test(&&1);
 
@@ -25,7 +25,7 @@ struct Foo
     double b;
 }
 
-func void test(Foo x) { ... }
+fn void test(Foo x) { ... }
 
 ... 
 
@@ -35,7 +35,7 @@ test(Foo({ 1, 2.0 }));
 Arrays follow the same syntax:
 
 ```
-func void test(int[3] x) { ... }
+fn void test(int[3] x) { ... }
 
 ...
 
@@ -46,7 +46,7 @@ One may take the address of temporaries, using `&&` (rather than `&` for normal 
 
 Passing a slice
 ```
-func void test(int[] y) { ... }
+fn void test(int[] y) { ... }
 
 // Using &&
 test(&&int[3]({ 1, 2, 3 }));
@@ -57,8 +57,8 @@ test(int[3]({ 1, 2, 3 }[..]));
 
 Passing a pointer to an array
 ```
-func void test1(int[3]* z) { ... }
-func void test2(int* z) { ... }
+fn void test1(int[3]* z) { ... }
+fn void test2(int* z) { ... }
 
 test1(&&int[3]({ 1, 2, 3 }));
 test2(&&int[3]({ 1, 2, 3 }));
@@ -76,13 +76,10 @@ In C3 all _constant expressions_ are guaranteed to be calculated at runtime. The
 6. The result of macros that does not generate code and only uses constant expressions.
 7. The result of a cast if the value is cast to a boolean, floating point or integer type and the value that is converted is a constant expression.
 8. String literals.
+9. Initializer lists containing constant values.
 
 Some things that are *not* constant expressions:
 
 1. Any pointer that isn't the `null` literal, even if it's derived from a constant expression.
 2. The result of a cast except for casts of constant expressions to a numeric type.
 3. Compound literals - even when values are constant expressions.
-
-
-
-

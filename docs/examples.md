@@ -1,6 +1,6 @@
 #####if-statement
 ```
-func void if_example(int a) 
+fn void if_example(int a) 
 {
     if (a > 0) 
     {
@@ -15,7 +15,7 @@ func void if_example(int a)
 
 #####for-loop
 ```
-func void example_for() 
+fn void example_for() 
 {
     // the for-loop is the same as C99. 
     for (int i = 0; i < 10; i++) 
@@ -34,7 +34,7 @@ func void example_for()
 #####while-loop
 
 ```
-func void example_while() 
+fn void example_while() 
 {
     // again exactly the same as C
     int a = 10;
@@ -56,76 +56,79 @@ func void example_while()
 Switches have implicit break and scope. Use "nextcase" to implicitly fallthrough or use comma:
 
 ```
-enum Height : uint 
+import std::io;
+
+enum Height : uint
 {
     LOW = 0,
     MEDIUM,
     HIGH,
 }
 
-func void demo_enum(Height h) 
+fn void demo_enum(Height h)
 {
-    switch (h) 
+    switch (h)
     {
-        case LOW: 
+        case LOW:
         case MEDIUM:
-            io::printf("Not high");
+            io::println("Not high");
             // Implicit break.
         case HIGH:
-            io::printf("High");
+            io::println("High");
     }
 
     // This also works
-    switch (h) 
+    switch (h)
     {
-        case LOW, 
+        case LOW:
         case MEDIUM:
-            io::printf("Not high");
+            io::println("Not high");
             // Implicit break.
         case Height.HIGH:
-            io::printf("High");
+            io::println("High");
     }
 
     // Completely empty cases are not allowed.
-    switch (h) 
+    switch (h)
     {
         case LOW:
             break; // Explicit break required, since switches can't be empty.
         case MEDIUM:
-            io::printf("Medium");
+            io::println("Medium");
         case HIGH:
             break;
     }
 
     // special checking of switching on enum types
-    switch (h) 
+    switch (h)
     {
-        case LOW,
-        case MEDIUM,
-        case HIGH,
+        case LOW:
+        case MEDIUM:
+        case HIGH:
             break;
         default:    // warning: default label in switch which covers all enumeration value
             break;
     }
-    
-    // Using "nextcase" will fallthrough to the next case statement, 
+
+    // Using "nextcase" will fallthrough to the next case statement,
     // and each case statement starts its own scope.
-    switch (h) 
+    switch (h)
     {
         case LOW:
             int a = 1;
-            printf("A\n");
+            io::println("A");
             nextcase;
-        case MEDIUM,
+        case MEDIUM:
             int a = 2;
-            printf("B\n");
+            io::println("B");
             nextcase;
-        case HIGH,
+        case HIGH:
             // a is not defined here
-            printf("C\n");
+            io::println("C");
     }
 }
 ```
+
 
 Enums are always namespaced.
 
@@ -134,8 +137,8 @@ Enums also define `.min` and `.max`, returning the minimum and maximum value for
 ```
 enum State : uint 
 {
-    Start,
-    Stop,
+    START,
+    STOP,
 }
 
 const uint LOWEST = State.min;
@@ -149,32 +152,40 @@ State start = State.all[0];
 Defer will be invoked on scope exit.
 
 ```
-func void test(int x)
+import std::io;
+
+fn void test(int x)
 {
-    defer printf("A");
+    defer io::println();
+    defer io::print("A");
     if (x == 1) return;
     {
-        defer printf("B");
+        defer io::print("B");
         if (x == 0) return;
     }
-    printf("!")
+    io::print("!");
 }
 
-test(1); // Prints "A"
-test(0); // Prints "BA"
-test(10); // Prints "B!A"
+fn void main()
+{
+    test(1); // Prints "A"
+    test(0); // Prints "BA"
+    test(10); // Prints "B!A"
+}
 ```
 
 Because it's often relevant to run different defers when having an error return there is also a way to create an error defer, by using the `catch` keyword directly after the defer.
 
+*Note that this is currently not implemented.*
 ```
-func void! test(int x)
+fn void! test(int x)
 {
-    defer printf("A");
-    defer catch printf("B")
-    defer catch (err) printf("%s", err.message);
+    defer io::println();
+    defer io::print("A");
+    defer catch io::print("B")
+    defer catch (err) io::printf("%s", err.message);
     if (x = 1) return FooError!;
-    printf("!")
+    print("!")
 }
 
 test(0); // Prints "!A"
@@ -184,7 +195,7 @@ test(1); // Prints "FOOBA" and returns a FooError
 #####struct types
 
 ```
-define Callback = func int(char c);
+define Callback = fn int(char c);
 
 enum Status : int
 {
@@ -205,21 +216,21 @@ struct MyData
     {
         int value;
         int status;   // ok, no name clash with other status
-    };
+    }
 
     // anonymous sub-structs (x.value)
     struct 
     {
         int value;
         int status;   // error, name clash with other status in MyData
-    };
+    }
 
     // anonymous union (x.person)
     union 
     {
         Person* person;
         Company* company;
-    };
+    }
 
     // named sub-unions (x.either.this)
     union either 
@@ -227,7 +238,7 @@ struct MyData
         int this;
         bool  or;
         char* that;
-    };
+    }
 }
 ```
 
@@ -237,17 +248,16 @@ struct MyData
 ```
 module demo;
 
-define Callback = func int(char* text, int value);
+define Callback = fn int(char* text, int value);
 
-// also shows function attribute
-func int my_callback(char* text, int value) @(unused_params) 
+fn int my_callback(char* text, int value) 
 {
     return 0;
 }
 
 Callback cb = &my_callback;
 
-func void example_cb() 
+fn void example_cb() 
 {
     int result = cb("demo", 123);
     // ..
@@ -264,32 +274,31 @@ errtype MathError
     DIVISION_BY_ZERO
 }
 
-func double divide(int a, int b)
+fn double! divide(int a, int b)
 {
     if (b == 0) return MathError.DIVISION_BY_ZERO!;
     return (double)(a) / (double)(b);
-
 }
 
 // Rethrowing an error uses "!!" suffix
-func void! testMayError()
+fn void! testMayError()
 {
-    divide(foo(), bar())!!; 
+    divide(foo(), bar())!!;
 }
 
-func void testHandlingError()
+fn void main()
 {
     // ratio has a failable type.
     double! ratio = divide(foo(), bar());
-    
+
     // Handle the error
-    switch (catch err = ratio)
+    if (catch err = ratio)
     {
         case MathError.DIVISION_BY_ZERO:
             io::printf("Division by zero\n");
             return;
         default:
-            io::printf("Unexpected error!");                 
+            io::printf("Unexpected error!");
             return;
     }
     // Flow typing makes "ratio"
@@ -301,19 +310,19 @@ func void testHandlingError()
 ```
 import std::io;
 
-func void printFile(string filename)
+fn void printFile(char[] filename)
 {
-    string! file = io::load_file(filename);
-    
+    char[]! file = io::load_file(filename);
+
     // The following function is not executed on error.
     io::printf("Loaded %s and got:\n%s", filename, file);
 
-    switch (catch err = file)
+    if (catch err = file)
     {
         case IoError.FILE_NOT_FOUND:
-            printf("I could not find the file %s\n", filename);
+            io::printf("I could not find the file %s\n", filename);
         default:
-            printf("Could not load %s: '%s'", filename, error.message());
+            io::printf("Could not load %s.\n", filename);
     }
 }
 ```
@@ -328,7 +337,7 @@ Pre- and postconditions are optionally compiled into asserts helping to optimize
  * @return number of foos x 10
  * @ensure return < 10000, return > 0
  **/
-func int testFoo(int foo)
+fn int testFoo(int foo)
 {
     return foo * 10;
 }
@@ -338,7 +347,7 @@ func int testFoo(int foo)
  * @param length : length of the array
  * @require length > 0
  **/
-func int getLastElement(int? array, int length)
+fn int getLastElement(int* array, int length)
 {
     return array[length - 1];
 }
@@ -353,12 +362,12 @@ macro foo(a, b)
     return a(b);
 }
 
-func int square(int x)
+fn int square(int x)
 {
     return x * x;
 }
 
-func int test()
+fn int test()
 {
     int a = 2;
     int b = 3;    
@@ -381,12 +390,12 @@ macro foo2(#a)
     return a * a;
 }
 
-func int square(int x)
+fn int square(int x)
 {
     return x * x;
 }
 
-func int test1()
+fn int test1()
 {
     int a = 2;
     int b = 3; 
@@ -394,7 +403,7 @@ func int test1()
     return b; // 27   
 }
 
-func int test2()
+fn int test2()
 {
     return foo2(1 + 1); // 1 + 1 * 1 + 1 = 3
 }
@@ -411,7 +420,7 @@ macro square(x)
     return x * x;
 }
 
-func void test()
+fn void test()
 {
     square("hello"); // Error: cannot multiply "hello"
     int a = 1;
@@ -429,12 +438,12 @@ struct Foo
     int i;
 }
 
-func void Foo.next(Foo* this)
+fn void Foo.next(Foo* this)
 {
     if (this) this.i++;
 }
 
-func void test()
+fn void test()
 {
     Foo foo = { 2 };
     foo.next();
@@ -461,7 +470,7 @@ struct Stack
 }
 
 
-func void Stack.push(Stack* this, Type element)
+fn void Stack.push(Stack* this, Type element)
 {
     if (this.capacity == this.size)
     {
@@ -471,13 +480,13 @@ func void Stack.push(Stack* this, Type element)
     this.elems[this.size++] = element;
 }
 
-func Type Stack.pop(Stack* this)
+fn Type Stack.pop(Stack* this)
 {
     assert(this.size > 0);
     return this.elems[--this.size];
 }
 
-func bool Stack.empty(Stack* this)
+fn bool Stack.empty(Stack* this)
 {
     return !this.size;
 }
@@ -491,7 +500,7 @@ import stack;
 define IntStack = Stack<int>;
 define DoubleStack = Stack<double>;
 
-func void test()
+fn void test()
 {
     IntStack stack;
     stack.push(1);

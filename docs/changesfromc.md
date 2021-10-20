@@ -31,7 +31,7 @@ The const qualifier is only retained for actual constant variables. C3 uses a sp
  * This function ensures that foo is not changed in the function, nor is bar.x altered.
  * @ensure const(foo), const(bar.x)
  **/
-func void test(Foo* foo, Bar* bar)
+fn void test(Foo* foo, Bar* bar)
 {
     bar.y = foo.x;
     // bar.x = foo.x - compile time error!
@@ -130,5 +130,5 @@ callFoo(Foo(1, 2, 3));
 callFoo(Foo { 1, 2, 3 });
 
 // C3:
-callFoo(Foo({ 1, 2, 3 }));
+callFoo(Foo { 1, 2, 3 } );
 ```

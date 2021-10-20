@@ -20,7 +20,7 @@ static
 
 int y = rand();
 
-func int randomCalculation()
+fn int randomCalculation()
 {
     return rand();
 }
@@ -139,7 +139,7 @@ It would be possible to define a generic, such a generic could be taken the addr
 
 ```c
 #define intmax = max(int, int);
-#define TwoIntFunc = func int(int, int);
+#define TwoIntfn = fn int(int, int);
 TwoIntFunc x = &intmax;
 ```
 
@@ -179,9 +179,9 @@ int[] z = [1, 2, 3]; // Slice pointing at literal allocated on the stack
 It offers some convenience when calling functions taking arrays:
 
 ```
-func void test1(int[3] x) { ... }
-func void test2(int[] y) { ... }
-func void test2(int[3]* z) { ... }
+fn void test1(int[3] x) { ... }
+fn void test2(int[] y) { ... }
+fn void test2(int[3]* z) { ... }
 
 test1([ 1, 2, 3 ]);
 test2([ 1, 2, 3 ]);
@@ -263,7 +263,7 @@ macro void @foo($x, #f)
     `#f $x * $x`;
 }
 
-func void test()
+fn void test()
 {
     int x = 1;
     @foo(4, "x +=");
@@ -315,7 +315,7 @@ struct Foo
     int i;
 }
 
-func Foo.next(Foo*)
+fn Foo.next(Foo*)
 {
     i++;
 }
@@ -514,7 +514,7 @@ void test()
 }
 
 \\ C3
-func void test()
+fn void test()
 {
     int v = 0;
     for (int i = 0; i < 100; i++)
@@ -530,7 +530,7 @@ func void test()
 ## Interfaces
 
 ```
-func void Foo.renderPage(Foo* foo, Page* info)
+fn void Foo.renderPage(Foo* foo, Page* info)
 {
     /* ... */
 }
@@ -540,13 +540,13 @@ interface Renderer
     void renderPage(virtual Renderer* renderer, Page* info);
 }
 
-func void render(virtual Renderer* renderer, Page* info)
+fn void render(virtual Renderer* renderer, Page* info)
 {
     if (!rendered) return;
     renderer->renderPage(info);
 }
 
-func void test()
+fn void test()
 {
     Foo* foo = getFoo();
     Page* page = getPage(); 
@@ -598,7 +598,7 @@ int i = map[0]!!; // Requires a rethrow
 int i = try map[12] else -1;
 
 // Extend a map:
-func bool int[int].remove_if_negative(int[int] *map, int index)
+fn bool int[int].remove_if_negative(int[int] *map, int index)
 {
     if (try map[index] >= 0 else true) return false;    
     map.remove(index);
@@ -833,7 +833,7 @@ public #define FOO { printf("FOO!\n"); }
 // file 2
 import foo
 
-func void test() {
+fn void test() {
   foo.FOO
 }
 ```
@@ -850,14 +850,14 @@ macro @foo(&b)
     b++;
 }
 
-func test()
+fn test()
 {
     int x = 1;
     @foo(x); 
 }
 
 // Same as:
-func void test()
+fn void test()
 {
     int x = 1;
     x++;	
@@ -872,14 +872,14 @@ macro @foo($x, &b)
     b += $x;
 }
 
-func void test()
+fn void test()
 {
     int x = 1;
     @foo(10, x);
 }
 
 // Expands to:
-func void test()
+fn void test()
 {
     int x = 1;
     x += 10;
@@ -894,14 +894,14 @@ macro @foo($x, #f)
     `#f $x * $x`;
 }
 
-func void test()
+fn void test()
 {
     int x = 1;
     @foo(4, "x += ");
 }
 
 // Expands to
-func void test()
+fn void test()
 {
     int x = 1;
     x += 4 * 4;	
@@ -941,7 +941,7 @@ macro @foo($x, &b)
     }
 }
 
-func void test()
+fn void test()
 {
     i32 x = 1;
     
@@ -950,7 +950,7 @@ func void test()
 }
 
 // Expands to
-func void test()
+fn void test()
 {
     i32 x = 1;
     
@@ -973,13 +973,13 @@ macro @foo($a)
     }
 }
 
-func void test()
+fn void test()
 {
     @foo(2);
 }
 
 // Expands to
-func void test()
+fn void test()
 {
     printf("%d\n", 2);
     printf("%d\n", 1);
@@ -1013,13 +1013,13 @@ enum MyEnum
     FOO
 }
 
-func void test()
+fn void test()
 {
     @foo_enum(MyEnum);
 }
 
 // Expands to
-func void test()
+fn void test()
 {
 	printf("%d\n", (int)(A));
 	printf("%d\n", (int)(B));
@@ -1048,13 +1048,13 @@ macro @foo()
     // but clashes with function name!
 }
 
-func int test()
+fn int test()
 {
     @foo();
 }
 
 // expands to
-func int test()
+fn int test()
 {
     return 1;
 }
@@ -1071,14 +1071,14 @@ macro @foo(&a)
     return 2; 
 }
 
-func int test()
+fn int test()
 {
     b = 10;
     int y = @foo(b);
 }
 
 // Expands to:
-func int test()
+fn int test()
 {
     b = 10;
     int __macro_ret_1;
@@ -1115,7 +1115,7 @@ macro @foo(&a, @body)
     } 
 }
 
-func void test()
+fn void test()
 {
     int i = 0;
     @foo(i) 
@@ -1125,7 +1125,7 @@ func void test()
 }
 
 // Expands to
-func void test()
+fn void test()
 {
     int i = 0;
     {
@@ -1152,7 +1152,7 @@ macro @foo(&a, @body(&x, $y))
     } 
 }
 
-func void test()
+fn void test()
 {
     int i = 0;
     @foo(i) 
@@ -1163,7 +1163,7 @@ func void test()
 
 // Expands to
 
-func void test()
+fn void test()
 {
     int i = 0;
     {

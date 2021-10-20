@@ -15,7 +15,7 @@ define Numbers = int[10];
 
 Function pointers _must_ be aliased in C3. The syntax is somewhat different from C:
 
-`define Callback = func void(int a, bool b);`
+`define Callback = fn void(int a, bool b);`
 
 This defines an alias to function pointer type of a function that returns nothing and requires two arguments: an int and a bool. Here is a sample usage:
 
@@ -45,13 +45,13 @@ It's possible to use `define` to create aliases for functions and variables.
 The syntax is `define <alias> = <original identifier>`.
 
 ```
-func void foo() { ... }
+fn void foo() { ... }
 int foo_var;
 
 define bar = foo;
 define bar_var = foo_var;
 
-func void test() 
+fn void test() 
 {
   // These are the same:
   foo();

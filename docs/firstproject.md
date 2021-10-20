@@ -9,7 +9,7 @@ module hello_world;
 
 import std::io;
 
-func int main(int argc, char** argv) 
+fn int main(int argc, char** argv) 
 {
     io::println("Hello World!");
     return 0;
@@ -33,7 +33,7 @@ You will get the following structure:
 
 
 ```
-$ c3c -new hello_world 
+$ c3c init hello_world 
 $ tree .
 .
 └── hello_world

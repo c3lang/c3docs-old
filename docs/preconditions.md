@@ -10,7 +10,7 @@ Pre conditions are usually used to validate incoming arguments. Each condition m
 /**
  * @require foo > 0, foo < 1000
  **/
-func int testFoo(int foo)
+fn int testFoo(int foo)
 {
     return foo * 10;
 }
@@ -29,7 +29,7 @@ For `const` and `pure`, they can either be given as separate annotations: `@pure
  * @ensure foo != nil, const(foo), return > foo.x;
  * @pure
  **/
-func uint checkFoo(Foo* foo)
+fn uint checkFoo(Foo* foo)
 {
     uint y = abs(foo.x) + 1;
     // If we had row: foo.x = 0, then this would be a compile time error.
@@ -44,7 +44,7 @@ The `const` annotation allows a program to make assumtions in regards of how the
 However, it should be noted that the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:
 
 ```
-func void badFunc(int* i)
+fn void badFunc(int* i)
 {
     *i = 2;
 }
@@ -52,12 +52,12 @@ func void badFunc(int* i)
 /**
  * @ensure const(i)
  */
-func void lyingFunc(int* i)
+fn void lyingFunc(int* i)
 {
     badFunc(i); // The compiler might not check this!
 }
 
-func void test()
+fn void test()
 {
     int a = 1;
     lyingFunc(&a);
@@ -71,7 +71,7 @@ However, compilers will usually detect this:
 /**
  * @ensure const(i)
  */
-func void badFunc(int* i)
+fn void badFunc(int* i)
 {
     *i = 2; // <- Compiler error: violating post condition const(i)
 }
@@ -86,24 +86,24 @@ However, just like for `const` the compiler might not detect whether the annotat
 ```
 int i = 0;
 
-type SecretFunc func void();
+type Secretfn fn void();
 
-func void badFunc()
+fn void badFunc()
 {
     i = 2;
 }
 
-SecretFunc foo = nil;
+Secretfn foo = nil;
 
 /**
  * @pure
  */
-func void lyingFunc()
+fn void lyingFunc()
 {
     SecretFunc(); // The compiler cannot reason about this!
 }
 
-func void test()
+fn void test()
 {
     foo = &badFunc;
     i = 1;
@@ -117,7 +117,7 @@ However, compilers will usually detect this:
 ```
 int i = 0;
 
-func void badFunc()
+fn void badFunc()
 {
     i = 2;
 }
@@ -125,7 +125,7 @@ func void badFunc()
 /**
  * @pure
  */
-func void lyingFunc()
+fn void lyingFunc()
 {
     badFunc(); // Error! Calling an impure function
 }

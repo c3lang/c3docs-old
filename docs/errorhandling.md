@@ -8,7 +8,7 @@ For C the interface to C, the error is returned as the normal value, and any ret
 
 C3 code:
 ```
-func int! getValue();
+fn int! getValue();
 ```
 
 Corresponding C code:
@@ -51,11 +51,11 @@ if (try file2)
 A function, method or macro call with one or more parameters will only execute if the failable has no error. This makes error returns composable. 
 
 ```
-func int! fooMayError() { ... }
-func int mult(int i) { ... }
-func int! save(int i) { ... }
+fn int! fooMayError() { ... }
+fn int mult(int i) { ... }
+fn int! save(int i) { ... }
 
-func void test()
+fn void test()
 (
     int! i = fooMayError();
     
@@ -109,7 +109,7 @@ errtype IoError
 Returning an error looks like a normal return but with the `!`
 
 ```
-func void! findFile()
+fn void! findFile()
 {
     if (File.doesFileExist("foo.txt")) return IoError.FILE_NOT_FOUND!;
     /* ... */
@@ -118,14 +118,27 @@ func void! findFile()
 
 ##### Calling a function automatically returning any error
 
-The `!!` suffix will create an implicit return on error.
+The `?` suffix will create an implicit return on error.
 
 ```
-func void! findFileAndTest()
+fn void! findFileAndTest()
+{
+    findFile()?;
+    // Implictly:
+    // catch (err = findFile()) return err!;
+}
+```
+
+##### Panic on error
+
+The `!!` will issue a panic on error.
+
+```
+fn void! findFileAndTest()
 {
     findFile()!!;
     // Implictly:
-    // catch (err = findFile()) return err!;
+    // catch (err = findFile()) panic("Unexpected error");
 }
 ```
 
@@ -134,7 +147,7 @@ func void! findFileAndTest()
 Catching an error and returning will implicitly unwrap the checked variable.
 
 ```
-func void findFileAndNoErr()
+fn void findFileAndNoErr()
 {
     File*! res = findFile();    
     if (catch res)
@@ -150,7 +163,7 @@ func void findFileAndNoErr()
 ##### Only do if no error
 
 ```
-func void doSomethingToFile()
+fn void doSomethingToFile()
 {
     void! res = findFile();    
     if (try res)
@@ -163,7 +176,7 @@ func void doSomethingToFile()
 ##### Catching some errors
 
 ```
-func void! findFileAndParse2()
+fn void! findFileAndParse2()
 {
     if (catch err = findFileAndParse())
     {
@@ -178,17 +191,17 @@ func void! findFileAndParse2()
 
 ##### Default values
 
-A function returning an error may be followed by an `else` and an expression. The call then executes and returns the expression.
+A function returning an error may be followed by an `??` and an expression. The call then executes and returns the expression.
 
 ```
-func int testDefault()
+fn int testDefault()
 {
-    return getIntNumberOrFail() else -1;
+    return getIntNumberOrFail() ?? -1;
 }
 
 // The above is equivalent to:
 
-func int testDefault()
+fn int testDefault()
 {
     int! i = getIntNumberOrFail();    
     catch (i) return -1;
@@ -199,15 +212,15 @@ func int testDefault()
 
 ##### Default jump
 
-The else can also be followed by a jump statement: `return`, `break` or `continue`.
+The ?? can also be followed by a jump statement: `return`, `break` or `continue`.
 
 ```
-func int testBreak(int times)
+fn int testBreak(int times)
 {
     int index;
     for (index = 0; i < times; i++)
     {
-       callTest(index) else break; 
+       callTest(index) ?? break; 
     }
     if (index < times)
     {

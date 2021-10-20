@@ -4,10 +4,10 @@ C3 has both regular functions and member functions. Member functions are name sp
 
 ## Regular functions
 
-Regular functions looks similar to C. It starts with the keyword `func`, followed by the conventional C declaration of `<return type> <name>(<parameter list>)`.
+Regular functions looks similar to C. It starts with the keyword `fn`, followed by the conventional C declaration of `<return type> <name>(<parameter list>)`.
 
 ```
-func void test(int times)
+fn void test(int times)
 {
     for (int i = 0; i < times; i++)
     {
@@ -22,12 +22,12 @@ C3 allows use of default arguments as well as named arguments. Note that
 named and unnamed arguments cannot be combined.
 
 ```
-func int testWithDefault(int foo = 1)
+fn int testWithDefault(int foo = 1)
 {
     return foo;
 }
 
-func void test()
+fn void test()
 {
     testWithDefault();
     testWithDefault(100);
@@ -37,7 +37,7 @@ func void test()
 Named arguments
 
 ```
-func void testNamed(int times, double data)
+fn void testNamed(int times, double data)
 {
     for (int i = 0; i < times; i++)
     {
@@ -45,7 +45,7 @@ func void testNamed(int times, double data)
     }
 }
 
-func void test()
+fn void test()
 {
     testNamed(.data = 3.0, .times = 1)
     testNamed(3, 4.0);
@@ -55,7 +55,7 @@ func void test()
 Named arguments with defaults:
 
 ```
-func void testNamedDefault(int times = 1, double data = 3.0, bool dummy = false)
+fn void testNamedDefault(int times = 1, double data = 3.0, bool dummy = false)
 {
     for (int i = 0; i < times; i++)
     {
@@ -63,7 +63,7 @@ func void testNamedDefault(int times = 1, double data = 3.0, bool dummy = false)
     }
 }
 
-func void test()
+fn void test()
 {
     testNamed(.data = 3.0)
     
@@ -81,17 +81,17 @@ There are two types of varargs: the usual C-style untyped varargs and typed vara
 
 
 ```
-func void varargsUntyped(string foo, ...)
+fn void varargsUntyped(string foo, ...)
 {
     /* ... */
 }
 
-func void varargsTyped(string bar, int... ints)
+fn void varargsTyped(string bar, int... ints)
 {
     /* ... */
 }
 
-func void test()
+fn void test()
 {
     varargsUntyped("Hello", 2, 1.0, (char)(1), "Test");
     varargsTyped("Test", 2, (char)(1));
@@ -105,7 +105,7 @@ The return parameter may be a *failable* – a type suffixed by `!` indicating t
 
 The below example might throw errors from both the `SomeError` error domain as well as the `OtherError` error domain.
 
-    func double! testError()
+    fn double! testError()
     {
         double val = random_value();
         if (val >= 0.2) return SomeError.BAD_JOSS_ERROR!;
@@ -115,7 +115,7 @@ The below example might throw errors from both the `SomeError` error domain as w
 
 *A function* that is passed a *failable* value will only conditionally execute if and only if all failable values evaluate to true, otherwise *the first* error is returned.
 
-    func void test()
+    fn void test()
     {
         // The following line is either prints a value less than 0.2
         // or does not print at all:
@@ -131,7 +131,7 @@ This allows us to chain functions:
 
 _NOTE: The compiler is not fully tested with all failable conditionals yet._
 
-    func void printInputWithExplicitChecks()
+    fn void printInputWithExplicitChecks()
     {
         string! line = readLine();
         if (try line)
@@ -147,7 +147,7 @@ _NOTE: The compiler is not fully tested with all failable conditionals yet._
         printf("You didn't type an integer :(\n");    
     }
     
-    func void printInputWithChaining()
+    fn void printInputWithChaining()
     {
         if (try int val = atoi(readLine()))
         {
@@ -168,12 +168,12 @@ invoked using dot syntax:
         int y;
     }
     
-    func void Point.add(Point* p, int x) 
+    fn void Point.add(Point* p, int x) 
     {
         p.x = x;
     }
     
-    func void example() 
+    fn void example() 
     {
         Point p = { 1, 2 }
         
@@ -193,12 +193,12 @@ Struct and unions will always take pointer, whereas enums take the enum value.
         RUNNING
     }
     
-    func bool State.mayOpen(State state) 
+    fn bool State.mayOpen(State state) 
     {
         switch (state)
         {
-            case State.STOPPED: return true;
-            case State.RUNNING: return false;
+            case STOPPED: return true;
+            case RUNNING: return false;
         }
     }
 
@@ -222,14 +222,14 @@ As an example, the following code:
      * @return number of foos x 10
      * @ensure return < 10000, return > 0
      **/
-    func int testFoo(int foo)
+    fn int testFoo(int foo)
     {
         return foo * 10;
     }
 
 Will in debug builds be compiled into something like this:
 
-    func int testFoo(int foo)
+    fn int testFoo(int foo)
     {
         assert(foo > 0);
         assert(foo < 1000);
@@ -241,7 +241,7 @@ Will in debug builds be compiled into something like this:
 
 The compiler is allowed to use the pre and post conditions for optimizations. For example this:
 
-    func int testExample(int bar)
+    fn int testExample(int bar)
     {
         if (testFoo(bar) == 0) return -1;
         return 1;
@@ -249,7 +249,7 @@ The compiler is allowed to use the pre and post conditions for optimizations. Fo
 
 May be optimized to:
 
-    func int testExample(int bar)
+    fn int testExample(int bar)
     {
         return 1;
     }

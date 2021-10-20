@@ -142,7 +142,7 @@ case        cast        catch
 const       continue    default
 defer       define      do
 else        enum        extern
-errtype     false       func
+errtype     false       fn
 generic     if          import
 in          local       macro
 module      nextcase    nil
@@ -385,8 +385,8 @@ A pointer may be cast to any integer, truncating the pointer value if the size o
 Example:
 
 ```
-func void test() { ... }
-define VoidFunc = func void test();
+fn void test() { ... }
+define VoidFunc = fn void test();
 
 VoidFunc a = &test;
 int b = (int)(null);

@@ -5,7 +5,7 @@
 ```
 import std::io;
 
-func void main()
+fn void main()
 {
     io::printf("Hello world!\n");
 }
@@ -14,7 +14,7 @@ func void main()
 ## Fibonacci recursive
 
 ```
-func long fib(long n)
+fn long fib(long n)
 {
     if (n <= 1) return n;
     return fib(n - 1) + fib(n - 2);
@@ -28,13 +28,13 @@ func long fib(long n)
 import net::http_server;
 import net;
 
-func void! httpHandler(HttpContext* context)
+fn void! httpHandler(HttpContext* context)
 {
     context.response.contentType = "text/plain";
     context.response.printf("Hello world!\n");
 }
 
-func void main()
+fn void main()
 {
     HttpServer server;
     server.init();

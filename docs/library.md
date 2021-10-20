@@ -74,7 +74,7 @@ struct Person
     char[] name;
 }
 
-func void test()
+fn void test()
 {
     Person* person = malloc(sizeof(Person));
     person.initRC(&free);

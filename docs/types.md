@@ -12,7 +12,7 @@ struct Stat @extname("stat")
     // ...
 } 
 
-func CInt stat(const char* pathname, Stat* buf);
+fn CInt stat(const char* pathname, Stat* buf);
 ```
 
 ##### Differences from C
@@ -52,7 +52,7 @@ All signed integer arithmetics uses 2's complement.
 
 ##### Integer constants
 
-Integer constants are 1293832 or -918212. Unlike C the "type" of an integer constant is a special compile time int. All constant operations, for example `9283 << 2` will be resolved at compile time. An compile time error will result if the constant is too large to fit whatever variable it is assigned or compared to.
+Integer constants are 1293832 or -918212. Without a suffix, suffix type is assumed to the signed integer of *arithmetic promotion width*. Adding the `u` suffix gives a unsigned integer of the same width. Use `ixx` and `uxx` – where `xx` is the bitwidth for typed integers, e.g. `1234u16`
 
 Integers may be written in decimal, but also
 
@@ -61,6 +61,7 @@ Integers may be written in decimal, but also
 - in hexadecimal with the prefix 0x e.g. `0xdeadbeef` `0x7f7f7f`
 
 Furthermore, underscore `_` may be used to add space between digits to improve readability e.g. `0xFFFF_1234_4511_0000`, `123_000_101_100`
+
 
 ##### TwoCC, FourCC and EightCC
 
@@ -144,9 +145,19 @@ char* bar = "\"Say `hello`\"";
 
 ##### Floating point constants
 
-Floating point constants will *at least* use 64 bit precision. Just like for integer constants, it is allowed to use underscore, but it may not occur immediagely before or after a dot or an exponential.
+Floating point constants will *at least* use 64 bit precision. Just like for integer constants, it is allowed to use underscore, but it may not occur immediately before or after a dot or an exponential.
 
 Floating point values may be written in decimal or hexadecimal. For decimal, the exponential symbol is e (or E, both are acceptable), for hexadecimal p (or P) is used: `-2.22e-21` `-0x21.93p-10` 
+
+It is possible to type a floating point by adding a suffix:
+
+| Suffix       | type     |
+| ------------ | --------:|
+| f16          | float16  |
+| f32 *or f*   | float    |
+| f64          | double   |
+| f128         | float128 |
+
 
 ### C compatibility
 
@@ -207,7 +218,7 @@ switch (foo)
         ...
 }
 
-func void test(State s) { ... }
+fn void test(State s) { ... }
 
 ...
 
@@ -219,7 +230,7 @@ In the case that it collides with a global in the same scope, it needs the quali
 ```
 module test;
 
-func void testState(State s) { ... }
+fn void testState(State s) { ... }
 
 State RUNNING = State.TERMINATED; // Don't do this!
 
@@ -271,8 +282,8 @@ i = IOError!; // Assigning an error to i.
 Only variables and return variables may be of the *failable* type. Function and macro parameters may not be failable types.
 
 ```
-func Foo*! getFoo() { ... } // Ok!
-func void processFoo(Foo*! f) { ... } // Error!
+fn Foo*! getFoo() { ... } // Ok!
+fn void processFoo(Foo*! f) { ... } // Error!
 int! x = 0; // Ok!
 ```
 
@@ -319,7 +330,7 @@ struct ImportantPerson
     char* title;
 }
 
-func printPerson(Person p)
+fn printPerson(Person p)
 {
     io::printf("%s is %d years old.", p.age, p.name);
 }
@@ -395,7 +406,7 @@ TBD: Exact syntax (see the [ideas](../ideas) page)
 Casting does not use the C-style `(<NewType>) <expression>` instead uses `(<NewType>)(<expression>)`
     
 ```
-float f = 2.0;
+float f = 2.0f;
 int i = (int)(f);
 ```
 
@@ -407,7 +418,7 @@ It's possible to use anonymous structs (structs without name) as arguments. Thes
 _NOTE: This syntax is not final._
 
 ```
-func void set_coordinates(struct { int i; int j; } coord) { ... }
+fn void set_coordinates(struct { int i; int j; } coord) { ... }
 
 struct Vec2
 {
@@ -428,7 +439,7 @@ struct Vec3
     int z;
 }
 
-func void test()
+fn void test()
 {
     Vec2 v2 = { 1, 2 };
     Vector v = { 1, 4 };

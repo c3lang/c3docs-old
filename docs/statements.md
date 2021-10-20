@@ -9,7 +9,7 @@ Expression blocks (delimited using `{| |}`) are compound statements that opens i
 
 The function below prints `World!`
 
-    func void test()
+    fn void test()
     {
         int a = 0;
         {|
@@ -22,7 +22,7 @@ The function below prints `World!`
 
 Expression blocks may also return values:
 
-    func void test(int x)
+    fn void test(int x)
     {
         int a = {|
             if (x > 0) return x * 2;
@@ -37,7 +37,7 @@ Expression blocks may also return values:
 Labelled `break` and `continue` lets you break out of an outer scope. Labels can be put on `if`, 
 `switch`, `while` and `do` statements.
    
-    func void test(int i)
+    fn void test(int i)
     {
         if FOO: (i > 0)
         {

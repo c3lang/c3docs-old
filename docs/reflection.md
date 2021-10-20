@@ -50,7 +50,7 @@ as exported by the linker.
 
     module bar;
     int x;
-    func void test(int x) { }
+    fn void test(int x) { }
     string a = $extnameof(x); // => "bar.x";
     string b = $extnameof(test); // => "bar.test"
     string c = $extnameof("test"); // => "bar.test"
@@ -206,7 +206,7 @@ string s = Foo.associatedValues[0].name; // "double"
 Returns the type of the return type.
 
 ```
-define TestFunc = func int(int, double);
+define TestFunc = fn int(int, double);
 string s = TestFunc.returnType.name; // "int"
 ```
 
@@ -216,7 +216,7 @@ string s = TestFunc.returnType.name; // "int"
 Returns a list of all parameters.
 
 ```
-define TestFunc = func int(int, double);
+define TestFunc = fn int(int, double);
 string s = TestFunc.params[1].name; // "double"
 ```
 
@@ -237,12 +237,12 @@ errtype SomeOtherError
     BAR
 }
 
-func void! foo()
+fn void! foo()
 {
     if (someReason()) return SomeError.FOO!;
     bar()!!;
 }
-func void! bar()
+fn void! bar()
 {
     return SomeOtherError.BAR!;
 }

@@ -19,7 +19,7 @@ struct Foo
    Type1 a;
 }
 
-func Type2 test(Type2 b, Foo *foo) 
+fn Type2 test(Type2 b, Foo *foo) 
 {
    return foo.a + b;
 }

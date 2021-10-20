@@ -133,7 +133,7 @@ Use `&` in front of a parameter to capture the a variable and pass it by referen
     
     // C3
     attribute pure_inline = @pure, @inline;
-    func int foo(int) @pure_inline { ... }    
+    fn int foo(int) @pure_inline { ... }    
 
 
 ### Declaration macros
@@ -181,14 +181,14 @@ A basic swap:
 
 This expands on usage like this:
 
-    func void test()
+    fn void test()
     {
         int a = 10;
         int b = 20;
         @swap(a, b);
     }
     // Equivalent to:
-    func void test()
+    fn void test()
     {
         int a = 10;
         int b = 20;
@@ -208,14 +208,14 @@ Note the necessary `&`. Here is an incorrect swap and what it would expand to:
         b = temp;
     }
     
-    func void test()
+    fn void test()
     {
         int a = 10;
         int b = 20;
         @badswap(a, b);
     }
     // Equivalent to:
-    func void test()
+    fn void test()
     {
         int a = 10;
         int b = 20;
@@ -260,7 +260,7 @@ Here's an example to illustrate its use:
         }
     }
     
-    func void test()
+    fn void test()
     {
         double[] a = { 1.0, 2.0, 3.0 };
         @foreach(a; int index, double value)
@@ -270,7 +270,7 @@ Here's an example to illustrate its use:
     }
     
     // Expands to code similar to:
-    func void test()
+    fn void test()
     {
         int[] a = { 1, 2, 3 };
         {
@@ -335,7 +335,7 @@ Inside of a macro, we can use the compile time statements `$if`, `$for` and `$sw
     
     const int FOO = 10;
     
-    func void test()
+    fn void test()
     {
         int a = 5;
         int b = 4;
@@ -358,7 +358,7 @@ Compile time looping:
         $endfor;
     }
     
-    func void test()
+    fn void test()
     {
         @foo(2);
         // Expands to ->
@@ -381,7 +381,7 @@ Looping over enums:
         B,
     }
     
-    func void test()
+    fn void test()
     {
         @foo_enum(MyEnum);
         // Expands to ->
@@ -411,7 +411,7 @@ Usually macro will generate its own scope, so that break, return, continue and n
 
     macro void @foo() { return; }
 
-    func void test()
+    fn void test()
     {
         @foo(); // Doesn't do anything.
         io::printf("Test");
@@ -424,7 +424,7 @@ However, sometimes macros are needed that does not create its own scope, allowin
         return; 
     }
     
-    func void test()
+    fn void test()
     {
         @foo(); // The function returns here.
         io::printf("Test"); // Never printed!
@@ -437,7 +437,7 @@ This is not limited to return: `break`, `continue` and `next` is allowed.
         nextcase $f;
     }
     
-    func void test()
+    fn void test()
     {
         int i = 1;
         switch (i)
@@ -471,7 +471,7 @@ inside of functions.
 
     $if ($defined(platform::OS) && platform::OS == WIN32):
     
-    func void doSomethingWin32Specific()
+    fn void doSomethingWin32Specific()
     {
         /* .... */
     }
