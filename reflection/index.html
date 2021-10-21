@@ -265,7 +265,7 @@ string d = $nameof(x); // =&gt; "bar::x"
 as exported by the linker.</p>
 <pre><code>module bar;
 int x;
-func void test(int x) { }
+fn void test(int x) { }
 string a = $extnameof(x); // =&gt; "bar.x";
 string b = $extnameof(test); // =&gt; "bar.test"
 string c = $extnameof("test"); // =&gt; "bar.test"
@@ -372,13 +372,13 @@ string s = Foo.associatedValues[0].name; // &quot;double&quot;
 <h4 id="returntype">returnType</h4>
 <p><em>Only available for function types.</em>
 Returns the type of the return type.</p>
-<pre><code>define TestFunc = func int(int, double);
+<pre><code>define TestFunc = fn int(int, double);
 string s = TestFunc.returnType.name; // &quot;int&quot;
 </code></pre>
 <h4 id="params">params</h4>
 <p><em>Only available for function types.</em>
 Returns a list of all parameters.</p>
-<pre><code>define TestFunc = func int(int, double);
+<pre><code>define TestFunc = fn int(int, double);
 string s = TestFunc.params[1].name; // &quot;double&quot;
 </code></pre>
 <h4 id="errors_1">errors</h4>
@@ -395,12 +395,12 @@ errtype SomeOtherError
     BAR
 }
 
-func void! foo()
+fn void! foo()
 {
     if (someReason()) return SomeError.FOO!;
     bar()!!;
 }
-func void! bar()
+fn void! bar()
 {
     return SomeOtherError.BAR!;
 }

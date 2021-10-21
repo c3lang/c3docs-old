@@ -393,7 +393,7 @@ case        cast        catch
 const       continue    default
 defer       define      do
 else        enum        extern
-errtype     false       func
+errtype     false       fn
 generic     if          import
 in          local       macro
 module      nextcase    nil
@@ -574,8 +574,8 @@ int* d = (int*)(0); // Valid and constant value.
 <h4 id="pointer-to-integer-cast">Pointer to integer cast</h4>
 <p>A pointer may be cast to any integer, truncating the pointer value if the size of the pointer is larger than the pointer size. A pointer to integer cast is considered non-constant, except in the special case of a null pointer, where it is equal to the integer value 0.</p>
 <p>Example:</p>
-<pre><code>func void test() { ... }
-define VoidFunc = func void test();
+<pre><code>fn void test() { ... }
+define VoidFunc = fn void test();
 
 VoidFunc a = &amp;test;
 int b = (int)(null);

@@ -242,7 +242,7 @@
     // ...
 } 
 
-func CInt stat(const char* pathname, Stat* buf);
+fn CInt stat(const char* pathname, Stat* buf);
 </code></pre>
 <h5 id="differences-from-c">Differences from C</h5>
 <p>Unlike C, C3 does not use type qualifiers. <code>const</code> exists, but is a storage class modifier, not a type qualifier. Instead of <code>volatile</code>, volatile loads and stores are used. In order to signal restrictions on variable usage, like const-ness <a href="../preconditions/">preconditions</a> are used.</p>
@@ -340,7 +340,7 @@ func CInt stat(const char* pathname, Stat* buf);
 <h5 id="integer-arithmetics">Integer arithmetics</h5>
 <p>All signed integer arithmetics uses 2's complement.</p>
 <h5 id="integer-constants">Integer constants</h5>
-<p>Integer constants are 1293832 or -918212. Unlike C the "type" of an integer constant is a special compile time int. All constant operations, for example <code>9283 &lt;&lt; 2</code> will be resolved at compile time. An compile time error will result if the constant is too large to fit whatever variable it is assigned or compared to.</p>
+<p>Integer constants are 1293832 or -918212. Without a suffix, suffix type is assumed to the signed integer of <em>arithmetic promotion width</em>. Adding the <code>u</code> suffix gives a unsigned integer of the same width. Use <code>ixx</code> and <code>uxx</code> – where <code>xx</code> is the bitwidth for typed integers, e.g. <code>1234u16</code></p>
 <p>Integers may be written in decimal, but also</p>
 <ul>
 <li>in binary with the prefix 0b e.g. <code>0b0101000111011</code>, <code>0b011</code></li>
@@ -433,8 +433,35 @@ char* bar = &quot;\&quot;Say `hello`\&quot;&quot;;
 </table>
 <p>*support depends on platform</p>
 <h5 id="floating-point-constants">Floating point constants</h5>
-<p>Floating point constants will <em>at least</em> use 64 bit precision. Just like for integer constants, it is allowed to use underscore, but it may not occur immediagely before or after a dot or an exponential.</p>
+<p>Floating point constants will <em>at least</em> use 64 bit precision. Just like for integer constants, it is allowed to use underscore, but it may not occur immediately before or after a dot or an exponential.</p>
 <p>Floating point values may be written in decimal or hexadecimal. For decimal, the exponential symbol is e (or E, both are acceptable), for hexadecimal p (or P) is used: <code>-2.22e-21</code> <code>-0x21.93p-10</code> </p>
+<p>It is possible to type a floating point by adding a suffix:</p>
+<table>
+<thead>
+<tr>
+<th>Suffix</th>
+<th align="right">type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>f16</td>
+<td align="right">float16</td>
+</tr>
+<tr>
+<td>f32 <em>or f</em></td>
+<td align="right">float</td>
+</tr>
+<tr>
+<td>f64</td>
+<td align="right">double</td>
+</tr>
+<tr>
+<td>f128</td>
+<td align="right">float128</td>
+</tr>
+</tbody>
+</table>
 <h3 id="c-compatibility">C compatibility</h3>
 <p>For C compatibility the following types are also defined when including std::cinterop</p>
 <table>
@@ -522,7 +549,7 @@ switch (foo)
         ...
 }
 
-func void test(State s) { ... }
+fn void test(State s) { ... }
 
 ...
 
@@ -531,7 +558,7 @@ test(RUNNING); // State.RUNNING is inferred
 <p>In the case that it collides with a global in the same scope, it needs the qualifier:</p>
 <pre><code>module test;
 
-func void testState(State s) { ... }
+fn void testState(State s) { ... }
 
 State RUNNING = State.TERMINATED; // Don't do this!
 
@@ -565,8 +592,8 @@ i = 5; // Assigning a real value to i.
 i = IOError!; // Assigning an error to i.
 </code></pre>
 <p>Only variables and return variables may be of the <em>failable</em> type. Function and macro parameters may not be failable types.</p>
-<pre><code>func Foo*! getFoo() { ... } // Ok!
-func void processFoo(Foo*! f) { ... } // Error!
+<pre><code>fn Foo*! getFoo() { ... } // Ok!
+fn void processFoo(Foo*! f) { ... } // Error!
 int! x = 0; // Ok!
 </code></pre>
 <p>Read more about the errors on the page about <a href="../errorhandling">error handling</a>.</p>
@@ -599,7 +626,7 @@ io::printf(&quot;%s is %d years old.&quot;, pPtr.age, pPtr.name);
     char* title;
 }
 
-func printPerson(Person p)
+fn printPerson(Person p)
 {
     io::printf(&quot;%s is %d years old.&quot;, p.age, p.name);
 }
@@ -655,13 +682,13 @@ io.printf(&quot;%d&quot;, i.as_byte);
 <p>TBD: Exact syntax (see the <a href="../ideas">ideas</a> page)</p>
 <h2 id="casting">Casting</h2>
 <p>Casting does not use the C-style <code>(&lt;NewType&gt;) &lt;expression&gt;</code> instead uses <code>(&lt;NewType&gt;)(&lt;expression&gt;)</code></p>
-<pre><code>float f = 2.0;
+<pre><code>float f = 2.0f;
 int i = (int)(f);
 </code></pre>
 <h2 id="anonymous-structs">Anonymous structs</h2>
 <p>It's possible to use anonymous structs (structs without name) as arguments. These will only be checked for structural equivalence.</p>
 <p><em>NOTE: This syntax is not final.</em></p>
-<pre><code>func void set_coordinates(struct { int i; int j; } coord) { ... }
+<pre><code>fn void set_coordinates(struct { int i; int j; } coord) { ... }
 
 struct Vec2
 {
@@ -682,7 +709,7 @@ struct Vec3
     int z;
 }
 
-func void test()
+fn void test()
 {
     Vec2 v2 = { 1, 2 };
     Vector v = { 1, 4 };

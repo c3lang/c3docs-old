@@ -102,6 +102,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#calling-a-function-automatically-returning-any-error">Calling a function automatically returning any error</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#panic-on-error">Panic on error</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#catching-errors">Catching errors</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#only-do-if-no-error">Only do if no error</a>
@@ -210,7 +212,7 @@
 <h3 id="error-returns">Error returns</h3>
 <p>For C the interface to C, the error is returned as the normal value, and any return is instead returned on as an out parameter.</p>
 <p>C3 code:</p>
-<pre><code>func int! getValue();
+<pre><code>fn int! getValue();
 </code></pre>
 <p>Corresponding C code:</p>
 <pre><code class="language-c">Error getValue(int *value);
@@ -245,11 +247,11 @@ if (try file2)
 }
 </code></pre>
 <p>A function, method or macro call with one or more parameters will only execute if the failable has no error. This makes error returns composable. </p>
-<pre><code>func int! fooMayError() { ... }
-func int mult(int i) { ... }
-func int! save(int i) { ... }
+<pre><code>fn int! fooMayError() { ... }
+fn int mult(int i) { ... }
+fn int! save(int i) { ... }
 
-func void test()
+fn void test()
 (
     int! i = fooMayError();
 
@@ -290,24 +292,33 @@ if (i &gt; 10) doSomething();
 </code></pre>
 <h5 id="returning-an-error">Returning an error</h5>
 <p>Returning an error looks like a normal return but with the <code>!</code></p>
-<pre><code>func void! findFile()
+<pre><code>fn void! findFile()
 {
     if (File.doesFileExist(&quot;foo.txt&quot;)) return IoError.FILE_NOT_FOUND!;
     /* ... */
 }
 </code></pre>
 <h5 id="calling-a-function-automatically-returning-any-error">Calling a function automatically returning any error</h5>
-<p>The <code>!!</code> suffix will create an implicit return on error.</p>
-<pre><code>func void! findFileAndTest()
+<p>The <code>?</code> suffix will create an implicit return on error.</p>
+<pre><code>fn void! findFileAndTest()
 {
-    findFile()!!;
+    findFile()?;
     // Implictly:
     // catch (err = findFile()) return err!;
 }
 </code></pre>
+<h5 id="panic-on-error">Panic on error</h5>
+<p>The <code>!!</code> will issue a panic on error.</p>
+<pre><code>fn void! findFileAndTest()
+{
+    findFile()!!;
+    // Implictly:
+    // catch (err = findFile()) panic(&quot;Unexpected error&quot;);
+}
+</code></pre>
 <h5 id="catching-errors">Catching errors</h5>
 <p>Catching an error and returning will implicitly unwrap the checked variable.</p>
-<pre><code>func void findFileAndNoErr()
+<pre><code>fn void findFileAndNoErr()
 {
     File*! res = findFile();    
     if (catch res)
@@ -320,7 +331,7 @@ if (i &gt; 10) doSomething();
 }
 </code></pre>
 <h5 id="only-do-if-no-error">Only do if no error</h5>
-<pre><code>func void doSomethingToFile()
+<pre><code>fn void doSomethingToFile()
 {
     void! res = findFile();    
     if (try res)
@@ -330,7 +341,7 @@ if (i &gt; 10) doSomething();
 }
 </code></pre>
 <h5 id="catching-some-errors">Catching some errors</h5>
-<pre><code>func void! findFileAndParse2()
+<pre><code>fn void! findFileAndParse2()
 {
     if (catch err = findFileAndParse())
     {
@@ -342,15 +353,15 @@ if (i &gt; 10) doSomething();
 }
 </code></pre>
 <h5 id="default-values">Default values</h5>
-<p>A function returning an error may be followed by an <code>else</code> and an expression. The call then executes and returns the expression.</p>
-<pre><code>func int testDefault()
+<p>A function returning an error may be followed by an <code>??</code> and an expression. The call then executes and returns the expression.</p>
+<pre><code>fn int testDefault()
 {
-    return getIntNumberOrFail() else -1;
+    return getIntNumberOrFail() ?? -1;
 }
 
 // The above is equivalent to:
 
-func int testDefault()
+fn int testDefault()
 {
     int! i = getIntNumberOrFail();    
     catch (i) return -1;
@@ -359,13 +370,13 @@ func int testDefault()
 
 </code></pre>
 <h5 id="default-jump">Default jump</h5>
-<p>The else can also be followed by a jump statement: <code>return</code>, <code>break</code> or <code>continue</code>.</p>
-<pre><code>func int testBreak(int times)
+<p>The ?? can also be followed by a jump statement: <code>return</code>, <code>break</code> or <code>continue</code>.</p>
+<pre><code>fn int testBreak(int times)
 {
     int index;
     for (index = 0; i &lt; times; i++)
     {
-       callTest(index) else break; 
+       callTest(index) ?? break; 
     }
     if (index &lt; times)
     {

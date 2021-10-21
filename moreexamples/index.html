@@ -177,13 +177,13 @@
 <h2 id="hello-world">Hello World</h2>
 <pre><code>import std::io;
 
-func void main()
+fn void main()
 {
     io::printf(&quot;Hello world!\n&quot;);
 }
 </code></pre>
 <h2 id="fibonacci-recursive">Fibonacci recursive</h2>
-<pre><code>func long fib(long n)
+<pre><code>fn long fib(long n)
 {
     if (n &lt;= 1) return n;
     return fib(n - 1) + fib(n - 2);
@@ -193,13 +193,13 @@ func void main()
 <pre><code>import net::http_server;
 import net;
 
-func void! httpHandler(HttpContext* context)
+fn void! httpHandler(HttpContext* context)
 {
     context.response.contentType = &quot;text/plain&quot;;
     context.response.printf(&quot;Hello world!\n&quot;);
 }
 
-func void main()
+fn void main()
 {
     HttpServer server;
     server.init();

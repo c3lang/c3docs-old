@@ -192,7 +192,7 @@
 <h2 id="expression-blocks">Expression blocks</h2>
 <p>Expression blocks (delimited using <code>{| |}</code>) are compound statements that opens its own function scope. Jumps cannot be done into or out of a function block, and <code>return</code> exits the block, rather than the function as a whole.</p>
 <p>The function below prints <code>World!</code></p>
-<pre><code>func void test()
+<pre><code>fn void test()
 {
     int a = 0;
     {|
@@ -204,7 +204,7 @@
 }
 </code></pre>
 <p>Expression blocks may also return values:</p>
-<pre><code>func void test(int x)
+<pre><code>fn void test(int x)
 {
     int a = {|
         if (x &gt; 0) return x * 2;
@@ -217,7 +217,7 @@
 <h2 id="labelled-break-and-continue">Labelled break and continue</h2>
 <p>Labelled <code>break</code> and <code>continue</code> lets you break out of an outer scope. Labels can be put on <code>if</code>, 
 <code>switch</code>, <code>while</code> and <code>do</code> statements.</p>
-<pre><code>func void test(int i)
+<pre><code>fn void test(int i)
 {
     if FOO: (i &gt; 0)
     {

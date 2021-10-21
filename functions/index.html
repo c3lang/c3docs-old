@@ -202,8 +202,8 @@
                 <h1 id="functions">Functions</h1>
 <p>C3 has both regular functions and member functions. Member functions are name spaced using a type name, and allows invocations using the dot syntax.</p>
 <h2 id="regular-functions">Regular functions</h2>
-<p>Regular functions looks similar to C. It starts with the keyword <code>func</code>, followed by the conventional C declaration of <code>&lt;return type&gt; &lt;name&gt;(&lt;parameter list&gt;)</code>.</p>
-<pre><code>func void test(int times)
+<p>Regular functions looks similar to C. It starts with the keyword <code>fn</code>, followed by the conventional C declaration of <code>&lt;return type&gt; &lt;name&gt;(&lt;parameter list&gt;)</code>.</p>
+<pre><code>fn void test(int times)
 {
     for (int i = 0; i &lt; times; i++)
     {
@@ -214,19 +214,19 @@
 <h3 id="function-arguments">Function arguments</h3>
 <p>C3 allows use of default arguments as well as named arguments. Note that
 named and unnamed arguments cannot be combined.</p>
-<pre><code>func int testWithDefault(int foo = 1)
+<pre><code>fn int testWithDefault(int foo = 1)
 {
     return foo;
 }
 
-func void test()
+fn void test()
 {
     testWithDefault();
     testWithDefault(100);
 }
 </code></pre>
 <p>Named arguments</p>
-<pre><code>func void testNamed(int times, double data)
+<pre><code>fn void testNamed(int times, double data)
 {
     for (int i = 0; i &lt; times; i++)
     {
@@ -234,14 +234,14 @@ func void test()
     }
 }
 
-func void test()
+fn void test()
 {
     testNamed(.data = 3.0, .times = 1)
     testNamed(3, 4.0);
 }
 </code></pre>
 <p>Named arguments with defaults:</p>
-<pre><code>func void testNamedDefault(int times = 1, double data = 3.0, bool dummy = false)
+<pre><code>fn void testNamedDefault(int times = 1, double data = 3.0, bool dummy = false)
 {
     for (int i = 0; i &lt; times; i++)
     {
@@ -249,7 +249,7 @@ func void test()
     }
 }
 
-func void test()
+fn void test()
 {
     testNamed(.data = 3.0)
 
@@ -262,17 +262,17 @@ func void test()
 </code></pre>
 <h4 id="varargs">Varargs</h4>
 <p>There are two types of varargs: the usual C-style untyped varargs and typed varargs. Untyped varargs will always send arguments as-is, whereas typed arguments will do normal conversions.</p>
-<pre><code>func void varargsUntyped(string foo, ...)
+<pre><code>fn void varargsUntyped(string foo, ...)
 {
     /* ... */
 }
 
-func void varargsTyped(string bar, int... ints)
+fn void varargsTyped(string bar, int... ints)
 {
     /* ... */
 }
 
-func void test()
+fn void test()
 {
     varargsUntyped(&quot;Hello&quot;, 2, 1.0, (char)(1), &quot;Test&quot;);
     varargsTyped(&quot;Test&quot;, 2, (char)(1));
@@ -282,7 +282,7 @@ func void test()
 <h3 id="functions-and-failables">Functions and failables</h3>
 <p>The return parameter may be a <em>failable</em> – a type suffixed by <code>!</code> indicating that this function might either return a regular value or an error.</p>
 <p>The below example might throw errors from both the <code>SomeError</code> error domain as well as the <code>OtherError</code> error domain.</p>
-<pre><code>func double! testError()
+<pre><code>fn double! testError()
 {
     double val = random_value();
     if (val &gt;= 0.2) return SomeError.BAD_JOSS_ERROR!;
@@ -291,7 +291,7 @@ func void test()
 }
 </code></pre>
 <p><em>A function</em> that is passed a <em>failable</em> value will only conditionally execute if and only if all failable values evaluate to true, otherwise <em>the first</em> error is returned.</p>
-<pre><code>func void test()
+<pre><code>fn void test()
 {
     // The following line is either prints a value less than 0.2
     // or does not print at all:
@@ -305,7 +305,7 @@ func void test()
 </code></pre>
 <p>This allows us to chain functions:</p>
 <p><em>NOTE: The compiler is not fully tested with all failable conditionals yet.</em></p>
-<pre><code>func void printInputWithExplicitChecks()
+<pre><code>fn void printInputWithExplicitChecks()
 {
     string! line = readLine();
     if (try line)
@@ -321,7 +321,7 @@ func void test()
     printf("You didn't type an integer :(\n");    
 }
 
-func void printInputWithChaining()
+fn void printInputWithChaining()
 {
     if (try int val = atoi(readLine()))
     {
@@ -340,12 +340,12 @@ invoked using dot syntax:</p>
     int y;
 }
 
-func void Point.add(Point* p, int x) 
+fn void Point.add(Point* p, int x) 
 {
     p.x = x;
 }
 
-func void example() 
+fn void example() 
 {
     Point p = { 1, 2 }
 
@@ -363,12 +363,12 @@ func void example()
     RUNNING
 }
 
-func bool State.mayOpen(State state) 
+fn bool State.mayOpen(State state) 
 {
     switch (state)
     {
-        case State.STOPPED: return true;
-        case State.RUNNING: return false;
+        case STOPPED: return true;
+        case RUNNING: return false;
     }
 }
 </code></pre>
@@ -388,13 +388,13 @@ func bool State.mayOpen(State state)
  * @return number of foos x 10
  * @ensure return &lt; 10000, return &gt; 0
  **/
-func int testFoo(int foo)
+fn int testFoo(int foo)
 {
     return foo * 10;
 }
 </code></pre>
 <p>Will in debug builds be compiled into something like this:</p>
-<pre><code>func int testFoo(int foo)
+<pre><code>fn int testFoo(int foo)
 {
     assert(foo &gt; 0);
     assert(foo &lt; 1000);
@@ -405,14 +405,14 @@ func int testFoo(int foo)
 }
 </code></pre>
 <p>The compiler is allowed to use the pre and post conditions for optimizations. For example this:</p>
-<pre><code>func int testExample(int bar)
+<pre><code>fn int testExample(int bar)
 {
     if (testFoo(bar) == 0) return -1;
     return 1;
 }
 </code></pre>
 <p>May be optimized to:</p>
-<pre><code>func int testExample(int bar)
+<pre><code>fn int testExample(int bar)
 {
     return 1;
 }

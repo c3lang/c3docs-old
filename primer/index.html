@@ -292,19 +292,19 @@ int[3] y = x;
 <p>C3 has less undefined behaviour, in particular integers are defined as using 2s
 complement and signed overflow is wrapping. See more <a href="../undefinedbehaviour">here</a>.</p>
 <h4 id="functions">Functions</h4>
-<p>Functions are declared like C, but you need to put <code>func</code> in front:</p>
+<p>Functions are declared like C, but you need to put <code>fn</code> in front:</p>
 <pre><code>// C:
 int foo(Foo *b, int x, void *z) { ... }
 
 // C3
-func int foo(Foo* b, int x, void *z) { ... }
+fn int foo(Foo* b, int x, void *z) { ... }
 </code></pre>
 <p>See more about functions, like named and default arguments <a href="../functions">here</a>.</p>
 <h4 id="calling-c-functions">Calling C functions</h4>
 <p>Declare a function (or variable) with <code>extern</code> and it will be possible to
 access it from C3:</p>
 <pre><code>// To access puts:
-extern func int puts(char*);
+extern fn int puts(char*);
 ...
 puts("Hello world");
 </code></pre>
@@ -313,7 +313,7 @@ In order to link with other libraries, you either need to explicitly tell
 the compiler to link them.</p>
 <p>If you want to use a different identifier inside of your C3 code compared to
 the function or variable's external name – use the <code>@extname</code> attribute:</p>
-<pre><code>extern func int _puts(char* message) @extname("puts");
+<pre><code>extern fn int _puts(char* message) @extname("puts");
 ...
 _puts("Hello world"); // &lt;- calls the puts function in libc
 </code></pre>
@@ -328,7 +328,7 @@ M____y y;
 
 x.myval = 1;
 int z = 123;
-func void fooBar(int x) { ... }
+fn void fooBar(int x) { ... }
 
 // Only upper case is a constant or an enum value:
 
@@ -440,13 +440,13 @@ ireg i;     // Register sized integer
 use <code>import</code>:</p>
 <pre><code>module mylib::foo;
 
-func void test() { ... }
+fn void test() { ... }
 struct FooStruct { ... }
 
 module mylib::bar;
 import mylib::foo;
 
-func void myCheck()
+fn void myCheck()
 {
   foo::test(); // foo prefix is mandatory.
   mylib::foo::test(); // This also works;

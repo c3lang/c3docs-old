@@ -118,15 +118,15 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#packed-struct-union-enum">packed (struct, union, enum)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#sectionname-var-func">section(name) (var, func)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#sectionname-var-fn">section(name) (var, fn)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#inline-func">inline (func)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#inline-fn">inline (fn)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#alignedalignment-struct-union-var-func">aligned(alignment) (struct, union, var, func)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#alignedalignment-struct-union-var-fn">aligned(alignment) (struct, union, var, fn)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#noreturn-func">noreturn (func)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#noreturn-fn">noreturn (fn)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#weak-func-var">weak (func, var)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#weak-fn-var">weak (fn, var)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#opaque-struct-union-enum">opaque (struct, union, enum)</a>
     </li>
@@ -204,15 +204,15 @@
 <h2 id="built-in-attributes">Built in attributes</h2>
 <h3 id="packed-struct-union-enum"><code>packed</code> (struct, union, enum)</h3>
 <p>If used on a struct or enum: packs the type, including any components to minimum size. On an enum, it uses the smallest representation containing all its values.</p>
-<h3 id="sectionname-var-func"><code>section(name)</code> (var, func)</h3>
+<h3 id="sectionname-var-fn"><code>section(name)</code> (var, fn)</h3>
 <p>Declares that a global variable or function should appear in a specific section.</p>
-<h3 id="inline-func"><code>inline</code> (func)</h3>
+<h3 id="inline-fn"><code>inline</code> (fn)</h3>
 <p>Declares a function to always be inlined.</p>
-<h3 id="alignedalignment-struct-union-var-func"><code>aligned(alignment)</code> (struct, union, var, func)</h3>
+<h3 id="alignedalignment-struct-union-var-fn"><code>aligned(alignment)</code> (struct, union, var, fn)</h3>
 <p>This attribute sets the minimum alignment for a field or a variable.</p>
-<h3 id="noreturn-func"><code>noreturn</code> (func)</h3>
+<h3 id="noreturn-fn"><code>noreturn</code> (fn)</h3>
 <p>Declares that the function will never return.</p>
-<h3 id="weak-func-var"><code>weak</code> (func, var)</h3>
+<h3 id="weak-fn-var"><code>weak</code> (fn, var)</h3>
 <p>Emits a weak symbol rather than a global. </p>
 <h3 id="opaque-struct-union-enum"><code>opaque</code> (struct, union, enum)</h3>
 <p>Prevents the union or struct from being statically allocated by other modules. In the case of enums,
@@ -222,8 +222,8 @@ prevents the enum from being converted to a value.</p>
 <pre><code>define @MyAttribute = @noreturn @inline;
 
 // The following two are equivalent:
-func void foo() @MyAttribute { ... }
-func void foo() @noreturn @inline { ... }
+fn void foo() @MyAttribute { ... }
+fn void foo() @noreturn @inline { ... }
 </code></pre>
 <p>A user defined attribute may also be completely empty:</p>
 <pre><code>define @MyAttributeEmpty = void;

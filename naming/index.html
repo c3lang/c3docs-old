@@ -226,7 +226,7 @@ errtype Err
 <p>All variables and parameters <em>except for</em> global constant variables must start with a-z after any optional initial <code>_</code>. <code>___a</code> <code>fooBar</code> and <code>_test_</code> are all valid variable / parameter names. <code>_</code>, <code>_Bar</code>, <code>X</code> are not.</p>
 <pre><code>int theGlobal = 1;
 
-func void foo(int x)
+fn void foo(int x)
 {
     Foo foo = getFoo(x);    
     theGlobal++;
@@ -258,7 +258,7 @@ errtype Err
 </code></pre>
 <h3 id="functions-and-macros">Functions and macros</h3>
 <p>Functions and macros must start with a-z after any optional initial <code>_</code>.</p>
-<pre><code>func void theMostAmazingFunction() 
+<pre><code>fn void theMostAmazingFunction() 
 { 
     return;
 }

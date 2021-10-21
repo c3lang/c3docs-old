@@ -209,7 +209,7 @@
     B
 }
 
-func char[] test()
+fn char[] test()
 {
     FooEnum x = FooEnum.A;
     return @describe(x); // Returns &quot;FooEnum.A&quot;
@@ -221,7 +221,7 @@ struct Foo
     char[] y;
 }
 
-func char[] test_struct()
+fn char[] test_struct()
 {
     Foo foo = { .x = 2, y = &quot;bar&quot; }
     return @describe(x); // Returns &quot;Foo { x: 2, y: &quot;bar&quot; }&quot;
@@ -234,13 +234,13 @@ func char[] test_struct()
 </code></pre>
 <h3 id="name">@name</h3>
 <p>Creates a runtime name of a value.</p>
-<pre><code>func char[] test()
+<pre><code>fn char[] test()
 {
     FooEnum x = FooEnum.B;
     return @name(x); // Returns &quot;B&quot;
 }
 
-func char[] test_struct()
+fn char[] test_struct()
 {
     Foo foo = { .x = 2, y = &quot;bar&quot; }
     return @name(x); // Returns &quot;Foo&quot;
@@ -252,12 +252,12 @@ func char[] test_struct()
 </code></pre>
 <h3 id="sizeof">@sizeof</h3>
 <p>Returns the size of a type or an expression</p>
-<pre><code>func usize size_test()
+<pre><code>fn usize size_test()
 {
     return @sizeof(Foo); // Might compile to 16
 }
 
-func usize size_test2()
+fn usize size_test2()
 {
     return @sizeof(size_test()); // Usually returns 8 (the size of usize)
 }

@@ -94,15 +94,17 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#target-type">Target type</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#implicit-promotion">Implicit promotion</a>
+    <li class="toctree-l2"><a class="reference internal" href="#common-arithmetic-promotion">Common arithmetic promotion</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#implicit-narrowing">Implicit narrowing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#implicit-widening">Implicit widening</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#maximum-type">Maximum type</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#substruct-conversions">Substruct conversions</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#pointer-conversions">Pointer conversions</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#implicit-narrowing">Implicit narrowing</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#binary-conversions">Binary conversions</a>
         <ul>
@@ -151,8 +153,6 @@
     <li class="toctree-l3"><a class="reference internal" href="#2-constants-and-literals">2. Constants and literals</a>
     </li>
         </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#ternary-and-return-type-conversions">Ternary and return type conversions</a>
     </li>
     </ul>
                     </li>
@@ -247,24 +247,71 @@
 <li>float to int conversions require a cast</li>
 <li>int to float conversions do not require a cast</li>
 <li>bool to float converts to 0.0 / 1.0</li>
-<li>widening float conversions do <em>not</em> require a cast</li>
+<li>widening float conversions are only conditionally allowed(*)</li>
 <li>narrowing conversions require a cast(*)</li>
-<li>widening conversions do <em>not</em> require a cast</li>
-<li>signed &lt;-&gt; unsigned conversions do not require a cast.</li>
+<li>widening int conversions are only conditionally allowed(*)</li>
+<li>signed &lt;-&gt; unsigned conversions of the same type do not require a cast.</li>
 <li>In conditionals float to bool <em>do not</em> require a cast, any non zero float value considered true</li>
 <li>Implicit conversion to bool only occurs in conditionals or when the value is enclosed in <code>()</code> e.g. <code>bool x = (1.0)</code> or <code>if (1.0) { ... }</code></li>
 </ul>
 <p>C3 uses two's complement arithmetic for all integer math.</p>
 <h2 id="target-type">Target type</h2>
 <p>The left hand side of an assignment, or the parameter type in a call is known as the <em>target type</em> the target type is used for implicit widening and inferring struct initialization.</p>
-<h2 id="implicit-promotion">Implicit promotion</h2>
-<p>Like C, C3 uses implicit promotion of integer and floating point variables:</p>
+<h2 id="common-arithmetic-promotion">Common arithmetic promotion</h2>
+<p>Like C, C3 uses implicit arithmetic promotion of integer and floating point variables before arithmetic operations:</p>
 <ol>
-<li>For any floating point type with a bit width smaller than 32 bits, widen to <code>float</code>. E.g. <code>half -&gt; float</code></li>
-<li>After 1, for any floating point type with a bit width smaller than the <em>target type</em> widen to the target type.</li>
-<li>For an integer type smaller than the <em>minimum arithmetic width</em>, promote the value to a signed integer of the <em>minimum arithmetic width</em> (this usually corresponds to a c int). E.g. <code>ushort -&gt; int</code></li>
-<li>After 3, for an integer type smaller than the <em>target type</em>, promote the value to an integer of the the same bit width. E.g. <code>ulong = int + int -&gt; ulong = long + long</code></li>
+<li>For any floating point type with a bit width smaller than 32 bits, widen to <code>float</code>. E.g. <code>f16 -&gt; float</code></li>
+<li>For an integer type smaller than the <em>minimum arithmetic width</em> promote the value to a same signed integer of the <em>minimum arithmetic width</em> (this usually corresponds to a c int/uint). E.g. <code>ushort -&gt; uint</code></li>
 </ol>
+<h2 id="implicit-narrowing">Implicit narrowing</h2>
+<p>An expression with an integer type, may implicitly narrow to smaller integer type, and similarly a float type may implicitly narrow to less wide floating point type is determined from the following algorithm.</p>
+<ol>
+<li>Look at the expression. If this expression's type is determined by its subexpression(s), recursively visit to find the leaves that determine the type of the expression.</li>
+<li>For each leaf, determine that the type before arithmetic promotion had a width equal or less than the type to convert to.</li>
+<li>In the case of an integer literal, instead of looking at the type, check that the integer would fit the type to narrow to.</li>
+</ol>
+<p>Basically, if all the sub expressions originally are small enough it's ok to implicitly convert the result.</p>
+<p>Examples</p>
+<pre><code>f16 h = 12.0;
+float f = 13.0;
+double d = 22.0;
+
+char x = 1;
+short y = -3;
+int z = 0xFFFFF;
+ulong w = -0xFFFFFFF;
+
+x = x + x; // =&gt; calculated as x = (char)((int)(x) + (int)(x));
+x = y + x; // =&gt; Error, narrowing not allowed as y &gt; char
+h = x * h; // =&gt; calculated as h = (f16)((float)(x) * (float)(h));
+h = f + x; // =&gt; Error, narrowing not allowed since f &gt; f16
+</code></pre>
+<h2 id="implicit-widening">Implicit widening</h2>
+<p>Unlike C, implicit widening will only happen on "simple expressions":
+if the expression is a primary expression, or a unary operation on a primary expression.</p>
+<p>For assignment, special rules hold. For an assignment to a binary expression, <em>if</em> its two subexpressions are "simple expressions" and the binary expression is <code>+</code>, <code>-</code>, <code>/</code>, <code>*</code>, allow an implicit promotion of the two sub expressions.</p>
+<pre><code>int a = ...
+short b = ...
+char c = ...
+long d = ~a; // Valid - simple expression.
+int e = (int)(d + (a + b)); // Error
+int f = (int)(d + ~b); // Valid
+long g = a + b; // Valid
+long h = a + (b + c); // Error
+</code></pre>
+<p>As a rule of thumb, if there are more than one possible conversion an explicit cast is needed.</p>
+<p>Example:</p>
+<pre><code>long h = a + (b + c);
+
+// Possible intention 1
+long h = (long)(a + (b + c));
+
+// Possible intention 2
+long h = (long)(a) + (long)(b + c);
+
+// Possible intention 3
+long h = (long)(a) + ((long)(b) + (long)(c));
+</code></pre>
 <h2 id="maximum-type">Maximum type</h2>
 <p>The <em>maximum type</em> is a concept used when unifying two or more types. The algorithm follows:</p>
 <ol>
@@ -286,56 +333,31 @@
 </ol>
 <h2 id="pointer-conversions">Pointer conversions</h2>
 <p>Pointer conversion between types usually need explicit casts. The exception is <code>void *</code> which any type may implicitly convert <em>to</em> or <em>from</em>. Conversion rules from and to arrays are detailed under <a href="../arrays">arrays</a></p>
-<h2 id="implicit-narrowing">Implicit narrowing</h2>
-<p>Implicit narrowing is only allowed for floating point values and integer types. The following must hold:</p>
-<ol>
-<li>To narrow to a floating point type, all sub expressions must be integers or a floating point as narrow or more narrow than the target type.</li>
-<li>To narrow to an integer type, all sub expressions must be integers and as narrow or narrower than the target type, ignoring signedness.</li>
-</ol>
-<pre><code>half h = 12.0;
-float f = 13.0;
-double d = 22.0;
-
-char x = 1;
-short y = -3;
-int z = 0xFFFFF;
-ulong w = -0xFFFFFFF;
-
-x = x + x; // =&gt; calculated as x = (char)((int)(x) + (int)(x));
-x = y + x; // =&gt; error
-w = x + y; // =&gt; calculated as w = (ulong)((long)(x) + (long)(x));
-
-h = x * h; // =&gt; calculated as h = (half)((float)(x) * (float)(h));
-h = f + x; // =&gt; error
-d = f * h; // =&gt; calculated as d = (double)(f) * (double)(h);
-</code></pre>
 <h2 id="binary-conversions">Binary conversions</h2>
 <h3 id="1-multiplication-division-remainder-subtraction-addition-with-both-operands-being-numbers">1. Multiplication, division, remainder, subtraction / addition with both operands being numbers</h3>
 <p>These operations are only valid for integer and float types.</p>
 <ol>
-<li>Resolve the operands, left to right, pushing down the target type.</li>
+<li>Resolve the operands.</li>
 <li>Find the maximum type of the two operands.</li>
-<li>Promote both operands to the resulting type.</li>
+<li>Promote both operands to the resulting type if both are simple expressions</li>
 <li>The resulting type of the expression is the resulting type.</li>
 </ol>
 <h3 id="2-addition-with-left-side-being-a-pointer">2. Addition with left side being a pointer</h3>
 <ol>
-<li>Resolve the left hand operand pushing down the target type.</li>
-<li>Resolve the right hand operand pushing down iptrdiff as the target type.</li>
+<li>Resolve the operands.</li>
 <li>If the rhs is not an integer, this is an error.   </li>
 <li>If the rhs has a bit width that exceeds iptrdiff, this is an error.</li>
 <li>The result of the expression is the lhs type.</li>
 </ol>
 <h3 id="3-subtraction-with-lhs-pointer-and-rhs-integer">3. Subtraction with lhs pointer and rhs integer</h3>
 <ol>
-<li>Resolve the left hand operand pushing down the target type.</li>
-<li>Resolve the right hand operand pushing down iptrdiff as the target type.</li>
+<li>Resolve the operands.</li>
 <li>If the right hand type has a bit width that exceeds iptrdiff, this is an error.</li>
 <li>The result of the expression is the left hand type.</li>
 </ol>
 <h3 id="4-subtraction-with-both-sides-pointers">4. Subtraction with both sides pointers</h3>
 <ol>
-<li>Resolve the operands, left to right.</li>
+<li>Resolve the operands.</li>
 <li>If the either side is a <code>void *</code>, it is cast to the other type.</li>
 <li>If the types of the sides are different, this is an error.   </li>
 <li>The result of the expression is iptrdiff.</li>
@@ -344,23 +366,22 @@ d = f * h; // =&gt; calculated as d = (double)(f) * (double)(h);
 <h3 id="6-bit-operations">6. Bit operations <code>^</code> <code>&amp;</code> <code>|</code></h3>
 <p>These operations are only valid for integers and booleans.</p>
 <ol>
-<li>Resolve the operands, left to right, pushing down the target type.</li>
+<li>Resolve the operands.</li>
 <li>Find the maximum type of the two operands.</li>
-<li>Promote both operands to the resulting type.</li>
-<li>The result of the expression is the resulting type.</li>
+<li>Promote both operands to the maximum type if they are simple expressions.</li>
+<li>The result of the expression is the maximum type.</li>
 </ol>
 <h3 id="6-shift-operations">6. Shift operations <code>&lt;&lt;</code> <code>&gt;&gt;</code></h3>
 <p>These operations are only valid for integers.</p>
 <ol>
-<li>Resolve the left operand pushing down the target type.</li>
-<li>Resolve the right operand <em>without pushing down</em> a target type.   </li>
-<li>In safe mode, insert a trap to ensure that rhs &gt;= 0 and rhs &lt; bit width of the left hand side.</li>
-<li>The result of the expression is the lhs type.</li>
+<li>Resolve the operands.</li>
+<li>In safe mode, insert a trap to ensure that rhs &gt;= 0 and rhs &lt; bit width of the left hand side.
+3The result of the expression is the lhs type.</li>
 </ol>
 <h3 id="7-assignment-operations-">7. Assignment operations <code>+=</code> <code>-=</code> <code>*=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>^=</code> <code>|=</code> <code>&amp;=</code></h3>
 <ol>
-<li>Resolve the type of the left operand.</li>
-<li>Resolve the right operand pushing down the lhs type as target type</li>
+<li>Resolve the lhs.</li>
+<li>Resolve the right operand as an assignment rhs.</li>
 <li>The result of the expression is the lhs type.</li>
 </ol>
 <h3 id="8-assignment-shift">8. Assignment shift <code>&gt;&gt;=</code> <code>&lt;&lt;=</code></h3>
@@ -379,13 +400,13 @@ d = f * h; // =&gt; calculated as d = (double)(f) * (double)(h);
 <ol>
 <li>Resolve the operands, left to right.</li>
 <li>Find the maximum type of the two operands.</li>
-<li>Promote both operands to the resulting type.</li>
+<li>Promote both operands to the maximum type.</li>
 <li>The type is bool.</li>
 </ol>
 <h2 id="unary-conversions">Unary conversions</h2>
 <h3 id="1-bit-negate">1. Bit negate</h3>
 <ol>
-<li>Resolve the inner operand, pushing down the target type.</li>
+<li>Resolve the inner operand.</li>
 <li>If the inner type is not an integer this is an error.   </li>
 <li>The type is the inner type.</li>
 </ol>
@@ -396,7 +417,7 @@ d = f * h; // =&gt; calculated as d = (double)(f) * (double)(h);
 </ol>
 <h3 id="3-negation">3. Negation</h3>
 <ol>
-<li>Resolve the inner operand, pushing down the target type.</li>
+<li>Resolve the inner operand.</li>
 <li>If the type inner type is not a number this is an error.</li>
 <li>If the inner type is an unsigned integer, cast it to the same signed type.</li>
 <li>The type is the type of the result from (3)</li>
@@ -428,35 +449,9 @@ d = f * h; // =&gt; calculated as d = (double)(f) * (double)(h);
 </ol>
 <h3 id="2-constants-and-literals">2. Constants and literals</h3>
 <ol>
-<li>If it is untyped, the type is that of the smallest type that the constant can fit in.</li>
-<li>If the width of the type is less than that of the target type, widen to the target type.</li>
-<li>If the width of the type is greater than that of the target type, it is an error.</li>
+<li>If the constant is an integer, it is assumed to be the <em>arithmetic promotion width</em> and signed. If the suffix <code>u</code> is added, it is assumed to be an unsigned number. If a suffix <code>ixx</code> or <code>uxx</code> is given then it is considered a an integer of that type width and signedness. It cannot be implicitly narrowed. </li>
+<li>If the constant is a floating point value, it is assumed to be a <code>double</code> unless suffixed with <code>f</code> which is then assumed to be a <code>float</code>. If a bitwidth is given after <code>f</code>, it is instead a floating point type of that width.</li>
 </ol>
-<h2 id="ternary-and-return-type-conversions">Ternary and return type conversions</h2>
-<p>In some cases an expression may have more than one branch and those branches have different types. A simple example is the ternary expressions. To resolve this, C3 does <em>return type conversion</em>. In essence this involves trying to implicitly cast each of the branches to the expected <em>return type</em>.</p>
-<p>C3 resolves the type in this manner:</p>
-<ol>
-<li>Is there an expected return type? Proceed error checking with the expected return type as the <em>target type</em> </li>
-<li>Is there no expected return type? Find the maximum type of all results and promote all results to the value. </li>
-</ol>
-<pre><code>int a = foo();
-short b = bar();
-
-// This is using return type conversion:
-long c = baz() ? a : b;
-
-// The above will compile to:
-long c = baz() ? (long)(a) : (long)(c);
-
-char d = foobar();
-
-// This is using maximum type because the ternary
-// is inside of an addition.
-baz() ? a : b;
-
-// The above will compile to:
-baz() ? a : (int)(b);               
-</code></pre>
               
             </div>
           </div>
