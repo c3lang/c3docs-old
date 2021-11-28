@@ -177,7 +177,7 @@ Cast syntax is slightly different:
     // C3
     int a = (int)(foo());
 
-You can also one struct to another as long as they are structurally equivalent:
+You can also cast one struct to another as long as they are structurally equivalent:
 
     struct Foo { int a; int b; }
     struct Bar { int x; int y; }
@@ -282,7 +282,7 @@ use `import`:
 
 #### Comments
 
-The /* */ comments are nesting:
+The `/* */` comments are nesting:
 
     /* This /* will all */ be commented out */
 
