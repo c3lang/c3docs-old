@@ -264,9 +264,9 @@ HEX_EXPONENT    ::= [pP] [+-] DECIMAL_DIGITS
 
 ### Character literals
 
-A character literal represents a constant value of 1, 2, 4 or 8 bytes, and may only be printable ASCII characters (U+0020 - U+007F). Each character is intepreted as part of an 1, 2, 4 or 8 byte integer constant. Escape sequences can be used to represent byte values 0-31 and 128-255.
+A character literal may either: (a) represent a constant value of up to 8 bytes (16 bytes on platforms with Int128 support) or (b) a single unicode character. Escape sequences can be used to represent byte values 0-31 and 128-255.
 
-A 2 byte literal is referred to as a 2cc literal, a 4 byte literal 4cc and an eight byte literal is called 8cc. We will commonly refer to a single byte character literal as just "character literal".
+
 
 The following backslash escapes are available to escape:
 
@@ -284,8 +284,8 @@ The following backslash escapes are available to escape:
 \'      0x27 single quote '
 \"      0x22 double quote "
 \x      Escapes a single byte hex value
-\u      Escapes a two byte hex value
-\U      Escapes a four byte hex value
+\u      Escapes a two byte unicode hex value 
+\U      Escapes a four byte unicode hex value
 ```
 
 ```
@@ -293,24 +293,28 @@ CHAR_ELEMENT    ::= [\x20-\x26] | [\x28-\x5B] | [\x5D-\x7F]
 CHAR_LIT_BYTE   ::= CHAR_ELEMENT | \x5C CHAR_ESCAPE
 CHAR_ESCAPE     ::= [abefnrtv\'\"\\] 
                     | 'x' HEX_DIGIT HEX_DIGIT
+UNICODE_CHAR    ::= unicode_char                    
                     | 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
                     | 'U' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT 
                           HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
-CHARACTER_LIT   ::= "'" CHAR_LIT_BYTE "'"
-TWOCC_LIT       ::= "'" CHAR_LIT_BYTE CHAR_LIT_BYTE "'"
-FOURCC_LIT      ::= "'" CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE "'"
-EIGHTCC_LIT     ::= "'" CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE
-                        CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE CHAR_LIT_BYTE "'"
+CHARACTER_LIT   ::= "'" (CHAR_LIT_BYTE+) | UNICODE_CHAR "'"
 ```
 
 ### String literals
 
 A string literal represents a string constant obtained from concatenating a sequence of characters. String literals are character sequences between double quotes, as in "bar". Within the quotes, any character may appear except newline and unescaped double quote. The text between the quotes forms the value of the literal, with backslash escapes interpreted as they are in rune literals, with the same restrictions. The two-digit hexadecimal (\xnn) escapes represent individual bytes of the resulting string; all other escapes represent the (possibly multi-byte) UTF-8 encoding of individual characters. Thus inside a string literal \xFF represent a single byte of value 0xFF=255, while ÿ, \u00FF, \U000000FF and \xc3\xbf represent the two bytes 0xc3 0xbf of the UTF-8 encoding of character U+00FF.
 
-STRING_LIT      ::= \x22 CHAR_LIT_BYTE* \x22
+```
+STRING_LIT      ::= \x22 (CHAR_LIT_BYTE | UNICODE_CHAR)* \x22
+```
 
 ## Types
+
+Types consist of built-in types and user-defined types (enums, structs, unions, bitstructs, errtype and distinct).
+
 ### Boolean types
+The
+
 ### Integer types
 
 

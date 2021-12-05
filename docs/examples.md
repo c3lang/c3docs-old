@@ -184,7 +184,7 @@ fn void! test(int x)
     defer io::print("A");
     defer catch io::print("B")
     defer catch (err) io::printf("%s", err.message);
-    if (x = 1) return FooError!;
+    if (x == 1) return FooError!;
     print("!")
 }
 
@@ -459,7 +459,7 @@ fn void test()
 Generic modules implements a generic system.
 
 ```
-module stack <Type>
+module stack <Type>;
 import std::mem;
 
 struct Stack
@@ -506,15 +506,15 @@ fn void test()
     stack.push(1);
     stack.push(2);
     // Prints pop: 2
-    printf("pop: %d\n", stack.pop())
+    printf("pop: %d\n", stack.pop());
     // Prints pop: 1
-    printf("pop: %d\n", stack.pop())
+    printf("pop: %d\n", stack.pop());
     
     DoubleStack dstack;
     dstack.push(2.3);
     dstack.push(3.141);
-    dstack.push(1.1235)
+    dstack.push(1.1235);
     // Prints pop: 1.1235
-    printf("pop: %f\n", dstack.pop())
+    printf("pop: %f\n", dstack.pop());
 }
 ```

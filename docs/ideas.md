@@ -495,35 +495,7 @@ struct Shape
 }
 ```
 
-## Removal of the volatile type qualifier
 
-The volatile type qualifier is replaced by volatile stores and loads.
-
-```
-\\ C volatile
-void test()
-{
-    volatile int v = 0;
-    for (int i = 0; i < 100; i++)
-    {
-        // Usually these two would be optimized away,
-        // but volatile will ensure it is executed.
-        v = 1;
-        int x = v; 
-    }
-}
-
-\\ C3
-fn void test()
-{
-    int v = 0;
-    for (int i = 0; i < 100; i++)
-    {
-        volatile(v) = 1;
-        int x = volatile(v);
-    }
-}
-```
 
 
 

@@ -3,7 +3,7 @@
 
 ## Keywords
 
-The following are 73 reserved keywords used by C3:
+The following are reserved keywords used by C3:
 
 * Note: this is out of date! *
 
@@ -11,7 +11,7 @@ as, auto, asm, attribute, break, case, cast, catch, const, continue,
 default, defer, define, do, else, enum, errtype, false, for, fn,
 generic, if, import, local, macro, module, nextcase, nil,
 private, return, struct, switch, throw, throws, true, 
-try, type, union, until, var, void, volatile, while,
+try, type, union, until, var, void, while,
 float, double 
 char, bool, byte, short, ushort, int, uint, long, ulong, isize, usize,
 
