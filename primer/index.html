@@ -365,7 +365,7 @@ int a = (int)foo();
 // C3
 int a = (int)(foo());
 </code></pre>
-<p>You can also one struct to another as long as they are structurally equivalent:</p>
+<p>You can also cast one struct to another as long as they are structurally equivalent:</p>
 <pre><code>struct Foo { int a; int b; }
 struct Bar { int x; int y; }
 
@@ -455,7 +455,7 @@ fn void myCheck()
 }
 </code></pre>
 <h4 id="comments">Comments</h4>
-<p>The /<em> </em>/ comments are nesting:</p>
+<p>The <code>/* */</code> comments are nesting:</p>
 <pre><code>/* This /* will all */ be commented out */
 </code></pre>
 <p>Note that doc comments, starting with <code>/**</code> has special rules for parsing it, and is

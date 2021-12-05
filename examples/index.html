@@ -343,7 +343,7 @@ fn void main()
     defer io::print(&quot;A&quot;);
     defer catch io::print(&quot;B&quot;)
     defer catch (err) io::printf(&quot;%s&quot;, err.message);
-    if (x = 1) return FooError!;
+    if (x == 1) return FooError!;
     print(&quot;!&quot;)
 }
 
@@ -585,7 +585,7 @@ fn void test()
 </code></pre>
 <h5 id="generic-modules">Generic modules</h5>
 <p>Generic modules implements a generic system.</p>
-<pre><code>module stack &lt;Type&gt;
+<pre><code>module stack &lt;Type&gt;;
 import std::mem;
 
 struct Stack
@@ -629,16 +629,16 @@ fn void test()
     stack.push(1);
     stack.push(2);
     // Prints pop: 2
-    printf(&quot;pop: %d\n&quot;, stack.pop())
+    printf(&quot;pop: %d\n&quot;, stack.pop());
     // Prints pop: 1
-    printf(&quot;pop: %d\n&quot;, stack.pop())
+    printf(&quot;pop: %d\n&quot;, stack.pop());
 
     DoubleStack dstack;
     dstack.push(2.3);
     dstack.push(3.141);
-    dstack.push(1.1235)
+    dstack.push(1.1235);
     // Prints pop: 1.1235
-    printf(&quot;pop: %f\n&quot;, dstack.pop())
+    printf(&quot;pop: %f\n&quot;, dstack.pop());
 }
 </code></pre>
               

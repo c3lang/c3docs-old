@@ -158,8 +158,6 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#removal-of-the-volatile-type-qualifier">Removal of the volatile type qualifier</a>
-    </li>
     <li class="toctree-l2"><a class="reference internal" href="#interfaces">Interfaces</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#built-in-maps">Built in maps</a>
@@ -626,32 +624,6 @@ switch(@tag(foo))
             int radius;            
     }
     byte kind;
-}
-</code></pre>
-<h2 id="removal-of-the-volatile-type-qualifier">Removal of the volatile type qualifier</h2>
-<p>The volatile type qualifier is replaced by volatile stores and loads.</p>
-<pre><code>\\ C volatile
-void test()
-{
-    volatile int v = 0;
-    for (int i = 0; i &lt; 100; i++)
-    {
-        // Usually these two would be optimized away,
-        // but volatile will ensure it is executed.
-        v = 1;
-        int x = v; 
-    }
-}
-
-\\ C3
-fn void test()
-{
-    int v = 0;
-    for (int i = 0; i &lt; 100; i++)
-    {
-        volatile(v) = 1;
-        int x = volatile(v);
-    }
 }
 </code></pre>
 <h2 id="interfaces">Interfaces</h2>
