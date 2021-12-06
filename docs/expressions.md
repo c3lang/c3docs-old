@@ -66,7 +66,7 @@ test2(&&int[3]({ 1, 2, 3 }));
 
 ## Constant expressions
 
-In C3 all _constant expressions_ are guaranteed to be calculated at runtime. The following are considered constant expressions:
+In C3 all _constant expressions_ are guaranteed to be calculated at compile time. The following are considered constant expressions:
 
 1. The `null` literal.
 2. Boolean, floating point and integer literals.
