@@ -100,7 +100,7 @@ possible.
 
 - Pervasive compile time execution.
 - Memory allocation failure is an error.
-- Zig's compile time execution is the build system.
+- Toolchain uses build files written in native Zig.
 - Different syntax and behaviour compared to C.
 - Structs define namespace.
 - Async primitives built in.
