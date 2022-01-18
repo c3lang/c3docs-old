@@ -35,7 +35,7 @@ Foo f = 0;
 f = f + 1;
 int i = 1;
 // f = f + i Error!
-f = f + (Foo)(i); // Valid
+f = f + (Foo)i; // Valid
 ```
 
 ## Function and variable aliases

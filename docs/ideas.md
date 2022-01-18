@@ -44,7 +44,7 @@ Use method macros to introduce some operator overloading and related functionali
 ```
 macro Foo._foreach_index(Foo *f; index, value)
 {
-    $IndexType = typeof(index);
+    $IndexType = $typeof(index);
     usize len = f.len;
     for (usize i = 0; i < len; i++)
     {
@@ -100,7 +100,7 @@ generic max(a, b)
 // Example of "malloc"
 generic malloc($Type)
 {
-    _builtin_malloc($Type.sizeof);
+    _builtin_malloc($sizeof($Type));
 }
 ```
 
@@ -616,8 +616,8 @@ For example this would be ok:
 ```
 macro swap(a, b) 
 {
-    $x = typeof(a);
-    static_assert(typeof(b) == $x);
+    $x = $typeof(a);
+    static_assert($typeof(b) == $x);
     $x temp = a;
     a = b;
     b = a;
@@ -629,8 +629,8 @@ The example above is a bit contrived as in the above example we could simply hav
 ```
 macro swap(a, b) 
 {
-    static_assert(typeof(b) == typeof(b));
-    typeof(a) temp = a;
+    $static_assert($typeof(b) == $typeof(b));
+    $typeof(a) temp = a;
     a = b;
     b = a;
 }
@@ -657,7 +657,7 @@ Or a version that is more flexible:
 ```
 public macro foreach(thelist, @body(typeof(thelist.first)) ) 
 { 
-    typeof(thelist.first) iname = thelist.first;
+    $typeof(thelist.first) iname = thelist.first;
     while (iname != nil) 
     {
         @body(iname);

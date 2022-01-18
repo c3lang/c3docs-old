@@ -148,7 +148,7 @@ in          local       macro
 module      nextcase    nil
 public      return      struct
 switch      true        try
-typeid      typeof      define
+typeid      $typeof     define
 var         volatile    void
 while
 
@@ -378,9 +378,9 @@ Any integer of pointer size or larger may be explicitly cast to a pointer. An in
 Example:
 ```
 byte a = 1;
-int* b = (int*)(a); // Invalid, pointer type is > 8 bits.
-int* c = (int*)(1); // Valid, but runtime value.
-int* d = (int*)(0); // Valid and constant value.
+int* b = (int*)a; // Invalid, pointer type is > 8 bits.
+int* c = (int*)1; // Valid, but runtime value.
+int* d = (int*)0; // Valid and constant value.
 ```
 
 #### Pointer to integer cast
@@ -393,9 +393,9 @@ fn void test() { ... }
 define VoidFunc = fn void test();
 
 VoidFunc a = &test;
-int b = (int)(null);
-int c = (int)(a); // Invalid, not constant
-int d = (int)((int*)(1)); // Invalid, not constant
+int b = (int)null;
+int c = (int)a; // Invalid, not constant
+int d = (int)((int*)1); // Invalid, not constant
 ```
 
 ### Subscript operator

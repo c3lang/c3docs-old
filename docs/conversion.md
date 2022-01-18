@@ -46,9 +46,9 @@ short y = -3;
 int z = 0xFFFFF;
 ulong w = -0xFFFFFFF;
 
-x = x + x; // => calculated as x = (char)((int)(x) + (int)(x));
+x = x + x; // => calculated as x = (char)((int)x + (int)x);
 x = y + x; // => Error, narrowing not allowed as y > char
-h = x * h; // => calculated as h = (f16)((float)(x) * (float)(h));
+h = x * h; // => calculated as h = (f16)((float)x * (float)h);
 h = f + x; // => Error, narrowing not allowed since f > f16
 ```
 
@@ -78,10 +78,10 @@ Example:
     long h = (long)(a + (b + c));
 
     // Possible intention 2
-    long h = (long)(a) + (long)(b + c);
+    long h = (long)a + (long)(b + c);
     
     // Possible intention 3
-    long h = (long)(a) + ((long)(b) + (long)(c));
+    long h = (long)a + ((long)b + (long)c);
 
 
 

@@ -37,8 +37,8 @@ The final type is the subarray `<type>[]`  e.g. `int[]`. A subarray is a view in
 ```
 int[4] a = { 1, 2, 3, 4};
 int[] b = &a; // Implicit conversion is always ok.
-int[4] c = (int[4])(b); // Will copy the value of b into c.
-int[4]* d = (int[4])(a); // Equivalent to d = &a
+int[4] c = (int[4])b; // Will copy the value of b into c.
+int[4]* d = (int[4])a; // Equivalent to d = &a
 b.size; // Returns 4
 e += 1;
 int* f = b; // Equivalent to e = &a
@@ -111,11 +111,11 @@ int[4] a;
 int[4]* b = &a;
 int* c = b;
 // Safe cast:
-int[4]* d = (int[4]*)(c); 
+int[4]* d = (int[4]*)c; 
 int e = 12;
 int* f = &e;
 // Incorrect, but not checked
-int[4]* g = (int[4]*)(f);
+int[4]* g = (int[4]*)f;
 // Also incorrect but not checked.
 int[] h = f[0..2];
 ```
@@ -161,24 +161,24 @@ struct Vector
 macro Vector._foreach_index(Vector* vector, $by_ref, $reverse; @body(index, value))
 {
     usize size = vector.size;
-    $IndexTyoe = typeof(index);
+    $IndexTyoe = $typeof(index);
     $if ($reverse):
         usize i = size;
         while (i-- >= 0)
         {
             $if ($by_ref):
-                @body(($IndexType)(i), &vector.elements[i]));
+                @body(($IndexType)i, &vector.elements[i]));
             $else:
-                @body(($IndexType)(i), vector.elements[i]));
+                @body(($IndexType)i, vector.elements[i]));
             $endif;    
         }
     $else:
         for (usize i = 0; i < size; i++)
         {
             $if ($by_ref):
-                @body(($IndexType)(i), &vector.elements[i]));
+                @body(($IndexType)i, &vector.elements[i]));
             $else:
-                @body(($IndexType)(i), vector.elements[i]));
+                @body(($IndexType)i, vector.elements[i]));
             $endif;    
         }
     $endif;    

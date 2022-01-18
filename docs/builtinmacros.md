@@ -75,27 +75,27 @@ Returns the byte offset in a structure, like `offsetof` in C
 @offset(Foo, y); // => returns 4 or 8
 ```
 
-### @sizeof
+### $sizeof
 
 Returns the size of a type or an expression
 
 ```
 fn usize size_test()
 {
-    return @sizeof(Foo); // Might compile to 16
+    return $sizeof(Foo); // Might compile to 16
 }
 
 fn usize size_test2()
 {
-    return @sizeof(size_test()); // Usually returns 8 (the size of usize)
+    return $sizeof(size_test()); // Usually returns 8 (the size of usize)
 }
 ```
 
-### @typeof
+### $typeof
 
 Returns the type of an expression
 
 ```
-@typeof(size_test()) x = size_test();
-@typeof(x) y = x + 1;
+$typeof(size_test()) x = size_test();
+$typeof(x) y = x + 1;
 ```

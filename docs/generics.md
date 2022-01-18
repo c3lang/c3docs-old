@@ -49,7 +49,7 @@ Just like for macros, optional constraints may be added to improve compile error
 
 ```
 /**
- * @checked TypeA a = (TypeB)(1) + (TypeC)(1)
+ * @checked TypeA a = (TypeB)1 + (TypeC)1
  */ 
 module vector <TypeA, TypeB, TypeC>;
 
@@ -63,6 +63,6 @@ define testFunction = vector::testFunc<Bar, float, int>;
 
 // This would give the error 
 // --> Illegal arguments for generic module vector, 
-// breaks check 'Bar a = (float)(1) + (int)(1)'
+// breaks check 'Bar a = (float)1 + (int)1'
 ```
 

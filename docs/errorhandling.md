@@ -34,7 +34,7 @@ if (catch err = file)
     printf("Error was %s\n", err.fullName()); 
     
     // Might print "Error code: 931938210"
-    printf("Error code: %ull\n", (ulong)(err)); 
+    printf("Error code: %ull\n", (ulong)err); 
     return;
 }
 

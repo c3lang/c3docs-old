@@ -203,7 +203,7 @@ Note the necessary `&`. Here is an incorrect swap and what it would expand to:
 
     macro void badswap(a, b)
     {
-        typeof(a) temp = a;
+        $typeof(a) temp = a;
         a = b;
         b = temp;
     }
@@ -371,7 +371,7 @@ Looping over enums:
     macro foo_enum($SomeEnum)
     {
         $foreach ($x : $SomeEnum.elements):
-            io::printf("%d\n", (int)($x));     
+            io::printf("%d\n", (int)$x);     
         $endforeach;
     }
     
@@ -385,8 +385,8 @@ Looping over enums:
     {
         @foo_enum(MyEnum);
         // Expands to ->
-        // io::printf("%d\n", (int)(MyEnum.A));
-        // io::printf("%d\n", (int)(MyEnum.B));    
+        // io::printf("%d\n", (int)MyEnum.A);
+        // io::printf("%d\n", (int)MyEnum.B);    
     }
 
 An important thing to note is that the content of the `$foreeach` or `$for` body must be a complete statement.

@@ -93,8 +93,8 @@ fn void varargsTyped(string bar, int... ints)
 
 fn void test()
 {
-    varargsUntyped("Hello", 2, 1.0, (char)(1), "Test");
-    varargsTyped("Test", 2, (char)(1));
+    varargsUntyped("Hello", 2, 1.0, (char)1, "Test");
+    varargsTyped("Test", 2, (char)1);
     // The second parameter will be converted to an int implicitly.
 }
 ```

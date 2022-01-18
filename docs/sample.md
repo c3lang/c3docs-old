@@ -36,22 +36,22 @@ const uint OFFSET = 8;
  */
 void Heap.init(Heap* heap, usize start) 
 {
-    Node* init_region = (Node*)(start);
+    Node* init_region = (Node*)start;
     init_region.hole = 1;
-    init_region.size = HEAP_INIT_SIZE - Node.sizeof - Footer.sizeof;
+    init_region.size = HEAP_INIT_SIZE - $sizeof(Node) - $sizeof(Footer);
 
     init_region.createFoot();
 
     heap.bins[get_bin_index(init_region.size)].add(init_region);
 
-    heap.start = (void*)(start);
+    heap.start = (void*)start;
     heap.end   = (void*)(start + HEAP_INIT_SIZE);
 }
 
 void* Heap.alloc(Heap* heap, usize size) 
 {
     uint index = get_bin_index(size);
-    Bin* temp = (Bin*)(heap.bins[index]);
+    Bin* temp = (Bin*)heap.bins[index];
     Node* found = temp.getBestFit(size);
 
     while (!found) 
@@ -62,8 +62,8 @@ void* Heap.alloc(Heap* heap, usize size)
 
     if ((found.size - size) > (overhead + MIN_ALLOC_SZ)) 
     {
-        Node* split = (Node*)((char*)(found) + Node.sizeof + Footer.sizeof) + size;
-        split.size = found.size - size - Node.sizeof - Footer.sizeof;
+        Node* split = (Node*)((char*)found + $sizeof(Node) + $sizeof(Footer)) + size;
+        split.size = found.size - size - $sizeof(Node) - $sizeof(Footer);
         split.hole = 1;
    
         split.createFoot();
@@ -106,16 +106,16 @@ fn void Heap.free(Heap* heap, void *p)
     Bin* list;
     Footer& new_foot, old_foot;
 
-    Node* head = (Node*)((char*)(p) - OFFSET);
-    if (head == (Node*)((usize)(heap.start))) 
+    Node* head = (Node*)((char*)p - OFFSET);
+    if (head == (Node*)((usize)heap.start)) 
     {
         head.hole = 1; 
         heap.bins[get_bin_index(head.size)].addNode(head);
         return;
     }
 
-    Node* next = (Node*)((char*)(head.getFoot()) + Footer.sizeof);
-    Footer* f = (Footer*)((char*)(head) - Footer.sizeof);
+    Node* next = (Node*)((char*)head.getFoot() + $sizeof(Footer));
+    Footer* f = (Footer*)((char*)(head) - $sizeof(Footer));
     Node* prev = f.header;
     
     if (prev.hole) 
@@ -179,12 +179,12 @@ fn void Node.createFoot(Node* head)
 
 fn Footer* Node.getFoot(Node* node) 
 {
-    return (Footer*)((char*)(node) + Node.sizeof + node.size);
+    return (Footer*)((char*)node + $sizeof(Node) + node.size);
 }
 
 fn Node* getWilderness(Heap* heap) 
 {
-    Footer* wild_foot = (Footer*)((char*)(heap.end) - Footer.sizeof);
+    Footer* wild_foot = (Footer*)((char*)heap.end - $sizeof(Footer));
     return wild_foot.header;
 }
 ```

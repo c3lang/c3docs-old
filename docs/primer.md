@@ -169,21 +169,13 @@ In C3, variables are always zero initialized, unless you explicitly opt out usin
 
 #### Casts
 
-Cast syntax is slightly different:
-
-    // C
-    int a = (int)foo();
-
-    // C3
-    int a = (int)(foo());
-
-You can also cast one struct to another as long as they are structurally equivalent:
+You can cast one struct to another as long as they are structurally equivalent:
 
     struct Foo { int a; int b; }
     struct Bar { int x; int y; }
 
     Foo f = { 1, 2 };
-    Bar b = (Bar)(f);
+    Bar b = (Bar)f;
 
 #### Compound literals
 

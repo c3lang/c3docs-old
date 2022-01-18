@@ -370,7 +370,7 @@ i.as_int = 500; // Changing the active member to as_int
 io.printf("%d", i.as_byte); 
 ```
 
-Note that unions only take up as much space as their largest member, so `sizeof(Integral)` is equivalent to `sizeof(long)`.
+Note that unions only take up as much space as their largest member, so `$sizeof(Integral)` is equivalent to `sizeof(long)`.
 
 ## Anonymous sub-structs / unions
 
@@ -400,16 +400,6 @@ struct Person
 In C, using structs with an enum value to indicate type is common practice. C3 also offers tagged unions, which is formalizing this within the language:
 
 TBD: Exact syntax (see the [ideas](../ideas) page)
-
-## Casting
-
-Casting does not use the C-style `(<NewType>) <expression>` instead uses `(<NewType>)(<expression>)`
-    
-```
-float f = 2.0f;
-int i = (int)(f);
-```
-
 
 ## Anonymous structs
 
@@ -448,6 +438,6 @@ fn void test()
     set_coordinates(v);   // valid
     set_coordinates(v3);  // ERROR, no structural equivalence.
     struct { int i; int j; } xy = v2;
-    v = (struct { int, int })(v2);
+    v = (struct { int, int })v2;
 }
 ```
