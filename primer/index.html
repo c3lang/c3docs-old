@@ -358,19 +358,12 @@ int a;
 int b = void;
 </code></pre>
 <h4 id="casts">Casts</h4>
-<p>Cast syntax is slightly different:</p>
-<pre><code>// C
-int a = (int)foo();
-
-// C3
-int a = (int)(foo());
-</code></pre>
-<p>You can also cast one struct to another as long as they are structurally equivalent:</p>
+<p>You can cast one struct to another as long as they are structurally equivalent:</p>
 <pre><code>struct Foo { int a; int b; }
 struct Bar { int x; int y; }
 
 Foo f = { 1, 2 };
-Bar b = (Bar)(f);
+Bar b = (Bar)f;
 </code></pre>
 <h4 id="compound-literals">Compound literals</h4>
 <p>Compound literals look different, but assigning to a struct will infer the type even if

@@ -261,7 +261,7 @@ struct Person
 
 fn void test()
 {
-    Person* person = malloc(sizeof(Person));
+    Person* person = malloc($sizeof(Person));
     person.initRC(&amp;free);
     printf(&quot;RC = %d\n&quot;, person.refCount); // Prints 1
     person.retain();

@@ -399,7 +399,7 @@ in          local       macro
 module      nextcase    nil
 public      return      struct
 switch      true        try
-typeid      typeof      define
+typeid      $typeof     define
 var         volatile    void
 while
 
@@ -566,9 +566,9 @@ CHARACTER_LIT   ::= &quot;'&quot; (CHAR_LIT_BYTE+) | UNICODE_CHAR &quot;'&quot;
 <p>Any integer of pointer size or larger may be explicitly cast to a pointer. An integer to pointer cast is considered non-constant, except in the special case where the integer == 0. In that case, the result is constant <code>null</code>.</p>
 <p>Example:</p>
 <pre><code>byte a = 1;
-int* b = (int*)(a); // Invalid, pointer type is &gt; 8 bits.
-int* c = (int*)(1); // Valid, but runtime value.
-int* d = (int*)(0); // Valid and constant value.
+int* b = (int*)a; // Invalid, pointer type is &gt; 8 bits.
+int* c = (int*)1; // Valid, but runtime value.
+int* d = (int*)0; // Valid and constant value.
 </code></pre>
 <h4 id="pointer-to-integer-cast">Pointer to integer cast</h4>
 <p>A pointer may be cast to any integer, truncating the pointer value if the size of the pointer is larger than the pointer size. A pointer to integer cast is considered non-constant, except in the special case of a null pointer, where it is equal to the integer value 0.</p>
@@ -577,9 +577,9 @@ int* d = (int*)(0); // Valid and constant value.
 define VoidFunc = fn void test();
 
 VoidFunc a = &amp;test;
-int b = (int)(null);
-int c = (int)(a); // Invalid, not constant
-int d = (int)((int*)(1)); // Invalid, not constant
+int b = (int)null;
+int c = (int)a; // Invalid, not constant
+int d = (int)((int*)1); // Invalid, not constant
 </code></pre>
 <h3 id="subscript-operator">Subscript operator</h3>
 <p>The subscript operator may take as its left side a pointer, array, subarray or vararray. The index may be of any integer type. TODO

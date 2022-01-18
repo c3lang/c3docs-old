@@ -283,7 +283,7 @@ fn int randomCalculation()
 <p>Use method macros to introduce some operator overloading and related functionality:</p>
 <pre><code>macro Foo._foreach_index(Foo *f; index, value)
 {
-    $IndexType = typeof(index);
+    $IndexType = $typeof(index);
     usize len = f.len;
     for (usize i = 0; i &lt; len; i++)
     {
@@ -331,7 +331,7 @@ generic max(a, b)
 // Example of &quot;malloc&quot;
 generic malloc($Type)
 {
-    _builtin_malloc($Type.sizeof);
+    _builtin_malloc($sizeof($Type));
 }
 </code></pre>
 <p>Invocation changes:</p>
@@ -722,8 +722,8 @@ char* data = &amp;string; // Taking a pointer to the string, which may later be 
 <p>For example this would be ok:</p>
 <pre><code>macro swap(a, b) 
 {
-    $x = typeof(a);
-    static_assert(typeof(b) == $x);
+    $x = $typeof(a);
+    static_assert($typeof(b) == $x);
     $x temp = a;
     a = b;
     b = a;
@@ -732,8 +732,8 @@ char* data = &amp;string; // Taking a pointer to the string, which may later be 
 <p>The example above is a bit contrived as in the above example we could simply have:</p>
 <pre><code>macro swap(a, b) 
 {
-    static_assert(typeof(b) == typeof(b));
-    typeof(a) temp = a;
+    $static_assert($typeof(b) == $typeof(b));
+    $typeof(a) temp = a;
     a = b;
     b = a;
 }
@@ -753,7 +753,7 @@ char* data = &amp;string; // Taking a pointer to the string, which may later be 
 <p>Or a version that is more flexible:</p>
 <pre><code>public macro foreach(thelist, @body(typeof(thelist.first)) ) 
 { 
-    typeof(thelist.first) iname = thelist.first;
+    $typeof(thelist.first) iname = thelist.first;
     while (iname != nil) 
     {
         @body(iname);

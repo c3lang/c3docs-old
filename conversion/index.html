@@ -281,9 +281,9 @@ short y = -3;
 int z = 0xFFFFF;
 ulong w = -0xFFFFFFF;
 
-x = x + x; // =&gt; calculated as x = (char)((int)(x) + (int)(x));
+x = x + x; // =&gt; calculated as x = (char)((int)x + (int)x);
 x = y + x; // =&gt; Error, narrowing not allowed as y &gt; char
-h = x * h; // =&gt; calculated as h = (f16)((float)(x) * (float)(h));
+h = x * h; // =&gt; calculated as h = (f16)((float)x * (float)h);
 h = f + x; // =&gt; Error, narrowing not allowed since f &gt; f16
 </code></pre>
 <h2 id="implicit-widening">Implicit widening</h2>
@@ -307,10 +307,10 @@ long h = a + (b + c); // Error
 long h = (long)(a + (b + c));
 
 // Possible intention 2
-long h = (long)(a) + (long)(b + c);
+long h = (long)a + (long)(b + c);
 
 // Possible intention 3
-long h = (long)(a) + ((long)(b) + (long)(c));
+long h = (long)a + ((long)b + (long)c);
 </code></pre>
 <h2 id="maximum-type">Maximum type</h2>
 <p>The <em>maximum type</em> is a concept used when unifying two or more types. The algorithm follows:</p>

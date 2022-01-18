@@ -220,8 +220,8 @@ int[*] b = { 4, 5, 6 }; // Type inferred to be int[3]
 <p>The final type is the subarray <code>&lt;type&gt;[]</code>  e.g. <code>int[]</code>. A subarray is a view into either a fixed or variable array. Internally it is represented as a struct containing a pointer and a size. Both fixed and variable arrays may be converted into slices, and slices may be implicitly converted to pointers:</p>
 <pre><code>int[4] a = { 1, 2, 3, 4};
 int[] b = &amp;a; // Implicit conversion is always ok.
-int[4] c = (int[4])(b); // Will copy the value of b into c.
-int[4]* d = (int[4])(a); // Equivalent to d = &amp;a
+int[4] c = (int[4])b; // Will copy the value of b into c.
+int[4]* d = (int[4])a; // Equivalent to d = &amp;a
 b.size; // Returns 4
 e += 1;
 int* f = b; // Equivalent to e = &amp;a
@@ -304,11 +304,11 @@ a[1..2] = b[0..1]; // a = { 1, 2, 4}
 int[4]* b = &amp;a;
 int* c = b;
 // Safe cast:
-int[4]* d = (int[4]*)(c); 
+int[4]* d = (int[4]*)c; 
 int e = 12;
 int* f = &amp;e;
 // Incorrect, but not checked
-int[4]* g = (int[4]*)(f);
+int[4]* g = (int[4]*)f;
 // Also incorrect but not checked.
 int[] h = f[0..2];
 </code></pre>
@@ -340,24 +340,24 @@ foreach (int x : a)
 macro Vector._foreach_index(Vector* vector, $by_ref, $reverse; @body(index, value))
 {
     usize size = vector.size;
-    $IndexTyoe = typeof(index);
+    $IndexTyoe = $typeof(index);
     $if ($reverse):
         usize i = size;
         while (i-- &gt;= 0)
         {
             $if ($by_ref):
-                @body(($IndexType)(i), &amp;vector.elements[i]));
+                @body(($IndexType)i, &amp;vector.elements[i]));
             $else:
-                @body(($IndexType)(i), vector.elements[i]));
+                @body(($IndexType)i, vector.elements[i]));
             $endif;    
         }
     $else:
         for (usize i = 0; i &lt; size; i++)
         {
             $if ($by_ref):
-                @body(($IndexType)(i), &amp;vector.elements[i]));
+                @body(($IndexType)i, &amp;vector.elements[i]));
             $else:
-                @body(($IndexType)(i), vector.elements[i]));
+                @body(($IndexType)i, vector.elements[i]));
             $endif;    
         }
     $endif;    

@@ -216,7 +216,7 @@ testFloat(1.0, &amp;f);
 <p>Just like for macros, optional constraints may be added to improve compile errors:</p>
 <p>*Note: constraints are not feature complete </p>
 <pre><code>/**
- * @checked TypeA a = (TypeB)(1) + (TypeC)(1)
+ * @checked TypeA a = (TypeB)1 + (TypeC)1
  */ 
 module vector &lt;TypeA, TypeB, TypeC&gt;;
 
@@ -228,7 +228,7 @@ define testFunction = vector::testFunc&lt;Bar, float, int&gt;;
 
 // This would give the error 
 // --&gt; Illegal arguments for generic module vector, 
-// breaks check 'Bar a = (float)(1) + (int)(1)'
+// breaks check 'Bar a = (float)1 + (int)1'
 </code></pre>
               
             </div>

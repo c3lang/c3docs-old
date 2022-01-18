@@ -126,8 +126,6 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#tagged-unions">Tagged unions</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#casting">Casting</a>
-    </li>
     <li class="toctree-l2"><a class="reference internal" href="#anonymous-structs">Anonymous structs</a>
     </li>
     </ul>
@@ -658,7 +656,7 @@ i.as_int = 500; // Changing the active member to as_int
 // so this will probably print garbage.
 io.printf(&quot;%d&quot;, i.as_byte); 
 </code></pre>
-<p>Note that unions only take up as much space as their largest member, so <code>sizeof(Integral)</code> is equivalent to <code>sizeof(long)</code>.</p>
+<p>Note that unions only take up as much space as their largest member, so <code>$sizeof(Integral)</code> is equivalent to <code>sizeof(long)</code>.</p>
 <h2 id="anonymous-sub-structs-unions">Anonymous sub-structs / unions</h2>
 <p>Just like in later versions of C, anonymous sub-structs / unions are allowed.</p>
 <pre><code>struct Person  
@@ -680,11 +678,6 @@ io.printf(&quot;%d&quot;, i.as_byte);
 <h2 id="tagged-unions">Tagged unions</h2>
 <p>In C, using structs with an enum value to indicate type is common practice. C3 also offers tagged unions, which is formalizing this within the language:</p>
 <p>TBD: Exact syntax (see the <a href="../ideas">ideas</a> page)</p>
-<h2 id="casting">Casting</h2>
-<p>Casting does not use the C-style <code>(&lt;NewType&gt;) &lt;expression&gt;</code> instead uses <code>(&lt;NewType&gt;)(&lt;expression&gt;)</code></p>
-<pre><code>float f = 2.0f;
-int i = (int)(f);
-</code></pre>
 <h2 id="anonymous-structs">Anonymous structs</h2>
 <p>It's possible to use anonymous structs (structs without name) as arguments. These will only be checked for structural equivalence.</p>
 <p><em>NOTE: This syntax is not final.</em></p>
@@ -718,7 +711,7 @@ fn void test()
     set_coordinates(v);   // valid
     set_coordinates(v3);  // ERROR, no structural equivalence.
     struct { int i; int j; } xy = v2;
-    v = (struct { int, int })(v2);
+    v = (struct { int, int })v2;
 }
 </code></pre>
               

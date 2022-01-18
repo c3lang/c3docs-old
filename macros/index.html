@@ -410,7 +410,7 @@ fn void test()
 <p>Note the necessary <code>&amp;</code>. Here is an incorrect swap and what it would expand to:</p>
 <pre><code>macro void badswap(a, b)
 {
-    typeof(a) temp = a;
+    $typeof(a) temp = a;
     a = b;
     b = temp;
 }
@@ -556,7 +556,7 @@ fn void test()
 <pre><code>macro foo_enum($SomeEnum)
 {
     $foreach ($x : $SomeEnum.elements):
-        io::printf("%d\n", (int)($x));     
+        io::printf("%d\n", (int)$x);     
     $endforeach;
 }
 
@@ -570,8 +570,8 @@ fn void test()
 {
     @foo_enum(MyEnum);
     // Expands to -&gt;
-    // io::printf("%d\n", (int)(MyEnum.A));
-    // io::printf("%d\n", (int)(MyEnum.B));    
+    // io::printf("%d\n", (int)MyEnum.A);
+    // io::printf("%d\n", (int)MyEnum.B);    
 }
 </code></pre>
 <p>An important thing to note is that the content of the <code>$foreeach</code> or <code>$for</code> body must be a complete statement.

@@ -102,9 +102,9 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#offset">@offset</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#sizeof">@sizeof</a>
+    <li class="toctree-l2"><a class="reference internal" href="#sizeof">$sizeof</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#typeof">@typeof</a>
+    <li class="toctree-l2"><a class="reference internal" href="#typeof">$typeof</a>
     </li>
     </ul>
                     </li>
@@ -250,22 +250,22 @@ fn char[] test_struct()
 <p>Returns the byte offset in a structure, like <code>offsetof</code> in C</p>
 <pre><code>@offset(Foo, y); // =&gt; returns 4 or 8
 </code></pre>
-<h3 id="sizeof">@sizeof</h3>
+<h3 id="sizeof">$sizeof</h3>
 <p>Returns the size of a type or an expression</p>
 <pre><code>fn usize size_test()
 {
-    return @sizeof(Foo); // Might compile to 16
+    return $sizeof(Foo); // Might compile to 16
 }
 
 fn usize size_test2()
 {
-    return @sizeof(size_test()); // Usually returns 8 (the size of usize)
+    return $sizeof(size_test()); // Usually returns 8 (the size of usize)
 }
 </code></pre>
-<h3 id="typeof">@typeof</h3>
+<h3 id="typeof">$typeof</h3>
 <p>Returns the type of an expression</p>
-<pre><code>@typeof(size_test()) x = size_test();
-@typeof(x) y = x + 1;
+<pre><code>$typeof(size_test()) x = size_test();
+$typeof(x) y = x + 1;
 </code></pre>
               
             </div>
