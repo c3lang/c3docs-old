@@ -36,7 +36,7 @@ The following operations cause undefined behaviour in release builds of C3:
 | --------- | :----------------------: |
 | int / 0 | Yes |
 | int % 0 | Yes |
-| using explicitly uninitialized memory | Possible* |
+| reading explicitly uninitialized memory | Possible* |
 | array index out of bounds | Yes |
 | dereference `null` | Yes |
 | dereferencing memory not allocated | Possible* |

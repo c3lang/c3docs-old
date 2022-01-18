@@ -89,7 +89,7 @@ enable polymorphic functions and parameterized types. It aims to be a C replacem
 
 Compared to C3, Zig tries to be a completely new language in terms of syntax and feel. 
 C3 uses macros to a modest degree where it is more pervasive in Zig, and 
-does not depart from C in the same degree. Like Rust, it features slices as a first
+does not depart from C to the same degree. Like Rust, it features slices as a first
 class type. The standard library uses an explicit allocator to allow it to work
 with many different allocation strategies.
 
@@ -104,6 +104,8 @@ possible.
 - Different syntax and behaviour compared to C.
 - Structs define namespace.
 - Async primitives built in.
+- Built in unit tests.
+- Arbitrarily integer sizes.
 
 ##### In C3 but not in Zig
 
