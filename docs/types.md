@@ -1,6 +1,6 @@
 # Types
 
-As usual, types are divided into basic types and user defined types (enum, union, struct, errtypes, aliases). All types are defined on a global level. Using the `public` prefix is necessary for any type that is to be exposed outside of the current module.
+As usual, types are divided into basic types and user defined types (enum, union, struct, optenums, aliases). All types are defined on a global level. Using the `public` prefix is necessary for any type that is to be exposed outside of the current module.
 
 ##### Naming
 
@@ -134,12 +134,12 @@ char* bar = "\"Say `hello`\"";
      
 ##### Floating point types
 
-| Name         | alias | bit size |
-| ------------ | -----:| --------:|
-| half*        | f16   | 16       |
-| float        | f32   | 32       |
-| double       | f64   | 64       |
-| quad*        | f128  | 128      |
+| Name         | bit size |
+| ------------ | --------:|
+| float16*     | 16       |
+| float        | 32       |
+| double       | 64       |
+| float128*    | 128      |
 
 *support depends on platform
 
@@ -185,6 +185,51 @@ Note that signed C char and unsigned char will correspond to `ichar` and `char`.
 
 Pointers mirror C: `Foo*` is a pointer to a `Foo`, while `Foo**` is a pointer to a pointer of Foo.
 
+### The `typeid` type
+
+The `typeid` can hold a runtime identifier for a type. Using `<typename>.typeid` a type may be converted to its unique runtime id, 
+e.g. `typeid a = Foo.typeid;`. This value is pointer-sized.
+
+### The `variant` type
+
+C3 contains a built-in variant type, which is essentially struct containing a `typeid` plus a `void*` pointer to a value.
+It is possible to cast the variant type to any pointer type, which will return `null` if the types match,
+or the pointer value otherwise.
+
+    int x;
+    variant y = &x;
+    double *z = (double*)y; // Returns null
+    int* w = (int*)x; // Returns the pointer to x
+
+Switching over the variant type is another method to unwrap the pointer inside:
+
+    fn void test(variant z)
+    {
+        // Unwrapping switch
+        switch (z)
+        {
+            case int: 
+                // z is unwrapped to int* here
+            case double:
+                // z is unwrapped to double* here
+        }
+        // Assignment switch
+        switch (y = z)
+        {
+            case int:
+                // y is int* here
+        }
+        // Direct unwrapping to a value is also possible:
+        switch (w = *z)
+        {
+            case int:
+                // w is int here
+        }
+    }
+
+`variant.type` returns the underlying pointee typeid of the contained value. `variant.ptr` returns 
+the raw `void*` pointer.
+
 ### Array types
 
 Arrays are indicated by `[<size>]` after the type, e.g. `int[4]`. Subarrays use the `type[]`. For initialization the wildcard `type[*]` can be used to infer the size
@@ -194,218 +239,198 @@ from the initializer. See the chapter on [arrays](../arrays).
 
 Enum (enumerated) types use the following syntax:
 
-```
-enum State : int 
-{
-    PENDING = 0,
-    RUNNING,
-    TERMINATED
-}
-```
+    enum State : int 
+    {
+      PENDING = 0,
+      RUNNING,
+      TERMINATED
+    }
+
 Enum constants are namespaces by default, just like C++'s class enums. So accessing the enums above would for example use `State.PENDING` rather than `PENDING`.
 
 ### Enum type inference
 
 When an enum is used in where the type can be inferred, like in case-clauses or in variable assignment, it is allowed to drop the enum name:
 
-```
-State foo = PENDING; // State.PENDING is inferred.
-switch (foo)
-{
-    case RUNNING: // State.RUNNING is inferred
+    State foo = PENDING; // State.PENDING is inferred.
+    switch (foo)
+    {
+      case RUNNING: // State.RUNNING is inferred
         ...
-    default:
+      default:
         ...
-}
+    }
 
-fn void test(State s) { ... }
+    fn void test(State s) { ... }
 
-...
+    ...
 
-test(RUNNING); // State.RUNNING is inferred
-```
+    test(RUNNING); // State.RUNNING is inferred
+
 
 In the case that it collides with a global in the same scope, it needs the qualifier:
 
-```
-module test;
+    module test;
 
-fn void testState(State s) { ... }
+    fn void testState(State s) { ... }
 
-State RUNNING = State.TERMINATED; // Don't do this!
+    State RUNNING = State.TERMINATED; // Don't do this!
 
-... 
+    ... 
 
-test(RUNNING); // Ambiguous
-test(test::RUNNING); // Uses global.
-test(State.RUNNING); // Uses enum constant.
-```
+    test(RUNNING); // Ambiguous
+    test(test::RUNNING); // Uses global.
+    test(State.RUNNING); // Uses enum constant.
 
 
-## Error
 
-Error types are similar to enums, and are used for error returns.
+## Optenums
 
-```
-errtype IOError;
-errtype ParseError
-{
-    int line;
-    int col;
-}
-```
+`optenum` defines a set of optional result values, that are similar to enums, but are used for 
+optional returns.
 
-The data inside of an error cannot exceed the size of an `iptr` that is pointer sized.
+    optenum IOResult
+    {
+      IO_ERROR,
+      PARSE_ERROR
+    }   
 
-An error is similar to a struct and is initialized the same way. One exception is that simple errors without a body does not need to be
-created using a `()`:
+    optenum MapResult
+    {
+      NOT_FOUND
+    }
+  
+Like the typeid, the constants are pointer sized and each value is globally unique, even when 
+compared to other optenums. For example the underlying value of `MapResult.NOT_FOUND` is guaranteed
+to be different from `IOResult.IO_ERROR`. This is true even if they are separately compiled.
 
-```
-return IOError!; 
-return IOError({})!; // Same as above
-return ParseError({ line, col })!;
-```
-
-In order to pass the error on the error side channel instead of as a value, the `!`.
+An optenum may be stored as a normal value, but is also unique in that it may be passed
+as the optional result value using the `!` suffix operator.
 
 
-## Failable
+## Optional Result Types
 
-A failable is created by taking a type and appending `!`. A failable is a tagged union containing either the given type or an error.
+An *optional result type* is created by taking a type and appending `!`. 
+An optional result type is a tagged union containing either the *expected result* or *an optional result value* 
+(which is an optenum).
 
-```
-int! i;
-i = 5; // Assigning a real value to i.
-i = IOError!; // Assigning an error to i.
-```
+    int! i;
+    i = 5; // Assigning a real value to i.
+    i = IOResult.IO_ERROR!; // Assigning an optional result to i.
 
-Only variables and return variables may be of the *failable* type. Function and macro parameters may not be failable types.
 
-```
-fn Foo*! getFoo() { ... } // Ok!
-fn void processFoo(Foo*! f) { ... } // Error!
-int! x = 0; // Ok!
-```
+Only variables and return variables may be optionals. Function and macro parameters may not be optionals.
 
-Read more about the errors on the page about [error handling](../errorhandling).
+    fn Foo*! getFoo() { ... } // Ok!
+    fn void processFoo(Foo*! f) { ... } // Error
+    int! x = 0; // Ok!
+
+
+Read more about the optional types on the page about [error handling](../errorhandling).
 
 
 ## Struct types
 
 Structs are always named:
 
-```
-struct Person  
-{
-    char age;
-    char* name;
-}
-```
+    struct Person  
+    {
+        char age;
+        char[] name;
+    }
 
 A struct's members may be accessed using dot notation, even for pointers to structs.
 
-```
-Person p;
-p.age = 21;
-p.name = "John Doe";
+    Person p;
+    p.age = 21;
+    p.name = "John Doe";
 
-io::printf("%s is %d years old.", p.age, p.name);
+    io::printf("%s is %d years old.", p.age, p.name);
 
-Person* pPtr = &p;
-pPtr.age = 20; // Ok!
+    Person* pPtr = &p;
+    pPtr.age = 20; // Ok!
 
-io::printf("%s is %d years old.", pPtr.age, pPtr.name);
-```
+    io::printf("%s is %d years old.", pPtr.age, pPtr.name);
 
-(One might wonder whether it's possible to take a `Person**` and use dot access. – It's not, only one level of dereference is done.)
+(One might wonder whether it's possible to take a `Person**` and use dot access. – It's not allowed, only one level of dereference is done.)
 
 ## Struct subtyping
 
-C3 allows creating struct subtypes:
+C3 allows creating struct subtypes using `inline`:
 
-```
-struct ImportantPerson 
-{
-    inline Person person;
-    char* title;
-}
+    struct ImportantPerson 
+    {
+        inline Person person;
+        char[] title;
+    }
 
-fn printPerson(Person p)
-{
-    io::printf("%s is %d years old.", p.age, p.name);
-}
+    fn void printPerson(Person p)
+    {
+        io::printf("%s is %d years old.", p.age, p.name);
+    }
 
 
-ImportantPerson important_person;
-important_person.age = 25;
-important_person.name = "Jane Doe";
-important_person.title = "Rockstar";
-printPerson(important_person); // Only the first part of the struct is copied.
-```
+    ImportantPerson important_person;
+    important_person.age = 25;
+    important_person.name = "Jane Doe";
+    important_person.title = "Rockstar";
+    printPerson(important_person); // Only the first part of the struct is copied.
+
 
 ## Union types
 
-Union types are defined just like structs.
+Union types are defined just like structs and are fully compatible with C.
 
-```
-union Integral  
-{
-    byte as_byte;
-    short as_short;
-    int as_int;
-    long as_long;
-}
-```
+    union Integral  
+    {
+        byte as_byte;
+        short as_short;
+        int as_int;
+        long as_long;
+    }
 
 As usual unions are used to hold one of many possible values:
 
-```
-Integral i;
-i.as_byte = 40; // Setting the active member to as_byte
+    Integral i;
+    i.as_byte = 40; // Setting the active member to as_byte
 
-i.as_int = 500; // Changing the active member to as_int
+    i.as_int = 500; // Changing the active member to as_int
 
-// Undefined behaviour: as_byte is not the active member, 
-// so this will probably print garbage.
-io.printf("%d", i.as_byte); 
-```
+    // Undefined behaviour: as_byte is not the active member, 
+    // so this will probably print garbage.
+    io::printf("%d\n", i.as_byte); 
 
-Note that unions only take up as much space as their largest member, so `$sizeof(Integral)` is equivalent to `sizeof(long)`.
 
-## Anonymous sub-structs / unions
+Note that unions only take up as much space as their largest member, so `$sizeof(Integral)` is equivalent to `$sizeof(long)`.
 
-Just like in later versions of C, anonymous sub-structs / unions are allowed.
 
-```
-struct Person  
-{
-    char age;
-    char* name;
-    union 
+## Anonymous and nested sub-structs / unions
+
+Just like in C99 and later, anonymous sub-structs / unions are allowed. Note that
+the placement of struct / union names is different to match the difference in declaration.
+
+    struct Person  
     {
-        int employee_nr;
-        uint other_nr;
+        char age;
+        char[] name;
+        union 
+        {
+            int employee_nr;
+            uint other_nr;
+        }
+        union subname 
+        {
+            bool b;
+            Callback cb;
+        }
     }
-    union subname 
-    {
-        bool b;
-        Callback cb;
-    }
-}
-```
 
-
-## Tagged unions
-
-In C, using structs with an enum value to indicate type is common practice. C3 also offers tagged unions, which is formalizing this within the language:
-
-TBD: Exact syntax (see the [ideas](../ideas) page)
 
 ## Anonymous structs
 
 It's possible to use anonymous structs (structs without name) as arguments. These will only be checked for structural equivalence.
 
-_NOTE: This syntax is not final._
+_NOTE: This syntax will be changed._
 
 ```
 fn void set_coordinates(struct { int i; int j; } coord) { ... }

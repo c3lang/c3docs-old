@@ -1,6 +1,6 @@
-# Pre and post conditions
+# Contracts
 
-Pre and post conditions are optional checks that the compiler may use for optimization and runtime checks. Note that _compilers are not obliged to process pre and post conditions at all_. However, violating either pre or post conditions is considered undefined behaviour, so a compiler may optimize as if they always hold – even if a potential bug may cause them to be violated.
+Contracts are optional pre and post conditions checks that the compiler may use for optimization and runtime checks. Note that _compilers are not obliged to process pre and post conditions at all_. However, violating either pre or post conditions is considered undefined behaviour, so a compiler may optimize as if they always hold – even if a potential bug may cause them to be violated.
 
 # Pre conditions
 
@@ -136,11 +136,12 @@ Consequently circumventing "pure" annotations is undefined behaviour.
 
 # Pre conditions for macros
 
-Macros have an additional class of pre conditions, that are used to confirm that the values actually will work inside the macro body. This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the `@reqparse` annotation, or together with the `@require` annotations, surrounded by `parse()`. 
+Macros have an additional class of pre conditions, that are used to confirm that the values actually will work inside the macro body. 
+This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the `@checked` annotation, or together with the `@require` annotations, surrounded by `parse()`. 
 
 ```
 /**
- * @reqparse resource.open()
+ * @checked resource.open()
  * @require resource != nil, parse(void *x = resource.open())
  **/
 macro openResource(resource)

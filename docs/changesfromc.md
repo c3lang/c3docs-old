@@ -93,7 +93,7 @@ else
 
 `goto` is removed and replaced with labelled `break` and `continue` together with the `nextcase` statement that allows you to jump between cases in a `switch` statement.
 
-*Rationale: It is very difficult to make goto work well with defer and implicit unwrapping of failables. It is not just making the compiler harder to write, but
+*Rationale: It is very difficult to make goto work well with defer and implicit unwrapping of optional results. It is not just making the compiler harder to write, but
 the code is harder to understand as well. The replacements together with `defer` cover many if not all usages of `goto` in regular code.*
 
 ##### Locals variables are implictly zeroed

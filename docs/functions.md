@@ -1,109 +1,112 @@
 # Functions
 
-C3 has both regular functions and member functions. Member functions are name spaced using a type name, and allows invocations using the dot syntax.
+C3 has both regular functions and member functions. Member functions are functions namespaced using type names, and allows invocations using the dot syntax.
 
 ## Regular functions
 
-Regular functions looks similar to C. It starts with the keyword `fn`, followed by the conventional C declaration of `<return type> <name>(<parameter list>)`.
+Regular functions are the same as C aside from the keyword `fn`, which is followed by the conventional C declaration of `<return type> <name>(<parameter list>)`.
 
-```
-fn void test(int times)
-{
-    for (int i = 0; i < times; i++)
+
+    fn void test(int times)
     {
-        io::printf("Hello %d\n", i);
+        for (int i = 0; i < times; i++)
+        {
+            io::printf("Hello %d\n", i);
+        }
     }
-}
-```
 
 ### Function arguments
 
 C3 allows use of default arguments as well as named arguments. Note that
 named and unnamed arguments cannot be combined.
 
-```
-fn int testWithDefault(int foo = 1)
-{
-    return foo;
-}
+    fn int testWithDefault(int foo = 1)
+    {
+        return foo;
+    }
 
-fn void test()
-{
-    testWithDefault();
-    testWithDefault(100);
-}
-```
+    fn void test()
+    {
+        testWithDefault();
+        testWithDefault(100);
+    }
 
 Named arguments
 
-```
-fn void testNamed(int times, double data)
-{
-    for (int i = 0; i < times; i++)
+    fn void testNamed(int times, double data)
     {
-        printf("Hello %d\n", i + data);
+        for (int i = 0; i < times; i++)
+        {
+            printf("Hello %d\n", i + data);
+        }
     }
-}
 
-fn void test()
-{
-    testNamed(.data = 3.0, .times = 1)
-    testNamed(3, 4.0);
-}
-```
+    fn void test()
+    {
+        testNamed(.data = 3.0, .times = 1)
+        testNamed(3, 4.0);
+    }
 
 Named arguments with defaults:
 
-```
-fn void testNamedDefault(int times = 1, double data = 3.0, bool dummy = false)
-{
-    for (int i = 0; i < times; i++)
+    fn void testNamedDefault(int times = 1, double data = 3.0, bool dummy = false)
     {
-        printf("Hello %d\n", i + data);
+        for (int i = 0; i < times; i++)
+        {
+            printf("Hello %d\n", i + data);
+        }
     }
-}
 
-fn void test()
-{
-    testNamed(.data = 3.0)
+    fn void test()
+    {
+        testNamed(.data = 3.0)
     
-    // Mixing named and defaults:
-    testNamed(3, .dummy = false);
+        // Mixing named and defaults:
+        testNamed(3, .dummy = false);
     
-    // Not allowed:
-    testNamed(1, .data = 1.0); // ERROR
-}
-```
+         // Not allowed:
+         testNamed(1, .data = 1.0); // ERROR
+    }
 
 #### Varargs
 
-There are two types of varargs: the usual C-style untyped varargs and typed varargs. Untyped varargs will always send arguments as-is, whereas typed arguments will do normal conversions.
+There are three types of varargs: 
+the usual C-style untyped varargs, typed varargs and variant varargs. 
+Untyped varargs will always send arguments as-is, whereas typed 
+arguments will do normal conversions. The variant varargs will implicitly
+convert the arguments to variant values.
 
+    fn void varargsUntyped(string foo, ...)
+    {
+        /* ... */
+    }
 
-```
-fn void varargsUntyped(string foo, ...)
-{
-    /* ... */
-}
+    fn void varargsTyped(string bar, int... ints)
+    {
+        /* ... */
+    }
 
-fn void varargsTyped(string bar, int... ints)
-{
-    /* ... */
-}
+    fn void varargsVariant(string bar, values...)
+    {
+        variant[] v = values;
+        /* ... */
+    }
 
-fn void test()
-{
-    varargsUntyped("Hello", 2, 1.0, (char)1, "Test");
-    varargsTyped("Test", 2, (char)1);
-    // The second parameter will be converted to an int implicitly.
-}
-```
+    fn void test()
+    {
+        varargsUntyped("Hello", 2, 1.0, (char)1, "Test");
+        varargsTyped("Test", 2, (char)1);
+        // The second parameter will be converted to an int implicitly.
+        varargsVariant("Hello", 2, 1.0, (char)1, "Test");
+    }
 
-### Functions and failables
+### Functions and optional returns
 
-The return parameter may be a *failable* – a type suffixed by `!` indicating that this function might either return a regular value or an error.
+The return parameter may be an *optional result type* – a type suffixed by `!` indicating that this 
+function might either return a regular value or an *optional result value*.
 
-The below example might throw errors from both the `SomeError` error domain as well as the `OtherError` error domain.
+The below example might return optional values from both the `SomeError` optional enum as well as 
+the `OtherResult` type.
 
     fn double! testError()
     {
@@ -113,7 +116,8 @@ The below example might throw errors from both the `SomeError` error domain as w
         return val;
     }
 
-*A function* that is passed a *failable* value will only conditionally execute if and only if all failable values evaluate to true, otherwise *the first* error is returned.
+*A function call* which is passed one or more *optional result type* arguments will only execute 
+if all optional values contain *expected results*, otherwise *the first* *optional result value* is returned.
 
     fn void test()
     {
@@ -128,8 +132,6 @@ The below example might throw errors from both the `SomeError` error domain as w
     }
 
 This allows us to chain functions:
-
-_NOTE: The compiler is not fully tested with all failable conditionals yet._
 
     fn void printInputWithExplicitChecks()
     {
@@ -210,7 +212,7 @@ Struct and unions will always take pointer, whereas enums take the enum value.
 - When taking a function pointer of a method, use the full name.
 - Using sub types, overlapping function names will be shadowed.
 
-## Pre and post conditions
+## Contracts
 
 C3's error handling is not intended to use errors to signal invalid data or to check invariants and post conditions. Instead C3's approach is to add annotations to the function, that conditionally will be compiled into asserts.
 
@@ -239,7 +241,7 @@ Will in debug builds be compiled into something like this:
         return _return;
     }
 
-The compiler is allowed to use the pre and post conditions for optimizations. For example this:
+The compiler is allowed to use the contracts for optimizations. For example this:
 
     fn int testExample(int bar)
     {

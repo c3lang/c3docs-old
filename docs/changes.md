@@ -1,11 +1,14 @@
 # Change log
 
+##### Revision 2022-02-09
+- Major revision to bring everything up to date.
+
 ##### Revision 2021-10-20
 - `func` replaced by `fn`
 - Compound literal now `Type { ... }` like C++.
 - Update of conversion rules
 - New error syntax
-- 
+
 
 ##### Revision 2021-08-27
 - Updated reflection functionality.

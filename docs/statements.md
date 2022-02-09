@@ -5,7 +5,8 @@ Statements largely work like in C, but with some additions.
 
 ## Expression blocks
 
-Expression blocks (delimited using `{| |}`) are compound statements that opens its own function scope. Jumps cannot be done into or out of a function block, and `return` exits the block, rather than the function as a whole.
+Expression blocks (delimited using `{| |}`) are compound statements that opens their own function scope.
+Jumps cannot be done into or out of a function block, and `return` exits the block, rather than the function as a whole.
 
 The function below prints `World!`
 
@@ -41,12 +42,12 @@ Labelled `break` and `continue` lets you break out of an outer scope. Labels can
     {
         if FOO: (i > 0)
         {
-            while (1)
-            {
-                io::printf("%d\n", i);
-                // Break out of the top if statement.
-                if (i++ > 10) break FOO;
-            }
+           while (1)
+           {
+               io::printf("%d\n", i);
+               // Break out of the top if statement.
+               if (i++ > 10) break FOO;
+           }
         }
     }
 
@@ -71,11 +72,11 @@ The `nextcase` statement is used in `switch` and `if-catch` to jump to the next 
 
     switch (i)
     {
-       case 1:
-         doSomething();
-         nextcase; // Jumps to case 2
-       case 2:
-         doSomethingElse();
+        case 1:
+            doSomething();
+            nextcase; // Jumps to case 2
+        case 2:
+            doSomethingElse();
     }
 
 It's also possible to use `nextcase` with an expression, to jump to an arbitrary case:

@@ -31,6 +31,18 @@ fn void example_for()
 }
 ```
 
+#####foreach-loop
+```
+fn void example_foreach(float[] values) 
+{
+    foreach (index, value : values) 
+    {
+        io::printf("%d: %f\n", index, value);
+    }
+}
+```
+
+
 #####while-loop
 
 ```
@@ -132,7 +144,7 @@ fn void demo_enum(Height h)
 
 Enums are always namespaced.
 
-Enums also define `.min` and `.max`, returning the minimum and maximum value for the enum values. `.all` returns an array with all enums.
+Enums also define `.min` and `.max`, returning the minimum and maximum value for the enum values. `.values` returns an array with all enums.
 
 ```
 enum State : uint 
@@ -144,7 +156,7 @@ enum State : uint
 const uint LOWEST = State.min;
 const uint HIGHEST = State.max;
 
-State start = State.all[0];
+State start = State.values[0];
 ```
 
 #####defer
@@ -266,32 +278,35 @@ fn void example_cb()
 
 #####Error handling
 
-Errors are sent as a result value, called a "failable":
+Errors are handled using optional results, denoted with a '!' suffix. A variable of an optional
+result type may either contain the regular value or an `optnum` enum value.
 
 ```
-errtype MathError
+optnum MathError
 {
     DIVISION_BY_ZERO
 }
 
 fn double! divide(int a, int b)
 {
+    // We return an optional result of type DIVISION_BY_ZERO
+    // when b is zero.
     if (b == 0) return MathError.DIVISION_BY_ZERO!;
     return (double)a / (double)b;
 }
 
-// Rethrowing an error uses "!!" suffix
+// Re-returning an optional result uses "?" suffix
 fn void! testMayError()
 {
-    divide(foo(), bar())!!;
+    divide(foo(), bar())?;
 }
 
 fn void main()
 {
-    // ratio has a failable type.
+    // ratio is an optional result.
     double! ratio = divide(foo(), bar());
 
-    // Handle the error
+    // Handle the optional result value if it exists.
     if (catch err = ratio)
     {
         case MathError.DIVISION_BY_ZERO:
@@ -302,7 +317,7 @@ fn void main()
             return;
     }
     // Flow typing makes "ratio"
-    // have the type double here.
+    // have the plain type 'double' here.
     io::printf("Ratio was %f\n", ratio);
 }
 ```
@@ -327,7 +342,7 @@ fn void printFile(char[] filename)
 }
 ```
 
-##### Pre and post conditions
+##### Contracts
 
 Pre- and postconditions are optionally compiled into asserts helping to optimize the code.
 ```

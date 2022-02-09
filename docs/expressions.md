@@ -1,68 +1,66 @@
 # Expressions
 
-Expressions work like in C, with one example: it is possible to take the address of a temporary. This uses the operator `&&` rather than `&`.
+Expressions work like in C, with one exception: it is possible to take the address of a temporary. This uses the operator `&&` rather than `&`.
 
 Consequently this is valid:
 
-```
-fn void test(int* x) { ... }
+    fn void test(int* x) { ... }
 
-test(&&1);
+    test(&&1);
 
-// In C:
-// int x = 1;
-// test(&x);
-```
+    // In C:
+    // int x = 1;
+    // test(&x);
 
 ## Compound literals
 
-C3 has C's compound literals, but unlike C's cast style syntax `(MyStruct) { 1, 2 }`, it uses a slightly different syntax, similar to C++: `MyStruct({ 1, 2 })`.
+C3 has C's compound literals, but unlike C's cast style syntax `(MyStruct) { 1, 2 }`, 
+it uses C++ syntax: `MyStruct { 1, 2 }`.
 
-```
-struct Foo
-{
-    int a;
-    double b;
-}
+    struct Foo
+    {
+        int a;
+        double b;
+    }
 
-fn void test(Foo x) { ... }
+    fn void test(Foo x) { ... }
 
-... 
+    ... 
 
-test(Foo({ 1, 2.0 }));
-```
+    test(Foo { 1, 2.0 });
 
 Arrays follow the same syntax:
 
-```
-fn void test(int[3] x) { ... }
+    fn void test(int[3] x) { ... }
 
-...
+    ...
 
-test(int[3]({ 1, 2, 3 }));
-```
+    test(int[3] { 1, 2, 3 });
+
 
 One may take the address of temporaries, using `&&` (rather than `&` for normal variables). This allows the following:
 
 Passing a slice
-```
-fn void test(int[] y) { ... }
 
-// Using &&
-test(&&int[3]({ 1, 2, 3 }));
+    fn void test(int[] y) { ... }
 
-// Explicitly slicing:
-test(int[3]({ 1, 2, 3 }[..]));
-```
+    // Using &&
+    test(&&int[3]{ 1, 2, 3 });
 
-Passing a pointer to an array
-```
-fn void test1(int[3]* z) { ... }
-fn void test2(int* z) { ... }
+    // Explicitly slicing:
+    test(int[3]{ 1, 2, 3 }[..]));
 
-test1(&&int[3]({ 1, 2, 3 }));
-test2(&&int[3]({ 1, 2, 3 }));
-```
+    // Using a slice directly as a temporary:
+    test(int[]{ 1, 2, 3 }));
+
+Passing the pointer to an array
+
+    fn void test1(int[3]* z) { ... }
+    fn void test2(int* z) { ... }
+
+    test1(&&int[3]({ 1, 2, 3 }));
+    test2(&&int[3]({ 1, 2, 3 }));
+
 
 ## Constant expressions
 

@@ -29,13 +29,13 @@ C3 adds features, but also removes a few.
 
 ## C++
 
-C++ is a very complex object oriented "almost superset" of C. It tries to be everything to everyone,
+C++ is a complex object oriented "almost superset" of C. It tries to be everything to everyone,
 while squeezing this into a C syntax. The language is well known for its 
 many pitfalls and quirky corners – as well as its long compile times.
 
 C3 is in many ways different from C++ in the same way that C is different from C++, 
 but the semantic macro system and the generics close the gap in terms of writing
-reusable generic code. The module system and error handling is also very
+reusable generic code. The C3 module system and error handling is also very
 different from how C++ does things. 
 
 ##### In C++ but not in C3
@@ -54,6 +54,7 @@ different from how C++ does things.
 - Associated enum data
 - Built-in subarrays
 
+
 ## Rust
 
 Rust is a safe systems programming language. While not quite as complex as C++,
@@ -63,7 +64,7 @@ pattern matching to mention a few.
 Error handling is handled using `Result` and `Optional` which is similar to 
 how C3 works.
 
-C3 compares to Rust much like C, although the presence of built in subarrays and 
+C3 compares to Rust much like C, although the presence of built-in subarrays and 
 strings reduces the places where C3 is unsafe. Rust provides arrays and strings,
 but they are not built in. Subarrays are the same as Rust's slices.
 
@@ -81,6 +82,7 @@ but they are not built in. Subarrays are the same as Rust's slices.
 - Same ease of programming as C
 - Optional contracts
 - Familiar C syntax and behaviour
+
 
 ## Zig
 
@@ -115,6 +117,7 @@ possible.
 - Optional contracts.
 - Familiar C syntax and behaviour.
 
+
 ## Jai
 
 Jai is a programming language aimed at high performance game programming.
@@ -138,6 +141,7 @@ an implicit context system to switch allocation schemes.
 - Optional contracts
 - Familiar C syntax and behaviour
 - Fairly small language
+
 
 ## Odin
 
@@ -164,11 +168,12 @@ the language. For error handling it relies on Go style tuple returns.
 - Optional contracts
 - Error handling support
 
+
 ## D
 
 D is a *huge* language. Where C++ is big, D provides all that C++ does and adds anything 
 else you might think of. There is very little you can't do in D that isn't supported
-one way or the other.
+one way or the other. The most impressive thing is that D does this with fewer syntactic quirks than C++.
 
 ##### In D but not in C3
 

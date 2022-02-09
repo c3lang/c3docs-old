@@ -37,51 +37,6 @@ Follow Go Modules:
 3. Dependency resolution per major library version is done by picking the minimal version. E.g. module Foo requires Bar 1.5+ and module Baz requires 1.3+. Our module using Bar and Baz will resolve the minimal version to 1.3. This is the version that will be used. Note that if Foo used 2.5+, then both Bar 2.5 and 1.3 would be required.
 
 
-## Limited operator overloading
-
-Use method macros to introduce some operator overloading and related functionality:
-
-```
-macro Foo._foreach_index(Foo *f; index, value)
-{
-    $IndexType = $typeof(index);
-    usize len = f.len;
-    for (usize i = 0; i < len; i++)
-    {
-        yield ($IndexType)(i), f.values[i];
-    }
-}
-
-macro Foo._initializer_list(Foo *f, $list)
-{
-    $foreach ($i : $list):
-        f.add($i);
-    $endforeach;    
-}
-```
-
-The above would allow:
-```c
-Foo f = { "a", "b", "c" };
-foreach(int i, value : f)
-{
-    printf("%d: %s\n", i, f);
-}
-```
-Which is transformed during macro expansion to:
-
-```c
-Foo f;
-f.add("a");
-f.add("b");
-f.add("c");
-usize len = f.len;
-for (usize i = 0; i < len; i++)
-{
-    printf("%d: %s\n", (int)i, f.values[i]);
-}
-```
-
 ## Generic as keyword for polymorphic functions
 
 For macros that essentially are polymorphic functions, we could use the keyword "generic" instead:

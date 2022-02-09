@@ -10,7 +10,7 @@ Don't add a `;` after enum, struct and union declarations, and note the slightly
 different syntax for declaring a named struct inside of a struct.
 
     // C
-    typedf struct
+    typedef struct
     {
       int a;
       struct 
@@ -179,8 +179,8 @@ You can cast one struct to another as long as they are structurally equivalent:
 
 #### Compound literals
 
-Compound literals look different, but assigning to a struct will infer the type even if
-it's not the initializer.
+Compound literals use C++ style brace initialization, not cast style like in C.
+For convenience, assigning to a struct will infer the type even if it's not an initializer.
 
     // C
     Foo f = { 1, 2 };
@@ -190,7 +190,7 @@ it's not the initializer.
     // C3
     Foo f = { 1, 2 };
     f = { 1, 2 };
-    callFoo(Foo({ 2, 3 }));
+    callFoo(Foo{ 2, 3 });
 
 
 #### Typedef
@@ -314,7 +314,21 @@ to handle the cases when it is commonly used in C.
     free(foo);
     return false; 
 
-    // C3
+    // C3, direct translation:
+    do FAIL: 
+    {
+        Foo *foo = malloc(sizeof(Foo));
+    
+        if (tryFoo(foo)) break FAIL;
+        if (modifyFoo(foo)) break FAIL;
+
+        free(foo);
+        return true;
+    }
+    free(foo);
+    return false; 
+        
+    // C3, using defer:
     Foo *foo = @mem::malloc(Foo);
     defer free(foo);
 

@@ -9,7 +9,7 @@ module hello_world;
 
 import std::io;
 
-fn int main(int argc, char** argv) 
+fn int main(char[][] argv) 
 {
     io::println("Hello World!");
     return 0;

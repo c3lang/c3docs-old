@@ -38,12 +38,12 @@ Finally a custom annotation, "@mycustom" is added. The compiler is free to silen
 | ------------ | ------------------:|
 | @param       | `@param <param> <description>`|
 | @return      | `@return <description>`|
-| @throws      | `@throws <description>`|
+| @fails      | `@fails <description>`|
 | @deprecated  | `@deprecated <optional description>`|
 | @require     | `@require <expr1>, <expr2>, ...` |
 | @ensure      | `@ensure <expre1>, <expr2>, ...` |
 | @const       | `@const <param1>, <param2>, ...` |    
 | @pure        | `@pure` |    
-| @reqparse    | `@reqparse <expr1>, <expr2>, ...` |
+| @checked    | `@checked <expr1>, <expr2>, ...` |
     
-See [pre and post conditions](../preconditions) for information regarding `@require`, `@ensure`, `@const`, `@pure`, `@reqparse`.
+See [contracts](../contracts) for information regarding `@require`, `@ensure`, `@const`, `@pure`, `@checked`.

@@ -1,10 +1,13 @@
 ## Error Handling
 
-Unlike usual exception handling, errors in C3 build on normal returns. A function returning errors add a `!` to the return type. In C3 this called a *failable* type.
+Unlike usual exception handling, errors in C3 build on optional returns. 
+An *optional result* works as a union containing either the *expected result* or an *optional result value*.
+
 
 ### Error returns
 
-For C the interface to C, the error is returned as the normal value, and any return is instead returned on as an out parameter.
+For C the interface to C3, the *optional result value* is returned as the regular value, while the return value 
+is instead returned as an out parameter.
 
 C3 code:
 ```
@@ -13,18 +16,18 @@ fn int! getValue();
 
 Corresponding C code:
 ```c
-Error getValue(int *value);
+OptEnum getValue(int *value);
 ```
 
-The `int!` here is the failable return type, which is a tagged union: it might hold either the error or an int.
+The `int!` here is the optional result type, which either contains an optional result value or an int.
 
-*Note: reflection methods on errors are not complete yet.*
+*Note: reflection methods on optionals are not complete yet.*
 ```
-// Open a file, we will get a failable:
+// Open a file, we will get an optional result:
 // Either a File* or an error.
 File*! file = openFile("foo.txt");
 
-// We can extract the error using "catch"
+// We can extract the optional result value using "catch"
 if (catch err = file)
 {
     // Might print "Error was FILE_NOT_FOUND"
@@ -41,14 +44,15 @@ if (catch err = file)
 // We can also just execute of success:
 File*! file2 = openFile("bar.txt");
 
-// Only true if there is no error.
+// Only true if there is an expected result.
 if (try file2)
 {
     // Inside here file2 is a regular File*
 }
 ```
 
-A function, method or macro call with one or more parameters will only execute if the failable has no error. This makes error returns composable. 
+A function, method or macro call with one or more parameters will only execute if the optional result has the *expected result*. 
+This makes optional result returns composable. 
 
 ```
 fn int! fooMayError() { ... }
@@ -60,13 +64,13 @@ fn void test()
     int! i = fooMayError();
     
     // "mult" is only called if "fooMayError()"
-    // returns a non error result.
+    // returns a non optional result.
     int! j = mult(fooMayError());
     
     int! k = save(mult(fooMAyError()));
     if (catch err = k)
     {
-        // The error may be from fooMayError
+        // The optional result value may be from fooMayError
         // or save!
     }    
 )
@@ -75,7 +79,7 @@ fn void test()
 #### Implicit unwrapping
 
 If a `if-catch` returns or jumps out of the current scope in some way, then the variable becomes
-unwrapped to it's non-failable type in that scope:
+unwrapped to it's non-optional type in that scope:
 
 ```
 int! i = fooMayError();
@@ -92,21 +96,22 @@ if (i > 10) doSomething();
 
 ### Some simple examples.
 
-##### Defining an error
+##### Defining an optional result value
 
-An error if effectively an enum, and is defined in the same way:
+An result if effectively an enum, and is defined in the same way:
 
 ```
-errtype IoError
+optnum IoError
 {
     FILE_NOT_FOUND,
     FILE_NOT_READABLE,
 }    
 ```
 
-##### Returning an error
 
-Returning an error looks like a normal return but with the `!`
+##### Returning an optional value result
+
+Returning an optional result looks like a normal return but with the `!`
 
 ```
 fn void! findFile()
@@ -116,9 +121,9 @@ fn void! findFile()
 }
 ```
 
-##### Calling a function automatically returning any error
+##### Calling a function automatically returning any optional result
 
-The `?` suffix will create an implicit return on error.
+The `?` suffix will create an implicit return if the *expected result* is missing.
 
 ```
 fn void! findFileAndTest()
@@ -131,7 +136,7 @@ fn void! findFileAndTest()
 
 ##### Panic on error
 
-The `!!` will issue a panic on error.
+The `!!` will issue a panic if the *expected value* is missing.
 
 ```
 fn void! findFileAndTest()
@@ -142,9 +147,9 @@ fn void! findFileAndTest()
 }
 ```
 
-##### Catching errors
+##### Catching optionals
 
-Catching an error and returning will implicitly unwrap the checked variable.
+Catching an optional and returning will implicitly unwrap the checked variable.
 
 ```
 fn void findFileAndNoErr()
@@ -160,7 +165,7 @@ fn void findFileAndNoErr()
 }
 ```
 
-##### Only do if no error
+##### Only do if no optional value return
 
 ```
 fn void doSomethingToFile()
@@ -173,7 +178,7 @@ fn void doSomethingToFile()
 }
 ```
 
-##### Catching some errors
+##### Catching some optional value results
 
 ```
 fn void! findFileAndParse2()
@@ -191,7 +196,8 @@ fn void! findFileAndParse2()
 
 ##### Default values
 
-A function returning an error may be followed by an `??` and an expression. The call then executes and returns the expression.
+A function returning an optional type may be followed by an `??` and an expression. The expression on the right hand
+side will be returned if the left hand side returns an optional result value.
 
 ```
 fn int testDefault()
