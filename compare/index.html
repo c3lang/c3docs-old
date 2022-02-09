@@ -150,8 +150,6 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtinmacros/">Built-in Macros</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
@@ -160,7 +158,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../preconditions/">Pre and post conditions</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
                     </li>
@@ -262,12 +260,12 @@ C3 adds features, but also removes a few.</p>
 <li>Unsafe implicit conversions</li>
 </ul>
 <h2 id="c_1">C++</h2>
-<p>C++ is a very complex object oriented "almost superset" of C. It tries to be everything to everyone,
+<p>C++ is a complex object oriented "almost superset" of C. It tries to be everything to everyone,
 while squeezing this into a C syntax. The language is well known for its 
 many pitfalls and quirky corners – as well as its long compile times.</p>
 <p>C3 is in many ways different from C++ in the same way that C is different from C++, 
 but the semantic macro system and the generics close the gap in terms of writing
-reusable generic code. The module system and error handling is also very
+reusable generic code. The C3 module system and error handling is also very
 different from how C++ does things. </p>
 <h5 id="in-c-but-not-in-c3_1">In C++ but not in C3</h5>
 <ul>
@@ -291,7 +289,7 @@ it is still a feature rich programming language with semantic macros, traits and
 pattern matching to mention a few.</p>
 <p>Error handling is handled using <code>Result</code> and <code>Optional</code> which is similar to 
 how C3 works.</p>
-<p>C3 compares to Rust much like C, although the presence of built in subarrays and 
+<p>C3 compares to Rust much like C, although the presence of built-in subarrays and 
 strings reduces the places where C3 is unsafe. Rust provides arrays and strings,
 but they are not built in. Subarrays are the same as Rust's slices.</p>
 <h5 id="in-rust-but-not-in-c3">In Rust but not in C3</h5>
@@ -386,7 +384,7 @@ the language. For error handling it relies on Go style tuple returns.</p>
 <h2 id="d">D</h2>
 <p>D is a <em>huge</em> language. Where C++ is big, D provides all that C++ does and adds anything 
 else you might think of. There is very little you can't do in D that isn't supported
-one way or the other.</p>
+one way or the other. The most impressive thing is that D does this with fewer syntactic quirks than C++.</p>
 <h5 id="in-d-but-not-in-c3">In D but not in C3</h5>
 <ul>
 <li>Objects and classes</li>

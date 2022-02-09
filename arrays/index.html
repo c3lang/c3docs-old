@@ -110,8 +110,6 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtinmacros/">Built-in Macros</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
@@ -120,7 +118,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../preconditions/">Pre and post conditions</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
                     </li>
@@ -313,12 +311,12 @@ int[4]* g = (int[4]*)f;
 int[] h = f[0..2];
 </code></pre>
 <h4 id="internals">Internals</h4>
-<p>Internally the layout of a slice is guaranteed to be <code>struct { usize arraySize; &lt;type&gt;* ptrToArray; }</code>.</p>
-<p>There is a built in struct <code>__ArrayType_C3</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
-<pre><code>struct __ArrayType_C3 
-{ 
-    usize arraySize;
-    void* ptrToArray;
+<p>Internally the layout of a slice is guaranteed to be <code>struct { &lt;type&gt;* ptrToArray; usize arraySize; }</code>.</p>
+<p>There is a built in struct <code>std::runtime::SubArrayContainer</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
+<pre><code>struct SubArrayContainer
+{
+    void* ptr;
+    usize len;
 }
 </code></pre>
 <h2 id="iteration-over-arrays">Iteration over arrays</h2>
@@ -329,38 +327,32 @@ foreach (int x : a)
     ...
 }
 </code></pre>
-<p><em>NOTE THAT THE SYNTAX WILL BE REVISED</em></p>
-<p>It is possible for any type to get this iteration by implementing the method macros <code>_foreach</code> <code>_foreach_index</code>:</p>
+<p>Using <code>&amp;</code> it is possible to get an element by reference rather than by copy.
+Furthermore, by providing two variable name, the first is assumed to be the
+index:</p>
+<pre><code>Foo[4] a = { ... }
+foreach (int idx, Foo* &amp;f : a)
+{
+    f.abc = idx; // Mutates the array element
+}
+</code></pre>
+<p>It is possible to enable foreach on any type 
+by implementing "length" and "element at" methods
+and annotating them using the <code>@operator</code> attribute:</p>
 <pre><code>struct Vector
 {
     usize size;
     int* elements;
 }
 
-macro Vector._foreach_index(Vector* vector, $by_ref, $reverse; @body(index, value))
+macro Vector.get(Vector* vector, usize element) @operator(elementat)
 {
-    usize size = vector.size;
-    $IndexTyoe = $typeof(index);
-    $if ($reverse):
-        usize i = size;
-        while (i-- &gt;= 0)
-        {
-            $if ($by_ref):
-                @body(($IndexType)i, &amp;vector.elements[i]));
-            $else:
-                @body(($IndexType)i, vector.elements[i]));
-            $endif;    
-        }
-    $else:
-        for (usize i = 0; i &lt; size; i++)
-        {
-            $if ($by_ref):
-                @body(($IndexType)i, &amp;vector.elements[i]));
-            $else:
-                @body(($IndexType)i, vector.elements[i]));
-            $endif;    
-        }
-    $endif;    
+    return vector.elements[element];
+}
+
+macro Vector.size(Vector* vector, usize element) @operator(len)
+{
+    return vector.elements[element];
 }
 
 Vector v;
@@ -370,7 +362,7 @@ v.add(7);
 // Will print 3 and 7
 foreach (int i : v)
 {
-    printf(&quot;%d\n&quot;);
+    printf("%d\n");
 }
 </code></pre>
               

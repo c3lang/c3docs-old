@@ -92,8 +92,6 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtinmacros/">Built-in Macros</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
@@ -102,7 +100,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../preconditions/">Pre and post conditions</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
                     </li>
@@ -228,8 +226,8 @@ void bar(int foo)
 <td align="right"><code>@return &lt;description&gt;</code></td>
 </tr>
 <tr>
-<td>@throws</td>
-<td align="right"><code>@throws &lt;description&gt;</code></td>
+<td>@fails</td>
+<td align="right"><code>@fails &lt;description&gt;</code></td>
 </tr>
 <tr>
 <td>@deprecated</td>
@@ -252,12 +250,12 @@ void bar(int foo)
 <td align="right"><code>@pure</code></td>
 </tr>
 <tr>
-<td>@reqparse</td>
-<td align="right"><code>@reqparse &lt;expr1&gt;, &lt;expr2&gt;, ...</code></td>
+<td>@checked</td>
+<td align="right"><code>@checked &lt;expr1&gt;, &lt;expr2&gt;, ...</code></td>
 </tr>
 </tbody>
 </table>
-<p>See <a href="../preconditions">pre and post conditions</a> for information regarding <code>@require</code>, <code>@ensure</code>, <code>@const</code>, <code>@pure</code>, <code>@reqparse</code>.</p>
+<p>See <a href="../contracts">contracts</a> for information regarding <code>@require</code>, <code>@ensure</code>, <code>@const</code>, <code>@pure</code>, <code>@checked</code>.</p>
               
             </div>
           </div>

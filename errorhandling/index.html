@@ -96,19 +96,19 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#some-simple-examples">Some simple examples.</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#defining-an-error">Defining an error</a>
+    <li class="toctree-l3"><a class="reference internal" href="#defining-an-optional-result-value">Defining an optional result value</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#returning-an-error">Returning an error</a>
+    <li class="toctree-l3"><a class="reference internal" href="#returning-an-optional-value-result">Returning an optional value result</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#calling-a-function-automatically-returning-any-error">Calling a function automatically returning any error</a>
+    <li class="toctree-l3"><a class="reference internal" href="#calling-a-function-automatically-returning-any-optional-result">Calling a function automatically returning any optional result</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#panic-on-error">Panic on error</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#catching-errors">Catching errors</a>
+    <li class="toctree-l3"><a class="reference internal" href="#catching-optionals">Catching optionals</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#only-do-if-no-error">Only do if no error</a>
+    <li class="toctree-l3"><a class="reference internal" href="#only-do-if-no-optional-value-return">Only do if no optional value return</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#catching-some-errors">Catching some errors</a>
+    <li class="toctree-l3"><a class="reference internal" href="#catching-some-optional-value-results">Catching some optional value results</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#default-values">Default values</a>
     </li>
@@ -122,8 +122,6 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtinmacros/">Built-in Macros</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
@@ -132,7 +130,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../preconditions/">Pre and post conditions</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
                     </li>
@@ -208,22 +206,24 @@
             <div class="section">
               
                 <h2 id="error-handling">Error Handling</h2>
-<p>Unlike usual exception handling, errors in C3 build on normal returns. A function returning errors add a <code>!</code> to the return type. In C3 this called a <em>failable</em> type.</p>
+<p>Unlike usual exception handling, errors in C3 build on optional returns. 
+An <em>optional result</em> works as a union containing either the <em>expected result</em> or an <em>optional result value</em>.</p>
 <h3 id="error-returns">Error returns</h3>
-<p>For C the interface to C, the error is returned as the normal value, and any return is instead returned on as an out parameter.</p>
+<p>For C the interface to C3, the <em>optional result value</em> is returned as the regular value, while the return value 
+is instead returned as an out parameter.</p>
 <p>C3 code:</p>
 <pre><code>fn int! getValue();
 </code></pre>
 <p>Corresponding C code:</p>
-<pre><code class="language-c">Error getValue(int *value);
+<pre><code class="language-c">OptEnum getValue(int *value);
 </code></pre>
-<p>The <code>int!</code> here is the failable return type, which is a tagged union: it might hold either the error or an int.</p>
-<p><em>Note: reflection methods on errors are not complete yet.</em></p>
-<pre><code>// Open a file, we will get a failable:
+<p>The <code>int!</code> here is the optional result type, which either contains an optional result value or an int.</p>
+<p><em>Note: reflection methods on optionals are not complete yet.</em></p>
+<pre><code>// Open a file, we will get an optional result:
 // Either a File* or an error.
 File*! file = openFile(&quot;foo.txt&quot;);
 
-// We can extract the error using &quot;catch&quot;
+// We can extract the optional result value using &quot;catch&quot;
 if (catch err = file)
 {
     // Might print &quot;Error was FILE_NOT_FOUND&quot;
@@ -240,13 +240,14 @@ if (catch err = file)
 // We can also just execute of success:
 File*! file2 = openFile(&quot;bar.txt&quot;);
 
-// Only true if there is no error.
+// Only true if there is an expected result.
 if (try file2)
 {
     // Inside here file2 is a regular File*
 }
 </code></pre>
-<p>A function, method or macro call with one or more parameters will only execute if the failable has no error. This makes error returns composable. </p>
+<p>A function, method or macro call with one or more parameters will only execute if the optional result has the <em>expected result</em>. 
+This makes optional result returns composable. </p>
 <pre><code>fn int! fooMayError() { ... }
 fn int mult(int i) { ... }
 fn int! save(int i) { ... }
@@ -256,20 +257,20 @@ fn void test()
     int! i = fooMayError();
 
     // &quot;mult&quot; is only called if &quot;fooMayError()&quot;
-    // returns a non error result.
+    // returns a non optional result.
     int! j = mult(fooMayError());
 
     int! k = save(mult(fooMAyError()));
     if (catch err = k)
     {
-        // The error may be from fooMayError
+        // The optional result value may be from fooMayError
         // or save!
     }    
 )
 </code></pre>
 <h4 id="implicit-unwrapping">Implicit unwrapping</h4>
 <p>If a <code>if-catch</code> returns or jumps out of the current scope in some way, then the variable becomes
-unwrapped to it's non-failable type in that scope:</p>
+unwrapped to it's non-optional type in that scope:</p>
 <pre><code>int! i = fooMayError();
 
 if (catch i)
@@ -282,24 +283,24 @@ if (catch i)
 if (i &gt; 10) doSomething();
 </code></pre>
 <h3 id="some-simple-examples">Some simple examples.</h3>
-<h5 id="defining-an-error">Defining an error</h5>
-<p>An error if effectively an enum, and is defined in the same way:</p>
-<pre><code>errtype IoError
+<h5 id="defining-an-optional-result-value">Defining an optional result value</h5>
+<p>An result if effectively an enum, and is defined in the same way:</p>
+<pre><code>optnum IoError
 {
     FILE_NOT_FOUND,
     FILE_NOT_READABLE,
 }    
 </code></pre>
-<h5 id="returning-an-error">Returning an error</h5>
-<p>Returning an error looks like a normal return but with the <code>!</code></p>
+<h5 id="returning-an-optional-value-result">Returning an optional value result</h5>
+<p>Returning an optional result looks like a normal return but with the <code>!</code></p>
 <pre><code>fn void! findFile()
 {
     if (File.doesFileExist(&quot;foo.txt&quot;)) return IoError.FILE_NOT_FOUND!;
     /* ... */
 }
 </code></pre>
-<h5 id="calling-a-function-automatically-returning-any-error">Calling a function automatically returning any error</h5>
-<p>The <code>?</code> suffix will create an implicit return on error.</p>
+<h5 id="calling-a-function-automatically-returning-any-optional-result">Calling a function automatically returning any optional result</h5>
+<p>The <code>?</code> suffix will create an implicit return if the <em>expected result</em> is missing.</p>
 <pre><code>fn void! findFileAndTest()
 {
     findFile()?;
@@ -308,7 +309,7 @@ if (i &gt; 10) doSomething();
 }
 </code></pre>
 <h5 id="panic-on-error">Panic on error</h5>
-<p>The <code>!!</code> will issue a panic on error.</p>
+<p>The <code>!!</code> will issue a panic if the <em>expected value</em> is missing.</p>
 <pre><code>fn void! findFileAndTest()
 {
     findFile()!!;
@@ -316,8 +317,8 @@ if (i &gt; 10) doSomething();
     // catch (err = findFile()) panic(&quot;Unexpected error&quot;);
 }
 </code></pre>
-<h5 id="catching-errors">Catching errors</h5>
-<p>Catching an error and returning will implicitly unwrap the checked variable.</p>
+<h5 id="catching-optionals">Catching optionals</h5>
+<p>Catching an optional and returning will implicitly unwrap the checked variable.</p>
 <pre><code>fn void findFileAndNoErr()
 {
     File*! res = findFile();    
@@ -330,7 +331,7 @@ if (i &gt; 10) doSomething();
     // and have an effective type of File* here.
 }
 </code></pre>
-<h5 id="only-do-if-no-error">Only do if no error</h5>
+<h5 id="only-do-if-no-optional-value-return">Only do if no optional value return</h5>
 <pre><code>fn void doSomethingToFile()
 {
     void! res = findFile();    
@@ -340,7 +341,7 @@ if (i &gt; 10) doSomething();
     }
 }
 </code></pre>
-<h5 id="catching-some-errors">Catching some errors</h5>
+<h5 id="catching-some-optional-value-results">Catching some optional value results</h5>
 <pre><code>fn void! findFileAndParse2()
 {
     if (catch err = findFileAndParse())
@@ -353,7 +354,8 @@ if (i &gt; 10) doSomething();
 }
 </code></pre>
 <h5 id="default-values">Default values</h5>
-<p>A function returning an error may be followed by an <code>??</code> and an expression. The call then executes and returns the expression.</p>
+<p>A function returning an optional type may be followed by an <code>??</code> and an expression. The expression on the right hand
+side will be returned if the left hand side returns an optional result value.</p>
 <pre><code>fn int testDefault()
 {
     return getIntNumberOrFail() ?? -1;

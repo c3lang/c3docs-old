@@ -92,8 +92,6 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtinmacros/">Built-in Macros</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
@@ -108,53 +106,53 @@
         <ul>
     <li class="toctree-l4"><a class="reference internal" href="#typeid">typeid</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#nameof">$nameof</a>
+    <li class="toctree-l4"><a class="reference internal" href="#length">length</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#qnameof">$qnameof</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#extnameof">$extnameof</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#sizeof">$sizeof</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#alignof">$alignof</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#kindof">kindof</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#elementtype">elementType</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#basetype">baseType</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#elements">elements</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#errors">errors</a>
+    <li class="toctree-l4"><a class="reference internal" href="#values">values</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#fields">fields</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#variants">variants</a>
-    </li>
     <li class="toctree-l4"><a class="reference internal" href="#signed">signed</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#length">length</a>
+    <li class="toctree-l4"><a class="reference internal" href="#associated">associated</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#associatedvalues">associatedValues</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#returntype">returnType</a>
+    <li class="toctree-l4"><a class="reference internal" href="#returns">returns</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#params">params</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#errors_1">errors</a>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compile-time-functions">Compile time functions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#alignof">$alignof</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#defined">$defined</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#extnameof">$extnameof</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#nameof">$nameof</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#offsetof">$offsetof</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#qnameof">$qnameof</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sizeof">$sizeof</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#stringify">$stringify</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#typeof">$typeof</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#kindof">$kindof</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#elementof">$elementof</a>
     </li>
         </ul>
     </li>
         </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#runtime-reflection">Runtime reflection</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#typekind">TypeKind</a>
     </li>
     </ul>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../preconditions/">Pre and post conditions</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
                     </li>
@@ -240,219 +238,162 @@
 <p>Returns the typeid for the given type. Typedefs will return the typeid of the underlying type. The typeid size is the same as that of an <code>iptr</code>.</p>
 <pre><code>typeid x = Foo.typeid;
 </code></pre>
-<h4 id="nameof">$nameof</h4>
-<p>The basic name of the type or variable without module prefixes.</p>
-<pre><code>struct Foo { ... }
-define Bar = Foo;
-int x;
-string a = $nameof(int[4]); // =&gt; "int[4]"
-string b = $nameof(Foo) // =&gt; "Foo"
-string c = $nameof(Bar); // =&gt; "Foo" 
-string d = $nameof(x); // =&gt; "x"
+<h4 id="length">length</h4>
+<p><em>Not yet implemented</em></p>
+<p><em>Only available for array and vector types.</em>
+Returns the length of the array.</p>
+<pre><code>usize len = int[4].length
 </code></pre>
-<h4 id="qnameof">$qnameof</h4>
-<p>Same as $nameof, but includes the full module path: e.g. "baz::bar::Foo".</p>
-<pre><code>module bar;
-struct Foo { ... }
-int x;
-string a = $qnameof(int[4]); // =&gt; "int[4]"
-string b = $qnameof(Foo); // =&gt; "bar::Foo"
-string c = $qnameof(Foo[4]); // =&gt; "bar::Foo[4]" 
-string d = $nameof(x); // =&gt; "bar::x"
-</code></pre>
-<h4 id="extnameof">$extnameof</h4>
-<p>Similar to $qnameof, this give the name of the type or variable or function 
-as exported by the linker.</p>
-<pre><code>module bar;
-int x;
-fn void test(int x) { }
-string a = $extnameof(x); // =&gt; "bar.x";
-string b = $extnameof(test); // =&gt; "bar.test"
-string c = $extnameof("test"); // =&gt; "bar.test"
-</code></pre>
-<h4 id="sizeof">$sizeof</h4>
-<p>Returns the size in bytes needed to store the type.</p>
-<pre><code>struct Foo { long a; long b; }
-usize x = $sizeof(Foo); // 16
-usize y = $sizeof(int); // 4
-usize z = $sizeof(Foo, a); // 8
-</code></pre>
-<h4 id="alignof">$alignof</h4>
-<p>Returns the alignment in bytes needed for the type.</p>
-<pre><code>struct Foo { long a; long b; }
-usize x = $alignof(Foo); // 16
-usize y = $alignof(int); // 4
-usize z = $alignof(Foo, a); // 8
-</code></pre>
-<p><strong> The following are not yet implemented </strong></p>
-<h4 id="kindof">kindof</h4>
-<p>Returns the TypeKind of the variable.</p>
-<pre><code>struct Foo { ... }
-union Bar { ... }
-TypeKind a = Foo.kindof; // STRUCT
-TypeKind b = Bar.kindof; // BAR
-TypeKind c = int.kindof; // INTEGER
-</code></pre>
-<h4 id="elementtype">elementType</h4>
-<p><em>Only available for array, vararray and subarray types.</em>
-Returns the element (underlying) type of an array, vararray or subarray.</p>
-<pre><code>struct Foo { ... }
-string x = Foo[].elementType.name; // &quot;Foo&quot;
-string y = Foo[4].elementType.name; // &quot;Foo&quot;
-string z = Foo[*].elementType.name; // &quot;Foo&quot;
-</code></pre>
-<h4 id="basetype">baseType</h4>
-<p><em>Only available for pointer types and failables.</em>
-Returns the type the pointer points to. E.g. for <code>int*</code> the base type is <code>int</code>.</p>
-<pre><code>struct Foo { ... }
-string x = (Foo*).baseType.name; // &quot;Foo&quot;
-</code></pre>
-<h4 id="elements">elements</h4>
-<p><em>Only available for enum types.</em>
-Returns an array containing the enum values in an enum.</p>
-<pre><code>enum Foo
+<h4 id="values">values</h4>
+<p>Returns a subarray containing the values of an enum or optenum.</p>
+<pre><code>enum FooEnum
 {
     BAR,
     BAZ
 }
-string x = Foo.elements[0].name; // &quot;BAR&quot;
-</code></pre>
-<h4 id="errors">errors</h4>
-<p><em>Only available for error types.</em>
-Returns an array containing the error values in an enum.</p>
-<pre><code>errtype FooErr
-{
-    BAD_BAR,
-    NO_BAZ
-}
-string x = Foo.errors[0].name; // &quot;BAD_BAR&quot;
+char[] x = $nameof(FooEnum.values[1]); // "BAR"
 </code></pre>
 <h4 id="fields">fields</h4>
+<p><em>Not yet implemented</em></p>
 <p><em>Only available for struct types.</em>
-Returns an array containing the fields in a struct.</p>
-<pre><code>struct Foo
+Returns an array containing the fields in a struct or enum.</p>
+<pre><code>struct Baz
 {
     int x;
     Foo* z;
 }
-string x = Foo.fields[1].name; // &quot;z&quot;
-</code></pre>
-<h4 id="variants">variants</h4>
-<p><em>Only available for union types.</em>
-Returns an array of types representing the possible variants of the union.</p>
-<pre><code>union Foo
-{
-    int x;
-    Foo* z;
-    double d;
-}
-string x = Foo.variants[2].name; // &quot;d&quot;
+char[] x = $nameof(Baz.fields[1]); // "z"
 </code></pre>
 <h4 id="signed">signed</h4>
+<p><em>Not yet implemented</em></p>
 <p><em>Only available for integer types.</em>
 Returns true for a signed number.</p>
 <pre><code>bool s1 = int.signed; // =&gt; true
 bool s2 = uint.signed; // =&gt; false
 </code></pre>
-<h4 id="length">length</h4>
-<p><em>Only available for array types.</em>
-Returns the length of the array.</p>
-<pre><code>usize len = int[4].length
-</code></pre>
-<h4 id="associatedvalues">associatedValues</h4>
+<h4 id="associated">associated</h4>
+<p><em>Not yet implemented</em></p>
 <p><em>Only available for enums.</em>
 Returns an array containing the types of associated values if any.</p>
-<pre><code>enum Foo : int(double d, string s)
+<pre><code>enum Foo : int(double d, char[] s)
 {
-    BAR(1.0, &quot;normal&quot;),
-    BAZ(2.0, &quot;exceptional&quot;)
+    BAR(1.0, "normal"),
+    BAZ(2.0, "exceptional")
 }
-string s = Foo.associatedValues[0].name; // &quot;double&quot;
+char[] s = $nameof(Foo.associated[0]); // "double"
 </code></pre>
-<h4 id="returntype">returnType</h4>
+<h4 id="returns">returns</h4>
+<p><em>Not yet implemented</em></p>
 <p><em>Only available for function types.</em>
 Returns the type of the return type.</p>
 <pre><code>define TestFunc = fn int(int, double);
-string s = TestFunc.returnType.name; // &quot;int&quot;
+char[] s = $nameof(TestFunc.returns); // "int"
 </code></pre>
 <h4 id="params">params</h4>
+<p><em>Not yet implemented</em></p>
 <p><em>Only available for function types.</em>
 Returns a list of all parameters.</p>
 <pre><code>define TestFunc = fn int(int, double);
-string s = TestFunc.params[1].name; // &quot;double&quot;
+char[] s = $nameof(TestFunc.params[1]); // "double"
 </code></pre>
-<h4 id="errors_1">errors</h4>
-<p><em>Only available for functions.</em>
-Returns a list containing all errors returned, or nil otherwise. An empty list
-is returned on not returning. </p>
-<p><em>NOTE: This may change.</em></p>
-<pre><code>errtype SomeError 
-{
-    FOO 
-}
-errtype SomeOtherError 
-{ 
-    BAR
-}
-
-fn void! foo()
-{
-    if (someReason()) return SomeError.FOO!;
-    bar()!!;
-}
-fn void! bar()
-{
-    return SomeOtherError.BAR!;
-}
-
-string s = foo.errors[1].name; // &quot;SomeOtherError.FOO&quot;
-int errors = bar.errors.size == 1;
-</code></pre>
-<h2 id="runtime-reflection">Runtime reflection</h2>
-<p>During runtime it's also possible to retrieve information by way of a typeid. Using typeid may implicitly cast into a <code>TypeInfo *</code>. This is a struct that contains data for the underlying type:</p>
-<pre><code>struct TypeData
-{
-    typeid typeId;
-    TypeKind kind;
-    int size;
-    int alignment;
-    char* name;
-    char* fullName;
-}
-</code></pre>
-<p>This structure is the base type, and the actual struct will can be <code>TypeError</code>, <code>TypeArray</code>, <code>TypeInteger</code> and so on. The definition of these are found in the module <code>system::builtin</code>.</p>
-<p>The <code>builtin</code> module further offers several ways to search for different types, returning the <code>TypeData *</code> directly:</p>
+<h3 id="compile-time-functions">Compile time functions</h3>
+<p>There are several built-in functions to inspect the code during compile time.</p>
 <ul>
-<li><code>functionByName</code></li>
-<li><code>structByName</code></li>
-<li><code>unionByName</code></li>
-<li><code>enumByName</code></li>
-<li><code>typeByName</code></li>
-<li><code>errorByName</code></li>
-<li><code>opaqueByName</code></li>
-<li><code>moduleByName</code></li>
+<li><code>$alignof</code></li>
+<li><code>$defined</code></li>
+<li><code>$nameof</code></li>
+<li><code>$qnameof</code></li>
+<li><code>$extnameof</code></li>
+<li><code>$offsetof</code></li>
+<li><code>$sizeof</code></li>
+<li><code>$typeof</code></li>
+<li><code>$stringify</code></li>
+<li><code>$typeof</code></li>
 </ul>
-<p>The TypeData substructs further offers functions for retrieving fields by name and other conveniences.</p>
-<h2 id="typekind">TypeKind</h2>
-<p>The TypeKind enum contains the basic kinds of types:</p>
-<ul>
-<li><code>VOID</code> </li>
-<li><code>INTEGER</code></li>
-<li><code>REAL</code></li>
-<li><code>BOOL</code></li>
-<li><code>POINTER</code></li>
-<li><code>UNION</code></li>
-<li><code>ENUM</code></li>
-<li><code>ERROR</code></li>
-<li><code>ARRAY</code></li>
-<li><code>VARARRAY</code></li>
-<li><code>SUBARRAY</code></li>
-<li><code>FUNC</code></li>
-<li><code>TYPEID</code></li>
-<li><code>STRING</code></li>
-<li><code>OPAQUE</code></li>
-<li><code>FAILABLE</code></li>
-</ul>
+<p>Most of these may use either the identifiers directly <em>or</em> the stringified version of
+the same:</p>
+<pre><code>$alignof(a); // Returns the alignment of the variable a
+$alignof("a"); // Returns the alignment of the variable a
+</code></pre>
+<h3 id="alignof">$alignof</h3>
+<p>Returns the alignment in bytes needed for the type or member.</p>
+<pre><code>module test::bar;
+
+struct Foo
+{
+  int x;
+  char[] y;
+}
+int g = 123;
+
+$alignof(Foo.x); // =&gt; returns 4
+$alignof(Foo.y); // =&gt; returns 8 on 64 bit
+$alignof(Foo);   // =&gt; returns 8 on 64 bit
+$alignof(g);     // =&gt; returns 4
+</code></pre>
+<h3 id="defined">$defined</h3>
+<p>Returns true if the expression inside is defined.</p>
+<pre><code>$defined(Foo.x); // =&gt; returns true
+$defined(Foo.z); // =&gt; returns false
+</code></pre>
+<h3 id="extnameof">$extnameof</h3>
+<p>Returns the external name of a type, variable or function. The external name is
+the one used by the linker.</p>
+<pre><code>fn void testfn(int x) { }
+char[] a = $extnameof(g); // =&gt; "test.bar.g";
+string b = $extnameof(testfn); // =&gt; "test.bar.testfn"
+string c = $extnameof("testfn"); // =&gt; "test.bar.testfn"
+</code></pre>
+<h3 id="nameof">$nameof</h3>
+<p>Returns the name of a function, type or variable as a string without module prefixes.</p>
+<pre><code>define Bar = Foo;
+char[] a = $nameof(int[4]); // =&gt; "int[4]"
+char[] b = $nameof(Foo) // =&gt; "Foo"
+char[] c = $nameof(Bar); // =&gt; "Foo" 
+char[] d = $nameof(g); // =&gt; "g"
+</code></pre>
+<h3 id="offsetof">$offsetof</h3>
+<p>Returns the offset of a member in a struct.</p>
+<pre><code>$offsetof(Foo.y); // =&gt; returns 8 on 64 bit, 4 on 32 bit
+</code></pre>
+<h3 id="qnameof">$qnameof</h3>
+<p>Returns the same as <code>$nameof</code>, but with the full module name prepended.</p>
+<pre><code>int x;
+char[] a = $nameof(int[4]); // =&gt; "int[4]"
+char[] b = $nameof(Foo) // =&gt; "test::bar::Foo"
+char[] c = $nameof(Foo[4]); // =&gt; "test::bar::Foo[4]" 
+char[] d = $nameof(g); // =&gt; "test::bar::g"
+</code></pre>
+<h3 id="sizeof">$sizeof</h3>
+<p>Returns the size of a type, like C's <code>sizeof</code>.</p>
+<pre><code>usize x = $sizeof(Foo);   // =&gt; 16 on 64 bit, 8 on 32 bit
+usize y = $sizeof(int);   // =&gt; 4
+usize z = $sizeof(Foo.x); // =&gt; 4
+</code></pre>
+<h3 id="stringify">$stringify</h3>
+<p>Returns the expression as a string. It has a special behaviour for macro expression parameters,
+where <code>$stringify(#foo)</code> will return the expression contained in <code>#foo</code> rather than simply return
+"#foo"</p>
+<h3 id="typeof">$typeof</h3>
+<p>Returns the type of an expression or variable as a type itself.</p>
+<pre><code>Foo f;
+$typeof(f) x = f;
+</code></pre>
+<p><strong> The following are not yet implemented </strong></p>
+<h4 id="kindof">$kindof</h4>
+<p>Returns the TypeKind of the variable.</p>
+<pre><code>union Bar { ... }
+TypeKind a = $kindof(Foo); // STRUCT
+TypeKind b = $kindof(Bar); // BAR
+TypeKind c = $kindof(int); // INTEGER
+</code></pre>
+<h4 id="elementof">$elementof</h4>
+<p><em>Only available for array, optional, pointer, vector and subarray types.</em>
+Returns the element (underlying) type of an array, pointer, vector or subarray.</p>
+<pre><code>char x = $nameof($elementof(Foo[])); // "Foo"
+char y = $nameof($elementof(Foo[4])); // "Foo"
+char z = $nameof($elementof(Foo*)); // "Foo"
+</code></pre>
               
             </div>
           </div>
@@ -460,7 +401,7 @@ int errors = bar.errors.size == 1;
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../preconditions/" class="btn btn-neutral float-right" title="Pre and post conditions">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../contracts/" class="btn btn-neutral float-right" title="Contracts">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../macros/" class="btn btn-neutral" title="Macros"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -492,7 +433,7 @@ int errors = bar.errors.size == 1;
         <span><a href="../macros/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../preconditions/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../contracts/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

@@ -102,6 +102,10 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#pointer-types">Pointer types</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#the-typeid-type">The typeid type</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#the-variant-type">The variant type</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#array-types">Array types</a>
     </li>
         </ul>
@@ -112,9 +116,9 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#error">Error</a>
+    <li class="toctree-l2"><a class="reference internal" href="#optenums">Optenums</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#failable">Failable</a>
+    <li class="toctree-l2"><a class="reference internal" href="#optional-result-types">Optional Result Types</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#struct-types">Struct types</a>
     </li>
@@ -122,9 +126,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#union-types">Union types</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#anonymous-sub-structs-unions">Anonymous sub-structs / unions</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#tagged-unions">Tagged unions</a>
+    <li class="toctree-l2"><a class="reference internal" href="#anonymous-and-nested-sub-structs-unions">Anonymous and nested sub-structs / unions</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#anonymous-structs">Anonymous structs</a>
     </li>
@@ -146,8 +148,6 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtinmacros/">Built-in Macros</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
@@ -156,7 +156,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../preconditions/">Pre and post conditions</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
                     </li>
@@ -232,7 +232,7 @@
             <div class="section">
               
                 <h1 id="types">Types</h1>
-<p>As usual, types are divided into basic types and user defined types (enum, union, struct, errtypes, aliases). All types are defined on a global level. Using the <code>public</code> prefix is necessary for any type that is to be exposed outside of the current module.</p>
+<p>As usual, types are divided into basic types and user defined types (enum, union, struct, optenums, aliases). All types are defined on a global level. Using the <code>public</code> prefix is necessary for any type that is to be exposed outside of the current module.</p>
 <h5 id="naming">Naming</h5>
 <p>All user defined types in C3 starts with upper case. So <code>MyStruct</code> or <code>Mystruct</code> would be fine, <code>mystruct_t</code> or <code>mystruct</code> would not. Since this affects C compatibility, it is possible to use attributes to change the external name of a type:</p>
 <pre><code>struct Stat @extname(&quot;stat&quot;)
@@ -402,29 +402,24 @@ char* bar = &quot;\&quot;Say `hello`\&quot;&quot;;
 <thead>
 <tr>
 <th>Name</th>
-<th align="right">alias</th>
 <th align="right">bit size</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>half*</td>
-<td align="right">f16</td>
+<td>float16*</td>
 <td align="right">16</td>
 </tr>
 <tr>
 <td>float</td>
-<td align="right">f32</td>
 <td align="right">32</td>
 </tr>
 <tr>
 <td>double</td>
-<td align="right">f64</td>
 <td align="right">64</td>
 </tr>
 <tr>
-<td>quad*</td>
-<td align="right">f128</td>
+<td>float128*</td>
 <td align="right">128</td>
 </tr>
 </tbody>
@@ -523,6 +518,45 @@ char* bar = &quot;\&quot;Say `hello`\&quot;&quot;;
 <p>Note that signed C char and unsigned char will correspond to <code>ichar</code> and <code>char</code>. <code>CChar</code> is only available to match the default signedness of <code>char</code> on the platform.</p>
 <h3 id="pointer-types">Pointer types</h3>
 <p>Pointers mirror C: <code>Foo*</code> is a pointer to a <code>Foo</code>, while <code>Foo**</code> is a pointer to a pointer of Foo.</p>
+<h3 id="the-typeid-type">The <code>typeid</code> type</h3>
+<p>The <code>typeid</code> can hold a runtime identifier for a type. Using <code>&lt;typename&gt;.typeid</code> a type may be converted to its unique runtime id, 
+e.g. <code>typeid a = Foo.typeid;</code>. This value is pointer-sized.</p>
+<h3 id="the-variant-type">The <code>variant</code> type</h3>
+<p>C3 contains a built-in variant type, which is essentially struct containing a <code>typeid</code> plus a <code>void*</code> pointer to a value.
+It is possible to cast the variant type to any pointer type, which will return <code>null</code> if the types match,
+or the pointer value otherwise.</p>
+<pre><code>int x;
+variant y = &amp;x;
+double *z = (double*)y; // Returns null
+int* w = (int*)x; // Returns the pointer to x
+</code></pre>
+<p>Switching over the variant type is another method to unwrap the pointer inside:</p>
+<pre><code>fn void test(variant z)
+{
+    // Unwrapping switch
+    switch (z)
+    {
+        case int: 
+            // z is unwrapped to int* here
+        case double:
+            // z is unwrapped to double* here
+    }
+    // Assignment switch
+    switch (y = z)
+    {
+        case int:
+            // y is int* here
+    }
+    // Direct unwrapping to a value is also possible:
+    switch (w = *z)
+    {
+        case int:
+            // w is int here
+    }
+}
+</code></pre>
+<p><code>variant.type</code> returns the underlying pointee typeid of the contained value. <code>variant.ptr</code> returns 
+the raw <code>void*</code> pointer.</p>
 <h3 id="array-types">Array types</h3>
 <p>Arrays are indicated by <code>[&lt;size&gt;]</code> after the type, e.g. <code>int[4]</code>. Subarrays use the <code>type[]</code>. For initialization the wildcard <code>type[*]</code> can be used to infer the size
 from the initializer. See the chapter on <a href="../arrays">arrays</a>.</p>
@@ -530,9 +564,9 @@ from the initializer. See the chapter on <a href="../arrays">arrays</a>.</p>
 <p>Enum (enumerated) types use the following syntax:</p>
 <pre><code>enum State : int 
 {
-    PENDING = 0,
-    RUNNING,
-    TERMINATED
+  PENDING = 0,
+  RUNNING,
+  TERMINATED
 }
 </code></pre>
 <p>Enum constants are namespaces by default, just like C++'s class enums. So accessing the enums above would for example use <code>State.PENDING</code> rather than <code>PENDING</code>.</p>
@@ -541,10 +575,10 @@ from the initializer. See the chapter on <a href="../arrays">arrays</a>.</p>
 <pre><code>State foo = PENDING; // State.PENDING is inferred.
 switch (foo)
 {
-    case RUNNING: // State.RUNNING is inferred
-        ...
-    default:
-        ...
+  case RUNNING: // State.RUNNING is inferred
+    ...
+  default:
+    ...
 }
 
 fn void test(State s) { ... }
@@ -560,84 +594,88 @@ fn void testState(State s) { ... }
 
 State RUNNING = State.TERMINATED; // Don't do this!
 
-... 
+...
 
 test(RUNNING); // Ambiguous
 test(test::RUNNING); // Uses global.
 test(State.RUNNING); // Uses enum constant.
 </code></pre>
-<h2 id="error">Error</h2>
-<p>Error types are similar to enums, and are used for error returns.</p>
-<pre><code>errtype IOError;
-errtype ParseError
+<h2 id="optenums">Optenums</h2>
+<p><code>optenum</code> defines a set of optional result values, that are similar to enums, but are used for 
+optional returns.</p>
+<pre><code>optenum IOResult
 {
-    int line;
-    int col;
+  IO_ERROR,
+  PARSE_ERROR
+}
+
+optenum MapResult
+{
+  NOT_FOUND
 }
 </code></pre>
-<p>The data inside of an error cannot exceed the size of an <code>iptr</code> that is pointer sized.</p>
-<p>An error is similar to a struct and is initialized the same way. One exception is that simple errors without a body does not need to be
-created using a <code>()</code>:</p>
-<pre><code>return IOError!; 
-return IOError({})!; // Same as above
-return ParseError({ line, col })!;
-</code></pre>
-<p>In order to pass the error on the error side channel instead of as a value, the <code>!</code>.</p>
-<h2 id="failable">Failable</h2>
-<p>A failable is created by taking a type and appending <code>!</code>. A failable is a tagged union containing either the given type or an error.</p>
+<p>Like the typeid, the constants are pointer sized and each value is globally unique, even when 
+compared to other optenums. For example the underlying value of <code>MapResult.NOT_FOUND</code> is guaranteed
+to be different from <code>IOResult.IO_ERROR</code>. This is true even if they are separately compiled.</p>
+<p>An optenum may be stored as a normal value, but is also unique in that it may be passed
+as the optional result value using the <code>!</code> suffix operator.</p>
+<h2 id="optional-result-types">Optional Result Types</h2>
+<p>An <em>optional result type</em> is created by taking a type and appending <code>!</code>. 
+An optional result type is a tagged union containing either the <em>expected result</em> or <em>an optional result value</em> 
+(which is an optenum).</p>
 <pre><code>int! i;
 i = 5; // Assigning a real value to i.
-i = IOError!; // Assigning an error to i.
+i = IOResult.IO_ERROR!; // Assigning an optional result to i.
 </code></pre>
-<p>Only variables and return variables may be of the <em>failable</em> type. Function and macro parameters may not be failable types.</p>
+<p>Only variables and return variables may be optionals. Function and macro parameters may not be optionals.</p>
 <pre><code>fn Foo*! getFoo() { ... } // Ok!
-fn void processFoo(Foo*! f) { ... } // Error!
+fn void processFoo(Foo*! f) { ... } // Error
 int! x = 0; // Ok!
 </code></pre>
-<p>Read more about the errors on the page about <a href="../errorhandling">error handling</a>.</p>
+<p>Read more about the optional types on the page about <a href="../errorhandling">error handling</a>.</p>
 <h2 id="struct-types">Struct types</h2>
 <p>Structs are always named:</p>
 <pre><code>struct Person  
 {
     char age;
-    char* name;
+    char[] name;
 }
 </code></pre>
 <p>A struct's members may be accessed using dot notation, even for pointers to structs.</p>
 <pre><code>Person p;
 p.age = 21;
-p.name = &quot;John Doe&quot;;
+p.name = "John Doe";
 
-io::printf(&quot;%s is %d years old.&quot;, p.age, p.name);
+io::printf("%s is %d years old.", p.age, p.name);
 
 Person* pPtr = &amp;p;
 pPtr.age = 20; // Ok!
 
-io::printf(&quot;%s is %d years old.&quot;, pPtr.age, pPtr.name);
+io::printf("%s is %d years old.", pPtr.age, pPtr.name);
 </code></pre>
-<p>(One might wonder whether it's possible to take a <code>Person**</code> and use dot access. – It's not, only one level of dereference is done.)</p>
+<p>(One might wonder whether it's possible to take a <code>Person**</code> and use dot access. – It's not allowed, only one level of dereference is done.)</p>
 <h2 id="struct-subtyping">Struct subtyping</h2>
-<p>C3 allows creating struct subtypes:</p>
+<p>C3 allows creating struct subtypes using <code>inline</code>:</p>
 <pre><code>struct ImportantPerson 
 {
     inline Person person;
-    char* title;
+    char[] title;
 }
 
-fn printPerson(Person p)
+fn void printPerson(Person p)
 {
-    io::printf(&quot;%s is %d years old.&quot;, p.age, p.name);
+    io::printf("%s is %d years old.", p.age, p.name);
 }
 
 
 ImportantPerson important_person;
 important_person.age = 25;
-important_person.name = &quot;Jane Doe&quot;;
-important_person.title = &quot;Rockstar&quot;;
+important_person.name = "Jane Doe";
+important_person.title = "Rockstar";
 printPerson(important_person); // Only the first part of the struct is copied.
 </code></pre>
 <h2 id="union-types">Union types</h2>
-<p>Union types are defined just like structs.</p>
+<p>Union types are defined just like structs and are fully compatible with C.</p>
 <pre><code>union Integral  
 {
     byte as_byte;
@@ -654,15 +692,16 @@ i.as_int = 500; // Changing the active member to as_int
 
 // Undefined behaviour: as_byte is not the active member, 
 // so this will probably print garbage.
-io.printf(&quot;%d&quot;, i.as_byte); 
+io::printf("%d\n", i.as_byte);
 </code></pre>
-<p>Note that unions only take up as much space as their largest member, so <code>$sizeof(Integral)</code> is equivalent to <code>sizeof(long)</code>.</p>
-<h2 id="anonymous-sub-structs-unions">Anonymous sub-structs / unions</h2>
-<p>Just like in later versions of C, anonymous sub-structs / unions are allowed.</p>
+<p>Note that unions only take up as much space as their largest member, so <code>$sizeof(Integral)</code> is equivalent to <code>$sizeof(long)</code>.</p>
+<h2 id="anonymous-and-nested-sub-structs-unions">Anonymous and nested sub-structs / unions</h2>
+<p>Just like in C99 and later, anonymous sub-structs / unions are allowed. Note that
+the placement of struct / union names is different to match the difference in declaration.</p>
 <pre><code>struct Person  
 {
     char age;
-    char* name;
+    char[] name;
     union 
     {
         int employee_nr;
@@ -675,12 +714,9 @@ io.printf(&quot;%d&quot;, i.as_byte);
     }
 }
 </code></pre>
-<h2 id="tagged-unions">Tagged unions</h2>
-<p>In C, using structs with an enum value to indicate type is common practice. C3 also offers tagged unions, which is formalizing this within the language:</p>
-<p>TBD: Exact syntax (see the <a href="../ideas">ideas</a> page)</p>
 <h2 id="anonymous-structs">Anonymous structs</h2>
 <p>It's possible to use anonymous structs (structs without name) as arguments. These will only be checked for structural equivalence.</p>
-<p><em>NOTE: This syntax is not final.</em></p>
+<p><em>NOTE: This syntax will be changed.</em></p>
 <pre><code>fn void set_coordinates(struct { int i; int j; } coord) { ... }
 
 struct Vec2

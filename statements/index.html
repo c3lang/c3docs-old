@@ -102,8 +102,6 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtinmacros/">Built-in Macros</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
@@ -112,7 +110,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../preconditions/">Pre and post conditions</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
                     </li>
@@ -190,7 +188,8 @@
                 <h1 id="statements">Statements</h1>
 <p>Statements largely work like in C, but with some additions.</p>
 <h2 id="expression-blocks">Expression blocks</h2>
-<p>Expression blocks (delimited using <code>{| |}</code>) are compound statements that opens its own function scope. Jumps cannot be done into or out of a function block, and <code>return</code> exits the block, rather than the function as a whole.</p>
+<p>Expression blocks (delimited using <code>{| |}</code>) are compound statements that opens their own function scope.
+Jumps cannot be done into or out of a function block, and <code>return</code> exits the block, rather than the function as a whole.</p>
 <p>The function below prints <code>World!</code></p>
 <pre><code>fn void test()
 {
@@ -221,12 +220,12 @@
 {
     if FOO: (i &gt; 0)
     {
-        while (1)
-        {
-            io::printf("%d\n", i);
-            // Break out of the top if statement.
-            if (i++ &gt; 10) break FOO;
-        }
+       while (1)
+       {
+           io::printf("%d\n", i);
+           // Break out of the top if statement.
+           if (i++ &gt; 10) break FOO;
+       }
     }
 }
 </code></pre>
@@ -247,11 +246,11 @@ do
 <p>The <code>nextcase</code> statement is used in <code>switch</code> and <code>if-catch</code> to jump to the next statement:</p>
 <pre><code>switch (i)
 {
-   case 1:
-     doSomething();
-     nextcase; // Jumps to case 2
-   case 2:
-     doSomethingElse();
+    case 1:
+        doSomething();
+        nextcase; // Jumps to case 2
+    case 2:
+        doSomethingElse();
 }
 </code></pre>
 <p>It's also possible to use <code>nextcase</code> with an expression, to jump to an arbitrary case:</p>

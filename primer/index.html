@@ -128,8 +128,6 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtinmacros/">Built-in Macros</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
@@ -138,7 +136,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../preconditions/">Pre and post conditions</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
                     </li>
@@ -221,7 +219,7 @@ how it can be converted manually to C3.</p>
 <p>Don't add a <code>;</code> after enum, struct and union declarations, and note the slightly
 different syntax for declaring a named struct inside of a struct.</p>
 <pre><code>// C
-typedf struct
+typedef struct
 {
   int a;
   struct 
@@ -366,8 +364,8 @@ Foo f = { 1, 2 };
 Bar b = (Bar)f;
 </code></pre>
 <h4 id="compound-literals">Compound literals</h4>
-<p>Compound literals look different, but assigning to a struct will infer the type even if
-it's not the initializer.</p>
+<p>Compound literals use C++ style brace initialization, not cast style like in C.
+For convenience, assigning to a struct will infer the type even if it's not an initializer.</p>
 <pre><code>// C
 Foo f = { 1, 2 };
 f = (Foo) { 1, 2 };
@@ -376,7 +374,7 @@ callFoo((Foo) { 2, 3 });
 // C3
 Foo f = { 1, 2 };
 f = { 1, 2 };
-callFoo(Foo({ 2, 3 }));
+callFoo(Foo{ 2, 3 });
 </code></pre>
 <h4 id="typedef">Typedef</h4>
 <p>Instead of <code>typedef</code>, use <code>define</code></p>
@@ -481,7 +479,21 @@ FAIL:
 free(foo);
 return false;
 
-// C3
+// C3, direct translation:
+do FAIL: 
+{
+    Foo *foo = malloc(sizeof(Foo));
+
+    if (tryFoo(foo)) break FAIL;
+    if (modifyFoo(foo)) break FAIL;
+
+    free(foo);
+    return true;
+}
+free(foo);
+return false;
+
+// C3, using defer:
 Foo *foo = @mem::malloc(Foo);
 defer free(foo);
 

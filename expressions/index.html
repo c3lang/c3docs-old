@@ -98,8 +98,6 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtinmacros/">Built-in Macros</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
@@ -108,7 +106,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../preconditions/">Pre and post conditions</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
                     </li>
@@ -184,7 +182,7 @@
             <div class="section">
               
                 <h1 id="expressions">Expressions</h1>
-<p>Expressions work like in C, with one example: it is possible to take the address of a temporary. This uses the operator <code>&amp;&amp;</code> rather than <code>&amp;</code>.</p>
+<p>Expressions work like in C, with one exception: it is possible to take the address of a temporary. This uses the operator <code>&amp;&amp;</code> rather than <code>&amp;</code>.</p>
 <p>Consequently this is valid:</p>
 <pre><code>fn void test(int* x) { ... }
 
@@ -195,7 +193,8 @@ test(&amp;&amp;1);
 // test(&amp;x);
 </code></pre>
 <h2 id="compound-literals">Compound literals</h2>
-<p>C3 has C's compound literals, but unlike C's cast style syntax <code>(MyStruct) { 1, 2 }</code>, it uses a slightly different syntax, similar to C++: <code>MyStruct({ 1, 2 })</code>.</p>
+<p>C3 has C's compound literals, but unlike C's cast style syntax <code>(MyStruct) { 1, 2 }</code>, 
+it uses C++ syntax: <code>MyStruct { 1, 2 }</code>.</p>
 <pre><code>struct Foo
 {
     int a;
@@ -204,28 +203,31 @@ test(&amp;&amp;1);
 
 fn void test(Foo x) { ... }
 
-... 
+...
 
-test(Foo({ 1, 2.0 }));
+test(Foo { 1, 2.0 });
 </code></pre>
 <p>Arrays follow the same syntax:</p>
 <pre><code>fn void test(int[3] x) { ... }
 
 ...
 
-test(int[3]({ 1, 2, 3 }));
+test(int[3] { 1, 2, 3 });
 </code></pre>
 <p>One may take the address of temporaries, using <code>&amp;&amp;</code> (rather than <code>&amp;</code> for normal variables). This allows the following:</p>
 <p>Passing a slice</p>
 <pre><code>fn void test(int[] y) { ... }
 
 // Using &amp;&amp;
-test(&amp;&amp;int[3]({ 1, 2, 3 }));
+test(&amp;&amp;int[3]{ 1, 2, 3 });
 
 // Explicitly slicing:
-test(int[3]({ 1, 2, 3 }[..]));
+test(int[3]{ 1, 2, 3 }[..]));
+
+// Using a slice directly as a temporary:
+test(int[]{ 1, 2, 3 }));
 </code></pre>
-<p>Passing a pointer to an array</p>
+<p>Passing the pointer to an array</p>
 <pre><code>fn void test1(int[3]* z) { ... }
 fn void test2(int* z) { ... }
 

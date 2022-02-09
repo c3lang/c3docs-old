@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Pre and post conditions - C3 Documentation</title>
+  <title>Contracts - C3 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Pre and post conditions";
-    var mkdocs_page_input_path = "preconditions.md";
+    var mkdocs_page_name = "Contracts";
+    var mkdocs_page_input_path = "contracts.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -92,8 +92,6 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtinmacros/">Built-in Macros</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
@@ -102,7 +100,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Pre and post conditions</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Contracts</a>
     <ul class="current">
     </ul>
                     </li>
@@ -168,7 +166,7 @@
         
       
     
-    <li>Pre and post conditions</li>
+    <li>Contracts</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -179,8 +177,8 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="pre-and-post-conditions">Pre and post conditions</h1>
-<p>Pre and post conditions are optional checks that the compiler may use for optimization and runtime checks. Note that <em>compilers are not obliged to process pre and post conditions at all</em>. However, violating either pre or post conditions is considered undefined behaviour, so a compiler may optimize as if they always hold – even if a potential bug may cause them to be violated.</p>
+                <h1 id="contracts">Contracts</h1>
+<p>Contracts are optional pre and post conditions checks that the compiler may use for optimization and runtime checks. Note that <em>compilers are not obliged to process pre and post conditions at all</em>. However, violating either pre or post conditions is considered undefined behaviour, so a compiler may optimize as if they always hold – even if a potential bug may cause them to be violated.</p>
 <h1 id="pre-conditions">Pre conditions</h1>
 <p>Pre conditions are usually used to validate incoming arguments. Each condition must be an expression that can be evaluated to a boolean. A pre condition use the <code>@require</code> annotation.</p>
 <pre><code>/**
@@ -287,9 +285,10 @@ fn void lyingFunc()
 </code></pre>
 <p>Consequently circumventing "pure" annotations is undefined behaviour.</p>
 <h1 id="pre-conditions-for-macros">Pre conditions for macros</h1>
-<p>Macros have an additional class of pre conditions, that are used to confirm that the values actually will work inside the macro body. This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the <code>@reqparse</code> annotation, or together with the <code>@require</code> annotations, surrounded by <code>parse()</code>. </p>
+<p>Macros have an additional class of pre conditions, that are used to confirm that the values actually will work inside the macro body. 
+This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the <code>@checked</code> annotation, or together with the <code>@require</code> annotations, surrounded by <code>parse()</code>. </p>
 <pre><code>/**
- * @reqparse resource.open()
+ * @checked resource.open()
  * @require resource != nil, parse(void *x = resource.open())
  **/
 macro openResource(resource)
