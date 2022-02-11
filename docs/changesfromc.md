@@ -41,7 +41,7 @@ fn void test(Foo* foo, Bar* bar)
 
 *Rationale: const correctness requires littering const across the code base. Although const is useful, it provides weaker guarantees that it appears.*
 
-##### Fixed arrays do not decay and have copy sematics
+##### Fixed arrays do not decay and have copy semantics
 
 C3 has three different array types. Variable arrays and slices decay to pointers, but fixed arrays are value objects and do not decay.
 
