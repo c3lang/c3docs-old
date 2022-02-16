@@ -3,8 +3,6 @@
 ## Hello World
 
 ```
-import std::io;
-
 fn void main()
 {
     io::printf("Hello world!\n");
@@ -26,7 +24,6 @@ fn long fib(long n)
 
 ```
 import net::http_server;
-import net;
 
 fn void! httpHandler(HttpContext* context)
 {

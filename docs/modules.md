@@ -40,35 +40,69 @@ Some details about the C3 module system:
 
 ## Importing modules
 
-Importing a module uses the `import` keyword. Imports have file scope, so consequently if `file_a.c3` imports the module `networking`, then `file_b.c3` cannot use those symbols unless it also imports `networking`.
+By default, all other modules are imported into every module:
 
-`file_a.c3`
-```
-module foo;
+`foo.c3`
 
-//import bar and stdio
-import bar;
-import stdio;
+    module some::foo;
+    fn void test() {}
 
-/* ... */
-```
+`bar.c3`
 
-`file_b.c3`
-```
-module foo;
+    module bar;
+    // import some::foo; <- not needed
+    fn void test()
+    {
+        foo::test();
+        // some::foo::test() also works.
+    }
 
-//import bar and networking imported, but not stdio
-import bar;
-import networking;
+In some cases there may be ambiguities, and there are two ways to solve those: full path names 
+or explicit `import` statements. The `import` statement makes the imported module prioritized
+over implicitly imported modules.
 
-/* ... */
-```
+`abc.c3`
 
+    module abc;
+    struct Context
+    {
+        int a;
+    }
+
+`def.c3`
+
+    module def;
+    struct Context
+    {
+        void* ptr;
+    }
+
+`using_path.c3`
+
+    module test1;
+    // Context c = {} <- ambiguous
+    abc::Context c = {};
+
+`using_import.c3`
+
+    module test2;
+    import abc;
+    // Resolved in favour of abc::Context
+    Context c = {};
+
+In the case where there are multiple imports, paths may still be needed.
+
+`ambiguity.c3`
+
+    module test3;
+    import abc;
+    import def;
+    Context c = {}; // Error, ambiguous again
 
 ## Visibility
 
 All files in the same module share the same global declaration namespace.
-By default a symbol is visible to anyone importing a module.
+By default a symbol is visible to all other modules.
 To make a symbol only visible inside the module, use the keyword 
 `private`.
 
@@ -84,7 +118,7 @@ In this example, the other modules can use the init() function after importing f
 
 ## Overriding symbol visibility rules
 
-By using `private` after `import`, it's possible to access another module´s private symbols.
+By using `import private`, it's possible to access another module´s private symbols.
 Many other module systems have hierarchal visibility rules, but the `import private` feature allows 
 visibility to be manipulated in a more ad-hoc manner without imposing hard rules.
 

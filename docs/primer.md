@@ -252,8 +252,9 @@ Read more about types [here](../types).
 
 #### Instead of #include: Modules and import
 
-Modules are not mandatory but create a namespace, to import the names from a module, 
-use `import`:
+Declaring the module name is not mandatory, but if you leave it out the file name will be used
+as the module name. Other modules are implicitly imported, but explicit `import` can be
+used to resolve ambiguities.
 
     module mylib::foo;
     
@@ -261,7 +262,6 @@ use `import`:
     struct FooStruct { ... }
 
     module mylib::bar;
-    import mylib::foo;
    
     fn void myCheck()
     {

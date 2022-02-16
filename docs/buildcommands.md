@@ -50,7 +50,7 @@ $ tree .
     │   └── src
     │       └── index.html
     ├── lib
-    ├── project.toml
+    ├── project.c3p
     ├── resources
     ├── src
     │   └── hello_world

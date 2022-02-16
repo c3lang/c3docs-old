@@ -7,8 +7,6 @@ Open a text editor and enter the following in a file you call `hello_world.c3`:
 ```
 module hello_world;
 
-import std::io;
-
 fn int main(char[][] argv) 
 {
     io::println("Hello World!");
@@ -45,7 +43,7 @@ $ tree .
     │   └── src
     │       └── index.html
     ├── lib
-    ├── project.toml
+    ├── project.c3p
     ├── resources
     ├── src
     │   └── hello_world

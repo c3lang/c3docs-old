@@ -1,69 +1,117 @@
 # Customizing A Project
 
-A new project is provided with a barebone structure:
+A new project is provided with a barebone structure in `project.c3p`:
 
 
-```toml
-[[executable]]
-# name of the target
-name = "hello_world"
-# version using semantic versioning
-version = "0.1.0"
-# authors, optionally with email
-authors = ["John Doe <john.doe@example.com>"]
-# language version of C3
-langrev = "1"
-# warnings used
-warnings = ["no-unused"]
-# sources compiled
-sources = ["src/**"]
-# libraries to use
-libs = ["lib/**"]
+```json5
+{
+  "version": "0.1.0",
+  "authors": [
+    "John Doe <john.doe@example.com>"
+  ],
+  "langrev": "1",
+  "warnings": [
+    "no-unused"
+  ],
+  // sources compiled
+  "sources": [
+    "./**"
+  ],
+  // libraries to use
+  "libs": [],
+  // c compiler
+  "cc": "cc",
+  // c sources
+  "csources": [
+    "./csource/**"
+  ],
+  "targets": {
+    "hello_world": {
+      "type": "executable"
+    }
+  }
+}
 ```
+        
 
-Libraries look a little different:
+By default, an executable in assumed, but changing the type to `"static-lib"` or `"dynamic-lib"` 
+creates static library and dynamic library targets respectively.
 
-```toml
-[[static-lib]]
-name = "graphics"
-version = "0.1.0"
-authors = ["John Doe <john.doe@example.com>"]
-langrev = "1"
-warnings = ["no-unused"]
-sources = ["src/**"]
-# exported modules
-export = ["api"]
-```
+*This part will be updated, stay tuned* 
 
+## Compilation options
 
-## Target options
+The project file contains common settings at the top level, that can be overridden by each
+target, by simply assigning that particular key. So if the top level defines `target` to be `x64-darwin`
+and the actual target defines it to be `x64-windows`, then the `x64-windows` will be used for compilation.
 
-#### config
+Similarly, compiler command line parameters can be used in turn to override the target setting.
 
-Under the config you define external constants ("key = value") that will be included in compilation as if they were global macro constants.
+#### targets
 
-#### export
+The list of targets that can be built.
 
-Define the list of modules to be exported by a library. Not valid for executables.
-
-#### generate
-
-C3 defaults to generating C code that is then compiled and remove. Simply compile to C without further compilation by setting generate = "C"
-
-#### warnings
-
-List of warnings to enable during compilation.
-
-#### lib
+#### libs
 
 List of libraries to use when compiling the target.
 
-#### macro-recursion-depth
+#### sources
 
-Set the depth for recursion of macros. Typically set to a value around 10,000.
+List of source files to compile.
+
+#### cc
+
+C compiler to use for compiling C sources (if C sources are compiled together with C3 files).
+
+#### csources
+
+List of C sources to compile.
+
+#### version
+
+*Not handled yet*
+
+Version for library, will also be provided as a compile time constant.
+
+#### authors
+
+*Not handled yet*
+
+List of authors to add for library compilation.
+
+#### langrev
+
+*Not handled yet*
+
+The language revision to use. 
+
+#### config
+
+*Not added yet*
+
+Under the config you define external constants ("key: value") that will be included in compilation as if they were global macro constants.
+
+#### export
+
+*Not added yet*
+Define the list of modules to be exported by a library. Not valid for executables.
+
+#### warnings
+
+*Not completely supported yet*
+List of warnings to enable during compilation.
+
+## Target options
+
+#### type
+
+This mandatory option should be one of "executable", "dynamic-lib" and "static-lib".
+
+*More types will be added*
 
 ## Using environment variables
 
+*Not supported yet*
 In addition to constants any values starting with "$" will be assumed to be environment variables.
 
 For example "$HOME" would on unix systems return the home directory. For strings that start with $ but *should not* be interpreted as an environment variable. For example, the string `"\$HOME"` would be interpreted as the plain string "$HOME"

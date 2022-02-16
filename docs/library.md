@@ -66,8 +66,6 @@ Mem contains memory allocators
 Any struct can enable ref counting by including the RefCount struct:
 
 ```
-import std::refcount;
-
 struct Person
 {
     RefCount rc inline;

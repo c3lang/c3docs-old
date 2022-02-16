@@ -68,8 +68,6 @@ fn void example_while()
 Switches have implicit break and scope. Use "nextcase" to implicitly fallthrough or use comma:
 
 ```
-import std::io;
-
 enum Height : uint
 {
     LOW = 0,
@@ -164,8 +162,6 @@ State start = State.values[0];
 Defer will be invoked on scope exit.
 
 ```
-import std::io;
-
 fn void test(int x)
 {
     defer io::println();
@@ -323,8 +319,6 @@ fn void main()
 ```
 
 ```
-import std::io;
-
 fn void printFile(char[] filename)
 {
     char[]! file = io::load_file(filename);
@@ -475,8 +469,6 @@ Generic modules implements a generic system.
 
 ```
 module stack <Type>;
-import std::mem;
-
 struct Stack
 {
     usize capacity;
@@ -510,8 +502,6 @@ fn bool Stack.empty(Stack* this)
 Testing it out:
 
 ```
-import stack;
-
 define IntStack = Stack<int>;
 define DoubleStack = Stack<double>;
 

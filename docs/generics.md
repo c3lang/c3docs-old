@@ -28,8 +28,6 @@ fn Type2 test(Type2 b, Foo *foo)
 Including a generic module works as usual, but to use a type, it must be *defined* before use.
 
 ```
-import foo_test;
-
 define FooFloat = Foo<float, double>;
 define testFloat = foo_test::test<float, double>;
 
@@ -57,8 +55,6 @@ module vector <TypeA, TypeB, TypeC>;
 ```
 
 ```
-import vector;
-
 define testFunction = vector::testFunc<Bar, float, int>;
 
 // This would give the error 
