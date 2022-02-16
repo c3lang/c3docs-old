@@ -249,9 +249,7 @@ printf(&quot;a = %d, b = %f\n&quot;, a, b);
 </ul>
 <h2 id="ref-counting">Ref counting</h2>
 <p>Any struct can enable ref counting by including the RefCount struct:</p>
-<pre><code>import std::refcount;
-
-struct Person
+<pre><code>struct Person
 {
     RefCount rc inline;
     char[] name;

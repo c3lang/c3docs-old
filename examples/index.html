@@ -234,9 +234,7 @@
 </code></pre>
 <h5 id="enum-switch">enum + switch</h5>
 <p>Switches have implicit break and scope. Use "nextcase" to implicitly fallthrough or use comma:</p>
-<pre><code>import std::io;
-
-enum Height : uint
+<pre><code>enum Height : uint
 {
     LOW = 0,
     MEDIUM,
@@ -321,9 +319,7 @@ State start = State.values[0];
 </code></pre>
 <h5 id="defer">defer</h5>
 <p>Defer will be invoked on scope exit.</p>
-<pre><code>import std::io;
-
-fn void test(int x)
+<pre><code>fn void test(int x)
 {
     defer io::println();
     defer io::print(&quot;A&quot;);
@@ -464,9 +460,7 @@ fn void main()
     io::printf(&quot;Ratio was %f\n&quot;, ratio);
 }
 </code></pre>
-<pre><code>import std::io;
-
-fn void printFile(char[] filename)
+<pre><code>fn void printFile(char[] filename)
 {
     char[]! file = io::load_file(filename);
 
@@ -596,8 +590,6 @@ fn void test()
 <h5 id="generic-modules">Generic modules</h5>
 <p>Generic modules implements a generic system.</p>
 <pre><code>module stack &lt;Type&gt;;
-import std::mem;
-
 struct Stack
 {
     usize capacity;
@@ -628,9 +620,7 @@ fn bool Stack.empty(Stack* this)
 }
 </code></pre>
 <p>Testing it out:</p>
-<pre><code>import stack;
-
-define IntStack = Stack&lt;int&gt;;
+<pre><code>define IntStack = Stack&lt;int&gt;;
 define DoubleStack = Stack&lt;double&gt;;
 
 fn void test()

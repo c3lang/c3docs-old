@@ -427,15 +427,15 @@ ireg i;     // Register sized integer
 </code></pre>
 <p>Read more about types <a href="../types">here</a>.</p>
 <h4 id="instead-of-include-modules-and-import">Instead of #include: Modules and import</h4>
-<p>Modules are not mandatory but create a namespace, to import the names from a module, 
-use <code>import</code>:</p>
+<p>Declaring the module name is not mandatory, but if you leave it out the file name will be used
+as the module name. Other modules are implicitly imported, but explicit <code>import</code> can be
+used to resolve ambiguities.</p>
 <pre><code>module mylib::foo;
 
 fn void test() { ... }
 struct FooStruct { ... }
 
 module mylib::bar;
-import mylib::foo;
 
 fn void myCheck()
 {

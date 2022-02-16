@@ -218,28 +218,58 @@
 <li>Module names are limited to 31 characters.</li>
 </ul>
 <h2 id="importing-modules">Importing modules</h2>
-<p>Importing a module uses the <code>import</code> keyword. Imports have file scope, so consequently if <code>file_a.c3</code> imports the module <code>networking</code>, then <code>file_b.c3</code> cannot use those symbols unless it also imports <code>networking</code>.</p>
-<p><code>file_a.c3</code></p>
-<pre><code>module foo;
-
-//import bar and stdio
-import bar;
-import stdio;
-
-/* ... */
+<p>By default, all other modules are imported into every module:</p>
+<p><code>foo.c3</code></p>
+<pre><code>module some::foo;
+fn void test() {}
 </code></pre>
-<p><code>file_b.c3</code></p>
-<pre><code>module foo;
-
-//import bar and networking imported, but not stdio
-import bar;
-import networking;
-
-/* ... */
+<p><code>bar.c3</code></p>
+<pre><code>module bar;
+// import some::foo; &lt;- not needed
+fn void test()
+{
+    foo::test();
+    // some::foo::test() also works.
+}
+</code></pre>
+<p>In some cases there may be ambiguities, and there are two ways to solve those: full path names 
+or explicit <code>import</code> statements. The <code>import</code> statement makes the imported module prioritized
+over implicitly imported modules.</p>
+<p><code>abc.c3</code></p>
+<pre><code>module abc;
+struct Context
+{
+    int a;
+}
+</code></pre>
+<p><code>def.c3</code></p>
+<pre><code>module def;
+struct Context
+{
+    void* ptr;
+}
+</code></pre>
+<p><code>using_path.c3</code></p>
+<pre><code>module test1;
+// Context c = {} &lt;- ambiguous
+abc::Context c = {};
+</code></pre>
+<p><code>using_import.c3</code></p>
+<pre><code>module test2;
+import abc;
+// Resolved in favour of abc::Context
+Context c = {};
+</code></pre>
+<p>In the case where there are multiple imports, paths may still be needed.</p>
+<p><code>ambiguity.c3</code></p>
+<pre><code>module test3;
+import abc;
+import def;
+Context c = {}; // Error, ambiguous again
 </code></pre>
 <h2 id="visibility">Visibility</h2>
 <p>All files in the same module share the same global declaration namespace.
-By default a symbol is visible to anyone importing a module.
+By default a symbol is visible to all other modules.
 To make a symbol only visible inside the module, use the keyword 
 <code>private</code>.</p>
 <pre><code>module foo;
@@ -250,7 +280,7 @@ private fn void open() { .. }
 </code></pre>
 <p>In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it is specified as <code>private</code>.</p>
 <h2 id="overriding-symbol-visibility-rules">Overriding symbol visibility rules</h2>
-<p>By using <code>private</code> after <code>import</code>, it's possible to access another module´s private symbols.
+<p>By using <code>import private</code>, it's possible to access another module´s private symbols.
 Many other module systems have hierarchal visibility rules, but the <code>import private</code> feature allows 
 visibility to be manipulated in a more ad-hoc manner without imposing hard rules.</p>
 <p>For example, you may provide a library with two modules: "mylib::net" and "mylib::file" - which both use functions
