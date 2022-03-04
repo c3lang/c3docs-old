@@ -306,7 +306,7 @@ macro m(int &amp;x, int y)
 // C3
 macro size($Type)
 {
-    return $sizeof($Type) + $sizeof(int);
+    return $Type.sizeof + int.sizeof;
 }
 </code></pre>
 <h3 id="trailing-blocks-for-macros">Trailing blocks for macros</h3>

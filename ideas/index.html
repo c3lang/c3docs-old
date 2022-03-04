@@ -266,7 +266,7 @@ generic max(a, b)
 // Example of &quot;malloc&quot;
 generic malloc($Type)
 {
-    _builtin_malloc($sizeof($Type));
+    _builtin_malloc($Type.sizeof);
 }
 </code></pre>
 <p>Invocation changes:</p>

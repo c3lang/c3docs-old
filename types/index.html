@@ -694,7 +694,7 @@ i.as_int = 500; // Changing the active member to as_int
 // so this will probably print garbage.
 io::printf("%d\n", i.as_byte);
 </code></pre>
-<p>Note that unions only take up as much space as their largest member, so <code>$sizeof(Integral)</code> is equivalent to <code>$sizeof(long)</code>.</p>
+<p>Note that unions only take up as much space as their largest member, so <code>Integral.sizeof</code> is equivalent to <code>long.sizeof</code>.</p>
 <h2 id="anonymous-and-nested-sub-structs-unions">Anonymous and nested sub-structs / unions</h2>
 <p>Just like in C99 and later, anonymous sub-structs / unions are allowed. Note that
 the placement of struct / union names is different to match the difference in declaration.</p>

@@ -106,6 +106,8 @@
         <ul>
     <li class="toctree-l4"><a class="reference internal" href="#typeid">typeid</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#sizeof">sizeof</a>
+    </li>
     <li class="toctree-l4"><a class="reference internal" href="#length">length</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#values">values</a>
@@ -128,6 +130,10 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#defined">$defined</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#eval">$eval</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#evaltype">$evaltype</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#extnameof">$extnameof</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#nameof">$nameof</a>
@@ -135,8 +141,6 @@
     <li class="toctree-l3"><a class="reference internal" href="#offsetof">$offsetof</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#qnameof">$qnameof</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#sizeof">$sizeof</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#stringify">$stringify</a>
     </li>
@@ -238,6 +242,10 @@
 <p>Returns the typeid for the given type. Typedefs will return the typeid of the underlying type. The typeid size is the same as that of an <code>iptr</code>.</p>
 <pre><code>typeid x = Foo.typeid;
 </code></pre>
+<h4 id="sizeof">sizeof</h4>
+<p>Returns the size in bytes for the given type, like C <code>sizeof</code>.</p>
+<pre><code>usize x = Foo.sizeof;
+</code></pre>
 <h4 id="length">length</h4>
 <p><em>Not yet implemented</em></p>
 <p><em>Only available for array and vector types.</em>
@@ -309,12 +317,9 @@ char[] s = $nameof(TestFunc.params[1]); // "double"
 <li><code>$typeof</code></li>
 <li><code>$stringify</code></li>
 <li><code>$typeof</code></li>
+<li><code>$eval</code></li>
+<li><code>$evaltype</code></li>
 </ul>
-<p>Most of these may use either the identifiers directly <em>or</em> the stringified version of
-the same:</p>
-<pre><code>$alignof(a); // Returns the alignment of the variable a
-$alignof("a"); // Returns the alignment of the variable a
-</code></pre>
 <h3 id="alignof">$alignof</h3>
 <p>Returns the alignment in bytes needed for the type or member.</p>
 <pre><code>module test::bar;
@@ -336,13 +341,22 @@ $alignof(g);     // =&gt; returns 4
 <pre><code>$defined(Foo.x); // =&gt; returns true
 $defined(Foo.z); // =&gt; returns false
 </code></pre>
+<h3 id="eval">$eval</h3>
+<p>Converts a compile time string with the corresponding variable:</p>
+<pre><code>int a = 123;         // =&gt; a is now 123
+$eval("a") = 222;    // =&gt; a is now 222
+$eval("mymodule::fooFunc")(a); // =&gt; same as mymodule::fooFunc(a)
+</code></pre>
+<h3 id="evaltype">$evaltype</h3>
+<p>Similar to <code>$eval</code> but for types:</p>
+<pre><code>$evaltype("float") f = 12.0f;
+</code></pre>
 <h3 id="extnameof">$extnameof</h3>
 <p>Returns the external name of a type, variable or function. The external name is
 the one used by the linker.</p>
 <pre><code>fn void testfn(int x) { }
 char[] a = $extnameof(g); // =&gt; "test.bar.g";
 string b = $extnameof(testfn); // =&gt; "test.bar.testfn"
-string c = $extnameof("testfn"); // =&gt; "test.bar.testfn"
 </code></pre>
 <h3 id="nameof">$nameof</h3>
 <p>Returns the name of a function, type or variable as a string without module prefixes.</p>
@@ -363,12 +377,6 @@ char[] a = $nameof(int[4]); // =&gt; "int[4]"
 char[] b = $nameof(Foo) // =&gt; "test::bar::Foo"
 char[] c = $nameof(Foo[4]); // =&gt; "test::bar::Foo[4]" 
 char[] d = $nameof(g); // =&gt; "test::bar::g"
-</code></pre>
-<h3 id="sizeof">$sizeof</h3>
-<p>Returns the size of a type, like C's <code>sizeof</code>.</p>
-<pre><code>usize x = $sizeof(Foo);   // =&gt; 16 on 64 bit, 8 on 32 bit
-usize y = $sizeof(int);   // =&gt; 4
-usize z = $sizeof(Foo.x); // =&gt; 4
 </code></pre>
 <h3 id="stringify">$stringify</h3>
 <p>Returns the expression as a string. It has a special behaviour for macro expression parameters,
