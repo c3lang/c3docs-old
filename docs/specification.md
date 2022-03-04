@@ -162,7 +162,7 @@ $assert     $case       $default
 $if         $for        $else
 $elif       $if         $switch
 $foreach    $endswitch  $endif      
-$endforeach $unreachable     
+$endforeach      
                   
 ```
 

@@ -44,7 +44,7 @@ The following operations cause undefined behaviour in release builds of C3:
 | casting pointer to the incorrect array or vararray | Possible* |
 | violating pre or post conditions | Yes |
 | violating asserts | Yes |
-| reaching $unreachable code | Yes |
+| reaching `@unreachable()` code | Yes |
 
 \* "Possible" indicates trapping is implementation dependent.
 

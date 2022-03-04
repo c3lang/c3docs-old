@@ -18,6 +18,12 @@ Returns the typeid for the given type. Typedefs will return the typeid of the un
 
     typeid x = Foo.typeid;
 
+#### sizeof
+
+Returns the size in bytes for the given type, like C `sizeof`.
+
+    usize x = Foo.sizeof;
+
 #### length
 
 *Not yet implemented*
@@ -117,12 +123,8 @@ There are several built-in functions to inspect the code during compile time.
 - `$typeof`
 - `$stringify`
 - `$typeof`
-
-Most of these may use either the identifiers directly *or* the stringified version of
-the same:
-
-    $alignof(a); // Returns the alignment of the variable a
-    $alignof("a"); // Returns the alignment of the variable a
+- `$eval`
+- `$evaltype`
 
 ### $alignof
 
@@ -149,6 +151,19 @@ Returns true if the expression inside is defined.
     $defined(Foo.x); // => returns true
     $defined(Foo.z); // => returns false
 
+### $eval
+
+Converts a compile time string with the corresponding variable:
+
+    int a = 123;         // => a is now 123
+    $eval("a") = 222;    // => a is now 222
+    $eval("mymodule::fooFunc")(a); // => same as mymodule::fooFunc(a) 
+
+### $evaltype
+
+Similar to `$eval` but for types:
+
+    $evaltype("float") f = 12.0f;
 
 ### $extnameof
 
@@ -158,7 +173,6 @@ the one used by the linker.
     fn void testfn(int x) { }
     char[] a = $extnameof(g); // => "test.bar.g";
     string b = $extnameof(testfn); // => "test.bar.testfn"
-    string c = $extnameof("testfn"); // => "test.bar.testfn"
 
 ### $nameof
 
@@ -187,13 +201,6 @@ Returns the same as `$nameof`, but with the full module name prepended.
     char[] d = $nameof(g); // => "test::bar::g"
     
 
-### $sizeof
-
-Returns the size of a type, like C's `sizeof`.
-
-    usize x = $sizeof(Foo);   // => 16 on 64 bit, 8 on 32 bit
-    usize y = $sizeof(int);   // => 4
-    usize z = $sizeof(Foo.x); // => 4
 
 ### $stringify
 

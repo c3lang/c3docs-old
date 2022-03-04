@@ -401,7 +401,7 @@ As usual unions are used to hold one of many possible values:
     io::printf("%d\n", i.as_byte); 
 
 
-Note that unions only take up as much space as their largest member, so `$sizeof(Integral)` is equivalent to `$sizeof(long)`.
+Note that unions only take up as much space as their largest member, so `Integral.sizeof` is equivalent to `long.sizeof`.
 
 
 ## Anonymous and nested sub-structs / unions

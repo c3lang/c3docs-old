@@ -1,5 +1,10 @@
 # Change log
 
+##### Revision 2022-03-04
+- Updates to $sizeof.
+- Addition of $eval / $evaltype.
+- Removal of $unreachable.
+
 ##### Revision 2022-02-16
 - Updates to imports.
 - Updates to project files.

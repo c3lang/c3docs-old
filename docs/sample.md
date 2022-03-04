@@ -38,7 +38,7 @@ void Heap.init(Heap* heap, usize start)
 {
     Node* init_region = (Node*)start;
     init_region.hole = 1;
-    init_region.size = HEAP_INIT_SIZE - $sizeof(Node) - $sizeof(Footer);
+    init_region.size = HEAP_INIT_SIZE - Node.sizeof - Footer.sizeof;
 
     init_region.createFoot();
 
@@ -62,8 +62,8 @@ void* Heap.alloc(Heap* heap, usize size)
 
     if ((found.size - size) > (overhead + MIN_ALLOC_SZ)) 
     {
-        Node* split = (Node*)((char*)found + $sizeof(Node) + $sizeof(Footer)) + size;
-        split.size = found.size - size - $sizeof(Node) - $sizeof(Footer);
+        Node* split = (Node*)((char*)found + Node.sizeof + Footer.sizeof) + size;
+        split.size = found.size - size - Node.sizeof - Footer.sizeof;
         split.hole = 1;
    
         split.createFoot();
@@ -114,8 +114,8 @@ fn void Heap.free(Heap* heap, void *p)
         return;
     }
 
-    Node* next = (Node*)((char*)head.getFoot() + $sizeof(Footer));
-    Footer* f = (Footer*)((char*)(head) - $sizeof(Footer));
+    Node* next = (Node*)((char*)head.getFoot() + Footer.sizeof);
+    Footer* f = (Footer*)((char*)(head) - Footer.sizeof);
     Node* prev = f.header;
     
     if (prev.hole) 
@@ -179,12 +179,12 @@ fn void Node.createFoot(Node* head)
 
 fn Footer* Node.getFoot(Node* node) 
 {
-    return (Footer*)((char*)node + $sizeof(Node) + node.size);
+    return (Footer*)((char*)node + Node.sizeof + node.size);
 }
 
 fn Node* getWilderness(Heap* heap) 
 {
-    Footer* wild_foot = (Footer*)((char*)heap.end - $sizeof(Footer));
+    Footer* wild_foot = (Footer*)((char*)heap.end - Footer.sizeof);
     return wild_foot.header;
 }
 ```

@@ -83,7 +83,7 @@ Use `&` in front of a parameter to capture the a variable and pass it by referen
     // C3
     macro size($Type)
     {
-        return $sizeof($Type) + $sizeof(int);
+        return $Type.sizeof + int.sizeof;
     }
 
 ### Trailing blocks for macros
