@@ -92,7 +92,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#base64-and-hex-data-literals">Base64 and hex data literals</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#string-literals-multi-line-and-raw-strings">String literals, multi-line and raw strings</a>
+    <li class="toctree-l3"><a class="reference internal" href="#string-literals-and-raw-strings">String literals, and raw strings</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#floating-point-types">Floating point types</a>
     </li>
@@ -361,35 +361,8 @@ fn CInt stat(const char* pathname, Stat* buf);
 <pre><code>char[*] hello_world_base64 = b64&quot;SGVsbG8gV29ybGQh&quot;;
 char[*] hello_world_hex = x&quot;4865 6c6c 6f20 776f 726c 6421&quot;;
 </code></pre>
-<h5 id="string-literals-multi-line-and-raw-strings">String literals, multi-line and raw strings</h5>
+<h5 id="string-literals-and-raw-strings">String literals, and raw strings</h5>
 <p>Regular string literals is text enclosed in <code>" ... "</code> just like in C. C3 also offers two other types of literals: <em>multi-line strings</em> and <em>raw strings</em>.</p>
-<p>Multi-line strings start and end with <code>"""</code>. Newline after the initial <code>"""</code> are removed, and so is a trailing new line on the last line before <code>"""</code>. Initial whitespace will be trimmed to the
-leftmost character in a line:</p>
-<pre><code>char* foo = &quot;&quot;&quot;
-    &lt;html&gt;
-      &lt;body&gt;
-        &lt;p&gt;Hello World&lt;/p&gt;
-      &lt;/body&gt;
-    &lt;/html&gt;
-    &quot;&quot;&quot;;
-// Same as:
-char* foo = &quot;&lt;html&gt;\n&quot;
-            &quot;  &lt;body&gt;\n&quot;
-            &quot;    &lt;p&gt;Hello World&lt;/p&gt;\n&quot;
-            &quot;  &lt;/body&gt;\n&quot;
-            &quot;&lt;/html&gt;&quot;;    
-</code></pre>
-<p>You can use <code>\|</code> (escapes to a zero length string) and <code>\s</code> (escapes to a space) to control the automatic trim:</p>
-<pre><code>char* foo = &quot;&quot;&quot;
-  \|  &lt;body&gt;
-  \|    &lt;p&gt;Hello World&lt;/p&gt;    \s
-  \|  &lt;/body&gt;
-    &quot;&quot;&quot;;
-// Same as:
-char* foo = &quot; &lt;body&gt;\n&quot;
-            &quot;   &lt;p&gt;Hello World&lt;/p&gt;     \n&quot;
-            &quot; &lt;/body&gt;&quot;;
-</code></pre>
 <p>Raw strings uses text between ` `. Inside of a raw string, no escapes are available. To write a ` double the character:</p>
 <pre><code>char* foo = `C:\foo\bar.dll`;
 char* bar = `&quot;Say ``hello``&quot;`;

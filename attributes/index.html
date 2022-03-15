@@ -114,6 +114,8 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#built-in-attributes">Built in attributes</a>
         <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pure-call">pure (call)</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#packed-struct-union-enum">packed (struct, union, enum)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#sectionname-var-fn">section(name) (var, fn)</a>
@@ -200,6 +202,9 @@
                 <h1 id="attributes">Attributes</h1>
 <p>Attributes are compile time annotations on functions, types, global constants and variables. Similar to Java annotations, a decoration may also take arguments. A attribute can also represent a bundle of attributes.</p>
 <h2 id="built-in-attributes">Built in attributes</h2>
+<h3 id="pure-call"><code>pure</code> (call)</h3>
+<p>Used to annotate a non pure function as "pure" when checking for conformance to <code>@pure</code> on 
+functions.</p>
 <h3 id="packed-struct-union-enum"><code>packed</code> (struct, union, enum)</h3>
 <p>If used on a struct or enum: packs the type, including any components to minimum size. On an enum, it uses the smallest representation containing all its values.</p>
 <h3 id="sectionname-var-fn"><code>section(name)</code> (var, fn)</h3>
