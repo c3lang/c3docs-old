@@ -4,6 +4,11 @@ Attributes are compile time annotations on functions, types, global constants an
 
 ## Built in attributes
 
+### `pure` (call)
+
+Used to annotate a non pure function as "pure" when checking for conformance to `@pure` on 
+functions.
+
 ### `packed` (struct, union, enum)
 
 If used on a struct or enum: packs the type, including any components to minimum size. On an enum, it uses the smallest representation containing all its values.

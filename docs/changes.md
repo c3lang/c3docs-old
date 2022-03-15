@@ -1,5 +1,8 @@
 # Change log
 
+##### Revision 2022-03-15
+- Removal of multi-line strings
+
 ##### Revision 2022-03-04
 - Updates to $sizeof.
 - Addition of $eval / $evaltype.

@@ -86,41 +86,9 @@ char[*] hello_world_base64 = b64"SGVsbG8gV29ybGQh";
 char[*] hello_world_hex = x"4865 6c6c 6f20 776f 726c 6421";
 ```
 
-##### String literals, multi-line and raw strings
+##### String literals, and raw strings
 
 Regular string literals is text enclosed in `" ... "` just like in C. C3 also offers two other types of literals: *multi-line strings* and *raw strings*.
-
-Multi-line strings start and end with `"""`. Newline after the initial `"""` are removed, and so is a trailing new line on the last line before `"""`. Initial whitespace will be trimmed to the
-leftmost character in a line:
-
-```
-char* foo = """
-    <html>
-      <body>
-        <p>Hello World</p>
-      </body>
-    </html>
-    """;
-// Same as:
-char* foo = "<html>\n"
-            "  <body>\n"
-            "    <p>Hello World</p>\n"
-            "  </body>\n"
-            "</html>";    
-```
-
-You can use `\|` (escapes to a zero length string) and `\s` (escapes to a space) to control the automatic trim:
-```
-char* foo = """
-  \|  <body>
-  \|    <p>Hello World</p>    \s
-  \|  </body>
-    """;
-// Same as:
-char* foo = " <body>\n"
-            "   <p>Hello World</p>     \n"
-            " </body>";
-```
 
 Raw strings uses text between \` \`. Inside of a raw string, no escapes are available. To write a \` double the character:
 
