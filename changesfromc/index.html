@@ -88,6 +88,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#goto-removed">Goto removed</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#implicit-break-in-switches">Implicit break in switches</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#locals-variables-are-implictly-zeroed">Locals variables are implictly zeroed</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#compound-literal-syntax-changed">Compound literal syntax changed</a>
@@ -264,6 +266,23 @@ else
 <p><code>goto</code> is removed and replaced with labelled <code>break</code> and <code>continue</code> together with the <code>nextcase</code> statement that allows you to jump between cases in a <code>switch</code> statement.</p>
 <p><em>Rationale: It is very difficult to make goto work well with defer and implicit unwrapping of optional results. It is not just making the compiler harder to write, but
 the code is harder to understand as well. The replacements together with <code>defer</code> cover many if not all usages of <code>goto</code> in regular code.</em></p>
+<h5 id="implicit-break-in-switches">Implicit break in switches</h5>
+<p>Empty <code>case</code> statements have implicit fall through in C3, otherwise the <code>nextcase</code> statement is needed
+<code>nextcase</code> can also be used to jump to any other case statement in the switch.</p>
+<pre><code>switch (h)
+{
+    case 1:
+        a = 1;
+        nextcase; // Fall through
+    case 2:
+        b = 123;
+    case 3:
+        a = 2;
+        nextcase 2; // Jump to case 2
+    default:
+        a = 111;
+}
+</code></pre>
 <h5 id="locals-variables-are-implictly-zeroed">Locals variables are implictly zeroed</h5>
 <p>In C global variables are implicitly zeroed out, but local variables aren't. In C3 local variables are zeroed out by default, but may be explicitly undefined to get the C behaviour.</p>
 <p><em>Rationale: In the "zero-is-initialization" paradigm, zeroing variables, in particular structs, is very common. By offering zero initialization by default this avoids a whole class of vulnerabilites.
