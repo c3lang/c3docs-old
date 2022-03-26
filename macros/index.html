@@ -144,8 +144,6 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#escape-macros">Escape macros</a>
-    </li>
     <li class="toctree-l2"><a class="reference internal" href="#conditional-macros-at-the-top-level">Conditional macros at the top level</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#conditional-compilation_1">Conditional compilation</a>
@@ -275,17 +273,12 @@ int y = @m(foo() + 2);
 u32 b = y;
 </code></pre>
 <h3 id="dynamic-scoping">Dynamic scoping</h3>
-<p><em>Note This is not currenctly implemented and may possibly not be included.</em></p>
 <pre><code>// C
 #define Z() ptr-&gt;x-&gt;y-&gt;z
 int x = Z();
 
 // C3
-macro z(implicit ptr)
-{
-    return ptr-&gt;x-&gt;y-&gt;z;
-}
-int x = @z();
+... currently no corresponding functionality ...
 </code></pre>
 <h3 id="reference-arguments">Reference arguments</h3>
 <p>Use <code>&amp;</code> in front of a parameter to capture the a variable and pass it by reference without having to explicitly use <code>&amp;</code> and pass a pointer. 
@@ -342,7 +335,11 @@ macro for_each(list; @body(it))
 #define offsetof(T, field) (size_t)(&amp;((T*)0)-&gt;field)
 
 // C3
-... Currently no corresponding functionality ...
+macro usize offset($Type, #field)
+{
+    $Type* t = null;
+    return (usize)(uptr)&amp;t.#field;
+}
 </code></pre>
 <h3 id="declaration-attributes">Declaration attributes</h3>
 <p><em>Note: this is not implemented yet</em></p>
@@ -364,10 +361,13 @@ DECLARE_LIST(hello)
 ... currently no corresponding functionality ...
 </code></pre>
 <h3 id="stringingification">Stringingification</h3>
-<pre><code>#define DECLARE_STRING(name, s) char *name##_str = #s;
+<pre><code>#define CHECK(x) do { if (!x) abort(#x); } while(0)
 
 // C3
-... currently no corresponding functionality ...
+macro fn check(#expr)
+{
+   if (!#expr) abort($stringify(#expr));
+}
 </code></pre>
 <h2 id="top-level-evaluation">Top level evaluation</h2>
 <p>Script languages, and also upcoming languages like <em>Jai</em>, usually have unbounded top level evaluation. The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. </p>
@@ -585,48 +585,6 @@ It's not possible to compile partial statements.</p>
     return a + b;
 }
 </code></pre>
-<h2 id="escape-macros">Escape macros</h2>
-<p>Usually macro will generate its own scope, so that break, return, continue and next only stays valid inside of the macro's "scope". A <code>return</code> from inside a macro does not normally escape the scope into which it's called:</p>
-<pre><code>macro void @foo() { return; }
-
-fn void test()
-{
-    @foo(); // Doesn't do anything.
-    io::printf("Test");
-}
-</code></pre>
-<p>However, sometimes macros are needed that does not create its own scope, allowing return, break etc work as if it was part of the included scope. Escape macros does exactly that. Adding the attribute <code>@escape</code> removes capturing return.</p>
-<pre><code>macro void @foo() @escape 
-{ 
-    return; 
-}
-
-fn void test()
-{
-    @foo(); // The function returns here.
-    io::printf("Test"); // Never printed!
-}
-</code></pre>
-<p>This is not limited to return: <code>break</code>, <code>continue</code> and <code>next</code> is allowed.</p>
-<pre><code>macro next($f) @escape
-{ 
-    nextcase $f;
-}
-
-fn void test()
-{
-    int i = 1;
-    switch (i)
-    {
-        case 1:
-            @next(3);
-            io::println("Foo");
-        case 3:
-            io::println("Bar!")
-    }
-}
-</code></pre>
-<p>The above code will print "Bar!"</p>
 <h2 id="conditional-macros-at-the-top-level">Conditional macros at the top level</h2>
 <p>A limitation with the macros is that they are only used <em>within</em> functions. 
 This is deliberate – macros expanding at the top level are much harder to 
