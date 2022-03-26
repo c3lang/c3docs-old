@@ -1,5 +1,10 @@
 # Change log
 
+##### Revision 2022-03-26
+- Remove escape macros.
+- Adding stringify and first class names.
+- Removing "?? jump"
+
 ##### Revision 2022-03-15
 - Removal of multi-line strings
 

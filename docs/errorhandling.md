@@ -101,7 +101,7 @@ if (i > 10) doSomething();
 An result if effectively an enum, and is defined in the same way:
 
 ```
-optnum IoError
+optenum IoError
 {
     FILE_NOT_FOUND,
     FILE_NOT_READABLE,
@@ -215,25 +215,3 @@ fn int testDefault()
 }
 
 ```
-
-##### Default jump
-
-The ?? can also be followed by a jump statement: `return`, `break` or `continue`.
-
-```
-fn int testBreak(int times)
-{
-    int index;
-    for (index = 0; i < times; i++)
-    {
-       callTest(index) ?? break; 
-    }
-    if (index < times)
-    {
-        printf("Aborted test at index: %d\n", index);
-    }
-    return index;
-}
-```
-
-

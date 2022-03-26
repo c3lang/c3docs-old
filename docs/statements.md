@@ -64,7 +64,7 @@ Do-while statements can skip the ending `while`. In that case it acts as if the 
     do 
     {
         io::printf("FOO\n");
-    }
+    };
 
 ## Nextcase and labelled nextcase
 

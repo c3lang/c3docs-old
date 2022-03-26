@@ -46,18 +46,12 @@ The macro capabilities of C3 reaches across several constructs: macros (prefixed
 
 ### Dynamic scoping
 
-_Note This is not currenctly implemented and may possibly not be included._
-
     // C
     #define Z() ptr->x->y->z
     int x = Z();
     
     // C3
-    macro z(implicit ptr)
-    {
-        return ptr->x->y->z;
-    }
-    int x = @z();
+    ... currently no corresponding functionality ...
 
 
 ### Reference arguments
@@ -121,7 +115,11 @@ Use `&` in front of a parameter to capture the a variable and pass it by referen
     #define offsetof(T, field) (size_t)(&((T*)0)->field)
     
     // C3
-    ... Currently no corresponding functionality ...
+    macro usize offset($Type, #field)
+    {
+        $Type* t = null;
+        return (usize)(uptr)&t.#field;
+    }
 
 ### Declaration attributes
 
@@ -148,11 +146,13 @@ Use `&` in front of a parameter to capture the a variable and pass it by referen
 
 ### Stringingification
 
-    #define DECLARE_STRING(name, s) char *name##_str = #s;
+    #define CHECK(x) do { if (!x) abort(#x); } while(0)
     
     // C3
-    ... currently no corresponding functionality ...
-
+    macro fn check(#expr)
+    {
+       if (!#expr) abort($stringify(#expr));
+    }
 
 ## Top level evaluation
 
@@ -405,52 +405,6 @@ It's possible to switch on type:
         return a + b;
     }
 
-## Escape macros
-
-Usually macro will generate its own scope, so that break, return, continue and next only stays valid inside of the macro's "scope". A `return` from inside a macro does not normally escape the scope into which it's called:
-
-    macro void @foo() { return; }
-
-    fn void test()
-    {
-        @foo(); // Doesn't do anything.
-        io::printf("Test");
-    }
-
-However, sometimes macros are needed that does not create its own scope, allowing return, break etc work as if it was part of the included scope. Escape macros does exactly that. Adding the attribute `@escape` removes capturing return.
-
-    macro void @foo() @escape 
-    { 
-        return; 
-    }
-    
-    fn void test()
-    {
-        @foo(); // The function returns here.
-        io::printf("Test"); // Never printed!
-    }
-
-This is not limited to return: `break`, `continue` and `next` is allowed.
-
-    macro next($f) @escape
-    { 
-        nextcase $f;
-    }
-    
-    fn void test()
-    {
-        int i = 1;
-        switch (i)
-        {
-            case 1:
-                @next(3);
-                io::println("Foo");
-            case 3:
-                io::println("Bar!")
-        }
-    }
-
-The above code will print "Bar!"
 
 ## Conditional macros at the top level
 

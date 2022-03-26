@@ -96,6 +96,26 @@ else
 *Rationale: It is very difficult to make goto work well with defer and implicit unwrapping of optional results. It is not just making the compiler harder to write, but
 the code is harder to understand as well. The replacements together with `defer` cover many if not all usages of `goto` in regular code.*
 
+##### Implicit break in switches
+
+Empty `case` statements have implicit fall through in C3, otherwise the `nextcase` statement is needed
+`nextcase` can also be used to jump to any other case statement in the switch.
+
+    switch (h)
+    {
+        case 1:
+            a = 1;
+            nextcase; // Fall through
+        case 2:
+            b = 123;
+        case 3:
+            a = 2;
+            nextcase 2; // Jump to case 2
+        default:
+            a = 111;
+    }
+
+
 ##### Locals variables are implictly zeroed
 
 In C global variables are implicitly zeroed out, but local variables aren't. In C3 local variables are zeroed out by default, but may be explicitly undefined to get the C behaviour.
