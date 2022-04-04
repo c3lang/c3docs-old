@@ -198,12 +198,12 @@
 
 - Updated grammar with keywords.
 - Added the [docs & comments](../comments) page.
-- Updated the [pre and post conditions](../preconditions).
+- Updated the [pre and post conditions](../contracts).
 
 ##### Revision 2019-07-24
 
 - Idea: typed varargs.
-- Added "pure" [post condition](../preconditions)
+- Added "pure" [post condition](../contracts)
 - Updated c3c commands.
 - Removed the `type` keyword for defining union/struct/enum/error.
 
@@ -220,7 +220,7 @@
 - Removed "defer sugar" from ideas.
 - Removed "built in dynamic arrays" from ideas.
 - Added [library](../library) section.
-- Added more about [pre and post conditions](../preconditions).
+- Added more about [pre and post conditions](../contracts).
 
 ##### Revision 2019-07-22
 

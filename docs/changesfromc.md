@@ -24,7 +24,7 @@ Notably bit operations have higher precedence than +/-, making code like this: `
 
 ##### Removal of the const type qualifier
 
-The const qualifier is only retained for actual constant variables. C3 uses a special type of [post condition](../preconditions) for functions to indicate that they do not alter in parameters.
+The const qualifier is only retained for actual constant variables. C3 uses a special type of [post condition](../contracts) for functions to indicate that they do not alter in parameters.
 
 ```
 /**

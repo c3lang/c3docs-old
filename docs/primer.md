@@ -279,7 +279,7 @@ The `/* */` comments are nesting:
     /* This /* will all */ be commented out */
 
 Note that doc comments, starting with `/**` has special rules for parsing it, and is
-not considered a regular comment. See [preconditions](../contracts) for more information.
+not considered a regular comment. See [contracts](../contracts) for more information.
 
 #### Type qualifiers
 
