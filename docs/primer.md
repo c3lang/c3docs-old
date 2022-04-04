@@ -424,6 +424,6 @@ C.
 - [Errors](../errorhandling)
 - [Semantic macros](../macros)
 - [Generic modules](../generics)
-- [Contracts](../preconditions)
+- [Contracts](../contracts)
 - [Reflection](../reflection)
 - Macro methods
