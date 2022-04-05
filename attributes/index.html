@@ -128,8 +128,6 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#weak-fn-var">weak (fn, var)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#opaque-struct-union-enum">opaque (struct, union, enum)</a>
-    </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#user-defined-attributes">User defined attributes</a>
@@ -216,10 +214,7 @@ functions.</p>
 <h3 id="noreturn-fn"><code>noreturn</code> (fn)</h3>
 <p>Declares that the function will never return.</p>
 <h3 id="weak-fn-var"><code>weak</code> (fn, var)</h3>
-<p>Emits a weak symbol rather than a global. </p>
-<h3 id="opaque-struct-union-enum"><code>opaque</code> (struct, union, enum)</h3>
-<p>Prevents the union or struct from being statically allocated by other modules. In the case of enums,
-prevents the enum from being converted to a value.</p>
+<p>Emits a weak symbol rather than a global.</p>
 <h2 id="user-defined-attributes">User defined attributes</h2>
 <p>User defined attributes are intended for conditional application of built-in attributes.</p>
 <pre><code>define @MyAttribute = @noreturn @inline;
