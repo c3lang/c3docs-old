@@ -1,5 +1,8 @@
 # Change log
 
+##### Revision 2022-04-05
+- Removal of `@opaque`.
+- 
 ##### Revision 2022-03-26
 - Remove escape macros.
 - Adding stringify and first class names.

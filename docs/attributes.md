@@ -31,12 +31,7 @@ Declares that the function will never return.
 
 ### `weak` (fn, var)
 
-Emits a weak symbol rather than a global. 
-
-### `opaque` (struct, union, enum)
-
-Prevents the union or struct from being statically allocated by other modules. In the case of enums,
-prevents the enum from being converted to a value.
+Emits a weak symbol rather than a global.
 
 ## User defined attributes
 
