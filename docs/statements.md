@@ -15,10 +15,10 @@ The function below prints `World!`
         int a = 0;
         {|
             if (a != 0) return;
-            io::printf("Hello ");
+            libc::printf("Hello ");
             return;
         |};
-        io::printf("World!\n");
+        libc::printf("World!\n");
     }
 
 Expression blocks may also return values:
@@ -30,7 +30,7 @@ Expression blocks may also return values:
             if (x == 0) return 100;
             return -x;
         |};            
-        io::printf("The result was %d\n", a);
+        libc::printf("The result was %d\n", a);
     }
 
 ## Labelled break and continue
@@ -44,7 +44,7 @@ Labelled `break` and `continue` lets you break out of an outer scope. Labels can
         {
            while (1)
            {
-               io::printf("%d\n", i);
+               libc::printf("%d\n", i);
                // Break out of the top if statement.
                if (i++ > 10) break FOO;
            }
@@ -57,13 +57,13 @@ Do-while statements can skip the ending `while`. In that case it acts as if the 
 
     do 
     {
-        io::printf("FOO\n");
+        libc::printf("FOO\n");
     } while (0);
     
     // Equivalent to the above.
     do 
     {
-        io::printf("FOO\n");
+        libc::printf("FOO\n");
     };
 
 ## Nextcase and labelled nextcase
@@ -91,7 +91,7 @@ It's also possible to use `nextcase` with an expression, to jump to an arbitrary
         case 3:
             nextcase rand(); // Jump to random case
         default:
-            io::printf("Ended\n");
+            libc::printf("Ended\n");
     }  
 
 Which can be used as structured `goto` when creating state machines.

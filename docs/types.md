@@ -313,12 +313,12 @@ A struct's members may be accessed using dot notation, even for pointers to stru
     p.age = 21;
     p.name = "John Doe";
 
-    io::printf("%s is %d years old.", p.age, p.name);
+    libc::printf("%s is %d years old.", p.age, p.name);
 
     Person* pPtr = &p;
     pPtr.age = 20; // Ok!
 
-    io::printf("%s is %d years old.", pPtr.age, pPtr.name);
+    libc::printf("%s is %d years old.", pPtr.age, pPtr.name);
 
 (One might wonder whether it's possible to take a `Person**` and use dot access. – It's not allowed, only one level of dereference is done.)
 
@@ -334,7 +334,7 @@ C3 allows creating struct subtypes using `inline`:
 
     fn void printPerson(Person p)
     {
-        io::printf("%s is %d years old.", p.age, p.name);
+        libc::printf("%s is %d years old.", p.age, p.name);
     }
 
 
@@ -366,7 +366,7 @@ As usual unions are used to hold one of many possible values:
 
     // Undefined behaviour: as_byte is not the active member, 
     // so this will probably print garbage.
-    io::printf("%d\n", i.as_byte); 
+    libc::printf("%d\n", i.as_byte); 
 
 
 Note that unions only take up as much space as their largest member, so `Integral.sizeof` is equivalent to `long.sizeof`.
