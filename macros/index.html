@@ -464,7 +464,7 @@ fn void test()
     double[] a = { 1.0, 2.0, 3.0 };
     @foreach(a; int index, double value)
     {
-        io::printf("a[%d] = %f\n", index, value);
+        libc::printf("a[%d] = %f\n", index, value);
     }
 }
 
@@ -476,7 +476,7 @@ fn void test()
         int[] __a = a;
         for (int __i = 0; i &lt; __a.len; i++)
         {
-            io::printf("Value: %d, x2: %d\n", __value1, __value2);
+            libc::printf("Value: %d, x2: %d\n", __value1, __value2);
         }
     }
 }
@@ -538,7 +538,7 @@ fn void test()
 <pre><code>macro foo($a)
 {
     $for (var $x = 0; $x &lt; $a; $x++):
-        io::printf("%d\n", $x);     
+        libc::printf("%d\n", $x);     
     $endfor;
 }
 
@@ -546,15 +546,15 @@ fn void test()
 {
     @foo(2);
     // Expands to -&gt;
-    // io::printf("%d\n", 0);     
-    // io::printf("%d\n", 1);         
+    // libc::printf("%d\n", 0);     
+    // libc::printf("%d\n", 1);         
 }
 </code></pre>
 <p>Looping over enums:</p>
 <pre><code>macro foo_enum($SomeEnum)
 {
     $foreach ($x : $SomeEnum.elements):
-        io::printf("%d\n", (int)$x);     
+        libc::printf("%d\n", (int)$x);     
     $endforeach;
 }
 
@@ -568,8 +568,8 @@ fn void test()
 {
     @foo_enum(MyEnum);
     // Expands to -&gt;
-    // io::printf("%d\n", (int)MyEnum.A);
-    // io::printf("%d\n", (int)MyEnum.B);    
+    // libc::printf("%d\n", (int)MyEnum.A);
+    // libc::printf("%d\n", (int)MyEnum.B);    
 }
 </code></pre>
 <p>An important thing to note is that the content of the <code>$foreeach</code> or <code>$for</code> body must be a complete statement.

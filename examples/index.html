@@ -196,7 +196,7 @@
     // the for-loop is the same as C99. 
     for (int i = 0; i &lt; 10; i++) 
     {
-        io::printf(&quot;%d\n&quot;, i);
+        libc::printf(&quot;%d\n&quot;, i);
     }
 
     // also equal
@@ -211,7 +211,7 @@
 {
     foreach (index, value : values) 
     {
-        io::printf(&quot;%d: %f\n&quot;, index, value);
+        libc::printf(&quot;%d: %f\n&quot;, index, value);
     }
 }
 </code></pre>
@@ -345,7 +345,7 @@ fn void main()
     defer io::println();
     defer io::print(&quot;A&quot;);
     defer catch io::print(&quot;B&quot;)
-    defer catch (err) io::printf(&quot;%s&quot;, err.message);
+    defer catch (err) libc::printf(&quot;%s&quot;, err.message);
     if (x == 1) return FooError!;
     print(&quot;!&quot;)
 }
@@ -449,15 +449,15 @@ fn void main()
     if (catch err = ratio)
     {
         case MathError.DIVISION_BY_ZERO:
-            io::printf(&quot;Division by zero\n&quot;);
+            libc::printf(&quot;Division by zero\n&quot;);
             return;
         default:
-            io::printf(&quot;Unexpected error!&quot;);
+            libc::printf(&quot;Unexpected error!&quot;);
             return;
     }
     // Flow typing makes &quot;ratio&quot;
     // have the plain type 'double' here.
-    io::printf(&quot;Ratio was %f\n&quot;, ratio);
+    libc::printf(&quot;Ratio was %f\n&quot;, ratio);
 }
 </code></pre>
 <pre><code>fn void printFile(char[] filename)
@@ -465,14 +465,14 @@ fn void main()
     char[]! file = io::load_file(filename);
 
     // The following function is not executed on error.
-    io::printf(&quot;Loaded %s and got:\n%s&quot;, filename, file);
+    libc::printf(&quot;Loaded %s and got:\n%s&quot;, filename, file);
 
     if (catch err = file)
     {
         case IoError.FILE_NOT_FOUND:
-            io::printf(&quot;I could not find the file %s\n&quot;, filename);
+            libc::printf(&quot;I could not find the file %s\n&quot;, filename);
         default:
-            io::printf(&quot;Could not load %s.\n&quot;, filename);
+            libc::printf(&quot;Could not load %s.\n&quot;, filename);
     }
 }
 </code></pre>

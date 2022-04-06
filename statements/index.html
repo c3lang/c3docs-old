@@ -196,10 +196,10 @@ Jumps cannot be done into or out of a function block, and <code>return</code> ex
     int a = 0;
     {|
         if (a != 0) return;
-        io::printf("Hello ");
+        libc::printf("Hello ");
         return;
     |};
-    io::printf("World!\n");
+    libc::printf("World!\n");
 }
 </code></pre>
 <p>Expression blocks may also return values:</p>
@@ -210,7 +210,7 @@ Jumps cannot be done into or out of a function block, and <code>return</code> ex
         if (x == 0) return 100;
         return -x;
     |};            
-    io::printf("The result was %d\n", a);
+    libc::printf("The result was %d\n", a);
 }
 </code></pre>
 <h2 id="labelled-break-and-continue">Labelled break and continue</h2>
@@ -222,7 +222,7 @@ Jumps cannot be done into or out of a function block, and <code>return</code> ex
     {
        while (1)
        {
-           io::printf("%d\n", i);
+           libc::printf("%d\n", i);
            // Break out of the top if statement.
            if (i++ &gt; 10) break FOO;
        }
@@ -233,13 +233,13 @@ Jumps cannot be done into or out of a function block, and <code>return</code> ex
 <p>Do-while statements can skip the ending <code>while</code>. In that case it acts as if the <code>while</code> was <code>while(0)</code>:</p>
 <pre><code>do 
 {
-    io::printf("FOO\n");
+    libc::printf("FOO\n");
 } while (0);
 
 // Equivalent to the above.
 do 
 {
-    io::printf("FOO\n");
+    libc::printf("FOO\n");
 };
 </code></pre>
 <h2 id="nextcase-and-labelled-nextcase">Nextcase and labelled nextcase</h2>
@@ -264,7 +264,7 @@ do
     case 3:
         nextcase rand(); // Jump to random case
     default:
-        io::printf("Ended\n");
+        libc::printf("Ended\n");
 }
 </code></pre>
 <p>Which can be used as structured <code>goto</code> when creating state machines.</p>
