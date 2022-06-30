@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Attributes - C3 Documentation</title>
+  <title>Standard Library - C3 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Attributes";
-    var mkdocs_page_input_path = "attributes.md";
+    var mkdocs_page_name = "Standard Library";
+    var mkdocs_page_input_path = "standard_library.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -104,7 +104,29 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Standard Library</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#lang">lang</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#macro-scoped-body">macro scoped(..., @body)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#other-macros">Other macros:</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mem">mem</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#globals">Globals</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#allocators">allocators</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#encodings">Encodings</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ref-counting">Ref counting</a>
+    </li>
+    </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../ideas/">Crazy ideas</a>
                     </li>
@@ -112,29 +134,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../comments/">Comments & Docs</a>
                     </li>
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Attributes</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#built-in-attributes">Built in attributes</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#pure-call">pure (call)</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#packed-struct-union-enum">packed (struct, union, enum)</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#sectionname-var-fn">section(name) (var, fn)</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#inline-fn">inline (fn)</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#alignedalignment-struct-union-var-fn">aligned(alignment) (struct, union, var, fn)</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#noreturn-fn">noreturn (fn)</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#weak-fn-var">weak (fn, var)</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#user-defined-attributes">User defined attributes</a>
-    </li>
-    </ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../attributes/">Attributes</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../cinterop/">C Interop</a>
                     </li>
@@ -188,7 +188,7 @@
         
       
     
-    <li>Attributes</li>
+    <li>Standard Library</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -199,34 +199,75 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="attributes">Attributes</h1>
-<p>Attributes are compile time annotations on functions, types, global constants and variables. Similar to Java annotations, a decoration may also take arguments. A attribute can also represent a bundle of attributes.</p>
-<h2 id="built-in-attributes">Built in attributes</h2>
-<h3 id="pure-call"><code>pure</code> (call)</h3>
-<p>Used to annotate a non pure function as "pure" when checking for conformance to <code>@pure</code> on 
-functions.</p>
-<h3 id="packed-struct-union-enum"><code>packed</code> (struct, union, enum)</h3>
-<p>If used on a struct or enum: packs the type, including any components to minimum size. On an enum, it uses the smallest representation containing all its values.</p>
-<h3 id="sectionname-var-fn"><code>section(name)</code> (var, fn)</h3>
-<p>Declares that a global variable or function should appear in a specific section.</p>
-<h3 id="inline-fn"><code>inline</code> (fn)</h3>
-<p>Declares a function to always be inlined.</p>
-<h3 id="alignedalignment-struct-union-var-fn"><code>aligned(alignment)</code> (struct, union, var, fn)</h3>
-<p>This attribute sets the minimum alignment for a field or a variable.</p>
-<h3 id="noreturn-fn"><code>noreturn</code> (fn)</h3>
-<p>Declares that the function will never return.</p>
-<h3 id="weak-fn-var"><code>weak</code> (fn, var)</h3>
-<p>Emits a weak symbol rather than a global.</p>
-<h2 id="user-defined-attributes">User defined attributes</h2>
-<p>User defined attributes are intended for conditional application of built-in attributes.</p>
-<pre><code>define @MyAttribute = @noreturn @inline;
+                <h1 id="library">Library</h1>
+<p>The standard library design is a sketch, no work has been done on this yet.</p>
+<h2 id="lang">lang</h2>
+<h3 id="macro-scoped-body">macro scoped(..., @body)</h3>
+<p>Scopes a list of variables:</p>
+<pre><code>int a = 3;
+double b = 1.0;
 
-// The following two are equivalent:
-fn void foo() @MyAttribute { ... }
-fn void foo() @noreturn @inline { ... }
+@scoped(a, b)
+{
+    a = 4;
+    b = 1.2;    
+}
+
+// Prints a = 3, b = 1.0
+printf(&quot;a = %d, b = %f\n&quot;, a, b);
 </code></pre>
-<p>A user defined attribute may also be completely empty:</p>
-<pre><code>define @MyAttributeEmpty = void;
+<p>This can be useful to push another allocator:</p>
+<pre><code>@scoped(mem::defaultAllocator)
+{
+    mem::defaultAllocator = myArenaAllocator;
+
+    // This will now use myArenaAllocator:
+    doSomethingThatAllocates();
+}
+// The default allocator is restored here.
+</code></pre>
+<h3 id="other-macros">Other macros:</h3>
+<ul>
+<li><code>max(a, b)</code> maximum of two values using &gt;</li>
+<li><code>min(a, b)</code> minimum of two values using &lt;</li>
+<li><code>swap($a, $b)</code> swap two variables using <code>=</code> and a temporary variable.</li>
+</ul>
+<h2 id="mem">mem</h2>
+<p>Mem contains memory allocators</p>
+<h3 id="globals">Globals</h3>
+<ul>
+<li><code>Alloc* defaultAlloc</code></li>
+<li><code>Alloc* tempAlloc</code>
+````</li>
+</ul>
+<h3 id="allocators">allocators</h3>
+<ul>
+<li><code>RingAlloc</code> ring buffer allocator</li>
+<li><code>ArenaAlloc</code> arena allocator</li>
+</ul>
+<h2 id="encodings">Encodings</h2>
+<ul>
+<li></li>
+</ul>
+<h2 id="ref-counting">Ref counting</h2>
+<p>Any struct can enable ref counting by including the RefCount struct:</p>
+<pre><code>struct Person
+{
+    RefCount rc inline;
+    char[] name;
+}
+
+fn void test()
+{
+    Person* person = malloc(Person.sizeof);
+    person.initRC(&amp;free);
+    printf(&quot;RC = %d\n&quot;, person.refCount); // Prints 1
+    person.retain();
+    printf(&quot;RC = %d\n&quot;, person.refCount); // Prints 2
+    person.release(); 
+    printf(&quot;RC = %d\n&quot;, person.refCount); // Prints 1
+    person.release(); // Will call free(person)        
+}
 </code></pre>
               
             </div>
@@ -235,10 +276,10 @@ fn void foo() @noreturn @inline { ... }
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../cinterop/" class="btn btn-neutral float-right" title="C Interop">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../ideas/" class="btn btn-neutral float-right" title="Crazy ideas">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../comments/" class="btn btn-neutral" title="Comments & Docs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../libraries/" class="btn btn-neutral" title="Libraries"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -264,10 +305,10 @@ fn void foo() @noreturn @inline { ... }
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../comments/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../libraries/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../cinterop/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../ideas/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

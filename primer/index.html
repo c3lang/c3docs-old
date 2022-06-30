@@ -138,7 +138,9 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../ideas/">Crazy ideas</a>
                     </li>
@@ -428,21 +430,20 @@ ireg i;     // Register sized integer
 <p>Read more about types <a href="../types">here</a>.</p>
 <h4 id="instead-of-include-modules-and-import">Instead of #include: Modules and import</h4>
 <p>Declaring the module name is not mandatory, but if you leave it out the file name will be used
-as the module name. Other modules are implicitly imported, but explicit <code>import</code> can be
-used to resolve ambiguities.</p>
-<pre><code>module mylib::foo;
+as the module name. Imports are recursive.</p>
+<pre><code>module otherlib::foo;
 
 fn void test() { ... }
 struct FooStruct { ... }
 
 module mylib::bar;
-
+import otherlib;
 fn void myCheck()
 {
   foo::test(); // foo prefix is mandatory.
   mylib::foo::test(); // This also works;
   FooStruct x; // But user defined types don't need the prefix.
-  mylib::foo::FooStruct y; // But it is allowed.
+  otherlib::foo::FooStruct y; // But it is allowed.
 }
 </code></pre>
 <h4 id="comments">Comments</h4>

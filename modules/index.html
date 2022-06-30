@@ -78,6 +78,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#importing-modules">Importing modules</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#implicit-imports">Implicit imports</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#visibility">Visibility</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#overriding-symbol-visibility-rules">Overriding symbol visibility rules</a>
@@ -85,6 +87,8 @@
     <li class="toctree-l2"><a class="reference internal" href="#private-modules">Private modules</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#using-functions-and-types-from-other-modules">Using functions and types from other modules</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#versioning-and-dynamic-inclusion">Versioning and dynamic inclusion</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#textual-includes">Textual includes</a>
     </li>
@@ -118,7 +122,9 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../ideas/">Crazy ideas</a>
                     </li>
@@ -218,23 +224,23 @@
 <li>Module names are limited to 31 characters.</li>
 </ul>
 <h2 id="importing-modules">Importing modules</h2>
-<p>By default, all other modules are imported into every module:</p>
+<p>Modules are imported using the <code>import</code> statement. Imports always <em>recursively import</em> sub-modules. Any module
+will automatically import all other modules with the same parent module.</p>
 <p><code>foo.c3</code></p>
 <pre><code>module some::foo;
 fn void test() {}
 </code></pre>
 <p><code>bar.c3</code></p>
 <pre><code>module bar;
-// import some::foo; &lt;- not needed
+import some;
+// import some::foo; &lt;- not needed, as it is a sub module to "some"
 fn void test()
 {
     foo::test();
     // some::foo::test() also works.
 }
 </code></pre>
-<p>In some cases there may be ambiguities, and there are two ways to solve those: full path names 
-or explicit <code>import</code> statements. The <code>import</code> statement makes the imported module prioritized
-over implicitly imported modules.</p>
+<p>In some cases there may be ambiguities, in which case the full path can be used to resolve the ambiguity:</p>
 <p><code>abc.c3</code></p>
 <pre><code>module abc;
 struct Context
@@ -249,27 +255,20 @@ struct Context
     void* ptr;
 }
 </code></pre>
-<p><code>using_path.c3</code></p>
+<p><code>test.c3</code></p>
 <pre><code>module test1;
+import def, abc;
 // Context c = {} &lt;- ambiguous
 abc::Context c = {};
 </code></pre>
-<p><code>using_import.c3</code></p>
-<pre><code>module test2;
-import abc;
-// Resolved in favour of abc::Context
-Context c = {};
-</code></pre>
-<p>In the case where there are multiple imports, paths may still be needed.</p>
-<p><code>ambiguity.c3</code></p>
-<pre><code>module test3;
-import abc;
-import def;
-Context c = {}; // Error, ambiguous again
-</code></pre>
+<h2 id="implicit-imports">Implicit imports</h2>
+<p>The module system will also implicitly import:</p>
+<ol>
+<li>The <code>std::core</code> module (and sub modules).</li>
+<li>Any other module sharing the same top module. E.g. the module <code>foo::abc</code> will implicitly also import modules <code>foo</code> and <code>foo::cde</code> if they exist.</li>
+</ol>
 <h2 id="visibility">Visibility</h2>
-<p>All files in the same module share the same global declaration namespace.
-By default a symbol is visible to all other modules.
+<p>All files in the same module share the same global declaration namespace. By default a symbol is visible to all other modules.
 To make a symbol only visible inside the module, use the keyword 
 <code>private</code>.</p>
 <pre><code>module foo;
@@ -311,7 +310,7 @@ fn void test()
 </code></pre>
 <h2 id="private-modules">Private modules</h2>
 <p>Modules may be declared using <code>private</code>, this makes the whole module private. Such a module must
-always be imported using <code>import private</code>.</p>
+always be imported using <code>import private</code>. Note that <code>import private</code> is <em>not</em> recursive.</p>
 <pre><code>module private foo;
 ...
 
@@ -380,6 +379,56 @@ fn void test()
 <blockquote>
 <p>Types are used without prefix; functions, variables, macros and constants are prefixed with the sub module name.</p>
 </blockquote>
+<h2 id="versioning-and-dynamic-inclusion">Versioning and dynamic inclusion</h2>
+<p><em>NOTE: This feature may significantly change.</em></p>
+<p>When including <em>dynamic</em> libraries, it is possible to use optional functions and globals. This is done using the
+<code>@dynamic</code> attribute.</p>
+<p>An example library could have this:</p>
+<p><code>dynlib.c3i</code></p>
+<pre><code>module dynlib;
+fn void do_something() @dynamic(4.0)
+fn void do_something_else() @dynamic(0, 5.0)
+fn void do_another_thing() @dynamic(0, 2.5)
+</code></pre>
+<p>Importing the dynamic library and setting the base version to 4.5 and minimum version to 3.0, we get the following:</p>
+<p><code>test.c3</code></p>
+<pre><code>import dynlib;
+fn void test()
+{
+    if (@available(dynlib::do_something))
+    {
+        dynlib::do_something();
+    }
+    else
+    {
+        dynlib::do_someting_else();
+    }  
+}
+</code></pre>
+<p>In this example the code would run <code>do_something</code> if available (that is, when the dynamic library is 4.0 or higher), or 
+fallback to <code>do_something_else</code> otherwise.</p>
+<p>If we tried to conditionally add something not available in the compilation itself, that is a compile time error:</p>
+<pre><code>if (@available(dynlib::do_another_thing))  
+{
+    dynlib::do_another_thing(); // Error: This function is not available with 3.0
+}
+</code></pre>
+<p>Versionless dynamic loading is also possible:</p>
+<p><code>maybe_dynlib.c3i</code></p>
+<pre><code>module maybe_dynlib;
+fn void testme() @dynamic;
+</code></pre>
+<p><code>test2.c3</code></p>
+<pre><code>import maybe_dynlib;
+fn void testme2()
+{
+    if (@available(maybe_dynlib::testme))
+    {
+        dynlib::testme();
+    }
+}
+</code></pre>
+<p>This allows things like optionally loading dynamic libraries on the platforms where this is available.</p>
 <h2 id="textual-includes">Textual includes</h2>
 <p>It's sometimes useful to include an entire file, doing so employs the <code>$include</code> function.</p>
 <p><em>NOTE: This feature may significantly change.</em></p>

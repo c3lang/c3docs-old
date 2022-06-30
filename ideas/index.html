@@ -102,7 +102,9 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../library/">Library</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Crazy ideas</a>
     <ul class="current">
@@ -245,12 +247,18 @@ fn int randomCalculation()
 </code></pre>
 <p>Sematic roughly work like in Java, except that all know globals are initialized before main, as opposed to when the class is invoked. The order of initialization is unspecified.</p>
 <h2 id="module-versioning">Module versioning</h2>
-<p>Follow Go Modules: </p>
+<p>Go Modules: </p>
 <ol>
 <li>Build file contains required library versions: e.g. 2.5.7</li>
 <li>First number is major version number and is considered incompatible (basically a different module completely)</li>
-<li>Dependency resolution per major library version is done by picking the minimal version. E.g. module Foo requires Bar 1.5+ and module Baz requires 1.3+. Our module using Bar and Baz will resolve the minimal version to 1.3. This is the version that will be used. Note that if Foo used 2.5+, then both Bar 2.5 and 1.3 would be required.</li>
+<li>Dependency resolution per major library version is done by picking the minimal version. E.g. module Foo requires Bar 1.5+ and module Baz requires 1.3+. Our module using Bar and Baz will resolve the minimal version to 1.5. This is the version that will be used. Note that if Foo used 2.5+, then both Bar 2.5 and 1.3 would be required.</li>
 </ol>
+<p>Possible design:
+1. Dependency contains no-version, major version, minor version, major + minor + build or list of major versions
+2. Try to resolve the major version to use. If none is selected, pick max. More than one are required -&gt; compile error 
+(example: A needs 1, 2, B needs 2, 3 =&gt; pick 2, A needs 1, 2, B needs 3, 4 =&gt; error)
+3. Pick the maximum minor + build version available. If this is less than minimum minor + build version needed =&gt; error.
+4. Excluding versions should be possible, eg exclude 1.3.4 </p>
 <h2 id="generic-as-keyword-for-polymorphic-functions">Generic as keyword for polymorphic functions</h2>
 <p>For macros that essentially are polymorphic functions, we could use the keyword "generic" instead:</p>
 <pre><code class="language-c">macro swap(&amp;a, &amp;b) { ... } // Cannot be generic, captures are not allowed.
@@ -560,7 +568,7 @@ fn bool int[int].remove_if_negative(int[int] *map, int index)
         <a href="../naming/" class="btn btn-neutral float-right" title="Naming rules">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../library/" class="btn btn-neutral" title="Library"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../standard_library/" class="btn btn-neutral" title="Standard Library"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -586,7 +594,7 @@ fn bool int[int].remove_if_negative(int[int] *map, int index)
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../library/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../standard_library/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../naming/" style="color: #fcfcfc">Next &raquo;</a></span>

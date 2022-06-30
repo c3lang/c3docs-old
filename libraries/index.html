@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Library - C3 Documentation</title>
+  <title>Libraries - C3 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Library";
-    var mkdocs_page_input_path = "library.md";
+    var mkdocs_page_name = "Libraries";
+    var mkdocs_page_input_path = "libraries.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -102,29 +102,21 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Library</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Libraries</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#lang">lang</a>
+    <li class="toctree-l2"><a class="reference internal" href="#how-it-works">How it works</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#macro-scoped-body">macro scoped(..., @body)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#the-specification">The specification</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#other-macros">Other macros:</a>
+    <li class="toctree-l3"><a class="reference internal" href="#source-code">Source code</a>
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#mem">mem</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#globals">Globals</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#allocators">allocators</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#encodings">Encodings</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#ref-counting">Ref counting</a>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-automatically-export-libraries">How to – automatically – export libraries</a>
     </li>
     </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../ideas/">Crazy ideas</a>
                     </li>
@@ -186,7 +178,7 @@
         
       
     
-    <li>Library</li>
+    <li>Libraries</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -197,76 +189,47 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="library">Library</h1>
-<p>The standard library design is a sketch, no work has been done on this yet.</p>
-<h2 id="lang">lang</h2>
-<h3 id="macro-scoped-body">macro scoped(..., @body)</h3>
-<p>Scopes a list of variables:</p>
-<pre><code>int a = 3;
-double b = 1.0;
-
-@scoped(a, b)
-{
-    a = 4;
-    b = 1.2;    
-}
-
-// Prints a = 3, b = 1.0
-printf(&quot;a = %d, b = %f\n&quot;, a, b);
-</code></pre>
-<p>This can be useful to push another allocator:</p>
-<pre><code>@scoped(mem::defaultAllocator)
-{
-    mem::defaultAllocator = myArenaAllocator;
-
-    // This will now use myArenaAllocator:
-    doSomethingThatAllocates();
-}
-// The default allocator is restored here.
-</code></pre>
-<h3 id="other-macros">Other macros:</h3>
-<ul>
-<li><code>max(a, b)</code> maximum of two values using &gt;</li>
-<li><code>min(a, b)</code> minimum of two values using &lt;</li>
-<li><code>swap($a, $b)</code> swap two variables using <code>=</code> and a temporary variable.</li>
-</ul>
-<h2 id="mem">mem</h2>
-<p>Mem contains memory allocators</p>
-<h3 id="globals">Globals</h3>
-<ul>
-<li><code>Alloc* defaultAlloc</code></li>
-<li><code>Alloc* tempAlloc</code>
-````</li>
-</ul>
-<h3 id="allocators">allocators</h3>
-<ul>
-<li><code>RingAlloc</code> ring buffer allocator</li>
-<li><code>ArenaAlloc</code> arena allocator</li>
-</ul>
-<h2 id="encodings">Encodings</h2>
-<ul>
-<li></li>
-</ul>
-<h2 id="ref-counting">Ref counting</h2>
-<p>Any struct can enable ref counting by including the RefCount struct:</p>
-<pre><code>struct Person
-{
-    RefCount rc inline;
-    char[] name;
-}
-
-fn void test()
-{
-    Person* person = malloc(Person.sizeof);
-    person.initRC(&amp;free);
-    printf(&quot;RC = %d\n&quot;, person.refCount); // Prints 1
-    person.retain();
-    printf(&quot;RC = %d\n&quot;, person.refCount); // Prints 2
-    person.release(); 
-    printf(&quot;RC = %d\n&quot;, person.refCount); // Prints 1
-    person.release(); // Will call free(person)        
+                <h1 id="libraries">Libraries</h1>
+<p><em>Note, the library system is in early alpha, everything below is subject to change</em></p>
+<p>C3 allows convenient packaging of C3 source files optionally with  statically or dynamically linked libraries.
+To use such a library, simply pass the path to the library directory and add the library you wish to link to.
+The compiler will resolve any dependencies to other libraries and only compile those that are in use.</p>
+<h2 id="how-it-works">How it works</h2>
+<p>A library may be used either packaged or unpacked. If unpacked, it is simply a directory with the <code>.c3l</code>
+suffix, which contains all the necessary files, if packed, this is simply a compressed variant of 
+a directory with the same structure.</p>
+<h3 id="the-specification">The specification</h3>
+<p>In the top of the library resides the <code>manifest.json</code> file which has the following structure:</p>
+<pre><code class="language-json">{
+  &quot;provides&quot; : &quot;my_lib&quot;,
+  &quot;targets&quot; : {
+    &quot;macos-x64&quot; : {
+      &quot;linkflags&quot; : [],
+      &quot;dependencies&quot; : [],
+      &quot;linked-libs&quot; : [&quot;my_lib_static&quot;, &quot;Cocoa.framework&quot;, &quot;c&quot;]
+    },
+    &quot;windows-x64&quot; : {
+      &quot;linkflags&quot; : [&quot;/stack:65536&quot;],
+      &quot;dependencies&quot; : [&quot;ms_my_extra&quot;],
+      &quot;linked-libs&quot; : [&quot;my_lib_static&quot;, &quot;kernel32&quot;]
+    }
+  }
 }
 </code></pre>
+<p>In the example here, this library supports two targets: <strong>macos-x64</strong> and <strong>windows-x64</strong>. If 
+we tried to use it with any other target, the compiler would give an error.</p>
+<p>We see that if we use the <strong>windows-x64</strong> target it will also load the <strong>ms_my_extra</strong> library. And
+we also see that the linker would have a special argument on that platform.</p>
+<p>Both targets expect <code>my_lib_static</code> to be available for linking. If this library provides this
+or dynamic library it will be in the target sub directories, so it likely has the path 
+<code>windows-x64/my_lib_static.lib</code> and <code>macos-z64/libmy_lib_static.a</code>.</p>
+<h3 id="source-code">Source code</h3>
+<p>Aside from the manifest, C3 will read any C and C3 files in the same directory as <code>manifest.json</code>
+as well as any files in the target subdirectory for the current target. For static libraries
+typically a <code>.c3i</code> file (that is, a C3 file without any implementations) is provided, similar to
+how .h files are used in C.</p>
+<h2 id="how-to-automatically-export-libraries">How to – automatically – export libraries</h2>
+<p><em>This is not implemented yet, docs will materialize once it is finished</em></p>
               
             </div>
           </div>
@@ -274,7 +237,7 @@ fn void test()
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../ideas/" class="btn btn-neutral float-right" title="Crazy ideas">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../standard_library/" class="btn btn-neutral float-right" title="Standard Library">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../contracts/" class="btn btn-neutral" title="Contracts"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -306,7 +269,7 @@ fn void test()
         <span><a href="../contracts/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../ideas/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../standard_library/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
