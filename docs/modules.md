@@ -40,7 +40,8 @@ Some details about the C3 module system:
 
 ## Importing modules
 
-By default, all other modules are imported into every module:
+Modules are imported using the `import` statement. Imports always *recursively import* sub-modules. Any module
+will automatically import all other modules with the same parent module.
 
 `foo.c3`
 
@@ -50,16 +51,15 @@ By default, all other modules are imported into every module:
 `bar.c3`
 
     module bar;
-    // import some::foo; <- not needed
+    import some;
+    // import some::foo; <- not needed, as it is a sub module to "some"
     fn void test()
     {
         foo::test();
         // some::foo::test() also works.
     }
 
-In some cases there may be ambiguities, and there are two ways to solve those: full path names 
-or explicit `import` statements. The `import` statement makes the imported module prioritized
-over implicitly imported modules.
+In some cases there may be ambiguities, in which case the full path can be used to resolve the ambiguity:
 
 `abc.c3`
 
@@ -77,32 +77,23 @@ over implicitly imported modules.
         void* ptr;
     }
 
-`using_path.c3`
+`test.c3`
 
     module test1;
+    import def, abc;
     // Context c = {} <- ambiguous
     abc::Context c = {};
 
-`using_import.c3`
+## Implicit imports
 
-    module test2;
-    import abc;
-    // Resolved in favour of abc::Context
-    Context c = {};
+The module system will also implicitly import:
 
-In the case where there are multiple imports, paths may still be needed.
-
-`ambiguity.c3`
-
-    module test3;
-    import abc;
-    import def;
-    Context c = {}; // Error, ambiguous again
+1. The `std::core` module (and sub modules).
+2. Any other module sharing the same top module. E.g. the module `foo::abc` will implicitly also import modules `foo` and `foo::cde` if they exist.
 
 ## Visibility
 
-All files in the same module share the same global declaration namespace.
-By default a symbol is visible to all other modules.
+All files in the same module share the same global declaration namespace. By default a symbol is visible to all other modules.
 To make a symbol only visible inside the module, use the keyword 
 `private`.
 
@@ -154,7 +145,7 @@ fn void test()
 ## Private modules
 
 Modules may be declared using `private`, this makes the whole module private. Such a module must
-always be imported using `import private`.
+always be imported using `import private`. Note that `import private` is *not* recursive.
 
 ```
 module private foo;
@@ -230,6 +221,69 @@ This means that the rule for the common case can be summarized as
 
 > Types are used without prefix; functions, variables, macros and constants are prefixed with the sub module name.
 
+
+## Versioning and dynamic inclusion
+
+_NOTE: This feature may significantly change._
+
+When including *dynamic* libraries, it is possible to use optional functions and globals. This is done using the
+`@dynamic` attribute.
+
+An example library could have this:
+
+`dynlib.c3i`
+
+    module dynlib;
+    fn void do_something() @dynamic(4.0)
+    fn void do_something_else() @dynamic(0, 5.0)
+    fn void do_another_thing() @dynamic(0, 2.5)
+
+Importing the dynamic library and setting the base version to 4.5 and minimum version to 3.0, we get the following:
+
+`test.c3`
+
+    import dynlib;
+    fn void test()
+    {
+        if (@available(dynlib::do_something))
+        {
+            dynlib::do_something();
+        }
+        else
+        {
+            dynlib::do_someting_else();
+        }  
+    }
+
+In this example the code would run `do_something` if available (that is, when the dynamic library is 4.0 or higher), or 
+fallback to `do_something_else` otherwise.
+
+If we tried to conditionally add something not available in the compilation itself, that is a compile time error:
+
+    if (@available(dynlib::do_another_thing))  
+    {
+        dynlib::do_another_thing(); // Error: This function is not available with 3.0
+    }
+
+Versionless dynamic loading is also possible:
+
+`maybe_dynlib.c3i`
+
+    module maybe_dynlib;
+    fn void testme() @dynamic;
+
+`test2.c3`
+
+    import maybe_dynlib;
+    fn void testme2()
+    {
+        if (@available(maybe_dynlib::testme))
+        {
+            dynlib::testme();
+        }
+    }
+
+This allows things like optionally loading dynamic libraries on the platforms where this is available.
 
 ## Textual includes
 

@@ -30,12 +30,19 @@ Sematic roughly work like in Java, except that all know globals are initialized 
 
 ## Module versioning
 
-Follow Go Modules: 
+
+Go Modules: 
 
 1. Build file contains required library versions: e.g. 2.5.7
 2. First number is major version number and is considered incompatible (basically a different module completely)
-3. Dependency resolution per major library version is done by picking the minimal version. E.g. module Foo requires Bar 1.5+ and module Baz requires 1.3+. Our module using Bar and Baz will resolve the minimal version to 1.3. This is the version that will be used. Note that if Foo used 2.5+, then both Bar 2.5 and 1.3 would be required.
+3. Dependency resolution per major library version is done by picking the minimal version. E.g. module Foo requires Bar 1.5+ and module Baz requires 1.3+. Our module using Bar and Baz will resolve the minimal version to 1.5. This is the version that will be used. Note that if Foo used 2.5+, then both Bar 2.5 and 1.3 would be required.
 
+Possible design:
+1. Dependency contains no-version, major version, minor version, major + minor + build or list of major versions
+2. Try to resolve the major version to use. If none is selected, pick max. More than one are required -> compile error 
+(example: A needs 1, 2, B needs 2, 3 => pick 2, A needs 1, 2, B needs 3, 4 => error)
+3. Pick the maximum minor + build version available. If this is less than minimum minor + build version needed => error.
+4. Excluding versions should be possible, eg exclude 1.3.4 
 
 ## Generic as keyword for polymorphic functions
 

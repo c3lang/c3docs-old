@@ -253,22 +253,21 @@ Read more about types [here](../types).
 #### Instead of #include: Modules and import
 
 Declaring the module name is not mandatory, but if you leave it out the file name will be used
-as the module name. Other modules are implicitly imported, but explicit `import` can be
-used to resolve ambiguities.
+as the module name. Imports are recursive.
 
-    module mylib::foo;
+    module otherlib::foo;
     
     fn void test() { ... }
     struct FooStruct { ... }
 
     module mylib::bar;
-   
+    import otherlib;
     fn void myCheck()
     {
       foo::test(); // foo prefix is mandatory.
       mylib::foo::test(); // This also works;
       FooStruct x; // But user defined types don't need the prefix.
-      mylib::foo::FooStruct y; // But it is allowed.
+      otherlib::foo::FooStruct y; // But it is allowed.
     }
 
 

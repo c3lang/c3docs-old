@@ -36,15 +36,15 @@ The following operations cause undefined behaviour in release builds of C3:
 | --------- | :----------------------: |
 | int / 0 | Yes |
 | int % 0 | Yes |
-| reading explicitly uninitialized memory | Possible* |
+| reading explicitly uninitialized memory | Possible\* |
 | array index out of bounds | Yes |
 | dereference `null` | Yes |
-| dereferencing memory not allocated | Possible* |
-| dereferencing memory outside of its lifetime | Possible* |
-| casting pointer to the incorrect array or vararray | Possible* |
+| dereferencing memory not allocated | Possible\* |
+| dereferencing memory outside of its lifetime | Possible\* |
+| casting pointer to the incorrect array or vararray | Possible\* |
 | violating pre or post conditions | Yes |
 | violating asserts | Yes |
-| reaching `@unreachable()` code | Yes |
+| reaching `unreachable()` code | Yes |
 
 \* "Possible" indicates trapping is implementation dependent.
 

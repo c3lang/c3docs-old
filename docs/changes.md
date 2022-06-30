@@ -1,8 +1,11 @@
 # Change log
 
+##### Revision 2022-06-30
+- Updates to module system
+
 ##### Revision 2022-04-05
 - Removal of `@opaque`.
-- 
+ 
 ##### Revision 2022-03-26
 - Remove escape macros.
 - Adding stringify and first class names.
@@ -222,7 +225,7 @@
 - Removed "managed qualifier" from ideas.
 - Removed "defer sugar" from ideas.
 - Removed "built in dynamic arrays" from ideas.
-- Added [library](../library) section.
+- Added [standard_library](../standard_library) section.
 - Added more about [pre and post conditions](../contracts).
 
 ##### Revision 2019-07-22
