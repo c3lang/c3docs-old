@@ -498,7 +498,7 @@ char* bar = &quot;\&quot;Say `hello`\&quot;&quot;;
 e.g. <code>typeid a = Foo.typeid;</code>. This value is pointer-sized.</p>
 <h3 id="the-variant-type">The <code>variant</code> type</h3>
 <p>C3 contains a built-in variant type, which is essentially struct containing a <code>typeid</code> plus a <code>void*</code> pointer to a value.
-It is possible to cast the variant type to any pointer type, which will return <code>null</code> if the types match,
+It is possible to cast the variant type to any pointer type, which will return <code>null</code> if the types don't match,
 or the pointer value otherwise.</p>
 <pre><code>int x;
 variant y = &amp;x;
