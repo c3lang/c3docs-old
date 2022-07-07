@@ -110,13 +110,13 @@
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Naming rules</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#structs-unions-enums-and-optenums">Structs, unions, enums and optenums</a>
+    <li class="toctree-l2"><a class="reference internal" href="#structs-unions-enums-and-faults">Structs, unions, enums and faults</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#variables-and-parameters">Variables and parameters</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#global-constants">Global constants</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#enum-optenum-values">Enum / Optenum values</a>
+    <li class="toctree-l2"><a class="reference internal" href="#enum-fault-values">Enum / Fault values</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#struct-union-members">Struct / union members</a>
     </li>
@@ -196,7 +196,7 @@
                 <h1 id="naming-rules">Naming rules</h1>
 <p>C3 introduces fairly strict naming rules to reduce ambiguity. </p>
 <p>As a basic rule, all identifiers are limited to a-z, A-Z, 0-9 and <code>_</code>. The initial character can not be a number. Furthermore, all identifiers are limited to 31 character.</p>
-<h3 id="structs-unions-enums-and-optenums">Structs, unions, enums and optenums</h3>
+<h3 id="structs-unions-enums-and-faults">Structs, unions, enums and faults</h3>
 <p>All user defined types must start with A-Z after any optional initial <code>_</code> and include at least 1 lower case letter. <code>Bar</code>, <code>_T_i12</code> and <code>TTi</code> are all valid names. <code>_1</code>, <code>bAR</code> and <code>BAR</code> are not. For C-compatibility it's possible to alias the type to a external name using the attribute "externname".</p>
 <pre><code>struct Foo @extname(&quot;foo&quot;)
 {
@@ -216,7 +216,7 @@ enum Baz
     VALUE_2
 }
 
-optenum Err 
+fault Err 
 {
     OOPS,
     LOTS_OF_OOPS
@@ -236,15 +236,15 @@ fn void foo(int x)
 <p>Global constants must start with A-Z after any optional initial <code>_</code>. <code>_FOO2</code>, <code>BAR_FOO</code>, <code>X</code> are all valid global constants, <code>_</code>, <code>_bar</code>, <code>x</code> are not. </p>
 <pre><code>const int A_VALUE = 12;
 </code></pre>
-<h3 id="enum-optenum-values">Enum / Optenum values</h3>
-<p>Enum and optenum values follow the same naming standard as global constants.</p>
+<h3 id="enum-fault-values">Enum / Fault values</h3>
+<p>Enum and fault values follow the same naming standard as global constants.</p>
 <pre><code>enum Baz 
 {
     VALUE_1,
     VALUE_2
 }
 
-optenum Err 
+fault Err 
 {
     OOPS,
     LOTS_OF_OOPS
