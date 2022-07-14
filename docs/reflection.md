@@ -38,7 +38,7 @@ usize len = int[4].length
 
 #### values
 
-Returns a subarray containing the values of an enum or optenum.
+Returns a subarray containing the values of an enum or fault.
 
     enum FooEnum
     {

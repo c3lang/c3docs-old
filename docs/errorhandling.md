@@ -139,7 +139,7 @@ fn void! findFileAndTest()
 The `!!` will issue a panic if the *expected value* is missing.
 
 ```
-fn void! findFileAndTest()
+fn void findFileAndTest()
 {
     findFile()!!;
     // Implictly:

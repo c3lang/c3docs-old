@@ -1,6 +1,6 @@
 # Types
 
-As usual, types are divided into basic types and user defined types (enum, union, struct, optenums, aliases). All types are defined on a global level. Using the `public` prefix is necessary for any type that is to be exposed outside of the current module.
+As usual, types are divided into basic types and user defined types (enum, union, struct, faults, aliases). All types are defined on a global level. Using the `public` prefix is necessary for any type that is to be exposed outside of the current module.
 
 ##### Naming
 
@@ -129,7 +129,7 @@ It is possible to type a floating point by adding a suffix:
 
 ### C compatibility
 
-For C compatibility the following types are also defined when including std::cinterop
+For C compatibility the following types are also defined in std::core::cinterop
 
 | Name         | c type             |
 | ------------ | ------------------:|
@@ -161,7 +161,7 @@ e.g. `typeid a = Foo.typeid;`. This value is pointer-sized.
 ### The `variant` type
 
 C3 contains a built-in variant type, which is essentially struct containing a `typeid` plus a `void*` pointer to a value.
-It is possible to cast the variant type to any pointer type, which will return `null` if the types match,
+It is possible to cast the variant type to any pointer type, which will return `null` if the types don't match,
 or the pointer value otherwise.
 
     int x;
@@ -252,27 +252,27 @@ In the case that it collides with a global in the same scope, it needs the quali
 
 
 
-## Optenums
+## Faults
 
-`optenum` defines a set of optional result values, that are similar to enums, but are used for 
+`fault` defines a set of optional result values, that are similar to enums, but are used for 
 optional returns.
 
-    optenum IOResult
+    fault IOResult
     {
       IO_ERROR,
       PARSE_ERROR
     }   
 
-    optenum MapResult
+    fault MapResult
     {
       NOT_FOUND
     }
   
 Like the typeid, the constants are pointer sized and each value is globally unique, even when 
-compared to other optenums. For example the underlying value of `MapResult.NOT_FOUND` is guaranteed
+compared to other faults. For example the underlying value of `MapResult.NOT_FOUND` is guaranteed
 to be different from `IOResult.IO_ERROR`. This is true even if they are separately compiled.
 
-An optenum may be stored as a normal value, but is also unique in that it may be passed
+A fault may be stored as a normal value, but is also unique in that it may be passed
 as the optional result value using the `!` suffix operator.
 
 
@@ -280,7 +280,7 @@ as the optional result value using the `!` suffix operator.
 
 An *optional result type* is created by taking a type and appending `!`. 
 An optional result type is a tagged union containing either the *expected result* or *an optional result value* 
-(which is an optenum).
+(which is a fault).
 
     int! i;
     i = 5; // Assigning a real value to i.

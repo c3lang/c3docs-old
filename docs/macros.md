@@ -165,14 +165,14 @@ In C3, top level compile time evaluation is limited to `$if` and `$switch` const
 A macro is defined using `macro <name>(<parameters>)`. All user defined macros use the @ symbol.
 
 The parameters have different sigils: `$` means compile time evaluated (constant expression or type). `#` indicates an expression that is not yet evaluated, but is bound to where it was defined. Finally `&` is used to *implicitly* pass a parameter by reference.
-
+`@` is required on macros that use `#` and `&` parameters.
 
 A basic swap:
 
     /**
      * @checked a = b, b = a
      */
-    macro void swap(&a, &b)
+    macro void @swap(&a, &b)
     {
         $typeof(a) temp = a;
         a = b;
@@ -212,7 +212,7 @@ Note the necessary `&`. Here is an incorrect swap and what it would expand to:
     {
         int a = 10;
         int b = 20;
-        @badswap(a, b);
+        badswap(a, b);
     }
     // Equivalent to:
     fn void test()
@@ -236,7 +236,7 @@ Similar to regular *methods* a macro may also be associated with a particular ty
     
     macro Foo.generate(Foo *foo) { ... }
     Foo f;
-    f.@generate();
+    f.generate();
 
 ## Capturing a trailing block
 
@@ -252,7 +252,7 @@ Here's an example to illustrate its use:
      *
      * @checked { int i = a.len; value2 = a[i]; }
      **/
-    macro foreach(a; @body(index, value))
+    macro @foreach(a; @body(index, value))
     {
         for (int i = 0; i < a.len; i++)
         {
@@ -292,14 +292,14 @@ A macro may return a value, it is then considered an expression rather than a st
         return x * x;
     }
     
-    int getTheSquare(int x)
+    fn int getTheSquare(int x)
     {
-        return @square(x);
+        return square(x);
     }
     
-    double getTheSquare2(double x)
+    fn double getTheSquare2(double x)
     {
-        return @square(x);
+        return square(x);
     }
 
 ## Calling macros
@@ -310,7 +310,7 @@ It's perfectly fine for a macro to invoke another macro or itself.
     
     macro squarePlusOne(x)
     {
-        return @square(x) + 1; // Expands to "return x * x + 1;"
+        return square(x) + 1; // Expands to "return x * x + 1;"
     }
 
 The maximum recursion depth is limited to the `macro-recursion-depth` build setting.
@@ -339,9 +339,9 @@ Inside of a macro, we can use the compile time statements `$if`, `$for` and `$sw
     {
         int a = 5;
         int b = 4;
-        @foo(1, a); // Allowed, expands to a += 1;
-        // @foo(b, a); // Error: b is not a compile time constant.
-        @foo(FOO, a); // Allowed, expands to a += FOO * FOO;
+        foo(1, a); // Allowed, expands to a += 1;
+        // foo(b, a); // Error: b is not a compile time constant.
+        foo(FOO, a); // Allowed, expands to a += FOO * FOO;
     }
 
 ### Loops using $foreach and $for
@@ -360,7 +360,7 @@ Compile time looping:
     
     fn void test()
     {
-        @foo(2);
+        foo(2);
         // Expands to ->
         // libc::printf("%d\n", 0);     
         // libc::printf("%d\n", 1);         
@@ -383,7 +383,7 @@ Looping over enums:
     
     fn void test()
     {
-        @foo_enum(MyEnum);
+        foo_enum(MyEnum);
         // Expands to ->
         // libc::printf("%d\n", (int)MyEnum.A);
         // libc::printf("%d\n", (int)MyEnum.B);    
@@ -448,7 +448,7 @@ macro foo()
     endif;
     return 1;
 }
-const Z = @foo(); // Z = 1
-const A = @foo(); // A = 1
-const B = @foo(); // B = 2
+const Z = foo(); // Z = 1
+const A = foo(); // A = 1
+const B = foo(); // B = 2
 ```
