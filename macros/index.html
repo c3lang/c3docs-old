@@ -376,12 +376,13 @@ macro fn check(#expr)
 <p>In C3, top level compile time evaluation is limited to <code>$if</code> and <code>$switch</code> constructs + macros with constant expression evaluation. This makes the code easier to read, but at the cost of expressive power.</p>
 <h2 id="macro-declarations">Macro declarations</h2>
 <p>A macro is defined using <code>macro &lt;name&gt;(&lt;parameters&gt;)</code>. All user defined macros use the @ symbol.</p>
-<p>The parameters have different sigils: <code>$</code> means compile time evaluated (constant expression or type). <code>#</code> indicates an expression that is not yet evaluated, but is bound to where it was defined. Finally <code>&amp;</code> is used to <em>implicitly</em> pass a parameter by reference.</p>
+<p>The parameters have different sigils: <code>$</code> means compile time evaluated (constant expression or type). <code>#</code> indicates an expression that is not yet evaluated, but is bound to where it was defined. Finally <code>&amp;</code> is used to <em>implicitly</em> pass a parameter by reference.
+<code>@</code> is required on macros that use <code>#</code> and <code>&amp;</code> parameters.</p>
 <p>A basic swap:</p>
 <pre><code>/**
  * @checked a = b, b = a
  */
-macro void swap(&amp;a, &amp;b)
+macro void @swap(&amp;a, &amp;b)
 {
     $typeof(a) temp = a;
     a = b;
@@ -419,7 +420,7 @@ fn void test()
 {
     int a = 10;
     int b = 20;
-    @badswap(a, b);
+    badswap(a, b);
 }
 // Equivalent to:
 fn void test()
@@ -441,7 +442,7 @@ fn void test()
 
 macro Foo.generate(Foo *foo) { ... }
 Foo f;
-f.@generate();
+f.generate();
 </code></pre>
 <h2 id="capturing-a-trailing-block">Capturing a trailing block</h2>
 <p>It is often useful for a macro to take a trailing compound statement as an argument. In C++ this pattern is usually expressed with a lambda, but in C3 this is completely inlined.</p>
@@ -453,7 +454,7 @@ f.@generate();
  *
  * @checked { int i = a.len; value2 = a[i]; }
  **/
-macro foreach(a; @body(index, value))
+macro @foreach(a; @body(index, value))
 {
     for (int i = 0; i &lt; a.len; i++)
     {
@@ -490,14 +491,14 @@ fn void test()
     return x * x;
 }
 
-int getTheSquare(int x)
+fn int getTheSquare(int x)
 {
-    return @square(x);
+    return square(x);
 }
 
-double getTheSquare2(double x)
+fn double getTheSquare2(double x)
 {
-    return @square(x);
+    return square(x);
 }
 </code></pre>
 <h2 id="calling-macros">Calling macros</h2>
@@ -506,7 +507,7 @@ double getTheSquare2(double x)
 
 macro squarePlusOne(x)
 {
-    return @square(x) + 1; // Expands to "return x * x + 1;"
+    return square(x) + 1; // Expands to "return x * x + 1;"
 }
 </code></pre>
 <p>The maximum recursion depth is limited to the <code>macro-recursion-depth</code> build setting.</p>
@@ -529,9 +530,9 @@ fn void test()
 {
     int a = 5;
     int b = 4;
-    @foo(1, a); // Allowed, expands to a += 1;
-    // @foo(b, a); // Error: b is not a compile time constant.
-    @foo(FOO, a); // Allowed, expands to a += FOO * FOO;
+    foo(1, a); // Allowed, expands to a += 1;
+    // foo(b, a); // Error: b is not a compile time constant.
+    foo(FOO, a); // Allowed, expands to a += FOO * FOO;
 }
 </code></pre>
 <h3 id="loops-using-foreach-and-for">Loops using $foreach and $for</h3>
@@ -546,7 +547,7 @@ fn void test()
 
 fn void test()
 {
-    @foo(2);
+    foo(2);
     // Expands to -&gt;
     // libc::printf("%d\n", 0);     
     // libc::printf("%d\n", 1);         
@@ -568,7 +569,7 @@ enum MyEnum
 
 fn void test()
 {
-    @foo_enum(MyEnum);
+    foo_enum(MyEnum);
     // Expands to -&gt;
     // libc::printf("%d\n", (int)MyEnum.A);
     // libc::printf("%d\n", (int)MyEnum.B);    
@@ -619,9 +620,9 @@ has to be taken into account when used in conjunction with @defined.</p>
     endif;
     return 1;
 }
-const Z = @foo(); // Z = 1
-const A = @foo(); // A = 1
-const B = @foo(); // B = 2
+const Z = foo(); // Z = 1
+const A = foo(); // A = 1
+const B = foo(); // B = 2
 </code></pre>
               
             </div>
