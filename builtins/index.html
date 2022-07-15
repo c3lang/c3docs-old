@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Changes from C - C3 Documentation</title>
+  <title>Builtins - C3 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Changes from C";
-    var mkdocs_page_input_path = "changesfromc.md";
+    var mkdocs_page_name = "Builtins";
+    var mkdocs_page_input_path = "builtins.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -66,35 +66,7 @@
                 </ul>
                 <p class="caption"><span class="caption-text">Documentation</span></p>
                 <ul class="current">
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Changes from C</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#no-mandatory-header-files">No mandatory header files</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#removal-of-the-old-c-macro-system">Removal of the old C macro system</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#import-and-modules">Import and modules</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#member-access-using-even-for-pointers">Member access using . even for pointers</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#different-operator-precedence">Different operator precedence</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#removal-of-the-const-type-qualifier">Removal of the const type qualifier</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#fixed-arrays-do-not-decay-and-have-copy-semantics">Fixed arrays do not decay and have copy semantics</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#removal-of-multiple-declaration-syntax">Removal of multiple declaration syntax</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#integer-promotions-rules-and-safe-signed-unsigned-comparisons">Integer promotions rules and safe signed-unsigned comparisons</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#goto-removed">Goto removed</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#implicit-break-in-switches">Implicit break in switches</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#locals-variables-are-implictly-zeroed">Locals variables are implictly zeroed</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#compound-literal-syntax-changed">Compound literal syntax changed</a>
-    </li>
-    </ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../changesfromc/">Changes from C</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../compare/">Comparisons with other languages</a>
                     </li>
@@ -128,7 +100,41 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Builtins</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#builtin-constants">Builtin constants</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#line">$$LINE</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#func">$$FUNC</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#file">$$FILE</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#linereal">$$LINEREAL</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#builtin-functions">Builtin functions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#trap">$$trap</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#unreachable">$$unreachable</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#stacktrace">$$stacktrace</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#math-functions">Math functions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#volatile_store">$$volatile_store</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#volatile_load">$$volatile_load</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#memcpy">$$memcpy</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#memset">$$memset</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
@@ -196,7 +202,7 @@
         
       
     
-    <li>Changes from C</li>
+    <li>Builtins</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -207,105 +213,40 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="changes-from-c">Changes from C</h1>
-<p>Although C3 is trying to improve on C, this does not only mean addition of features, but also removal, or breaking changes:</p>
-<h5 id="no-mandatory-header-files">No mandatory header files</h5>
-<p>There is a C3 interchange header format for declaring interfaces of libraries, but it is only used for special applications.</p>
-<h5 id="removal-of-the-old-c-macro-system">Removal of the old C macro system</h5>
-<p>The old C macro system is replaced by a new C3 macro system.</p>
-<h5 id="import-and-modules">Import and modules</h5>
-<p>C3 uses module imports instead of header includes to link modules together.</p>
-<h5 id="member-access-using-even-for-pointers">Member access using <code>.</code> even for pointers</h5>
-<p>The <code>-&gt;</code> operator is removed, access uses dot for both direct and pointer access. Note that this is just single access: to access a pointer of a pointer (e.g. <code>int**</code>) an explicit dereference would be needed.</p>
-<h5 id="different-operator-precedence">Different operator precedence</h5>
-<p>Notably bit operations have higher precedence than +/-, making code like this: <code>a &amp; b == c</code> evaluate like <code>(a &amp; b) == c</code> instead of C's <code>a &amp; (b == c)</code>. See the page about <a href="../precedence">precedence rules</a>.</p>
-<h5 id="removal-of-the-const-type-qualifier">Removal of the const type qualifier</h5>
-<p>The const qualifier is only retained for actual constant variables. C3 uses a special type of <a href="../contracts">post condition</a> for functions to indicate that they do not alter in parameters.</p>
-<pre><code>/**
- * This function ensures that foo is not changed in the function, nor is bar.x altered.
- * @ensure const(foo), const(bar.x)
- **/
-fn void test(Foo* foo, Bar* bar)
-{
-    bar.y = foo.x;
-    // bar.x = foo.x - compile time error!
-    // foo.x = bar.y - compile time error!
-}
-</code></pre>
-<p><em>Rationale: const correctness requires littering const across the code base. Although const is useful, it provides weaker guarantees that it appears.</em></p>
-<h5 id="fixed-arrays-do-not-decay-and-have-copy-semantics">Fixed arrays do not decay and have copy semantics</h5>
-<p>C3 has three different array types. Variable arrays and slices decay to pointers, but fixed arrays are value objects and do not decay.</p>
-<pre><code>int[3] a = { 1, 2, 3 };
-int[4]* b = &amp;a; // No conversion
-int* c = a; // ERROR
-int* d = &amp;a; // Valid implicit conversion
-int* e = b; // Valid implicit conversion
-int[3] f = a; // Copy by value!
-</code></pre>
-<h5 id="removal-of-multiple-declaration-syntax">Removal of multiple declaration syntax</h5>
-<p>Only a single declaration is allowed per statement in C3:</p>
-<pre><code>int i, j; // ERROR
-int a;    // Fine
-</code></pre>
-<p>In conditionals, a special form of multiple declarations are allowed but each must then provide its type:</p>
-<pre><code>for (int i = 0, int j = 1; i &lt; 10; i++, j++) { ... }
-</code></pre>
-<h5 id="integer-promotions-rules-and-safe-signed-unsigned-comparisons">Integer promotions rules and safe signed-unsigned comparisons</h5>
-<p>Promotion rules for integer types are different from C. Most prominently, C3 does left side widening in the case of <code>long x = intValue1 + intValue2</code>. In C this becomes:
-<code>long x = (long)(intValue1 + intValue2)</code>, whereas in C3 it would behaves as <code>long x = (long)intValue1 + (long)intValue2</code> to minimize chance of overflow. (read more on the <a href="../conversion">conversion page</a>. C3 also adds <em>safe signed-unsigned comparisons</em>: this means that comparing signed and unsigned values will always yield the correct result:</p>
-<pre><code>// The code below will print &quot;Hello C3!&quot; on C3 and &quot;Hello C!&quot; in C.
-int i = -1;
-uint j = 1;
-// int z = i + j; &lt;- Error, explicit cast needed.
-if (i &lt; j)
-{
-  printf(&quot;Hello C3!\n&quot;);
-}
-else
-{
-  printf(&quot;Hello C!\n&quot;);
-}
-</code></pre>
-<h5 id="goto-removed">Goto removed</h5>
-<p><code>goto</code> is removed and replaced with labelled <code>break</code> and <code>continue</code> together with the <code>nextcase</code> statement that allows you to jump between cases in a <code>switch</code> statement.</p>
-<p><em>Rationale: It is very difficult to make goto work well with defer and implicit unwrapping of optional results. It is not just making the compiler harder to write, but
-the code is harder to understand as well. The replacements together with <code>defer</code> cover many if not all usages of <code>goto</code> in regular code.</em></p>
-<h5 id="implicit-break-in-switches">Implicit break in switches</h5>
-<p>Empty <code>case</code> statements have implicit fall through in C3, otherwise the <code>nextcase</code> statement is needed
-<code>nextcase</code> can also be used to jump to any other case statement in the switch.</p>
-<pre><code>switch (h)
-{
-    case 1:
-        a = 1;
-        nextcase; // Fall through
-    case 2:
-        b = 123;
-    case 3:
-        a = 2;
-        nextcase 2; // Jump to case 2
-    default:
-        a = 111;
-}
-</code></pre>
-<h5 id="locals-variables-are-implictly-zeroed">Locals variables are implictly zeroed</h5>
-<p>In C global variables are implicitly zeroed out, but local variables aren't. In C3 local variables are zeroed out by default, but may be explicitly undefined to get the C behaviour.</p>
-<p><em>Rationale: In the "zero-is-initialization" paradigm, zeroing variables, in particular structs, is very common. By offering zero initialization by default this avoids a whole class of vulnerabilites.
-Another alternative that was considered for C3 was mandatory initialization,
-but this adds a lot of extra boilerplate. 
-C3 also offers a way to opt out of zero-initialization, so the change comes at no performance loss.</em></p>
-<h5 id="compound-literal-syntax-changed">Compound literal syntax changed</h5>
-<pre><code class="language-c">// C style:
-callFoo((Foo) { 1, 2, 3 });
-
-// C++ style (1):
-callFoo(Foo(1, 2, 3));
-
-// C++ style (2):
-callFoo(Foo { 1, 2, 3 });
-
-// C3:
-callFoo(Foo { 1, 2, 3 } );
-</code></pre>
+                <h1 id="builtins">Builtins</h1>
+<p>The compiler offers builtin constants and functions. Some are only available on certain targets. All builtins use the <code>$$</code>
+name prefix.</p>
+<h2 id="builtin-constants">Builtin constants</h2>
+<p>These can all safely be used by the user.</p>
+<h4 id="line">$$LINE</h4>
+<p>The current line as an integer.</p>
+<h4 id="func">$$FUNC</h4>
+<p>The current function name, will return "<GLOBAL>" on the global level.</p>
+<h4 id="file">$$FILE</h4>
+<p>The current file name.</p>
+<h4 id="linereal">$$LINEREAL</h4>
+<p>Usually the same as $$LINE, but in case of a macro inclusion it returns the line in the macro rather than
+the line where the macro was included.</p>
+<h2 id="builtin-functions">Builtin functions</h2>
+<p>These functions are not guaranteed to exist on all platforms. They are intended for use standard library
+use, and typically the standard library has macros that wrap these builtins, so they should not be used on its own.</p>
+<h4 id="trap">$$trap</h4>
+<p>Emits a trap instruction.</p>
+<h4 id="unreachable">$$unreachable</h4>
+<p>Inserts an "unreachable" annotation.</p>
+<h4 id="stacktrace">$$stacktrace</h4>
+<p>Returns the current "callstack" reference if available. Compiler dependent.</p>
+<h4 id="math-functions">Math functions</h4>
+<p>Functions $$ceil, $$trunc, $$sin, $$cos, $$log, $$log2, $$log10, $$sqrt, $$pow, $$min, $$max, $$exp, $$fma and $$fabs.</p>
+<p>Can be applied to float vectors or numbers. Returns the same type.</p>
+<h4 id="volatile_store">$$volatile_store</h4>
+<p>Takes a variable and a value and stores the value as a volatile store.</p>
+<h4 id="volatile_load">$$volatile_load</h4>
+<p>Takes a variable and returns the value using a volatile load.</p>
+<h4 id="memcpy">$$memcpy</h4>
+<p>Builtin memcpy instruction.</p>
+<h4 id="memset">$$memset</h4>
+<p>Builtin memset instruction.</p>
               
             </div>
           </div>
@@ -313,10 +254,10 @@ callFoo(Foo { 1, 2, 3 } );
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../compare/" class="btn btn-neutral float-right" title="Comparisons with other languages">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../contracts/" class="btn btn-neutral float-right" title="Contracts">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../primer/" class="btn btn-neutral" title="A quick primer on C3"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../reflection/" class="btn btn-neutral" title="Reflection"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -342,10 +283,10 @@ callFoo(Foo { 1, 2, 3 } );
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../primer/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../reflection/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../compare/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../contracts/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
