@@ -122,8 +122,6 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#stacktrace">$$stacktrace</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#math-functions">Math functions</a>
-    </li>
     <li class="toctree-l3"><a class="reference internal" href="#volatile_store">$$volatile_store</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#volatile_load">$$volatile_load</a>
@@ -131,6 +129,8 @@
     <li class="toctree-l3"><a class="reference internal" href="#memcpy">$$memcpy</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#memset">$$memset</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#math-functions">Math functions</a>
     </li>
         </ul>
     </li>
@@ -236,9 +236,6 @@ use, and typically the standard library has macros that wrap these builtins, so 
 <p>Inserts an "unreachable" annotation.</p>
 <h4 id="stacktrace">$$stacktrace</h4>
 <p>Returns the current "callstack" reference if available. Compiler dependent.</p>
-<h4 id="math-functions">Math functions</h4>
-<p>Functions $$ceil, $$trunc, $$sin, $$cos, $$log, $$log2, $$log10, $$sqrt, $$pow, $$min, $$max, $$exp, $$fma and $$fabs.</p>
-<p>Can be applied to float vectors or numbers. Returns the same type.</p>
 <h4 id="volatile_store">$$volatile_store</h4>
 <p>Takes a variable and a value and stores the value as a volatile store.</p>
 <h4 id="volatile_load">$$volatile_load</h4>
@@ -247,6 +244,9 @@ use, and typically the standard library has macros that wrap these builtins, so 
 <p>Builtin memcpy instruction.</p>
 <h4 id="memset">$$memset</h4>
 <p>Builtin memset instruction.</p>
+<h3 id="math-functions">Math functions</h3>
+<p>Functions $$ceil, $$trunc, $$sin, $$cos, $$log, $$log2, $$log10, $$sqrt, $$pow, $$min, $$max, $$exp, $$fma and $$fabs.</p>
+<p>Can be applied to float vectors or numbers. Returns the same type.</p>
               
             </div>
           </div>
