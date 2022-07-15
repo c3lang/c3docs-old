@@ -25,6 +25,7 @@ nav:
     - Generics: 'generics.md'
     - Macros: 'macros.md'
     - Reflection: 'reflection.md'
+    - Builtins: 'builtins.md'
     - Contracts: 'contracts.md'
     - Libraries: 'libraries.md'
     - Standard Library: 'standard_library.md'
