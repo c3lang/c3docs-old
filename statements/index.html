@@ -92,6 +92,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#nextcase-and-labelled-nextcase">Nextcase and labelled nextcase</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#switch-cases-with-runtime-evaluation">Switch cases with runtime evaluation</a>
+    </li>
     </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../expressions/">Expressions</a>
@@ -272,6 +274,52 @@ do
 }
 </code></pre>
 <p>Which can be used as structured <code>goto</code> when creating state machines.</p>
+<h2 id="switch-cases-with-runtime-evaluation">Switch cases with runtime evaluation</h2>
+<p>It's possible to use <code>switch</code> as an enhanced if-else chain:</p>
+<pre><code>switch (true)
+{
+    case x &lt; 0:
+        xless();
+    case x &gt; 0:
+        xgreater();
+    default:
+        xequals();
+}
+</code></pre>
+<p>The above would be equivalent to writing:</p>
+<pre><code>if (c &lt; 0)
+{
+    xless();
+}
+else if (x &gt; 0)
+{
+    xgreater();
+}
+else
+{
+    xequals();
+}
+</code></pre>
+<p>Note that because of this, the first match is always picked. Consider:</p>
+<pre><code>switch (true)
+{
+    case x &gt; 0:
+        foo();
+    case x &gt; 2:
+        bar();
+}
+</code></pre>
+<p>Because of the evaluation order, only <code>foo()</code> will be invoked for x &gt; 0, even when x is greater than 2.</p>
+<p>It's also possible to omit the conditional after <code>switch</code>. In that case it is implicitly assumed to be same as
+writing <code>(true)</code></p>
+<pre><code>switch
+{
+    case foo() &gt; 0:
+        bar();
+    case test() == 1:
+        baz();
+}
+</code></pre>
               
             </div>
           </div>
