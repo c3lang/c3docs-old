@@ -101,7 +101,7 @@ if (i > 10) doSomething();
 An result if effectively an enum, and is defined in the same way:
 
 ```
-optenum IoError
+fault IoError
 {
     FILE_NOT_FOUND,
     FILE_NOT_READABLE,

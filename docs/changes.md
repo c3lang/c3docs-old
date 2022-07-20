@@ -1,5 +1,8 @@
 # Change log
 
+##### Revision 2022-07-20
+- Added start + len syntax
+
 ##### Revision 2022-07-15
 - Added "builtins"
 

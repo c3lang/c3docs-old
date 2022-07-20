@@ -95,3 +95,55 @@ It's also possible to use `nextcase` with an expression, to jump to an arbitrary
     }  
 
 Which can be used as structured `goto` when creating state machines.
+
+## Switch cases with runtime evaluation
+
+It's possible to use `switch` as an enhanced if-else chain:
+
+    switch (true)
+    {
+        case x < 0:
+            xless();
+        case x > 0:
+            xgreater();
+        default:
+            xequals();
+    }
+
+The above would be equivalent to writing:
+
+    if (c < 0)
+    {
+        xless();
+    }
+    else if (x > 0)
+    {
+        xgreater();
+    }
+    else
+    {
+        xequals();
+    }
+
+Note that because of this, the first match is always picked. Consider:
+
+    switch (true)
+    {
+        case x > 0:
+            foo();
+        case x > 2:
+            bar();
+    }
+
+Because of the evaluation order, only `foo()` will be invoked for x > 0, even when x is greater than 2.
+
+It's also possible to omit the conditional after `switch`. In that case it is implicitly assumed to be same as
+writing `(true)`
+
+    switch
+    {
+        case foo() > 0:
+            bar();
+        case test() == 1:
+            baz();
+    }

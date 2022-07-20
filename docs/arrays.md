@@ -44,13 +44,19 @@ The final type is the subarray `<type>[]`  e.g. `int[]`. A subarray is a view in
 
 ### Slicing arrays
 
-It's possible to use a range syntax to create subarrays from pointers, arrays, vararrays and other subarrays. The usual syntax is `arr[<start index>..<end index>]`. The end index is included in the final result.
+It's possible to use a range syntax to create subarrays from pointers, arrays, vararrays and other subarrays. The either use range syntax:
+`arr[<start index>..<end index>]` (the end index is included in the final result) or start + len syntax: `arr[<start index> : len]`
+
     
     int[5] a = { 1, 20, 50, 100, 200 };
     int[] b = a[0..4]; // The whole array as a slice.
-    int[] c = a[1..2]; // { 20, 50 }
+    int[] b2 = a[0:5]; // Same as above.
+    int[] c = a[2..3]; // { 50, 100 }
+    int[] c2 = a[2:2]; // Same as above.
 
-It's possible to omit the first and last index, in which case the start and the len is inferred. Note that omitting the last index is not allowed for pointers.
+It's possible to omit the first and last index in ranges, and the start index for start + len.
+Omitting the start index will default it to 0, omitting the end index will set it to the last valid
+index (this is not allowed on pointers). Length cannot be omitted in start + len syntax.
 
 The following are all equivalent:
 
@@ -59,12 +65,15 @@ The following are all equivalent:
     int[] c = a[..4];
     int[] d = a[0..];
     int[] e = a[..];
+    int[] f = a[0:5];
+    int[] g = a[:5];
 
 One may also slice from the end. Again this is not allowed for pointers.
 
     int[5] a = { 1, 20, 50, 100, 200 };
     int[] b = a[1..^2]; // { 20, 50, 100 }
     int[] c = a[^3..]; // { 50, 100, 200 }
+    int[] d = a[^3:2]; // { 50, 100 }
 
 One may also use assign to slices:
 
