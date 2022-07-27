@@ -253,13 +253,13 @@ fn void test()
 
 fn void test()
 {
-    testNamed(.data = 3.0)
+    testNamedDefault(.data = 3.0)
 
     // Mixing named and defaults:
-    testNamed(3, .dummy = false);
+    testNamedDefault(3, .dummy = false);
 
-     // Not allowed:
-     testNamed(1, .data = 1.0); // ERROR
+    // Not allowed, because "times" is already set.
+    testNamedDefault(1, .times = 1.0); // ERROR
 }
 </code></pre>
 <h4 id="varargs">Varargs</h4>
