@@ -108,25 +108,131 @@
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Standard Library</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#lang">lang</a>
+    <li class="toctree-l2"><a class="reference internal" href="#stdcorebuiltin">std::core::builtin</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#macro-scoped-body">macro scoped(..., @body)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-panicchar-message-char-file-char-function-uint-line">void panic(char message, char file, char *function, uint line)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#other-macros">Other macros:</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-swapa-b">void @swap(&amp;a, &amp;b)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#varcastvariant-v-type">varcast(variant v, $Type)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-unreachable">void unreachable()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bitcastvalue-type">bitcast(value, $Type)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#enum_by_nametype-enum_name">enum_by_name($Type, enum_name)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-scope-body">void @scope(&variable; @body)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#less-greater-less_eq-greater_eq-equals">less, greater, less_eq, greater_eq, equals</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#faults">Faults</a>
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#mem">mem</a>
+    <li class="toctree-l2"><a class="reference internal" href="#stdcoreenv">std::core::env</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#globals">Globals</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#allocators">allocators</a>
+    <li class="toctree-l3"><a class="reference internal" href="#constants">Constants</a>
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#encodings">Encodings</a>
+    <li class="toctree-l2"><a class="reference internal" href="#stdcoremem">std::core::mem</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#volatile_loadx">@volatile_load(&amp;x)</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#ref-counting">Ref counting</a>
+    <li class="toctree-l3"><a class="reference internal" href="#volatile_storex-y">@volatile_store(&amp;x, y)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#stdcorememarray">std::core::mem::array</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#alloctype-usize-elements">alloc($Type, usize elements)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#maketype-usize-elements">make($Type, usize elements)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#stdcoretypes">std::core::types</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#bool-is_comparabletype">bool is_comparable($Type)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bool-is_equatable_valuevalue">bool is_equatable_value(value)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bool-is_equatable_valuevalue_1">bool is_equatable_value(value)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#kind_is_inttypekind-kind">kind_is_int(TypeKind kind)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#variant_to_intvariant-v-type">variant_to_int(variant v, $Type)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#stdcorestringconv">std::core::string::conv</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#usize-char32_to_utf8char32-c-char-output-usize-available">usize! char32_to_utf8(Char32 c, char* output, usize available)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-char32_to_utf16_unsafechar32-c-char16-output">void char32_to_utf16_unsafe(Char32 c, Char16** output)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#stdio">std::io</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#usize-printfchar-format-args-maydiscard">usize! printf(char[] format, args...) @maydiscard</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usize-stringprintfstring-str-char-format-args-maydiscard">usize! String.printf(String* str, char[] format, args...) @maydiscard</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usize-fileprintffile-file-char-format-args-maydiscard">usize! File.printf(File file, char[] format, args...) @maydiscard</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-fileopenfile-file-char-filename-char-mode">void! File.open(File* file, char[] filename, char[] mode)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-fileseekfile-file-long-offset-seek-seekmode-seekset">void! File.seek(File *file, long offset, Seek seekMode = Seek.SET)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-fileclosefile-file-inline">void! File.close(File *file) @inline</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bool-fileeoffile-file-inline">bool File.eof(File* file) @inline</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-fileputcfile-file-char-c">void! File.putc(File *file, char c)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usize-filereadfile-file-void-buffer-usize-items-usize-element_size-1">usize File.read(File file, void buffer, usize items, usize element_size = 1)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usize-filewritefile-file-void-buffer-usize-items-usize-element_size-1">usize File.write(File file, void buffer, usize items, usize element_size = 1)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#stdout-stdin-stderr">stdout(), stdin(), stderr()</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#stdarraylist">std::array::list</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#listpushlist-list-type-element-append">List.push(List *list, Type element), append(...)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#type-listpoplist-list">Type List.pop(List* list)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#type-listpop_firstlist-list">Type List.pop_first(List *list)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-listremove_atlist-list-usize-index">void List.remove_at(List *list, usize index)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-listinsert_atlist-list-usize-index-type-type">void List.insert_at(List *list, usize index, Type type)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-listpush_frontlist-list-type-type">void List.push_front(List *list, Type type)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-listremove_lastlist-list">void List.remove_last(List* list)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-listremove_firstlist-list">void List.remove_first(List *list)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#type-listfirstlist-list">Type List.first(List list)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#type-listlastlist-list">Type List.last(List list)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#listis_emptylist-list">List.is_empty(List *list)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usize-listlenlist-list">usize List.len(List *list)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#type-listgetlist-list-usize-index">Type List.get(List *list, usize index)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-listfreelist-list">void List.free(List *list)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-listswaplist-list-usize-i-usize-j">void List.swap(List *list, usize i, usize j)</a>
+    </li>
+        </ul>
     </li>
     </ul>
                     </li>
@@ -202,75 +308,172 @@
             <div class="section">
               
                 <h1 id="library">Library</h1>
-<p>The standard library design is a sketch, no work has been done on this yet.</p>
-<h2 id="lang">lang</h2>
-<h3 id="macro-scoped-body">macro scoped(..., @body)</h3>
-<p>Scopes a list of variables:</p>
-<pre><code>int a = 3;
-double b = 1.0;
+<p>The standard library is currently in development, so frequent changes will occur. Note that all std::core modules and
+sub modules are implicitly imported.</p>
+<h2 id="stdcorebuiltin">std::core::builtin</h2>
+<p>All functions and macros in this library can be used without path qualifiers.</p>
+<h3 id="void-panicchar-message-char-file-char-function-uint-line">void panic(char<em> message, char </em>file, char *function, uint line)</h3>
+<p>Default function called when the asserts fails.</p>
+<h3 id="void-swapa-b">void @swap(&amp;a, &amp;b)</h3>
+<p>Swap values in <code>a</code> and <code>b</code>.</p>
+<pre><code class="language-c">int a = 3;
+int b = 5;
+@swap(a, b);
+io::printf(&quot;%d\n&quot;, a); // Prints 5
+</code></pre>
+<h3 id="varcastvariant-v-type">varcast(variant v, $Type)</h3>
+<p>Optionally cast the value <code>v</code> to type <code>$Type*</code> on failure returns <code>VarCastResult.TYPE_MISMATCH</code>.</p>
+<h3 id="void-unreachable">void unreachable()</h3>
+<p>Mark a code path as unreachable.</p>
+<h3 id="bitcastvalue-type">bitcast(value, $Type)</h3>
+<p>Do a bitcast of a value to <code>$Type</code>, requires that the types are of the same memory size.</p>
+<pre><code class="language-c">float x = 1.0;
+int y = bitcast(x, int); // y = 0x3f800000
+</code></pre>
+<h3 id="enum_by_nametype-enum_name">enum_by_name($Type, enum_name)</h3>
+<p>Optionally returns the enum value with the given name. <code>$Type</code> must be an enum. Returns <code>SearchResult.MISSING</code>
+on failure.</p>
+<pre><code class="language-c">enum Foo { ABC, CDE, EFG }
 
-@scoped(a, b)
+fn void! test()
+{
+  Foo f = enum_by_name(Foo, &quot;CDE&quot;)?; 
+  // same as Foo f = Foo.CDE;
+}
+</code></pre>
+<h3 id="void-scope-body">void @scope(&variable; @body)</h3>
+<p>Scopes a variable:</p>
+<pre><code>int a = 3;
+
+@scope(a)
 {
     a = 4;
-    b = 1.2;    
-}
+    a++;
+};
 
-// Prints a = 3, b = 1.0
-printf(&quot;a = %d, b = %f\n&quot;, a, b);
+// Prints a = 3
+io::printf(&quot;a = %d\n&quot;, a, b);
 </code></pre>
-<p>This can be useful to push another allocator:</p>
-<pre><code>@scoped(mem::defaultAllocator)
-{
-    mem::defaultAllocator = myArenaAllocator;
+<h3 id="less-greater-less_eq-greater_eq-equals">less, greater, less_eq, greater_eq, equals</h3>
+<p>All macros take two values and compare them. Any type implementing <code>Type.less</code> 
+or <code>Type.compare_to</code> may be compared (or if the type implements <code>&lt;</code>). Types 
+implementing <code>Type.equals</code> may use <code>equals</code> even if neither <code>less</code> nor <code>compare_to</code>
+are implemented.</p>
+<h3 id="faults">Faults</h3>
+<ul>
+<li><code>IteratorResult</code> returned when reaching the end of an iterator.</li>
+<li><code>SearchResult</code> used when a search fails.</li>
+<li><code>VarCastResult</code> when a variant cast fails.</li>
+</ul>
+<h2 id="stdcoreenv">std::core::env</h2>
+<h3 id="constants">Constants</h3>
+<ul>
+<li><code>OS_TYPE</code> the OS type compiled for.</li>
+<li><code>COMPILER_OPT_LEVEL</code> the optimization level used.</li>
+<li><code>I128_SUPPORT</code> true if int128 support is available.</li>
+<li><code>COMPILER_SAFE_MODE</code> true if compiled with safety checks.</li>
+</ul>
+<h2 id="stdcoremem">std::core::mem</h2>
+<h3 id="volatile_loadx">@volatile_load(&amp;x)</h3>
+<p>Returns the value in <code>x</code> using a volatile load.</p>
+<h3 id="volatile_storex-y">@volatile_store(&amp;x, y)</h3>
+<p>Store the value <code>y</code> in <code>x</code> using a volatile store.</p>
+<h2 id="stdcorememarray">std::core::mem::array</h2>
+<h3 id="alloctype-usize-elements">alloc($Type, usize elements)</h3>
+<p>Allocate a slice with <code>elements</code> number of elements, returning
+a subarray of the given length. Elements are not initialized.</p>
+<pre><code class="language-c">int[] ints = array::alloc(int, 100);
+</code></pre>
+<h3 id="maketype-usize-elements">make($Type, usize elements)</h3>
+<p>Like <code>array::alloc</code> but all elements are cleared.</p>
+<h2 id="stdcoretypes">std::core::types</h2>
+<h3 id="bool-is_comparabletype">bool is_comparable($Type)</h3>
+<p>Return true if the type can be used with comparison operators.</p>
+<h3 id="bool-is_equatable_valuevalue">bool is_equatable_value(value)</h3>
+<p>Return <code>true</code> if the value can be compared using the <code>equals</code> macro.</p>
+<h3 id="bool-is_equatable_valuevalue_1">bool is_equatable_value(value)</h3>
+<p>Return <code>true</code> if the value can be compared using the comparison macros.</p>
+<h3 id="kind_is_inttypekind-kind">kind_is_int(TypeKind kind)</h3>
+<h3 id="variant_to_intvariant-v-type">variant_to_int(variant v, $Type)</h3>
+<p>Returns an optional value of <code>$Type</code> if the variant value losslessly
+may be converted into the given type. Returns a <code>ConversionResult</code> otherwise.</p>
+<pre><code class="language-c">variant v = &amp;&amp;128;
+short y = variant_to_int(v, short)!!; // Works 
+ichar z = variant_to_int(v, ichar)!!; // Panics VALUE_OUT_OF_RANGE
+</code></pre>
+<h2 id="stdcorestringconv">std::core::string::conv</h2>
+<h3 id="usize-char32_to_utf8char32-c-char-output-usize-available">usize! char32_to_utf8(Char32 c, char* output, usize available)</h3>
+<p>Convert a UTF32 codepoint to an UTF8 buffer. <code>size</code> has the number of
+writable bytes left. It returns the number of bytes used, or 
+<code>UnicodeResult.CONVERSION_FAILED</code> if the buffer is too small.</p>
+<h3 id="void-char32_to_utf16_unsafechar32-c-char16-output">void char32_to_utf16_unsafe(Char32 c, Char16** output)</h3>
+<p>Convert a UTF32 codepoint to an UTF16 buffer without bounds checking,
+moving the output pointer 1 or 2 steps.</p>
+<h2 id="stdio">std::io</h2>
+<h3 id="usize-printfchar-format-args-maydiscard">usize! printf(char[] format, args...) @maydiscard</h3>
+<p>Regular printf functionality: <code>%s</code>, <code>%x</code>, <code>%d</code>, <code>%f</code> and <code>%p</code> are supported.
+Will also print enums and vectors.</p>
+<h3 id="usize-stringprintfstring-str-char-format-args-maydiscard">usize! String.printf(String* str, char[] format, args...) @maydiscard</h3>
+<p>Same as printf but on strings.</p>
+<h3 id="usize-fileprintffile-file-char-format-args-maydiscard">usize! File.printf(File file, char[] format, args...) @maydiscard</h3>
+<p>Same as printf but on files.</p>
+<h3 id="void-fileopenfile-file-char-filename-char-mode">void! File.open(File* file, char[] filename, char[] mode)</h3>
+<p>Open a file with the given file name with the given mode (r, w etc)</p>
+<h3 id="void-fileseekfile-file-long-offset-seek-seekmode-seekset">void! File.seek(File *file, long offset, Seek seekMode = Seek.SET)</h3>
+<p>Seek in a file. Based on the libc function.</p>
+<h3 id="void-fileclosefile-file-inline">void! File.close(File *file) @inline</h3>
+<p>Close a file, based on the libc function.</p>
+<h3 id="bool-fileeoffile-file-inline">bool File.eof(File* file) @inline</h3>
+<p>True if EOF has been reached. Based on the libc function.</p>
+<h3 id="void-fileputcfile-file-char-c">void! File.putc(File *file, char c)</h3>
+<p>Write a single byte to a file. See the libc function.</p>
+<h3 id="usize-filereadfile-file-void-buffer-usize-items-usize-element_size-1">usize File.read(File<em> file, void</em> buffer, usize items, usize element_size = 1)</h3>
+<p>Read into a buffer, based on the libc function.</p>
+<h3 id="usize-filewritefile-file-void-buffer-usize-items-usize-element_size-1">usize File.write(File<em> file, void</em> buffer, usize items, usize element_size = 1)</h3>
+<p>Write to a buffer, based on the libc function.</p>
+<h3 id="stdout-stdin-stderr">stdout(), stdin(), stderr()</h3>
+<p>Return stdout, stdin and stderr respectively.</p>
+<h2 id="stdarraylist">std::array::list<Type></h2>
+<p>Generic list module, elements are of <code>Type</code>.</p>
+<pre><code class="language-c">import std::array::list;
+define MyIntList = List&lt;int&gt;;
 
-    // This will now use myArenaAllocator:
-    doSomethingThatAllocates();
-}
-// The default allocator is restored here.
-</code></pre>
-<h3 id="other-macros">Other macros:</h3>
-<ul>
-<li><code>max(a, b)</code> maximum of two values using &gt;</li>
-<li><code>min(a, b)</code> minimum of two values using &lt;</li>
-<li><code>swap($a, $b)</code> swap two variables using <code>=</code> and a temporary variable.</li>
-</ul>
-<h2 id="mem">mem</h2>
-<p>Mem contains memory allocators</p>
-<h3 id="globals">Globals</h3>
-<ul>
-<li><code>Alloc* defaultAlloc</code></li>
-<li><code>Alloc* tempAlloc</code>
-````</li>
-</ul>
-<h3 id="allocators">allocators</h3>
-<ul>
-<li><code>RingAlloc</code> ring buffer allocator</li>
-<li><code>ArenaAlloc</code> arena allocator</li>
-</ul>
-<h2 id="encodings">Encodings</h2>
-<ul>
-<li></li>
-</ul>
-<h2 id="ref-counting">Ref counting</h2>
-<p>Any struct can enable ref counting by including the RefCount struct:</p>
-<pre><code>struct Person
-{
-    RefCount rc inline;
-    char[] name;
-}
+...
 
-fn void test()
-{
-    Person* person = malloc(Person.sizeof);
-    person.initRC(&amp;free);
-    printf(&quot;RC = %d\n&quot;, person.refCount); // Prints 1
-    person.retain();
-    printf(&quot;RC = %d\n&quot;, person.refCount); // Prints 2
-    person.release(); 
-    printf(&quot;RC = %d\n&quot;, person.refCount); // Prints 1
-    person.release(); // Will call free(person)        
-}
+MyIntList list;
+list.push(123);
+list.free();
 </code></pre>
+<h3 id="listpushlist-list-type-element-append">List.push(List *list, Type element), append(...)</h3>
+<p>Append a single value to the list.</p>
+<h3 id="type-listpoplist-list">Type List.pop(List* list)</h3>
+<p>Removes and returns the last entry in the list.</p>
+<h3 id="type-listpop_firstlist-list">Type List.pop_first(List *list)</h3>
+<p>Removes the first entry in the list.</p>
+<h3 id="void-listremove_atlist-list-usize-index">void List.remove_at(List *list, usize index)</h3>
+<p>Removes the entry at <code>index</code>.</p>
+<h3 id="void-listinsert_atlist-list-usize-index-type-type">void List.insert_at(List *list, usize index, Type type)</h3>
+<p>Inserts a value at <code>index</code>.</p>
+<h3 id="void-listpush_frontlist-list-type-type">void List.push_front(List *list, Type type)</h3>
+<p>Inserts a value to the front of the list.</p>
+<h3 id="void-listremove_lastlist-list">void List.remove_last(List* list)</h3>
+<p>Remove the last value of the list.</p>
+<h3 id="void-listremove_firstlist-list">void List.remove_first(List *list)</h3>
+<p>Remove the first element in the list.</p>
+<h3 id="type-listfirstlist-list">Type<em> List.first(List</em> list)</h3>
+<p>Return the first element in the list if available.</p>
+<h3 id="type-listlastlist-list">Type<em> List.last(List </em>list)</h3>
+<p>Return the last element in the list if available.</p>
+<h3 id="listis_emptylist-list">List.is_empty(List *list)</h3>
+<p>Return <code>true</code> if the list is empty.</p>
+<h3 id="usize-listlenlist-list">usize List.len(List *list)</h3>
+<p>Return the number of elements in the list.</p>
+<h3 id="type-listgetlist-list-usize-index">Type List.get(List *list, usize index)</h3>
+<p>Return the value at <code>index</code>.</p>
+<h3 id="void-listfreelist-list">void List.free(List *list)</h3>
+<p>Free all memory associated with this list.</p>
+<h3 id="void-listswaplist-list-usize-i-usize-j">void List.swap(List *list, usize i, usize j)</h3>
+<p>Swap two elements in the list.</p>
               
             </div>
           </div>
