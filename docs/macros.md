@@ -123,15 +123,14 @@ Use `&` in front of a parameter to capture the a variable and pass it by referen
 
 ### Declaration attributes
 
-*Note: this is not implemented yet*
 
     // C
     #define PURE_INLINE __attribute__((pure)) __attribute__((always_inline))
     int foo(int x) PURE_INLINE { ... }
     
     // C3
-    attribute pure_inline = @pure, @inline;
-    fn int foo(int) @pure_inline { ... }    
+    define @PureInline = @pure, @inline
+    fn int foo(int) @PureInline { ... }    
 
 
 ### Declaration macros
@@ -435,20 +434,5 @@ inside of functions.
 ### Global constants
 
 Global constant on the top level work like compile time variables in macros – with the exception
-that they must always be declared constant. They are always evaluated in order, which 
-has to be taken into account when used in conjunction with @defined.
+that they must always be declared constant. They are evaluated in order, but will resolve on-demand if needed.
 
-Consider this code:
-
-```
-macro foo()
-{
-    $if ($defined(A)): 
-        return A + 1; 
-    endif;
-    return 1;
-}
-const Z = foo(); // Z = 1
-const A = foo(); // A = 1
-const B = foo(); // B = 2
-```
