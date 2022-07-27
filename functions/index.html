@@ -215,7 +215,7 @@
 </code></pre>
 <h3 id="function-arguments">Function arguments</h3>
 <p>C3 allows use of default arguments as well as named arguments. Note that
-named and unnamed arguments cannot be combined.</p>
+any unnamed arguments must appear before any named arguments.</p>
 <pre><code>fn int testWithDefault(int foo = 1)
 {
     return foo;
@@ -240,6 +240,7 @@ fn void test()
 {
     testNamed(.data = 3.0, .times = 1)
     testNamed(3, 4.0);
+    testNamed(15, .data = 3.141592);
 }
 </code></pre>
 <p>Named arguments with defaults:</p>
@@ -253,13 +254,19 @@ fn void test()
 
 fn void test()
 {
-    testNamedDefault(.data = 3.0)
+    testNamedDefault(.data = 3.5, .times = 10);
 
-    // Mixing named and defaults:
+    // Using named arguments after unnamed works:
     testNamedDefault(3, .dummy = false);
 
-    // Not allowed, because "times" is already set.
-    testNamedDefault(1, .times = 1.0); // ERROR
+    // But named arguments may not overwrite 
+    // unnamed ones. This is not allowed
+    // because "times" would overwrite the unnamed 
+    // argument setting times to 2:
+    // testNamedDefault(2, .times = 3); ERROR!
+
+    // Named arguments followed by unnamed args is not allowed.
+    // testNamedDefault(.times = 3, 4.0); ERROR!
 }
 </code></pre>
 <h4 id="varargs">Varargs</h4>
