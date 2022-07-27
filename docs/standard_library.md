@@ -1,86 +1,186 @@
 # Library
 
-The standard library design is a sketch, no work has been done on this yet.
+The standard library is currently in development, so frequent changes will occur. Note that all std::core modules and
+sub modules are implicitly imported.
 
+## std::core::builtin
 
-## lang
+All functions and macros in this library can be used without path qualifiers.
 
-### macro scoped(..., @body)
+### void panic(char* message, char *file, char *function, uint line)
+Default function called when the asserts fails.
 
-Scopes a list of variables:
+### void @swap(&a, &b)
+Swap values in `a` and `b`.
+
+```c
+int a = 3;
+int b = 5;
+@swap(a, b);
+io::printf("%d\n", a); // Prints 5
+```
+
+### varcast(variant v, $Type)
+
+Optionally cast the value `v` to type `$Type*` on failure returns `VarCastResult.TYPE_MISMATCH`.
+
+### void unreachable()
+
+Mark a code path as unreachable.
+
+### bitcast(value, $Type)
+Do a bitcast of a value to `$Type`, requires that the types are of the same memory size.
+```c
+float x = 1.0;
+int y = bitcast(x, int); // y = 0x3f800000
+```
+
+### enum_by_name($Type, enum_name)
+Optionally returns the enum value with the given name. `$Type` must be an enum. Returns `SearchResult.MISSING`
+on failure.
+```c
+enum Foo { ABC, CDE, EFG }
+
+fn void! test()
+{
+  Foo f = enum_by_name(Foo, "CDE")?; 
+  // same as Foo f = Foo.CDE;
+}
+```
+
+### void @scope(&variable; @body)
+
+Scopes a variable:
 
 ```
 int a = 3;
-double b = 1.0;
 
-@scoped(a, b)
+@scope(a)
 {
     a = 4;
-    b = 1.2;    
-}
+    a++;
+};
 
-// Prints a = 3, b = 1.0
-printf("a = %d, b = %f\n", a, b);
+// Prints a = 3
+io::printf("a = %d\n", a, b);
 ```
 
-This can be useful to push another allocator:
+### less, greater, less_eq, greater_eq, equals
+All macros take two values and compare them. Any type implementing `Type.less` 
+or `Type.compare_to` may be compared (or if the type implements `<`). Types 
+implementing `Type.equals` may use `equals` even if neither `less` nor `compare_to`
+are implemented.
 
+### Faults
+
+- `IteratorResult` returned when reaching the end of an iterator.
+- `SearchResult` used when a search fails.
+- `VarCastResult` when a variant cast fails.
+
+## std::core::env
+
+### Constants
+- `OS_TYPE` the OS type compiled for.
+- `COMPILER_OPT_LEVEL` the optimization level used.
+- `I128_SUPPORT` true if int128 support is available.
+- `COMPILER_SAFE_MODE` true if compiled with safety checks.
+
+## std::core::mem
+
+### @volatile_load(&x)
+
+Returns the value in `x` using a volatile load.
+
+### @volatile_store(&x, y)
+
+Store the value `y` in `x` using a volatile store.
+
+## std::core::mem::array
+
+### alloc($Type, usize elements)
+
+Allocate a slice with `elements` number of elements, returning
+a subarray of the given length. Elements are not initialized.
+
+```c
+int[] ints = array::alloc(int, 100);
 ```
-@scoped(mem::defaultAllocator)
-{
-    mem::defaultAllocator = myArenaAllocator;
-    
-    // This will now use myArenaAllocator:
-    doSomethingThatAllocates();
-}
-// The default allocator is restored here.
+
+### make($Type, usize elements)
+
+Like `array::alloc` but all elements are cleared.
+
+## std::core::types
+
+### bool is_comparable($Type)
+
+Return true if the type can be used with comparison operators.
+
+### bool is_equatable_value(value)
+
+Return `true` if the value can be compared using the `equals` macro.
+
+### bool is_equatable_value(value)
+
+Return `true` if the value can be compared using the comparison macros.
+
+### kind_is_int(TypeKind kind)
+### variant_to_int(variant v, $Type)
+
+Returns an optional value of `$Type` if the variant value losslessly
+may be converted into the given type. Returns a `ConversionResult` otherwise.
+
+```c
+variant v = &&128;
+short y = variant_to_int(v, short)!!; // Works 
+ichar z = variant_to_int(v, ichar)!!; // Panics VALUE_OUT_OF_RANGE
 ```
 
-### Other macros:
+## std::core::string::conv
 
-* `max(a, b)` maximum of two values using >
-* `min(a, b)` minimum of two values using <
-* `swap($a, $b)` swap two variables using `=` and a temporary variable.
+### usize! char32_to_utf8(Char32 c, char* output, usize available)
+Convert a UTF32 codepoint to an UTF8 buffer. `size` has the number of
+writable bytes left. It returns the number of bytes used, or 
+`UnicodeResult.CONVERSION_FAILED` if the buffer is too small.
 
-## mem
+### void char32_to_utf16_unsafe(Char32 c, Char16** output)
+Convert a UTF32 codepoint to an UTF16 buffer without bounds checking,
+moving the output pointer 1 or 2 steps.
 
-Mem contains memory allocators
+## std::io
 
-### Globals
+### usize! printf(char[] format, args...) @maydiscard
+Regular printf functionality: `%s`, `%x`, `%d`, `%f` and `%p` are supported.
+Will also print enums and vectors.
 
-* `Alloc* defaultAlloc`
-* `Alloc* tempAlloc`
-````
+### usize! String.printf(String* str, char[] format, args...) @maydiscard
+Same as printf but on strings.
 
-### allocators
+### usize! File.printf(File file, char[] format, args...) @maydiscard
+Same as printf but on files.
 
-* `RingAlloc` ring buffer allocator
-* `ArenaAlloc` arena allocator
+### void! File.open(File* file, char[] filename, char[] mode)
+Open a file with the given file name with the given mode (r, w etc)
 
-## Encodings
+### void! File.seek(File *file, long offset, Seek seekMode = Seek.SET)
+Seek in a file. Based on the libc function.
 
-- 
+### void! File.close(File *file) @inline
+Close a file, based on the libc function.
 
-## Ref counting
+### bool File.eof(File* file) @inline
+True if EOF has been reached. Based on the libc function.
 
-Any struct can enable ref counting by including the RefCount struct:
+### void! File.putc(File *file, char c)
+Write a single byte to a file. See the libc function.
 
-```
-struct Person
-{
-    RefCount rc inline;
-    char[] name;
-}
+### usize File.read(File* file, void* buffer, usize items, usize element_size = 1)
+Read into a buffer, based on the libc function.
 
-fn void test()
-{
-    Person* person = malloc(Person.sizeof);
-    person.initRC(&free);
-    printf("RC = %d\n", person.refCount); // Prints 1
-    person.retain();
-    printf("RC = %d\n", person.refCount); // Prints 2
-    person.release(); 
-    printf("RC = %d\n", person.refCount); // Prints 1
-    person.release(); // Will call free(person)        
-}
-```
+### usize File.write(File* file, void* buffer, usize items, usize element_size = 1)
+Write to a buffer, based on the libc function.
+
+### stdout(), stdin(), stderr()
+Return stdout, stdin and stderr respectively.
+
+
