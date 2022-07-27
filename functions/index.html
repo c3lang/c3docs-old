@@ -238,8 +238,13 @@ fn void test()
 
 fn void test()
 {
+    // Named only
     testNamed(.data = 3.0, .times = 1)
+
+    // Unnamed only
     testNamed(3, 4.0);
+
+    // Mixing named and unnamed        
     testNamed(15, .data = 3.141592);
 }
 </code></pre>
@@ -254,18 +259,16 @@ fn void test()
 
 fn void test()
 {
+    // Named only
     testNamedDefault(.data = 3.5, .times = 10);
 
-    // Using named arguments after unnamed works:
+    // Unnamed and named
     testNamedDefault(3, .dummy = false);
 
-    // But named arguments may not overwrite 
-    // unnamed ones. This is not allowed
-    // because "times" would overwrite the unnamed 
-    // argument setting times to 2:
+    // Overwriting an unnamed argument with named is an error:
     // testNamedDefault(2, .times = 3); ERROR!
 
-    // Named arguments followed by unnamed args is not allowed.
+    // Unnamed may not follow named arguments.
     // testNamedDefault(.times = 3, 4.0); ERROR!
 }
 </code></pre>
