@@ -183,4 +183,63 @@ Write to a buffer, based on the libc function.
 ### stdout(), stdin(), stderr()
 Return stdout, stdin and stderr respectively.
 
+## std::array::list<Type>
+
+Generic list module, elements are of `Type`.
+
+```c
+import std::array::list;
+define MyIntList = List<int>;
+
+...
+
+MyIntList list;
+list.push(123);
+list.free();
+```
+
+### List.push(List *list, Type element), append(...)
+Append a single value to the list.
+
+### Type List.pop(List* list)
+Removes and returns the last entry in the list.
+
+### Type List.pop_first(List *list)
+Removes the first entry in the list.
+
+### void List.remove_at(List *list, usize index)
+Removes the entry at `index`.
+
+### void List.insert_at(List *list, usize index, Type type)
+Inserts a value at `index`.
+
+### void List.push_front(List *list, Type type)
+Inserts a value to the front of the list.
+
+### void List.remove_last(List* list)
+Remove the last value of the list.
+
+### void List.remove_first(List *list)
+Remove the first element in the list.
+
+### Type* List.first(List* list)
+Return the first element in the list if available.
+
+### Type* List.last(List *list)
+Return the last element in the list if available.
+
+### List.is_empty(List *list)
+Return `true` if the list is empty.
+
+### usize List.len(List *list)
+Return the number of elements in the list.
+
+### Type List.get(List *list, usize index)
+Return the value at `index`.
+
+### void List.free(List *list)
+Free all memory associated with this list.
+
+### void List.swap(List *list, usize i, usize j)
+Swap two elements in the list.
 
