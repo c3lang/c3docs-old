@@ -18,7 +18,7 @@ Regular functions are the same as C aside from the keyword `fn`, which is follow
 ### Function arguments
 
 C3 allows use of default arguments as well as named arguments. Note that
-named and unnamed arguments cannot be combined.
+any unnamed arguments must appear before any named arguments.
 
     fn int testWithDefault(int foo = 1)
     {
@@ -43,8 +43,14 @@ Named arguments
 
     fn void test()
     {
+        // Named only
         testNamed(.data = 3.0, .times = 1)
+
+        // Unnamed only
         testNamed(3, 4.0);
+
+        // Mixing named and unnamed        
+        testNamed(15, .data = 3.141592);
     }
 
 Named arguments with defaults:
@@ -59,13 +65,17 @@ Named arguments with defaults:
 
     fn void test()
     {
-        testNamed(.data = 3.0)
+        // Named only
+        testNamedDefault(.data = 3.5, .times = 10);
     
-        // Mixing named and defaults:
-        testNamed(3, .dummy = false);
+        // Unnamed and named
+        testNamedDefault(3, .dummy = false);
     
-         // Not allowed:
-         testNamed(1, .data = 1.0); // ERROR
+        // Overwriting an unnamed argument with named is an error:
+        // testNamedDefault(2, .times = 3); ERROR!
+        
+        // Unnamed may not follow named arguments.
+        // testNamedDefault(.times = 3, 4.0); ERROR!
     }
 
 #### Varargs
