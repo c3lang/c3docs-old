@@ -24,9 +24,32 @@ io::printf("%d\n", a); // Prints 5
 
 Optionally cast the value `v` to type `$Type*` on failure returns `VarCastResult.TYPE_MISMATCH`.
 
-### void unreachable()
+```c
+int b;
+variant a = &b;
+float*! c = varcast(a, float); // Will return TYPE_MISMATCH
+int*! d = varcast(a, int);     // Works!
+```
+
+### void unreachable($string = "Unreachable statement reached.")
 
 Mark a code path as unreachable.
+
+```c
+switch (x)
+{
+  case 0:
+    foo();
+  case 1:
+    bar();
+  default:
+    // Should never happen.
+    unreachable("x should have been 0 or 1");    
+}    
+```
+
+On safe mode this will throw a runtime panic when reached. For release mode the
+compiler will assume this case never happens.
 
 ### bitcast(value, $Type)
 Do a bitcast of a value to `$Type`, requires that the types are of the same memory size.
@@ -87,13 +110,165 @@ are implemented.
 
 ## std::core::mem
 
+### malloc, malloc_checked, malloc_aligned
+
+Allocate the given number of bytes. `malloc` will panic on out of memory, 
+whereas `malloc_checked` and `malloc_aligned` returns an optional value.
+`malloc_aligned` adds an alignment, which must be a power of 2. Any pointer
+allocated using `malloc_aligned` must be freed using `free_aligned` rather
+the normal `free` or memory corruption may result.
+
+```c
+char* data = malloc(8);
+char*! data2 = malloc_checked(8);
+int[<16>]*! data3 = malloc_aligned(16 * int.sizeof), 128);  
+```
+
+### calloc, calloc_checked, calloc_aligned
+
+Identical to `malloc`, except the data is guaranteed to be zeroed out.
+
+### relloc, relloc_checked, realloc_aligned
+
+Resizes memory allocated using `malloc` or `calloc`. Any extra data is 
+guaranteed to be zeroed out. `realloc_aligned` can only be used with
+pointers created using `calloc_aligned` or `alloc_aligned`.
+
+### free, free_aligned
+
+Frees memory allocated using `malloc` or `calloc`.
+
+### char[] alloc_bytes(usize bytes)
+
+Similar to malloc, but returns the data as a subarray. Will panic on out of memory.
+
+### alloc($Type)
+
+Will allocate enough memory for exactly the type provided:
+
+```c
+Foo* f = mem::alloc(Foo);
+```
+
+### @scoped(Allocator* allocator; @body())
+
+Swaps the current memory allocator for the duration of the call.
+
+```c
+DynamicArenaAllocator dynamic_arena;
+dynamic_arena.init(1024);
+mem::@scoped(&dynamic_arena) 
+{
+    // This allocation uses the dynamic arena 
+    Foo* f = mem::alloc(Foo);
+};
+// Release any dynamic arena memory.
+dynamic_arena.destroy();    
+
+```
+
+### @tscoped(; @body())
+
+Same as @scoped, but uses the temporary allocator rather than any
+arbitrary allocator.
+
+### void* tmalloc(usize size, usize alignment = 0)
+
+Allocates memory using the temporary allocator. Panic on failure.
+
+### void* tcalloc(usize size, usize alignment = 0)
+
+Same as `tmalloc` but clears the memory.
+
+### void* trealloc(void* ptr, usize size, usize alignment = 0)
+
+`realloc` but on memory received using `tcalloc` or `tmalloc`.
+
+### talloc($Type)
+
+Like `alloc` but using the temporary allocator.
+
+### void @pool(;@body)
+
+Opens a temporary memory scope.
+
+```c
+@poo() 
+{
+    // This allocation uses the dynamic arena 
+    Foo* f = talloc(Foo);
+};
+
+```
+
+
 ### @volatile_load(&x)
 
 Returns the value in `x` using a volatile load.
 
+```c
+// Both loads will always happen:
+int y = @volatile_load(my_global);
+y = @volatile_load(my_global);
+```
+
+
 ### @volatile_store(&x, y)
 
 Store the value `y` in `x` using a volatile store.
+
+```c
+// Both stores will always happen:
+@volatile_store(y, 1);
+@volatile_store(y, 1);
+```
+### usize aligned_offset(usize offset, usize alignment)
+
+Returns an aligned size based on the current offset. The alignment
+must be a power of two. E.g. `mem::aligned_offset(17, 8)` would return `24`
+
+### usize aligned_pointer(void* ptr, usize alignment)
+
+Returns a pointer aligned to the given alignment, using `aligned_offset`.
+
+### bool ptr_is_aligned(void* ptr, usize alignment)
+
+Return true if the pointer is aligned, false otherwise.
+
+### void copy(void* dst, void* src, usize len, usize $dst_align = 0, usize $src_align = 0, bool $is_volatile = false)
+
+Copies bytes from one pointer to another. It may optionally be set as volatile,
+in which case the copy may not be optimized away. Furthermore the source
+and destination alignment may be used.
+
+```c
+
+Foo* f = talloc(data_size);
+mem::copy(f, slice.ptr, size); 
+```
+
+### void set(void* dst, char val, usize len, usize $dst_align = 0, bool $is_volatile = false)
+
+Sets bytes to a value. This operation may be aligned and/or volatile. See the `copy` method.
+
+### void clear(void* dst, usize len, usize $dst_align = 0, bool $is_volatile = false)
+
+Sets bytes to zero. This operation may be aligned and/or volatile. See the `copy` method.
+
+### @clone(&value)
+
+Makes a shallow copy of a value using the regular allocator.
+
+```c
+Foo f = ...
+
+return @clone(f); 
+
+```
+
+### @tclone(&value)
+
+Same as `@clone` but uses the temporary allocator.
 
 ## std::core::mem::array
 
