@@ -116,7 +116,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#varcastvariant-v-type">varcast(variant v, $Type)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#void-unreachable">void unreachable()</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-unreachablestring-unreachable-statement-reached">void unreachable($string = "Unreachable statement reached.")</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#bitcastvalue-type">bitcast(value, $Type)</a>
     </li>
@@ -138,9 +138,51 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#stdcoremem">std::core::mem</a>
         <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#malloc-malloc_checked-malloc_aligned">malloc, malloc_checked, malloc_aligned</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#calloc-calloc_checked-calloc_aligned">calloc, calloc_checked, calloc_aligned</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#relloc-relloc_checked-realloc_aligned">relloc, relloc_checked, realloc_aligned</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#free-free_aligned">free, free_aligned</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#char-alloc_bytesusize-bytes">char[] alloc_bytes(usize bytes)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#alloctype">alloc($Type)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#scopedallocator-allocator-body">@scoped(Allocator* allocator; @body())</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#tscoped-body">@tscoped(; @body())</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-tmallocusize-size-usize-alignment-0">void* tmalloc(usize size, usize alignment = 0)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-tcallocusize-size-usize-alignment-0">void* tcalloc(usize size, usize alignment = 0)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-treallocvoid-ptr-usize-size-usize-alignment-0">void trealloc(void ptr, usize size, usize alignment = 0)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#talloctype">talloc($Type)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-poolbody">void @pool(;@body)</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#volatile_loadx">@volatile_load(&amp;x)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#volatile_storex-y">@volatile_store(&amp;x, y)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usize-aligned_offsetusize-offset-usize-alignment">usize aligned_offset(usize offset, usize alignment)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usize-aligned_pointervoid-ptr-usize-alignment">usize aligned_pointer(void* ptr, usize alignment)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bool-ptr_is_alignedvoid-ptr-usize-alignment">bool ptr_is_aligned(void* ptr, usize alignment)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-copyvoid-dst-void-src-usize-len-usize-dst_align-0-usize-src_align-0-bool-is_volatile-false">void copy(void dst, void src, usize len, usize $dst_align = 0, usize $src_align = 0, bool $is_volatile = false)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-setvoid-dst-char-val-usize-len-usize-dst_align-0-bool-is_volatile-false">void set(void* dst, char val, usize len, usize $dst_align = 0, bool $is_volatile = false)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#void-clearvoid-dst-usize-len-usize-dst_align-0-bool-is_volatile-false">void clear(void* dst, usize len, usize $dst_align = 0, bool $is_volatile = false)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#clonevalue">@clone(&amp;value)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#tclonevalue">@tclone(&amp;value)</a>
     </li>
         </ul>
     </li>
@@ -323,8 +365,26 @@ io::printf(&quot;%d\n&quot;, a); // Prints 5
 </code></pre>
 <h3 id="varcastvariant-v-type">varcast(variant v, $Type)</h3>
 <p>Optionally cast the value <code>v</code> to type <code>$Type*</code> on failure returns <code>VarCastResult.TYPE_MISMATCH</code>.</p>
-<h3 id="void-unreachable">void unreachable()</h3>
+<pre><code class="language-c">int b;
+variant a = &amp;b;
+float*! c = varcast(a, float); // Will return TYPE_MISMATCH
+int*! d = varcast(a, int);     // Works!
+</code></pre>
+<h3 id="void-unreachablestring-unreachable-statement-reached">void unreachable($string = "Unreachable statement reached.")</h3>
 <p>Mark a code path as unreachable.</p>
+<pre><code class="language-c">switch (x)
+{
+  case 0:
+    foo();
+  case 1:
+    bar();
+  default:
+    // Should never happen.
+    unreachable(&quot;x should have been 0 or 1&quot;);    
+}    
+</code></pre>
+<p>On safe mode this will throw a runtime panic when reached. For release mode the
+compiler will assume this case never happens.</p>
 <h3 id="bitcastvalue-type">bitcast(value, $Type)</h3>
 <p>Do a bitcast of a value to <code>$Type</code>, requires that the types are of the same memory size.</p>
 <pre><code class="language-c">float x = 1.0;
@@ -374,10 +434,103 @@ are implemented.</p>
 <li><code>COMPILER_SAFE_MODE</code> true if compiled with safety checks.</li>
 </ul>
 <h2 id="stdcoremem">std::core::mem</h2>
+<h3 id="malloc-malloc_checked-malloc_aligned">malloc, malloc_checked, malloc_aligned</h3>
+<p>Allocate the given number of bytes. <code>malloc</code> will panic on out of memory, 
+whereas <code>malloc_checked</code> and <code>malloc_aligned</code> returns an optional value.
+<code>malloc_aligned</code> adds an alignment, which must be a power of 2. Any pointer
+allocated using <code>malloc_aligned</code> must be freed using <code>free_aligned</code> rather
+the normal <code>free</code> or memory corruption may result.</p>
+<pre><code class="language-c">char* data = malloc(8);
+char*! data2 = malloc_checked(8);
+int[&lt;16&gt;]*! data3 = malloc_aligned(16 * int.sizeof), 128);  
+</code></pre>
+<h3 id="calloc-calloc_checked-calloc_aligned">calloc, calloc_checked, calloc_aligned</h3>
+<p>Identical to <code>malloc</code>, except the data is guaranteed to be zeroed out.</p>
+<h3 id="relloc-relloc_checked-realloc_aligned">relloc, relloc_checked, realloc_aligned</h3>
+<p>Resizes memory allocated using <code>malloc</code> or <code>calloc</code>. Any extra data is 
+guaranteed to be zeroed out. <code>realloc_aligned</code> can only be used with
+pointers created using <code>calloc_aligned</code> or <code>alloc_aligned</code>.</p>
+<h3 id="free-free_aligned">free, free_aligned</h3>
+<p>Frees memory allocated using <code>malloc</code> or <code>calloc</code>.</p>
+<h3 id="char-alloc_bytesusize-bytes">char[] alloc_bytes(usize bytes)</h3>
+<p>Similar to malloc, but returns the data as a subarray. Will panic on out of memory.</p>
+<h3 id="alloctype">alloc($Type)</h3>
+<p>Will allocate enough memory for exactly the type provided:</p>
+<pre><code class="language-c">Foo* f = mem::alloc(Foo);
+</code></pre>
+<h3 id="scopedallocator-allocator-body">@scoped(Allocator* allocator; @body())</h3>
+<p>Swaps the current memory allocator for the duration of the call.</p>
+<pre><code class="language-c">DynamicArenaAllocator dynamic_arena;
+dynamic_arena.init(1024);
+mem::@scoped(&amp;dynamic_arena) 
+{
+    // This allocation uses the dynamic arena 
+    Foo* f = mem::alloc(Foo);
+};
+// Release any dynamic arena memory.
+dynamic_arena.destroy();    
+
+</code></pre>
+<h3 id="tscoped-body">@tscoped(; @body())</h3>
+<p>Same as @scoped, but uses the temporary allocator rather than any
+arbitrary allocator.</p>
+<h3 id="void-tmallocusize-size-usize-alignment-0">void* tmalloc(usize size, usize alignment = 0)</h3>
+<p>Allocates memory using the temporary allocator. Panic on failure.</p>
+<h3 id="void-tcallocusize-size-usize-alignment-0">void* tcalloc(usize size, usize alignment = 0)</h3>
+<p>Same as <code>tmalloc</code> but clears the memory.</p>
+<h3 id="void-treallocvoid-ptr-usize-size-usize-alignment-0">void<em> trealloc(void</em> ptr, usize size, usize alignment = 0)</h3>
+<p><code>realloc</code> but on memory received using <code>tcalloc</code> or <code>tmalloc</code>.</p>
+<h3 id="talloctype">talloc($Type)</h3>
+<p>Like <code>alloc</code> but using the temporary allocator.</p>
+<h3 id="void-poolbody">void @pool(;@body)</h3>
+<p>Opens a temporary memory scope.</p>
+<pre><code class="language-c">@poo() 
+{
+    // This allocation uses the dynamic arena 
+    Foo* f = talloc(Foo);
+};
+
+</code></pre>
 <h3 id="volatile_loadx">@volatile_load(&amp;x)</h3>
 <p>Returns the value in <code>x</code> using a volatile load.</p>
+<pre><code class="language-c">// Both loads will always happen:
+int y = @volatile_load(my_global);
+y = @volatile_load(my_global);
+</code></pre>
 <h3 id="volatile_storex-y">@volatile_store(&amp;x, y)</h3>
 <p>Store the value <code>y</code> in <code>x</code> using a volatile store.</p>
+<pre><code class="language-c">// Both stores will always happen:
+@volatile_store(y, 1);
+@volatile_store(y, 1);
+</code></pre>
+<h3 id="usize-aligned_offsetusize-offset-usize-alignment">usize aligned_offset(usize offset, usize alignment)</h3>
+<p>Returns an aligned size based on the current offset. The alignment
+must be a power of two. E.g. <code>mem::aligned_offset(17, 8)</code> would return <code>24</code></p>
+<h3 id="usize-aligned_pointervoid-ptr-usize-alignment">usize aligned_pointer(void* ptr, usize alignment)</h3>
+<p>Returns a pointer aligned to the given alignment, using <code>aligned_offset</code>.</p>
+<h3 id="bool-ptr_is_alignedvoid-ptr-usize-alignment">bool ptr_is_aligned(void* ptr, usize alignment)</h3>
+<p>Return true if the pointer is aligned, false otherwise.</p>
+<h3 id="void-copyvoid-dst-void-src-usize-len-usize-dst_align-0-usize-src_align-0-bool-is_volatile-false">void copy(void<em> dst, void</em> src, usize len, usize $dst_align = 0, usize $src_align = 0, bool $is_volatile = false)</h3>
+<p>Copies bytes from one pointer to another. It may optionally be set as volatile,
+in which case the copy may not be optimized away. Furthermore the source
+and destination alignment may be used.</p>
+<pre><code class="language-c">
+Foo* f = talloc(data_size);
+mem::copy(f, slice.ptr, size); 
+</code></pre>
+<h3 id="void-setvoid-dst-char-val-usize-len-usize-dst_align-0-bool-is_volatile-false">void set(void* dst, char val, usize len, usize $dst_align = 0, bool $is_volatile = false)</h3>
+<p>Sets bytes to a value. This operation may be aligned and/or volatile. See the <code>copy</code> method.</p>
+<h3 id="void-clearvoid-dst-usize-len-usize-dst_align-0-bool-is_volatile-false">void clear(void* dst, usize len, usize $dst_align = 0, bool $is_volatile = false)</h3>
+<p>Sets bytes to zero. This operation may be aligned and/or volatile. See the <code>copy</code> method.</p>
+<h3 id="clonevalue">@clone(&amp;value)</h3>
+<p>Makes a shallow copy of a value using the regular allocator.</p>
+<pre><code class="language-c">Foo f = ...
+
+return @clone(f); 
+
+</code></pre>
+<h3 id="tclonevalue">@tclone(&amp;value)</h3>
+<p>Same as <code>@clone</code> but uses the temporary allocator.</p>
 <h2 id="stdcorememarray">std::core::mem::array</h2>
 <h3 id="alloctype-usize-elements">alloc($Type, usize elements)</h3>
 <p>Allocate a slice with <code>elements</code> number of elements, returning
