@@ -534,11 +534,13 @@ return @clone(f);
 <h2 id="stdcorememarray">std::core::mem::array</h2>
 <h3 id="alloctype-usize-elements">alloc($Type, usize elements)</h3>
 <p>Allocate a slice with <code>elements</code> number of elements, returning
-a subarray of the given length. Elements are not initialized.</p>
+a subarray of the given length. Elements are not initialized.
+<code>array::talloc</code> variant uses the temporary allocator.</p>
 <pre><code class="language-c">int[] ints = array::alloc(int, 100);
 </code></pre>
 <h3 id="maketype-usize-elements">make($Type, usize elements)</h3>
-<p>Like <code>array::alloc</code> but all elements are cleared.</p>
+<p>Like <code>array::alloc</code> but all elements are cleared. <code>tmake</code> variant uses
+the temporary allocator.</p>
 <h2 id="stdcoretypes">std::core::types</h2>
 <h3 id="bool-is_comparabletype">bool is_comparable($Type)</h3>
 <p>Return true if the type can be used with comparison operators.</p>
