@@ -130,6 +130,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#memset">$$memset</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sysclock">$$sysclock</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#math-functions">Math functions</a>
     </li>
         </ul>
@@ -244,6 +246,9 @@ use, and typically the standard library has macros that wrap these builtins, so 
 <p>Builtin memcpy instruction.</p>
 <h4 id="memset">$$memset</h4>
 <p>Builtin memset instruction.</p>
+<h4 id="sysclock">$$sysclock</h4>
+<p>Access to the cycle counter register (or similar low latency clock) on supported
+architectures (e.g. RDTSC on x86), otherwise $$sysclock will yield 0.</p>
 <h3 id="math-functions">Math functions</h3>
 <p>Functions $$ceil, $$trunc, $$sin, $$cos, $$log, $$log2, $$log10, $$sqrt, $$pow, $$min, $$max, $$exp, $$fma and $$fabs.</p>
 <p>Can be applied to float vectors or numbers. Returns the same type.</p>
