@@ -186,8 +186,8 @@
                 <h1 id="c-interoperability">C Interoperability</h1>
 <p>C3 is C ABI compatible. That means you can call C from C3, and call C3 from C without having to
 do anything special. As a quick way to call C, you can simply declare the function as a 
-C3 function but with <code>export</code> in front of it. As long as the function is linked, it will work:</p>
-<pre><code>export fn void puts(char*); // C "puts"
+C3 function but with <code>extern</code> in front of it. As long as the function is linked, it will work:</p>
+<pre><code>extern fn void puts(char*); // C "puts"
 
 fn void main()
 {
