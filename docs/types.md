@@ -209,7 +209,7 @@ Enum (enumerated) types use the following syntax:
 
     enum State : int 
     {
-      PENDING = 0,
+      PENDING,
       RUNNING,
       TERMINATED
     }

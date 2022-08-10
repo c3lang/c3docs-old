@@ -18,7 +18,7 @@ Now in the terminal type:
 
 ```
 $ c3c compile hello_world.c3
-$ ./hello_world.a
+$ ./hello_world
 Hello World
 $ 
 ```

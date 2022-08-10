@@ -276,6 +276,7 @@ Same as `@clone` but uses the temporary allocator.
 
 Allocate a slice with `elements` number of elements, returning
 a subarray of the given length. Elements are not initialized.
+`array::talloc` variant uses the temporary allocator.
 
 ```c
 int[] ints = array::alloc(int, 100);
@@ -283,7 +284,8 @@ int[] ints = array::alloc(int, 100);
 
 ### make($Type, usize elements)
 
-Like `array::alloc` but all elements are cleared.
+Like `array::alloc` but all elements are cleared. `tmake` variant uses
+the temporary allocator.
 
 ## std::core::types
 

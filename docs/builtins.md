@@ -53,6 +53,11 @@ Builtin memcpy instruction.
 
 Builtin memset instruction.
 
+#### $$sysclock
+
+Access to the cycle counter register (or similar low latency clock) on supported
+architectures (e.g. RDTSC on x86), otherwise $$sysclock will yield 0.
+
 ### Math functions
 
 Functions $$ceil, $$trunc, $$sin, $$cos, $$log, $$log2, $$log10, $$sqrt, $$pow, $$min, $$max, $$exp, $$fma and $$fabs.

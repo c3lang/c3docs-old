@@ -70,7 +70,7 @@ Switches have implicit break and scope. Use "nextcase" to implicitly fallthrough
 ```
 enum Height : uint
 {
-    LOW = 0,
+    LOW,
     MEDIUM,
     HIGH,
 }
