@@ -83,7 +83,7 @@ Named arguments with defaults:
 There are four types of varargs: 
 1. single typed
 2. explicitly typed variants: pass non-variant arguments as references
-3. implicitly typed variants: arguments are implicitly converted to references
+3. implicitly typed variants: arguments are implicitly converted to references (use with care)
 4. untyped C-style
 
 Examples:
@@ -118,7 +118,6 @@ Examples:
         va_untyped(1, x, "foo"); // extern C-function
     }
     
-
 ### Functions and optional returns
 
 The return parameter may be an *optional result type* – a type suffixed by `!` indicating that this 
