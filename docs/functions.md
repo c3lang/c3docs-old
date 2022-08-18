@@ -80,35 +80,44 @@ Named arguments with defaults:
 
 #### Varargs
 
-There are three types of varargs: 
-the usual C-style untyped varargs, typed varargs and variant varargs. 
-Untyped varargs will always send arguments as-is, whereas typed 
-arguments will do normal conversions. The variant varargs will implicitly
-convert the arguments to variant values.
+There are four types of varargs: 
+1. single typed
+2. explicitly typed variants: pass non-variant arguments as references
+3. implicitly typed variants: arguments are implicitly converted to references
+4. untyped C-style
 
-    fn void varargsUntyped(string foo, ...)
+Examples:
+
+    fn void va_singletyped(int... args)
     {
-        /* ... */
+        /* args has type int[] */
     }
 
-    fn void varargsTyped(string bar, int... ints)
+    fn void va_variants_explicit(variant... args)
     {
-        /* ... */
+        /* args has type variant[] */
     }
 
-    fn void varargsVariant(string bar, values...)
+    fn void va_variants_implicit(args...)
     {
-        variant[] v = values;
-        /* ... */
+        /* args has type variant[] */
     }
-
+    
+    extern fn void va_untyped(...); // only used for extern C functions
+    
     fn void test()
     {
-        varargsUntyped("Hello", 2, 1.0, (char)1, "Test");
-        varargsTyped("Test", 2, (char)1);
-        // The second parameter will be converted to an int implicitly.
-        varargsVariant("Hello", 2, 1.0, (char)1, "Test");
+        va_singletyped(1, 2, 3);
+        
+        int x = 1;
+        variant v = &x;
+        va_variants_explicit(&&1, &x, v); // pass references for non-variant arguments
+        
+        va_variants_implicit(1, x, "foo"); // arguments are implicitly converted to variants
+        
+        va_untyped(1, x, "foo"); // extern C-function
     }
+    
 
 ### Functions and optional returns
 
