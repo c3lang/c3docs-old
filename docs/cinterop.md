@@ -2,9 +2,9 @@
 
 C3 is C ABI compatible. That means you can call C from C3, and call C3 from C without having to
 do anything special. As a quick way to call C, you can simply declare the function as a 
-C3 function but with `export` in front of it. As long as the function is linked, it will work:
+C3 function but with `extern` in front of it. As long as the function is linked, it will work:
 
-    export fn void puts(char*); // C "puts"
+    extern fn void puts(char*); // C "puts"
 
     fn void main()
     {
