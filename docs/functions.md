@@ -117,7 +117,7 @@ Examples:
         
         va_untyped(1, x, "foo"); // extern C-function
     }
-    
+
 ### Functions and optional returns
 
 The return parameter may be an *optional result type* – a type suffixed by `!` indicating that this 
