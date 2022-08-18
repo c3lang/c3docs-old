@@ -81,6 +81,7 @@ Named arguments with defaults:
 #### Varargs
 
 There are four types of varargs: 
+
 1. single typed
 2. explicitly typed variants: pass non-variant arguments as references
 3. implicitly typed variants: arguments are implicitly converted to references (use with care)
