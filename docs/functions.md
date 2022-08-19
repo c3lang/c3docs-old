@@ -118,6 +118,18 @@ Examples:
         
         va_untyped(1, x, "foo"); // extern C-function
     }
+    
+To pass the varargs to another function in an expanded way, use the unsplat operator:
+
+    import std::io;
+
+    fn void myprintf(char[] fmt, args...) {
+        io::printf(fmt, ...args); // the args are passed expanded
+    }
+
+    fn void main() {
+        myprintf("%s %d", "foo", 42);
+    }
 
 ### Functions and optional returns
 
