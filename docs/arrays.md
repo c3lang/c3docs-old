@@ -162,7 +162,7 @@ and annotating them using the `@operator` attribute:
         return vector.elements[element];
     }
 
-    macro Vector.size(Vector* vector, usize element) @operator(len)
+    macro Vector.size(Vector* vector) @operator(len)
     {
         return vector.size;
     }
