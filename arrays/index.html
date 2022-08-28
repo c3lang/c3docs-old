@@ -357,7 +357,7 @@ and annotating them using the <code>@operator</code> attribute:</p>
     int* elements;
 }
 
-macro Vector.get(Vector* vector, usize element) @operator(elementat)
+macro int Vector.get(Vector* vector, usize element) @operator(elementat)
 {
     return vector.elements[element];
 }
