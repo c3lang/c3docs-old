@@ -194,12 +194,11 @@ fn int testFoo(int foo)
 }
 </code></pre>
 <h1 id="post-conditions">Post conditions</h1>
-<p>Post conditions are evaluated to make checks on the resulting state after passing through the function. There are two special post conditions: <code>const</code> and <code>pure</code>.</p>
-<p>The post condition uses the <code>@ensure</code> annotation. Where <code>return</code> is used to mark the return value from the function. </p>
-<p>For <code>const</code> and <code>pure</code>, they can either be given as separate annotations: <code>@pure</code> and <code>@const &lt;parameter&gt;, ...</code>, or inside an <code>@ensure</code> using the format <code>const(&lt;parameter&gt;)</code> and <code>pure(&lt;function name&gt;)</code>. A parameter marked <code>const</code> guarentees that the memory pointed to is not altered within the scope of a function. <code>pure</code> guarantees that the function does not read or write to any global variables.</p>
+<p>Post conditions are evaluated to make checks on the resulting state after passing through the function.
+The post condition uses the <code>@ensure</code> annotation. Where <code>return</code> is used to represent the return value from the function. </p>
 <pre><code>/**
- * @ensure foo != nil, const(foo), return &gt; foo.x;
- * @pure
+ * @require foo != null
+ * @ensure return &gt; foo.x
  **/
 fn uint checkFoo(Foo* foo)
 {
@@ -208,8 +207,62 @@ fn uint checkFoo(Foo* foo)
     return y * abs(foo.x);
 }
 </code></pre>
-<h3 id="const-in-detail">Const in detail</h3>
-<p>The <code>const</code> annotation allows a program to make assumtions in regards of how the function treats the parameter. This can then be used by a compiler make optimizations for any caller of the function.</p>
+<h2 id="parameter-annotations">Parameter annotations</h2>
+<p><code>@param</code> supports <code>[in]</code> <code>[out]</code> and <code>[inout]</code>. These are only applicable
+for pointer arguments. <code>[in]</code> disallows writing to the variable,
+<code>[out]</code> disallows reading from the variable. Without an annotation,
+pointers may both be read from and written to without checks. </p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th align="center">readable?</th>
+<th align="center">writable?</th>
+<th align="center">nullable?</th>
+<th align="center">use as "in"?</th>
+<th align="center">use as "out"?</th>
+<th align="center">use as "inout"</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>no annotation</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+</tr>
+<tr>
+<td><code>in</code></td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td><code>out</code></td>
+<td align="center">No</td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td><code>inout</code></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+</tr>
+</tbody>
+</table>
 <p>However, it should be noted that the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:</p>
 <pre><code>fn void badFunc(int* i)
 {
@@ -217,7 +270,7 @@ fn uint checkFoo(Foo* foo)
 }
 
 /**
- * @ensure const(i)
+ * @param [in] i
  */
 fn void lyingFunc(int* i)
 {
@@ -234,11 +287,11 @@ fn void test()
 <p>However, compilers will usually detect this:</p>
 <pre><code>
 /**
- * @ensure const(i)
+ * @param [in] i
  */
 fn void badFunc(int* i)
 {
-    *i = 2; // &lt;- Compiler error: violating post condition const(i)
+    *i = 2; // &lt;- Compiler error: cannot write to &quot;in&quot; parameter
 }
 </code></pre>
 <h3 id="pure-in-detail">Pure in detail</h3>
@@ -290,10 +343,11 @@ fn void lyingFunc()
 <p>Consequently circumventing "pure" annotations is undefined behaviour.</p>
 <h1 id="pre-conditions-for-macros">Pre conditions for macros</h1>
 <p>Macros have an additional class of pre conditions, that are used to confirm that the values actually will work inside the macro body. 
-This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the <code>@checked</code> annotation, or together with the <code>@require</code> annotations, surrounded by <code>parse()</code>. </p>
+This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the <code>@checked</code> annotation. </p>
 <pre><code>/**
  * @checked resource.open()
- * @require resource != nil, parse(void *x = resource.open())
+ * @require resource != nil
+ * @checked void *x = resource.open()
  **/
 macro openResource(resource)
 {
