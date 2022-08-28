@@ -157,12 +157,12 @@ and annotating them using the `@operator` attribute:
         int* elements;
     }
 
-    macro Vector.get(Vector* vector, usize element) @operator(elementat)
+    macro int Vector.get(Vector* vector, usize element) @operator(elementat)
     {
         return vector.elements[element];
     }
 
-    macro Vector.size(Vector* vector) @operator(len)
+    macro usize Vector.size(Vector* vector) @operator(len)
     {
         return vector.size;
     }
