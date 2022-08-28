@@ -28,14 +28,15 @@ The const qualifier is only retained for actual constant variables. C3 uses a sp
 
 ```
 /**
- * This function ensures that foo is not changed in the function, nor is bar.x altered.
- * @ensure const(foo), const(bar.x)
+ * This function ensures that foo is not changed in the function.
+ * @param [in] foo
+ * @param [out] bar
  **/
 fn void test(Foo* foo, Bar* bar)
 {
     bar.y = foo.x;
-    // bar.x = foo.x - compile time error!
-    // foo.x = bar.y - compile time error!
+    // foo.x = foo.x + 1 - compile time error, can't write to 'in' param.
+    // int x = bar.y     - compile time error, can't read from an 'out' param.
 }
 ```
 

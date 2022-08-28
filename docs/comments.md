@@ -42,7 +42,6 @@ Finally a custom annotation, "@mycustom" is added. The compiler is free to silen
 | @deprecated  | `@deprecated <optional description>`|
 | @require     | `@require <expr1>, <expr2>, ...` |
 | @ensure      | `@ensure <expre1>, <expr2>, ...` |
-| @const       | `@const <param1>, <param2>, ...` |    
 | @pure        | `@pure` |    
 | @checked    | `@checked <expr1>, <expr2>, ...` |
     

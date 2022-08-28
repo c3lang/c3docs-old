@@ -18,16 +18,15 @@ fn int testFoo(int foo)
 
 # Post conditions
 
-Post conditions are evaluated to make checks on the resulting state after passing through the function. There are two special post conditions: `const` and `pure`.
+Post conditions are evaluated to make checks on the resulting state after passing through the function.
+The post condition uses the `@ensure` annotation. Where `return` is used to represent the return value from the function. 
 
-The post condition uses the `@ensure` annotation. Where `return` is used to mark the return value from the function. 
 
-For `const` and `pure`, they can either be given as separate annotations: `@pure` and `@const <parameter>, ...`, or inside an `@ensure` using the format `const(<parameter>)` and `pure(<function name>)`. A parameter marked `const` guarentees that the memory pointed to is not altered within the scope of a function. `pure` guarantees that the function does not read or write to any global variables.
     
 ```
 /**
- * @ensure foo != nil, const(foo), return > foo.x;
- * @pure
+ * @require foo != null
+ * @ensure return > foo.x
  **/
 fn uint checkFoo(Foo* foo)
 {
@@ -37,9 +36,20 @@ fn uint checkFoo(Foo* foo)
 }
 ```
 
-### Const in detail
+## Parameter annotations
 
-The `const` annotation allows a program to make assumtions in regards of how the function treats the parameter. This can then be used by a compiler make optimizations for any caller of the function.
+`@param` supports `[in]` `[out]` and `[inout]`. These are only applicable
+for pointer arguments. `[in]` disallows writing to the variable,
+`[out]` disallows reading from the variable. Without an annotation,
+pointers may both be read from and written to without checks. 
+
+| Type        | readable?    | writable?   | nullable?   | use as "in"? | use as "out"? | use as "inout"
+| ------      | :-----: | :-----: | :-----: | :-----:      | :-----:       | :----: |
+| no annotation| Yes    | Yes     | Yes     | Yes          | Yes           |  Yes   |
+| `in`        | Yes     | No      | Yes     | Yes          | No            |  No    |
+| `out`       | No      | Yes     | No      | No           | Yes           |  No    |
+| `inout`     | Yes     | Yes     | Yes     | Yes          | Yes           |  Yes   |
+
 
 However, it should be noted that the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:
 
@@ -50,7 +60,7 @@ fn void badFunc(int* i)
 }
 
 /**
- * @ensure const(i)
+ * @param [in] i
  */
 fn void lyingFunc(int* i)
 {
@@ -69,11 +79,11 @@ However, compilers will usually detect this:
 ```
 
 /**
- * @ensure const(i)
+ * @param [in] i
  */
 fn void badFunc(int* i)
 {
-    *i = 2; // <- Compiler error: violating post condition const(i)
+    *i = 2; // <- Compiler error: cannot write to "in" parameter
 }
 ```
 
@@ -137,12 +147,13 @@ Consequently circumventing "pure" annotations is undefined behaviour.
 # Pre conditions for macros
 
 Macros have an additional class of pre conditions, that are used to confirm that the values actually will work inside the macro body. 
-This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the `@checked` annotation, or together with the `@require` annotations, surrounded by `parse()`. 
+This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the `@checked` annotation. 
 
 ```
 /**
  * @checked resource.open()
- * @require resource != nil, parse(void *x = resource.open())
+ * @require resource != nil
+ * @checked void *x = resource.open()
  **/
 macro openResource(resource)
 {
