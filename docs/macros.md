@@ -314,6 +314,55 @@ It's perfectly fine for a macro to invoke another macro or itself.
 
 The maximum recursion depth is limited to the `macro-recursion-depth` build setting.
 
+## Macro vaargs
+
+Macros support the typed vaargs used by C3 functions: `macro void foo(int... args)` and `macro void bar(args...)` 
+but it also supports a unique set of macro vaargs that look like C style vaargs: `macro void baz(...)`
+
+To access the arguments there is a family of $va-* built in functions to retrieve
+the arguments:
+
+    macro compile_time_sum(...)
+    {
+       var $x = 0;
+       $for (var $i = 0; $i < $vacount(); $i++):
+           $x += $vaconst($i);
+       $endfor;
+       return $x;
+    }
+    $if (compile_time_sum(1, 3) > 2): // Will compile to $if (4 > 2)
+      ...
+    $endif;
+
+### $vacount
+
+Returns the number of arguments.
+
+### $vaarg
+
+Returns the argument as a regular parameter. The argument is
+guaranteed to be evaluated once, even if the argument is used multiple times.
+
+### $vaconst
+
+Returns the argument as a compile time constant, this is suitable for
+placing in a compile time variable or use for compile time evaluation,
+e.g. `$foo = $vaconst(1)`. This corresponds to `$` parameters.
+
+### $vaexpr
+
+Returns the argument as an unevaluated expression. Multiple uses will
+evaluate the expression multiple times, this corresponds to `#` parameters.
+
+### $vatype
+
+Returns the argument as a type. This corresponds to `$Type` style parameters, 
+e.g. `$vatype(2) a = 2` 
+
+### $varef
+
+Returns the argument as an lvalue. This corresponds to `&myref` style parameters,
+e.g. `$varef(1) = 123`.
 
 ## Macro directives
 

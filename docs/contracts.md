@@ -43,12 +43,12 @@ for pointer arguments. `[in]` disallows writing to the variable,
 `[out]` disallows reading from the variable. Without an annotation,
 pointers may both be read from and written to without checks. 
 
-| Type        | readable?    | writable?   | nullable?   | use as "in"? | use as "out"? | use as "inout"
-| ------      | :-----: | :-----: | :-----: | :-----:      | :-----:       | :----: |
-| no annotation| Yes    | Yes     | Yes     | Yes          | Yes           |  Yes   |
-| `in`        | Yes     | No      | Yes     | Yes          | No            |  No    |
-| `out`       | No      | Yes     | No      | No           | Yes           |  No    |
-| `inout`     | Yes     | Yes     | Yes     | Yes          | Yes           |  Yes   |
+| Type        | readable?    | writable?   | use as "in"? | use as "out"? | use as "inout"
+| ------      | :-----: | :-----: | :-----: | :-----:       | :----: |
+| no annotation| Yes    | Yes     | Yes     | Yes          |  Yes   |
+| `in`        | Yes     | No      | Yes     | Yes          |  No    |
+| `out`       | No      | Yes     | No      | No           |  No    |
+| `inout`     | Yes     | Yes     | Yes     | Yes          |  Yes   |
 
 
 However, it should be noted that the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:
