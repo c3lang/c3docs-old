@@ -134,6 +134,22 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#calling-macros">Calling macros</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#macro-vaargs">Macro vaargs</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#vacount">$vacount</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vaarg">$vaarg</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vaconst">$vaconst</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vaexpr">$vaexpr</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vatype">$vatype</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#varef">$varef</a>
+    </li>
+        </ul>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#macro-directives">Macro directives</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#if-else-and-elif">$if, $else and $elif</a>
@@ -512,6 +528,41 @@ macro squarePlusOne(x)
 }
 </code></pre>
 <p>The maximum recursion depth is limited to the <code>macro-recursion-depth</code> build setting.</p>
+<h2 id="macro-vaargs">Macro vaargs</h2>
+<p>Macros support the typed vaargs used by C3 functions: <code>macro void foo(int... args)</code> and <code>macro void bar(args...)</code> 
+but it also supports a unique set of macro vaargs that look like C style vaargs: <code>macro void baz(...)</code></p>
+<p>To access the arguments there is a family of $va-* built in functions to retrieve
+the arguments:</p>
+<pre><code>macro compile_time_sum(...)
+{
+   var $x = 0;
+   $for (var $i = 0; $i &lt; $vacount(); $i++):
+       $x += $vaconst($i);
+   $endfor;
+   return $x;
+}
+$if (compile_time_sum(1, 3) &gt; 2): // Will compile to $if (4 &gt; 2)
+  ...
+$endif;
+</code></pre>
+<h3 id="vacount">$vacount</h3>
+<p>Returns the number of arguments.</p>
+<h3 id="vaarg">$vaarg</h3>
+<p>Returns the argument as a regular parameter. The argument is
+guaranteed to be evaluated once, even if the argument is used multiple times.</p>
+<h3 id="vaconst">$vaconst</h3>
+<p>Returns the argument as a compile time constant, this is suitable for
+placing in a compile time variable or use for compile time evaluation,
+e.g. <code>$foo = $vaconst(1)</code>. This corresponds to <code>$</code> parameters.</p>
+<h3 id="vaexpr">$vaexpr</h3>
+<p>Returns the argument as an unevaluated expression. Multiple uses will
+evaluate the expression multiple times, this corresponds to <code>#</code> parameters.</p>
+<h3 id="vatype">$vatype</h3>
+<p>Returns the argument as a type. This corresponds to <code>$Type</code> style parameters, 
+e.g. <code>$vatype(2) a = 2</code> </p>
+<h3 id="varef">$varef</h3>
+<p>Returns the argument as an lvalue. This corresponds to <code>&amp;myref</code> style parameters,
+e.g. <code>$varef(1) = 123</code>.</p>
 <h2 id="macro-directives">Macro directives</h2>
 <p>Inside of a macro, we can use the compile time statements <code>$if</code>, <code>$for</code> and <code>$switch</code>. Macros may also be recursively invoked. As previously mentioned, <code>$if</code> and <code>$switch</code> may also be invoked on the top level.</p>
 <h3 id="if-else-and-elif">$if, $else and $elif</h3>
