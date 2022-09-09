@@ -47,6 +47,17 @@ Returns a subarray containing the values of an enum or fault.
     }
     char[] x = $nameof(FooEnum.values[1]); // "BAR"
 
+#### elements
+
+Returns the element count of an enum or fault.
+
+    enum FooEnum
+    {
+        BAR,
+        BAZ
+    }
+    int x = FooEnum.elements; // 2
+
 #### fields
 
 *Not yet implemented*

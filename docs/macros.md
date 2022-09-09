@@ -418,7 +418,7 @@ Looping over enums:
 
     macro foo_enum($SomeEnum)
     {
-        $foreach ($x : $SomeEnum.elements):
+        $foreach ($x : $SomeEnum.values):
             libc::printf("%d\n", (int)$x);     
         $endforeach;
     }
