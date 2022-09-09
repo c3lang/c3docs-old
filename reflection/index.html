@@ -112,6 +112,8 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#values">values</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#elements">elements</a>
+    </li>
     <li class="toctree-l4"><a class="reference internal" href="#fields">fields</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#signed">signed</a>
@@ -264,6 +266,15 @@ Returns the length of the array.</p>
     BAZ
 }
 char[] x = $nameof(FooEnum.values[1]); // "BAR"
+</code></pre>
+<h4 id="elements">elements</h4>
+<p>Returns the element count of an enum or fault.</p>
+<pre><code>enum FooEnum
+{
+    BAR,
+    BAZ
+}
+int x = FooEnum.elements; // 2
 </code></pre>
 <h4 id="fields">fields</h4>
 <p><em>Not yet implemented</em></p>

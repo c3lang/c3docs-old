@@ -608,7 +608,7 @@ fn void test()
 <p>Looping over enums:</p>
 <pre><code>macro foo_enum($SomeEnum)
 {
-    $foreach ($x : $SomeEnum.elements):
+    $foreach ($x : $SomeEnum.values):
         libc::printf("%d\n", (int)$x);     
     $endforeach;
 }
