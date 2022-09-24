@@ -364,6 +364,24 @@ e.g. `$vatype(2) a = 2`
 Returns the argument as an lvalue. This corresponds to `&myref` style parameters,
 e.g. `$varef(1) = 123`.
 
+## Untyped lists
+
+Compile time variables may hold untyped lists. Such lists may be iterated over or 
+implicitly converted to initializer lists:
+
+    var $a = { 1, 2 };
+    $foreach ($x : $a):
+        io::printfln("%d", $x);
+    $endforeach;
+    int[2] x = $a;
+    io::printfln("%s", x);
+    io::printfln("%s", $a[1]);
+    // Will print
+    // 1
+    // 2
+    // [1, 2]
+    // 2
+
 ## Macro directives
 
 Inside of a macro, we can use the compile time statements `$if`, `$for` and `$switch`. Macros may also be recursively invoked. As previously mentioned, `$if` and `$switch` may also be invoked on the top level.

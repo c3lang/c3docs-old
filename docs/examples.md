@@ -275,10 +275,10 @@ fn void example_cb()
 #####Error handling
 
 Errors are handled using optional results, denoted with a '!' suffix. A variable of an optional
-result type may either contain the regular value or an `optnum` enum value.
+result type may either contain the regular value or a `fault` enum value.
 
 ```
-optnum MathError
+fault MathError
 {
     DIVISION_BY_ZERO
 }
@@ -341,9 +341,9 @@ fn void printFile(char[] filename)
 Pre- and postconditions are optionally compiled into asserts helping to optimize the code.
 ```
 /**
- * @param foo : the number of foos 
+ * @param foo "the number of foos" 
  * @require foo > 0, foo < 1000
- * @return number of foos x 10
+ * @return "number of foos x 10"
  * @ensure return < 10000, return > 0
  **/
 fn int testFoo(int foo)
@@ -352,8 +352,8 @@ fn int testFoo(int foo)
 }
 
 /**
- * @param array : the array to test
- * @param length : length of the array
+ * @param array "the array to test"
+ * @param length "length of the array"
  * @require length > 0
  **/
 fn int getLastElement(int* array, int length)
@@ -421,8 +421,8 @@ fn int test2()
 Improve macro errors with preconditions:
 ```
 /**
- * @param x : value to square
- * @checked x * x >= 0 : "cannot multiply"
+ * @param x "value to square"
+ * @require $checks(x * x >= 0) "cannot multiply"
  **/
 macro square(x)
 {

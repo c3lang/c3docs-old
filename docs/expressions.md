@@ -58,8 +58,8 @@ Passing the pointer to an array
     fn void test1(int[3]* z) { ... }
     fn void test2(int* z) { ... }
 
-    test1(&&int[3]({ 1, 2, 3 }));
-    test2(&&int[3]({ 1, 2, 3 }));
+    test1(&&int[3]{ 1, 2, 3 }));
+    test2(&&int[3]{ 1, 2, 3 }));
 
 
 ## Constant expressions

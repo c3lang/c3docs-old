@@ -146,14 +146,15 @@ Consequently circumventing "pure" annotations is undefined behaviour.
 
 # Pre conditions for macros
 
-Macros have an additional class of pre conditions, that are used to confirm that the values actually will work inside the macro body. 
-This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the `@checked` annotation. 
+In order to check macros, it's often useful to use the builtin `$checks`
+function which returns true if the code inside would pass semantic checking.
+
 
 ```
 /**
- * @checked resource.open()
+ * @require $checks(resource.open()) `Expected resource to have an "open" function`
  * @require resource != nil
- * @checked void *x = resource.open()
+ * @require $checks(void *x = resource.open())
  **/
 macro openResource(resource)
 {

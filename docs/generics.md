@@ -47,7 +47,7 @@ Just like for macros, optional constraints may be added to improve compile error
 
 ```
 /**
- * @checked TypeA a = (TypeB)1 + (TypeC)1
+ * @require $checks(TypeA a = (TypeB)1 + (TypeC)1)
  */ 
 module vector <TypeA, TypeB, TypeC>;
 

@@ -22,7 +22,7 @@ the line where the macro was included.
 
 ## Builtin functions
 
-These functions are not guaranteed to exist on all platforms. They are intended for use standard library
+These functions are *not guaranteed* to exist on all platforms. They are intended for use standard library
 use, and typically the standard library has macros that wrap these builtins, so they should not be used on its own.
 
 #### $$trap
@@ -53,13 +53,55 @@ Builtin memcpy instruction.
 
 Builtin memset instruction.
 
+#### $$prefetch
+
+Prefetch a memory location.
+
 #### $$sysclock
 
 Access to the cycle counter register (or similar low latency clock) on supported
 architectures (e.g. RDTSC on x86), otherwise $$sysclock will yield 0.
 
+#### $$syscall
+
+Makes a syscall according to the platform convention on platforms where it is supported.
+
 ### Math functions
 
-Functions $$ceil, $$trunc, $$sin, $$cos, $$log, $$log2, $$log10, $$sqrt, $$pow, $$min, $$max, $$exp, $$fma and $$fabs.
+Functions $$ceil, $$trunc, $$sin, $$cos, $$log, $$log2, $$log10, $$rint, $$round
+$$sqrt, $$roundeven, $$floor, $$sqrt, $$pow, $$exp, $$fma and $$fabs, $$copysign,
+$$round, $$nearbyint.
 
 Can be applied to float vectors or numbers. Returns the same type.
+
+Functions $$min, $$abs and $$max can be applied to any integer or float number or vector.
+
+Function $pow_int takes a float or floating vector + an integer and returns
+the same type as the first parameter.
+
+Saturated addition, subtraction and left shift for integers and integer vectors:
+$$sat_add, $$sat_shl, $$sat_sub.
+
+### Bit functions
+
+#### $$fshl and $$fshr
+
+Funnel shift left and right, takes either two integers or two integer vectors.
+
+#### $$ctz, $$clz, $$bitreverse, $$bswap, $$popcount
+
+Bit functions work on an integer or an integer vector.
+
+### Vector functions
+
+$$reduce_add, $$reduce_mul, $$reduce_and, $$reduce_or, $$reduce_xor work on integer vectors.
+
+$$reduce_fadd, $$reduce_fmul works on float vectors.
+
+$$reduce_max, $$reduce_min works on any vector.
+
+$$reverse reverses the values in any vector.
+
+$$shufflevector rearranges the values of two vectors using a fixed mask into
+a resulting vector.
+
