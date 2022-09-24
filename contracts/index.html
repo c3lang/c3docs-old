@@ -337,12 +337,12 @@ fn void lyingFunc()
 </code></pre>
 <p>Consequently circumventing "pure" annotations is undefined behaviour.</p>
 <h1 id="pre-conditions-for-macros">Pre conditions for macros</h1>
-<p>Macros have an additional class of pre conditions, that are used to confirm that the values actually will work inside the macro body. 
-This improves the error messages, since otherwise it would be hard to know if the error is in the implementation of the macro, or in the parameters. These are placed under the <code>@checked</code> annotation. </p>
+<p>In order to check macros, it's often useful to use the builtin <code>$checks</code>
+function which returns true if the code inside would pass semantic checking.</p>
 <pre><code>/**
- * @checked resource.open()
+ * @require $checks(resource.open()) `Expected resource to have an &quot;open&quot; function`
  * @require resource != nil
- * @checked void *x = resource.open()
+ * @require $checks(void *x = resource.open())
  **/
 macro openResource(resource)
 {

@@ -130,9 +130,23 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#memset">$$memset</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#prefetch">$$prefetch</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#sysclock">$$sysclock</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#syscall">$$syscall</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#math-functions">Math functions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bit-functions">Bit functions</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#fshl-and-fshr">$$fshl and $$fshr</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#ctz-clz-bitreverse-bswap-popcount">$$ctz, $$clz, $$bitreverse, $$bswap, $$popcount</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vector-functions">Vector functions</a>
     </li>
         </ul>
     </li>
@@ -230,7 +244,7 @@ name prefix.</p>
 <p>Usually the same as $$LINE, but in case of a macro inclusion it returns the line in the macro rather than
 the line where the macro was included.</p>
 <h2 id="builtin-functions">Builtin functions</h2>
-<p>These functions are not guaranteed to exist on all platforms. They are intended for use standard library
+<p>These functions are <em>not guaranteed</em> to exist on all platforms. They are intended for use standard library
 use, and typically the standard library has macros that wrap these builtins, so they should not be used on its own.</p>
 <h4 id="trap">$$trap</h4>
 <p>Emits a trap instruction.</p>
@@ -246,12 +260,35 @@ use, and typically the standard library has macros that wrap these builtins, so 
 <p>Builtin memcpy instruction.</p>
 <h4 id="memset">$$memset</h4>
 <p>Builtin memset instruction.</p>
+<h4 id="prefetch">$$prefetch</h4>
+<p>Prefetch a memory location.</p>
 <h4 id="sysclock">$$sysclock</h4>
 <p>Access to the cycle counter register (or similar low latency clock) on supported
 architectures (e.g. RDTSC on x86), otherwise $$sysclock will yield 0.</p>
+<h4 id="syscall">$$syscall</h4>
+<p>Makes a syscall according to the platform convention on platforms where it is supported.</p>
 <h3 id="math-functions">Math functions</h3>
-<p>Functions $$ceil, $$trunc, $$sin, $$cos, $$log, $$log2, $$log10, $$sqrt, $$pow, $$min, $$max, $$exp, $$fma and $$fabs.</p>
+<p>Functions $$ceil, $$trunc, $$sin, $$cos, $$log, $$log2, $$log10, $$rint, $$round
+$$sqrt, $$roundeven, $$floor, $$sqrt, $$pow, $$exp, $$fma and $$fabs, $$copysign,
+$$round, $$nearbyint.</p>
 <p>Can be applied to float vectors or numbers. Returns the same type.</p>
+<p>Functions $$min, $$abs and $$max can be applied to any integer or float number or vector.</p>
+<p>Function $pow_int takes a float or floating vector + an integer and returns
+the same type as the first parameter.</p>
+<p>Saturated addition, subtraction and left shift for integers and integer vectors:
+$$sat_add, $$sat_shl, $$sat_sub.</p>
+<h3 id="bit-functions">Bit functions</h3>
+<h4 id="fshl-and-fshr">$$fshl and $$fshr</h4>
+<p>Funnel shift left and right, takes either two integers or two integer vectors.</p>
+<h4 id="ctz-clz-bitreverse-bswap-popcount">$$ctz, $$clz, $$bitreverse, $$bswap, $$popcount</h4>
+<p>Bit functions work on an integer or an integer vector.</p>
+<h3 id="vector-functions">Vector functions</h3>
+<p>$$reduce_add, $$reduce_mul, $$reduce_and, $$reduce_or, $$reduce_xor work on integer vectors.</p>
+<p>$$reduce_fadd, $$reduce_fmul works on float vectors.</p>
+<p>$$reduce_max, $$reduce_min works on any vector.</p>
+<p>$$reverse reverses the values in any vector.</p>
+<p>$$shufflevector rearranges the values of two vectors using a fixed mask into
+a resulting vector.</p>
               
             </div>
           </div>

@@ -216,7 +216,7 @@ testFloat(1.0, &amp;f);
 <p>Just like for macros, optional constraints may be added to improve compile errors:</p>
 <p>*Note: constraints are not feature complete </p>
 <pre><code>/**
- * @checked TypeA a = (TypeB)1 + (TypeC)1
+ * @require $checks(TypeA a = (TypeB)1 + (TypeC)1)
  */ 
 module vector &lt;TypeA, TypeB, TypeC&gt;;
 

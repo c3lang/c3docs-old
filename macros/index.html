@@ -150,6 +150,8 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#untyped-lists">Untyped lists</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#macro-directives">Macro directives</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#if-else-and-elif">$if, $else and $elif</a>
@@ -563,6 +565,22 @@ e.g. <code>$vatype(2) a = 2</code> </p>
 <h3 id="varef">$varef</h3>
 <p>Returns the argument as an lvalue. This corresponds to <code>&amp;myref</code> style parameters,
 e.g. <code>$varef(1) = 123</code>.</p>
+<h2 id="untyped-lists">Untyped lists</h2>
+<p>Compile time variables may hold untyped lists. Such lists may be iterated over or 
+implicitly converted to initializer lists:</p>
+<pre><code>var $a = { 1, 2 };
+$foreach ($x : $a):
+    io::printfln("%d", $x);
+$endforeach;
+int[2] x = $a;
+io::printfln("%s", x);
+io::printfln("%s", $a[1]);
+// Will print
+// 1
+// 2
+// [1, 2]
+// 2
+</code></pre>
 <h2 id="macro-directives">Macro directives</h2>
 <p>Inside of a macro, we can use the compile time statements <code>$if</code>, <code>$for</code> and <code>$switch</code>. Macros may also be recursively invoked. As previously mentioned, <code>$if</code> and <code>$switch</code> may also be invoked on the top level.</p>
 <h3 id="if-else-and-elif">$if, $else and $elif</h3>
