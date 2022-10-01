@@ -145,6 +145,7 @@ It is possible to type a floating point by adding a suffix:
 | f64          | double   |
 | f128         | float128 |
 
+    
 
 ### C compatibility
 
@@ -167,6 +168,8 @@ For C compatibility the following types are also defined in std::core::cinterop
 
     
 Note that signed C char and unsigned char will correspond to `ichar` and `char`. `CChar` is only available to match the default signedness of `char` on the platform.
+
+## Other built-in types
 
 ### Pointer types
 
@@ -227,9 +230,12 @@ from the initializer. See the chapter on [arrays](../arrays).
 Vectors use `[<size>]` after the type, e.g. `float[<3>]`, with the restriction that vectors may only form out
 of integers, floats and booleans. Similar to vectors, wildcard can be used to infer the size of a vector: `int[<*>] a = { 1, 2 }`.
 
-*Note* C3 will support scaled vectors using the syntax `float[<>]`, but this is currently not implemented.
+*Note: C3 will support scaled vectors using the syntax `float[<>]`, but this is currently not implemented.*
 
-### Using `define` as type alias
+
+## Types created using `defined`
+
+### "typedef"
 
 Like in C, C3 has a "typedef" construct, `define <typename> = <type>`
 
@@ -240,6 +246,35 @@ Like in C, C3 has a "typedef" construct, `define <typename> = <type>`
 
     Int32 a = 1;
     int b = a;    
+
+### Function pointer types
+
+Function pointers are always used through a `define`:
+
+    define Callback = fn void(int value);
+    Callback callback = &test;
+
+    fn void test(int a) { ... }
+
+To form a function pointer, write a normal function declaration but skipping the function name. `fn int foo(double x)` ->
+`fn int(double x)`.
+
+Function pointers can have default arguments, e.g. `define Callback = fn void(int value = 0)` but default arguments
+and parameter names are not taken into account when determining function pointer assignability:
+
+    define Callback = fn void(int value = 1);
+    fn void test(int a = 0) { ... }
+
+    Callback callback = &main; // Ok
+    
+    fn void main()
+    {
+      callback(); // Works, same as test(0);
+      test(); // Works, same as test(1);
+      callback(.value = 3); // Works, same as test(3)
+      test(.a = 4); // Works, same as test(4)
+      // callback(.a = 3); ERROR!
+    }
 
 ### Distinct types
 
@@ -260,35 +295,18 @@ is created by adding `distinct` before the type name in a "define": `define <typ
       // a = id; // ERROR can't assign 'MyId' to 'int'
     }
 
-### Function pointer types
+### Generic types
 
-Function pointers are always used through a `define`:
+Similar to function pointers, generic types are only available using `define`:
 
-    define Callback = fn void(int value);
-    Callback callback = &test;
+    import generic_list; // Contains the generic MyList
 
-    fn void test(int a) { ... }
+    struct Foo { int x; }
 
-To form a function pointer, write a normal function declaration but skipping the function name. `fn int foo(double x)` ->
-`fn int(double x)`.
+    define IntMyList = generic_list::MyList<int>;
+    define FooMyList = generic_list::MyList<Foo>;
 
-Function pointers can have default arguments, e.g. `define Callback = fn void(int value = 0)` but default arguments 
-and parameter names are not taken into account when determining function pointer assignability:
-
-    define Callback = fn void(int value = 1);
-    fn void test(int a = 0) { ... }
-
-    Callback callback = &main; // Ok
-    
-    fn void main()
-    {
-      callback(); // Works, same as test(0);
-      test(); // Works, same as test(1);
-      callback(.value = 3); // Works, same as test(3)
-      test(.a = 4); // Works, same as test(4)
-      // callback(.a = 3); ERROR!
-    }
-
+Read more about generic types on [the page about generics](../generics).
 
 ## Enum
 
@@ -408,6 +426,8 @@ A struct's members may be accessed using dot notation, even for pointers to stru
     libc::printf("%s is %d years old.", pPtr.age, pPtr.name);
 
 (One might wonder whether it's possible to take a `Person**` and use dot access. – It's not allowed, only one level of dereference is done.)
+
+To change alignment and packing, optional [attributes](../attributes) such as `@packed` may be used.
 
 ## Struct subtyping
 
