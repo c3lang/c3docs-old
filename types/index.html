@@ -108,6 +108,14 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#array-types">Array types</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#vector-types">Vector types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#using-define-as-type-alias">Using define as type alias</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#distinct-types">Distinct types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#function-pointer-types">Function pointer types</a>
+    </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#enum">Enum</a>
@@ -126,9 +134,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#union-types">Union types</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#anonymous-and-nested-sub-structs-unions">Anonymous and nested sub-structs / unions</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#anonymous-structs">Anonymous structs</a>
+    <li class="toctree-l2"><a class="reference internal" href="#nested-sub-structs-unions">Nested sub-structs / unions</a>
     </li>
     </ul>
                     </li>
@@ -238,7 +244,9 @@
                 <h1 id="types">Types</h1>
 <p>As usual, types are divided into basic types and user defined types (enum, union, struct, faults, aliases). All types are defined on a global level. Using the <code>public</code> prefix is necessary for any type that is to be exposed outside of the current module.</p>
 <h5 id="naming">Naming</h5>
-<p>All user defined types in C3 starts with upper case. So <code>MyStruct</code> or <code>Mystruct</code> would be fine, <code>mystruct_t</code> or <code>mystruct</code> would not. Since this affects C compatibility, it is possible to use attributes to change the external name of a type:</p>
+<p>All user defined types in C3 starts with upper case. So <code>MyStruct</code> or <code>Mystruct</code> would be fine, <code>mystruct_t</code> or <code>mystruct</code> would not.
+This naming requirement ensures that the language is easy to parse for tools.
+It is possible to use attributes to change the external name of a type:</p>
 <pre><code>struct Stat @extname(&quot;stat&quot;)
 {
     // ...
@@ -246,8 +254,22 @@
 
 fn CInt stat(const char* pathname, Stat* buf);
 </code></pre>
+<p>This would for example affect generated C headers.</p>
 <h5 id="differences-from-c">Differences from C</h5>
-<p>Unlike C, C3 does not use type qualifiers. <code>const</code> exists, but is a storage class modifier, not a type qualifier. Instead of <code>volatile</code>, volatile loads and stores are used. In order to signal restrictions on variable usage, like const-ness <a href="../preconditions/">preconditions</a> are used.</p>
+<p>Unlike C, C3 does not use type qualifiers. <code>const</code> exists, 
+but is a storage class modifier, not a type qualifier. 
+Instead of <code>volatile</code>, volatile loads and stores are used. 
+In order to signal restrictions on parameter usage, parameter <a href="../preconditions/">preconditions</a> are used.
+Instead of <code>typedef</code>, C3 uses a more general <code>define</code> construct, which also
+supports distinct types.</p>
+<p>C3 also requires all function pointers to be used with an alias, so:</p>
+<pre><code>define Callback = fn void();
+Callback a = null; // Ok!
+fn Callback getCallback() { ... } // Ok!
+
+// fn fn void() getCallback() { ... } - ERROR!
+// fn void() a = null; - ERROR!```
+</code></pre>
 <h2 id="basic-types">Basic types</h2>
 <p>Basic types are divided into floating point types, and integer types. Integer types being either signed or unsigned.</p>
 <h5 id="integer-types">Integer types</h5>
@@ -535,8 +557,64 @@ int* w = (int*)x; // Returns the pointer to x
 <p><code>variant.type</code> returns the underlying pointee typeid of the contained value. <code>variant.ptr</code> returns 
 the raw <code>void*</code> pointer.</p>
 <h3 id="array-types">Array types</h3>
-<p>Arrays are indicated by <code>[&lt;size&gt;]</code> after the type, e.g. <code>int[4]</code>. Subarrays use the <code>type[]</code>. For initialization the wildcard <code>type[*]</code> can be used to infer the size
+<p>Arrays are indicated by <code>[size]</code> after the type, e.g. <code>int[4]</code>. Subarrays use the <code>type[]</code>. For initialization the wildcard <code>type[*]</code> can be used to infer the size
 from the initializer. See the chapter on <a href="../arrays">arrays</a>.</p>
+<h3 id="vector-types">Vector types</h3>
+<p>Vectors use <code>[&lt;size&gt;]</code> after the type, e.g. <code>float[&lt;3&gt;]</code>, with the restriction that vectors may only form out
+of integers, floats and booleans. Similar to vectors, wildcard can be used to infer the size of a vector: <code>int[&lt;*&gt;] a = { 1, 2 }</code>.</p>
+<p><em>Note</em> C3 will support scaled vectors using the syntax <code>float[&lt;&gt;]</code>, but this is currently not implemented.</p>
+<h3 id="using-define-as-type-alias">Using <code>define</code> as type alias</h3>
+<p>Like in C, C3 has a "typedef" construct, <code>define &lt;typename&gt; = &lt;type&gt;</code></p>
+<pre><code>define Int32 = int;
+define Vector2 = float[&lt;2&gt;];
+
+...
+
+Int32 a = 1;
+int b = a;
+</code></pre>
+<h3 id="distinct-types">Distinct types</h3>
+<p>Distinct types is a kind of typedef which creates a new type that has the same properties as the original type
+but is - as the name suggests - distinct from it. It cannot implicitly convert into the other type. A distinct type
+is created by adding <code>distinct</code> before the type name in a "define": <code>define &lt;typename&gt; = distinct &lt;type&gt;</code></p>
+<pre><code>define MyId = distinct int;
+fn void* get_by_id(MyId id) { ... }
+
+fn void test(MyId id)
+{
+  void* val = get_by_id(id); // Ok
+  void* val2 = get_by_id(1); // Literals convert implicitly
+  int a = 1;
+  // void* val3 = get_by_id(a); // ERROR expected a MyId
+  void* val4 = get_by_id((MyId)a); // Works
+  // a = id; // ERROR can't assign 'MyId' to 'int'
+}
+</code></pre>
+<h3 id="function-pointer-types">Function pointer types</h3>
+<p>Function pointers are always used through a <code>define</code>:</p>
+<pre><code>define Callback = fn void(int value);
+Callback callback = &amp;test;
+
+fn void test(int a) { ... }
+</code></pre>
+<p>To form a function pointer, write a normal function declaration but skipping the function name. <code>fn int foo(double x)</code> -&gt;
+<code>fn int(double x)</code>.</p>
+<p>Function pointers can have default arguments, e.g. <code>define Callback = fn void(int value = 0)</code> but default arguments 
+and parameter names are not taken into account when determining function pointer assignability:</p>
+<pre><code>define Callback = fn void(int value = 1);
+fn void test(int a = 0) { ... }
+
+Callback callback = &amp;main; // Ok
+
+fn void main()
+{
+  callback(); // Works, same as test(0);
+  test(); // Works, same as test(1);
+  callback(.value = 3); // Works, same as test(3)
+  test(.a = 4); // Works, same as test(4)
+  // callback(.a = 3); ERROR!
+}
+</code></pre>
 <h2 id="enum">Enum</h2>
 <p>Enum (enumerated) types use the following syntax:</p>
 <pre><code>enum State : int 
@@ -672,8 +750,8 @@ i.as_int = 500; // Changing the active member to as_int
 libc::printf("%d\n", i.as_byte);
 </code></pre>
 <p>Note that unions only take up as much space as their largest member, so <code>Integral.sizeof</code> is equivalent to <code>long.sizeof</code>.</p>
-<h2 id="anonymous-and-nested-sub-structs-unions">Anonymous and nested sub-structs / unions</h2>
-<p>Just like in C99 and later, anonymous sub-structs / unions are allowed. Note that
+<h2 id="nested-sub-structs-unions">Nested sub-structs / unions</h2>
+<p>Just like in C99 and later, nested anonymous sub-structs / unions are allowed. Note that
 the placement of struct / union names is different to match the difference in declaration.</p>
 <pre><code>struct Person  
 {
@@ -689,42 +767,6 @@ the placement of struct / union names is different to match the difference in de
         bool b;
         Callback cb;
     }
-}
-</code></pre>
-<h2 id="anonymous-structs">Anonymous structs</h2>
-<p>It's possible to use anonymous structs (structs without name) as arguments. These will only be checked for structural equivalence.</p>
-<p><em>NOTE: This syntax will be changed.</em></p>
-<pre><code>fn void set_coordinates(struct { int i; int j; } coord) { ... }
-
-struct Vec2
-{
-    int x;
-    int y;
-}
-
-struct Vector
-{
-    int px;
-    int py;
-}
-
-struct Vec3
-{
-    int x;
-    int y;
-    int z;
-}
-
-fn void test()
-{
-    Vec2 v2 = { 1, 2 };
-    Vector v = { 1, 4 };
-    Vec3 v3 = { 1, 2, 3 };
-    set_coordinates(v2);  // valid
-    set_coordinates(v);   // valid
-    set_coordinates(v3);  // ERROR, no structural equivalence.
-    struct { int i; int j; } xy = v2;
-    v = (struct { int, int })v2;
 }
 </code></pre>
               
