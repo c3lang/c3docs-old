@@ -116,13 +116,15 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#defined-types">"defined" types</a>
+    <li class="toctree-l2"><a class="reference internal" href="#types-created-using-defined">Types created using defined</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#using-define-as-type-alias">Using define as type alias</a>
+    <li class="toctree-l3"><a class="reference internal" href="#typedef">"typedef"</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#function-pointer-types">Function pointer types</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#distinct-types">Distinct types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#generic-types">Generic types</a>
     </li>
         </ul>
     </li>
@@ -572,8 +574,8 @@ from the initializer. See the chapter on <a href="../arrays">arrays</a>.</p>
 <p>Vectors use <code>[&lt;size&gt;]</code> after the type, e.g. <code>float[&lt;3&gt;]</code>, with the restriction that vectors may only form out
 of integers, floats and booleans. Similar to vectors, wildcard can be used to infer the size of a vector: <code>int[&lt;*&gt;] a = { 1, 2 }</code>.</p>
 <p><em>Note: C3 will support scaled vectors using the syntax <code>float[&lt;&gt;]</code>, but this is currently not implemented.</em></p>
-<h2 id="defined-types">"defined" types</h2>
-<h3 id="using-define-as-type-alias">Using <code>define</code> as type alias</h3>
+<h2 id="types-created-using-defined">Types created using <code>defined</code></h2>
+<h3 id="typedef">"typedef"</h3>
 <p>Like in C, C3 has a "typedef" construct, <code>define &lt;typename&gt; = &lt;type&gt;</code></p>
 <pre><code>define Int32 = int;
 define Vector2 = float[&lt;2&gt;];
@@ -625,6 +627,16 @@ fn void test(MyId id)
   // a = id; // ERROR can't assign 'MyId' to 'int'
 }
 </code></pre>
+<h3 id="generic-types">Generic types</h3>
+<p>Similar to function pointers, generic types are only available using <code>define</code>:</p>
+<pre><code>import generic_list; // Contains the generic MyList
+
+struct Foo { int x; }
+
+define IntMyList = generic_list::MyList&lt;int&gt;;
+define FooMyList = generic_list::MyList&lt;Foo&gt;;
+</code></pre>
+<p>Read more about generic types on <a href="../generics">the page about generics</a>.</p>
 <h2 id="enum">Enum</h2>
 <p>Enum (enumerated) types use the following syntax:</p>
 <pre><code>enum State : int 
@@ -719,6 +731,7 @@ pPtr.age = 20; // Ok!
 libc::printf("%s is %d years old.", pPtr.age, pPtr.name);
 </code></pre>
 <p>(One might wonder whether it's possible to take a <code>Person**</code> and use dot access. – It's not allowed, only one level of dereference is done.)</p>
+<p>To change alignment and packing, optional <a href="../attributes">attributes</a> such as <code>@packed</code> may be used.</p>
 <h2 id="struct-subtyping">Struct subtyping</h2>
 <p>C3 allows creating struct subtypes using <code>inline</code>:</p>
 <pre><code>struct ImportantPerson 
