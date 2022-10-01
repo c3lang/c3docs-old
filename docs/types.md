@@ -4,7 +4,9 @@ As usual, types are divided into basic types and user defined types (enum, union
 
 ##### Naming
 
-All user defined types in C3 starts with upper case. So `MyStruct` or `Mystruct` would be fine, `mystruct_t` or `mystruct` would not. Since this affects C compatibility, it is possible to use attributes to change the external name of a type:
+All user defined types in C3 starts with upper case. So `MyStruct` or `Mystruct` would be fine, `mystruct_t` or `mystruct` would not.
+This naming requirement ensures that the language is easy to parse for tools.
+It is possible to use attributes to change the external name of a type:
 
 ```
 struct Stat @extname("stat")
@@ -15,9 +17,26 @@ struct Stat @extname("stat")
 fn CInt stat(const char* pathname, Stat* buf);
 ```
 
+This would for example affect generated C headers.
+
 ##### Differences from C
 
-Unlike C, C3 does not use type qualifiers. `const` exists, but is a storage class modifier, not a type qualifier. Instead of `volatile`, volatile loads and stores are used. In order to signal restrictions on variable usage, like const-ness [preconditions](../preconditions/) are used.
+Unlike C, C3 does not use type qualifiers. `const` exists, 
+but is a storage class modifier, not a type qualifier. 
+Instead of `volatile`, volatile loads and stores are used. 
+In order to signal restrictions on parameter usage, parameter [preconditions](../preconditions/) are used.
+Instead of `typedef`, C3 uses a more general `define` construct, which also
+supports distinct types.
+
+C3 also requires all function pointers to be used with an alias, so:
+
+    define Callback = fn void();
+    Callback a = null; // Ok!
+    fn Callback getCallback() { ... } // Ok!
+    
+    // fn fn void() getCallback() { ... } - ERROR!
+    // fn void() a = null; - ERROR!```
+
 
 ## Basic types
 
@@ -200,8 +219,76 @@ the raw `void*` pointer.
 
 ### Array types
 
-Arrays are indicated by `[<size>]` after the type, e.g. `int[4]`. Subarrays use the `type[]`. For initialization the wildcard `type[*]` can be used to infer the size
+Arrays are indicated by `[size]` after the type, e.g. `int[4]`. Subarrays use the `type[]`. For initialization the wildcard `type[*]` can be used to infer the size
 from the initializer. See the chapter on [arrays](../arrays).
+
+### Vector types
+
+Vectors use `[<size>]` after the type, e.g. `float[<3>]`, with the restriction that vectors may only form out
+of integers, floats and booleans. Similar to vectors, wildcard can be used to infer the size of a vector: `int[<*>] a = { 1, 2 }`.
+
+*Note* C3 will support scaled vectors using the syntax `float[<>]`, but this is currently not implemented.
+
+### Using `define` as type alias
+
+Like in C, C3 has a "typedef" construct, `define <typename> = <type>`
+
+    define Int32 = int;
+    define Vector2 = float[<2>];
+
+    ...
+
+    Int32 a = 1;
+    int b = a;    
+
+### Distinct types
+
+Distinct types is a kind of typedef which creates a new type that has the same properties as the original type
+but is - as the name suggests - distinct from it. It cannot implicitly convert into the other type. A distinct type
+is created by adding `distinct` before the type name in a "define": `define <typename> = distinct <type>`
+
+    define MyId = distinct int;
+    fn void* get_by_id(MyId id) { ... }
+
+    fn void test(MyId id)
+    {
+      void* val = get_by_id(id); // Ok
+      void* val2 = get_by_id(1); // Literals convert implicitly
+      int a = 1;
+      // void* val3 = get_by_id(a); // ERROR expected a MyId
+      void* val4 = get_by_id((MyId)a); // Works
+      // a = id; // ERROR can't assign 'MyId' to 'int'
+    }
+
+### Function pointer types
+
+Function pointers are always used through a `define`:
+
+    define Callback = fn void(int value);
+    Callback callback = &test;
+
+    fn void test(int a) { ... }
+
+To form a function pointer, write a normal function declaration but skipping the function name. `fn int foo(double x)` ->
+`fn int(double x)`.
+
+Function pointers can have default arguments, e.g. `define Callback = fn void(int value = 0)` but default arguments 
+and parameter names are not taken into account when determining function pointer assignability:
+
+    define Callback = fn void(int value = 1);
+    fn void test(int a = 0) { ... }
+
+    Callback callback = &main; // Ok
+    
+    fn void main()
+    {
+      callback(); // Works, same as test(0);
+      test(); // Works, same as test(1);
+      callback(.value = 3); // Works, same as test(3)
+      test(.a = 4); // Works, same as test(4)
+      // callback(.a = 3); ERROR!
+    }
+
 
 ## Enum
 
@@ -372,9 +459,9 @@ As usual unions are used to hold one of many possible values:
 Note that unions only take up as much space as their largest member, so `Integral.sizeof` is equivalent to `long.sizeof`.
 
 
-## Anonymous and nested sub-structs / unions
+## Nested sub-structs / unions
 
-Just like in C99 and later, anonymous sub-structs / unions are allowed. Note that
+Just like in C99 and later, nested anonymous sub-structs / unions are allowed. Note that
 the placement of struct / union names is different to match the difference in declaration.
 
     struct Person  
@@ -393,44 +480,3 @@ the placement of struct / union names is different to match the difference in de
         }
     }
 
-
-## Anonymous structs
-
-It's possible to use anonymous structs (structs without name) as arguments. These will only be checked for structural equivalence.
-
-_NOTE: This syntax will be changed._
-
-```
-fn void set_coordinates(struct { int i; int j; } coord) { ... }
-
-struct Vec2
-{
-    int x;
-    int y;
-}
-
-struct Vector
-{
-    int px;
-    int py;
-}
-
-struct Vec3
-{
-    int x;
-    int y;
-    int z;
-}
-
-fn void test()
-{
-    Vec2 v2 = { 1, 2 };
-    Vector v = { 1, 4 };
-    Vec3 v3 = { 1, 2, 3 };
-    set_coordinates(v2);  // valid
-    set_coordinates(v);   // valid
-    set_coordinates(v3);  // ERROR, no structural equivalence.
-    struct { int i; int j; } xy = v2;
-    v = (struct { int, int })v2;
-}
-```

@@ -1,5 +1,8 @@
 # Change log
 
+##### Revision 2022-10-01
+- Expanded and updated [types](../types).
+- 
 ##### Revision 2022-07-20
 - Added start + len syntax
 

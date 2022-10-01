@@ -8,7 +8,7 @@ It has evolved significantly, not just in syntax but also in regard to error han
 
 The C3 compiler can be found on github: [https://github.com/c3lang/c3c](https://github.com/c3lang/c3c).
 
-Last updated: [Revision 2022-07-20](changes).
+Last updated: [Revision 2022-10-01](changes).
 
 ## Features
 
@@ -17,9 +17,10 @@ Last updated: [Revision 2022-07-20](changes).
 - Generic modules
 - Zero overhead errors
 - Struct subtyping 
+- Semantic macro system
 - Safe array access using sub arrays
-- Zero cost simple gradual & opt-in pre/post conditions.
-- High level containers and string handling. [IN PROGRESS]
+- Zero cost simple gradual & opt-in pre/post conditions
+- High level containers and string handling
 - C to C3 conversion (for a subset of C) *TODO*
 - LLVM backend
 
