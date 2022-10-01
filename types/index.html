@@ -102,15 +102,19 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#pointer-types">Pointer types</a>
+    <li class="toctree-l2"><a class="reference internal" href="#other-built-in-types">Other built-in types</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#pointer-types">Pointer types</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#the-typeid-type">The typeid type</a>
+    <li class="toctree-l3"><a class="reference internal" href="#the-typeid-type">The typeid type</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#the-variant-type">The variant type</a>
+    <li class="toctree-l3"><a class="reference internal" href="#the-variant-type">The variant type</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#array-types">Array types</a>
+    <li class="toctree-l3"><a class="reference internal" href="#array-types">Array types</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#vector-types">Vector types</a>
+    <li class="toctree-l3"><a class="reference internal" href="#vector-types">Vector types</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#using-define-as-type-alias">Using define as type alias</a>
     </li>
@@ -515,12 +519,13 @@ char* bar = &quot;\&quot;Say `hello`\&quot;&quot;;
 </tbody>
 </table>
 <p>Note that signed C char and unsigned char will correspond to <code>ichar</code> and <code>char</code>. <code>CChar</code> is only available to match the default signedness of <code>char</code> on the platform.</p>
-<h2 id="pointer-types">Pointer types</h2>
+<h2 id="other-built-in-types">Other built-in types</h2>
+<h3 id="pointer-types">Pointer types</h3>
 <p>Pointers mirror C: <code>Foo*</code> is a pointer to a <code>Foo</code>, while <code>Foo**</code> is a pointer to a pointer of Foo.</p>
-<h2 id="the-typeid-type">The <code>typeid</code> type</h2>
+<h3 id="the-typeid-type">The <code>typeid</code> type</h3>
 <p>The <code>typeid</code> can hold a runtime identifier for a type. Using <code>&lt;typename&gt;.typeid</code> a type may be converted to its unique runtime id, 
 e.g. <code>typeid a = Foo.typeid;</code>. This value is pointer-sized.</p>
-<h2 id="the-variant-type">The <code>variant</code> type</h2>
+<h3 id="the-variant-type">The <code>variant</code> type</h3>
 <p>C3 contains a built-in variant type, which is essentially struct containing a <code>typeid</code> plus a <code>void*</code> pointer to a value.
 It is possible to cast the variant type to any pointer type, which will return <code>null</code> if the types don't match,
 or the pointer value otherwise.</p>
@@ -556,10 +561,10 @@ int* w = (int*)x; // Returns the pointer to x
 </code></pre>
 <p><code>variant.type</code> returns the underlying pointee typeid of the contained value. <code>variant.ptr</code> returns 
 the raw <code>void*</code> pointer.</p>
-<h2 id="array-types">Array types</h2>
+<h3 id="array-types">Array types</h3>
 <p>Arrays are indicated by <code>[size]</code> after the type, e.g. <code>int[4]</code>. Subarrays use the <code>type[]</code>. For initialization the wildcard <code>type[*]</code> can be used to infer the size
 from the initializer. See the chapter on <a href="../arrays">arrays</a>.</p>
-<h2 id="vector-types">Vector types</h2>
+<h3 id="vector-types">Vector types</h3>
 <p>Vectors use <code>[&lt;size&gt;]</code> after the type, e.g. <code>float[&lt;3&gt;]</code>, with the restriction that vectors may only form out
 of integers, floats and booleans. Similar to vectors, wildcard can be used to infer the size of a vector: <code>int[&lt;*&gt;] a = { 1, 2 }</code>.</p>
 <p><em>Note</em> C3 will support scaled vectors using the syntax <code>float[&lt;&gt;]</code>, but this is currently not implemented.</p>
