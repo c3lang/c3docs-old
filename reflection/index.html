@@ -108,8 +108,6 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#elements">elements</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#fields">fields</a>
-    </li>
     <li class="toctree-l4"><a class="reference internal" href="#inf">inf</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#inner">inner</a>
@@ -118,9 +116,11 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#len">len</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#min">min</a>
-    </li>
     <li class="toctree-l4"><a class="reference internal" href="#max">max</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#membersof">membersof</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#min">min</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#names">names</a>
     </li>
@@ -256,13 +256,13 @@
 <ul>
 <li><code>associated</code></li>
 <li><code>elements</code></li>
-<li><code>fields</code></li>
 <li><code>inf</code></li>
 <li><code>inner</code></li>
 <li><code>kind</code></li>
 <li><code>len</code></li>
-<li><code>min</code></li>
 <li><code>max</code></li>
+<li><code>membersof</code></li>
+<li><code>min</code></li>
 <li><code>nan</code></li>
 <li><code>names</code></li>
 <li><code>params</code></li>
@@ -291,17 +291,6 @@ char[] s = $nameof(Foo.associated[0]); // "double"
 }
 int x = FooEnum.elements; // 2
 </code></pre>
-<h4 id="fields">fields</h4>
-<p><em>Not yet implemented</em></p>
-<p><em>Only available for struct types.</em>
-Returns an array containing the fields in a struct or enum.</p>
-<pre><code>struct Baz
-{
-    int x;
-    Foo* z;
-}
-char[] x = $nameof(Baz.fields[1]); // "z"
-</code></pre>
 <h4 id="inf">inf</h4>
 <p><em>Only available for floating point types</em></p>
 <p>Returns a representation of floating point "infinity".</p>
@@ -324,13 +313,23 @@ char[] x = $nameof(Baz.fields[1]); // "z"
 <p>Returns the length of the array.</p>
 <pre><code>usize len = int[4].len; // 4
 </code></pre>
-<h4 id="min">min</h4>
-<p>Returns the minimum value of the type (only valid for integer and float types).</p>
-<pre><code>ichar min_ichar = ichar.min; // -128
-</code></pre>
 <h4 id="max">max</h4>
 <p>Returns the maximum value of the type (only valid for integer and float types).</p>
 <pre><code>ushort max_ushort = ushort.max; // 65535
+</code></pre>
+<h4 id="membersof">membersof</h4>
+<p><em>Only available for struct and union types.</em></p>
+<p>Returns an array containing the fields in a struct or enum.</p>
+<pre><code>struct Baz
+{
+    int x;
+    Foo* z;
+}
+char[] x = $nameof($typefrom(Baz.membersof[1])); // "z"
+</code></pre>
+<h4 id="min">min</h4>
+<p>Returns the minimum value of the type (only valid for integer and float types).</p>
+<pre><code>ichar min_ichar = ichar.min; // -128
 </code></pre>
 <h4 id="names">names</h4>
 <p>Returns a subarray containing the names of an enum or fault.</p>
