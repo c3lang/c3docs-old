@@ -348,11 +348,10 @@ Returns a list of all parameters.</p>
 char[] s = $nameof(TestFunc.params[1]); // "double"
 </code></pre>
 <h4 id="returns">returns</h4>
-<p><em>Not yet implemented</em></p>
 <p><em>Only available for function types.</em>
 Returns the type of the return type.</p>
 <pre><code>define TestFunc = fn int(int, double);
-char[] s = $nameof(TestFunc.returns); // "int"
+char[] s = $nameof($typeform(TestFunc.returns)); // "int"
 </code></pre>
 <h4 id="sizeof">sizeof</h4>
 <p>Returns the size in bytes for the given type, like C <code>sizeof</code>.</p>
