@@ -270,29 +270,22 @@ $endif;
 <h3 id="macros_1">Macros</h3>
 <pre><code>// C
 #define M(x) ((x) + 2)
-#define RETURN(x) return x;
-#define u32 unsigned int
+#define UInt32 unsigned int
 
 // Use:
 int y = M(foo() + 2);
-RETURN(bar());
-u32 b = y;
+UInt32 b = y;
 
 // C3
 macro m(x)
 {
     return x + 2;
 }
-macro ret(x) @escape
-{
-    return x;
-}
-define u32 = uint;
+define UInt32 = uint;
 
 // Use:
 int y = @m(foo() + 2);
-@ret(bar());
-u32 b = y;
+UInt32 b = y;
 </code></pre>
 <h3 id="dynamic-scoping">Dynamic scoping</h3>
 <pre><code>// C

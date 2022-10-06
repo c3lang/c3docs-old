@@ -102,33 +102,45 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#compile-time-reflection">Compile time reflection</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#compile-time-variables">Compile time variables</a>
+    <li class="toctree-l3"><a class="reference internal" href="#type-properties">Type properties</a>
         <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#typeid">typeid</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#sizeof">sizeof</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#length">length</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#values">values</a>
+    <li class="toctree-l4"><a class="reference internal" href="#associated">associated</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#elements">elements</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#fields">fields</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#signed">signed</a>
+    <li class="toctree-l4"><a class="reference internal" href="#inf">inf</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#associated">associated</a>
+    <li class="toctree-l4"><a class="reference internal" href="#inner">inner</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#kind">kind</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#len">len</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#min">min</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#max">max</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#names">names</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#params">params</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#returns">returns</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#params">params</a>
+    <li class="toctree-l4"><a class="reference internal" href="#sizeof">sizeof</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#typeid">typeid</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#values">values</a>
     </li>
         </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#compile-time-functions">Compile time functions</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#alignof">$alignof</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#checks">$checks</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#defined">$defined</a>
     </li>
@@ -144,15 +156,11 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#qnameof">$qnameof</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sizeof_1">$sizeof</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#stringify">$stringify</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#typeof">$typeof</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#kindof">$kindof</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#elementof">$elementof</a>
-    </li>
-        </ul>
     </li>
         </ul>
     </li>
@@ -243,29 +251,36 @@
 <p><em>Note that not all reflection is implemented in the compiler at this point in time.</em></p>
 <h2 id="compile-time-reflection">Compile time reflection</h2>
 <p>During compile time there are a number of compile time fields that may be accessed directly.</p>
-<h3 id="compile-time-variables">Compile time variables</h3>
-<h4 id="typeid">typeid</h4>
-<p>Returns the typeid for the given type. Typedefs will return the typeid of the underlying type. The typeid size is the same as that of an <code>iptr</code>.</p>
-<pre><code>typeid x = Foo.typeid;
-</code></pre>
-<h4 id="sizeof">sizeof</h4>
-<p>Returns the size in bytes for the given type, like C <code>sizeof</code>.</p>
-<pre><code>usize x = Foo.sizeof;
-</code></pre>
-<h4 id="length">length</h4>
+<h3 id="type-properties">Type properties</h3>
+<p>It is possible to access properties on the type itself:</p>
+<ul>
+<li><code>associated</code></li>
+<li><code>elements</code></li>
+<li><code>fields</code></li>
+<li><code>inf</code></li>
+<li><code>inner</code></li>
+<li><code>kind</code></li>
+<li><code>len</code></li>
+<li><code>min</code></li>
+<li><code>max</code></li>
+<li><code>nan</code></li>
+<li><code>names</code></li>
+<li><code>params</code></li>
+<li><code>returns</code></li>
+<li><code>sizeof</code></li>
+<li><code>typeid</code></li>
+<li><code>values</code></li>
+</ul>
+<h4 id="associated">associated</h4>
 <p><em>Not yet implemented</em></p>
-<p><em>Only available for array and vector types.</em>
-Returns the length of the array.</p>
-<pre><code>usize len = int[4].length
-</code></pre>
-<h4 id="values">values</h4>
-<p>Returns a subarray containing the values of an enum or fault.</p>
-<pre><code>enum FooEnum
+<p><em>Only available for enums.</em>
+Returns an array containing the types of associated values if any.</p>
+<pre><code>enum Foo : int(double d, char[] s)
 {
-    BAR,
-    BAZ
+    BAR(1.0, "normal"),
+    BAZ(2.0, "exceptional")
 }
-char[] x = $nameof(FooEnum.values[1]); // "BAR"
+char[] s = $nameof(Foo.associated[0]); // "double"
 </code></pre>
 <h4 id="elements">elements</h4>
 <p>Returns the element count of an enum or fault.</p>
@@ -287,30 +302,44 @@ Returns an array containing the fields in a struct or enum.</p>
 }
 char[] x = $nameof(Baz.fields[1]); // "z"
 </code></pre>
-<h4 id="signed">signed</h4>
-<p><em>Not yet implemented</em></p>
-<p><em>Only available for integer types.</em>
-Returns true for a signed number.</p>
-<pre><code>bool s1 = int.signed; // =&gt; true
-bool s2 = uint.signed; // =&gt; false
+<h4 id="inf">inf</h4>
+<p><em>Only available for floating point types</em></p>
+<p>Returns a representation of floating point "infinity".</p>
+<h4 id="inner">inner</h4>
+<p>This returns a typeid to an "inner" type. What this means is different for each type:</p>
+<ul>
+<li>Array -&gt; the array base type.</li>
+<li>Bitstruct -&gt; underlying base type.</li>
+<li>Enum -&gt; underlying enum base type.</li>
+<li>Pointer -&gt; the type being pointed to.</li>
+<li>Vector -&gt; the vector base type.</li>
+<li>Distinct -&gt; the underlying type.</li>
+</ul>
+<p>It is not defined for other types.</p>
+<h4 id="kind">kind</h4>
+<p>Returns the underlying <code>TypeKind</code> as defined in std::core::types.</p>
+<pre><code>TypeKind kind = int.kind; // TypeKind.SIGNED_INT
 </code></pre>
-<h4 id="associated">associated</h4>
-<p><em>Not yet implemented</em></p>
-<p><em>Only available for enums.</em>
-Returns an array containing the types of associated values if any.</p>
-<pre><code>enum Foo : int(double d, char[] s)
+<h4 id="len">len</h4>
+<p>Returns the length of the array.</p>
+<pre><code>usize len = int[4].len; // 4
+</code></pre>
+<h4 id="min">min</h4>
+<p>Returns the minimum value of the type (only valid for integer and float types).</p>
+<pre><code>ichar min_ichar = ichar.min; // -128
+</code></pre>
+<h4 id="max">max</h4>
+<p>Returns the maximum value of the type (only valid for integer and float types).</p>
+<pre><code>ushort max_ushort = ushort.max; // 65535
+</code></pre>
+<h4 id="names">names</h4>
+<p>Returns a subarray containing the names of an enum or fault.</p>
+<pre><code>enum FooEnum
 {
-    BAR(1.0, "normal"),
-    BAZ(2.0, "exceptional")
+    BAR,
+    BAZ
 }
-char[] s = $nameof(Foo.associated[0]); // "double"
-</code></pre>
-<h4 id="returns">returns</h4>
-<p><em>Not yet implemented</em></p>
-<p><em>Only available for function types.</em>
-Returns the type of the return type.</p>
-<pre><code>define TestFunc = fn int(int, double);
-char[] s = $nameof(TestFunc.returns); // "int"
+char[][] x = FooEnum.names; // ["BAR", "BAZ"]
 </code></pre>
 <h4 id="params">params</h4>
 <p><em>Not yet implemented</em></p>
@@ -319,21 +348,45 @@ Returns a list of all parameters.</p>
 <pre><code>define TestFunc = fn int(int, double);
 char[] s = $nameof(TestFunc.params[1]); // "double"
 </code></pre>
+<h4 id="returns">returns</h4>
+<p><em>Not yet implemented</em></p>
+<p><em>Only available for function types.</em>
+Returns the type of the return type.</p>
+<pre><code>define TestFunc = fn int(int, double);
+char[] s = $nameof(TestFunc.returns); // "int"
+</code></pre>
+<h4 id="sizeof">sizeof</h4>
+<p>Returns the size in bytes for the given type, like C <code>sizeof</code>.</p>
+<pre><code>usize x = Foo.sizeof;
+</code></pre>
+<h4 id="typeid">typeid</h4>
+<p>Returns the typeid for the given type. Typedefs will return the typeid of the underlying type. The typeid size is the same as that of an <code>iptr</code>.</p>
+<pre><code>typeid x = Foo.typeid;
+</code></pre>
+<h4 id="values">values</h4>
+<p>Returns a subarray containing the values of an enum or fault.</p>
+<pre><code>enum FooEnum
+{
+    BAR,
+    BAZ
+}
+char[] x = $nameof(FooEnum.values[1]); // "BAR"
+</code></pre>
 <h3 id="compile-time-functions">Compile time functions</h3>
 <p>There are several built-in functions to inspect the code during compile time.</p>
 <ul>
 <li><code>$alignof</code></li>
+<li><code>$checks</code></li>
 <li><code>$defined</code></li>
-<li><code>$nameof</code></li>
-<li><code>$qnameof</code></li>
-<li><code>$extnameof</code></li>
-<li><code>$offsetof</code></li>
-<li><code>$sizeof</code></li>
-<li><code>$typeof</code></li>
-<li><code>$stringify</code></li>
-<li><code>$typeof</code></li>
 <li><code>$eval</code></li>
 <li><code>$evaltype</code></li>
+<li><code>$extnameof</code></li>
+<li><code>$nameof</code></li>
+<li><code>$offsetof</code></li>
+<li><code>$qnameof</code></li>
+<li><code>$sizeof</code></li>
+<li><code>$stringify</code></li>
+<li><code>$typeof</code></li>
 </ul>
 <h3 id="alignof">$alignof</h3>
 <p>Returns the alignment in bytes needed for the type or member.</p>
@@ -351,6 +404,14 @@ $alignof(Foo.y); // =&gt; returns 8 on 64 bit
 $alignof(Foo);   // =&gt; returns 8 on 64 bit
 $alignof(g);     // =&gt; returns 4
 </code></pre>
+<h3 id="checks">$checks</h3>
+<p>Returns true if the expression can be parsed and analysed, false otherwise.</p>
+<pre><code>int a;
+typeid b;
+bool x = $checks(a + a); // x = true
+bool y = $checks(b + b); // y = false
+</code></pre>
+<p>This function can be very useful when checking macro arguments.</p>
 <h3 id="defined">$defined</h3>
 <p>Returns true if the expression inside is defined.</p>
 <pre><code>$defined(Foo.x); // =&gt; returns true
@@ -361,6 +422,18 @@ $defined(Foo.z); // =&gt; returns false
 <pre><code>int a = 123;         // =&gt; a is now 123
 $eval("a") = 222;    // =&gt; a is now 222
 $eval("mymodule::fooFunc")(a); // =&gt; same as mymodule::fooFunc(a)
+</code></pre>
+<p><code>$eval</code> is limited to a single, optionally path prefixed, identifier.
+Consequently methods cannot be evaluated directly:</p>
+<pre><code>struct Foo { ... }
+fn int Foo.test(Foo* f) { ... }
+
+fn void test()
+{
+   void* test1 = &amp;$eval("test"); // Works
+   void* test2 = &amp;Foo.$eval("test"); // Works
+   // void* test3 = &amp;$eval("Foo.test"); // Error
+}
 </code></pre>
 <h3 id="evaltype">$evaltype</h3>
 <p>Similar to <code>$eval</code> but for types:</p>
@@ -393,6 +466,12 @@ char[] b = $nameof(Foo) // =&gt; "test::bar::Foo"
 char[] c = $nameof(Foo[4]); // =&gt; "test::bar::Foo[4]" 
 char[] d = $nameof(g); // =&gt; "test::bar::g"
 </code></pre>
+<h3 id="sizeof_1">$sizeof</h3>
+<p>This is used on a value to determine the allocation size needed. <code>$sizeof(a)</code> is equivalent
+to doing <code>$typeof(a).sizeof</code>. Note that this is only used on values and not on types.</p>
+<pre><code>$typeof(a)* x = allocate_bytes($sizeof(a));
+*x = a;
+</code></pre>
 <h3 id="stringify">$stringify</h3>
 <p>Returns the expression as a string. It has a special behaviour for macro expression parameters,
 where <code>$stringify(#foo)</code> will return the expression contained in <code>#foo</code> rather than simply return
@@ -401,21 +480,6 @@ where <code>$stringify(#foo)</code> will return the expression contained in <cod
 <p>Returns the type of an expression or variable as a type itself.</p>
 <pre><code>Foo f;
 $typeof(f) x = f;
-</code></pre>
-<p><strong> The following are not yet implemented </strong></p>
-<h4 id="kindof">$kindof</h4>
-<p>Returns the TypeKind of the variable.</p>
-<pre><code>union Bar { ... }
-TypeKind a = $kindof(Foo); // STRUCT
-TypeKind b = $kindof(Bar); // BAR
-TypeKind c = $kindof(int); // INTEGER
-</code></pre>
-<h4 id="elementof">$elementof</h4>
-<p><em>Only available for array, optional, pointer, vector and subarray types.</em>
-Returns the element (underlying) type of an array, pointer, vector or subarray.</p>
-<pre><code>char x = $nameof($elementof(Foo[])); // "Foo"
-char y = $nameof($elementof(Foo[4])); // "Foo"
-char z = $nameof($elementof(Foo*)); // "Foo"
 </code></pre>
               
             </div>
