@@ -10,78 +10,26 @@ During compile time the type information may be directly used as compile time co
 
 During compile time there are a number of compile time fields that may be accessed directly.
 
-### Compile time variables
+### Type properties
 
-#### typeid
+It is possible to access properties on the type itself:
 
-Returns the typeid for the given type. Typedefs will return the typeid of the underlying type. The typeid size is the same as that of an `iptr`.
-
-    typeid x = Foo.typeid;
-
-#### sizeof
-
-Returns the size in bytes for the given type, like C `sizeof`.
-
-    usize x = Foo.sizeof;
-
-#### length
-
-*Not yet implemented*
-
-*Only available for array and vector types.*
-Returns the length of the array.
-
-```
-usize len = int[4].length
-```
-
-
-#### values
-
-Returns a subarray containing the values of an enum or fault.
-
-    enum FooEnum
-    {
-        BAR,
-        BAZ
-    }
-    char[] x = $nameof(FooEnum.values[1]); // "BAR"
-
-#### elements
-
-Returns the element count of an enum or fault.
-
-    enum FooEnum
-    {
-        BAR,
-        BAZ
-    }
-    int x = FooEnum.elements; // 2
-
-#### fields
-
-*Not yet implemented*
-
-*Only available for struct types.*
-Returns an array containing the fields in a struct or enum.
-
-    struct Baz
-    {
-        int x;
-        Foo* z;
-    }
-    char[] x = $nameof(Baz.fields[1]); // "z"
-
-#### signed
-
-*Not yet implemented*
-
-*Only available for integer types.*
-Returns true for a signed number.
-
-    bool s1 = int.signed; // => true
-    bool s2 = uint.signed; // => false
-
+- `associated`
+- `elements`
+- `inf`
+- `inner`
+- `kind`
+- `len`
+- `max`
+- `membersof`
+- `min`
+- `nan`
+- `names`
+- `params`
+- `returns`
+- `sizeof`
+- `typeid`
+- `values`
 
 #### associated
 
@@ -97,17 +45,85 @@ Returns an array containing the types of associated values if any.
     }
     char[] s = $nameof(Foo.associated[0]); // "double"
 
+#### elements
 
-#### returns
+Returns the element count of an enum or fault.
 
-*Not yet implemented*
+    enum FooEnum
+    {
+        BAR,
+        BAZ
+    }
+    int x = FooEnum.elements; // 2
 
-*Only available for function types.*
-Returns the type of the return type.
 
-    define TestFunc = fn int(int, double);
-    char[] s = $nameof(TestFunc.returns); // "int"
+#### inf
 
+*Only available for floating point types*
+
+Returns a representation of floating point "infinity".
+
+#### inner
+
+This returns a typeid to an "inner" type. What this means is different for each type:
+
+- Array -> the array base type.
+- Bitstruct -> underlying base type.
+- Enum -> underlying enum base type.
+- Pointer -> the type being pointed to.
+- Vector -> the vector base type.
+- Distinct -> the underlying type.
+
+It is not defined for other types.
+
+#### kind
+
+Returns the underlying `TypeKind` as defined in std::core::types.
+
+    TypeKind kind = int.kind; // TypeKind.SIGNED_INT
+
+#### len
+
+Returns the length of the array.
+
+    usize len = int[4].len; // 4
+
+#### max
+
+Returns the maximum value of the type (only valid for integer and float types).
+
+    ushort max_ushort = ushort.max; // 65535
+
+#### membersof
+
+*Only available for struct and union types.*
+
+Returns an array containing the fields in a struct or enum.
+
+    struct Baz
+    {
+        int x;
+        Foo* z;
+    }
+    char[] x = $nameof($typefrom(Baz.membersof[1])); // "z"
+
+#### min
+
+Returns the minimum value of the type (only valid for integer and float types).
+
+    ichar min_ichar = ichar.min; // -128
+
+
+#### names
+
+Returns a subarray containing the names of an enum or fault.
+
+    enum FooEnum
+    {
+        BAR,
+        BAZ
+    }
+    char[][] x = FooEnum.names; // ["BAR", "BAZ"]
 
 #### params
 
@@ -119,23 +135,53 @@ Returns a list of all parameters.
     define TestFunc = fn int(int, double);
     char[] s = $nameof(TestFunc.params[1]); // "double"
 
+#### returns
+
+*Only available for function types.*
+Returns the type of the return type.
+
+    define TestFunc = fn int(int, double);
+    char[] s = $nameof($typeform(TestFunc.returns)); // "int"
+
+#### sizeof
+
+Returns the size in bytes for the given type, like C `sizeof`.
+
+    usize x = Foo.sizeof;
+
+#### typeid
+
+Returns the typeid for the given type. Typedefs will return the typeid of the underlying type. The typeid size is the same as that of an `iptr`.
+
+    typeid x = Foo.typeid;
+
+#### values
+
+Returns a subarray containing the values of an enum or fault.
+
+    enum FooEnum
+    {
+        BAR,
+        BAZ
+    }
+    char[] x = $nameof(FooEnum.values[1]); // "BAR"
 
 ### Compile time functions
 
 There are several built-in functions to inspect the code during compile time.
 
 - `$alignof`
+- `$checks`
 - `$defined`
-- `$nameof`
-- `$qnameof`
-- `$extnameof`
-- `$offsetof`
-- `$sizeof`
-- `$typeof`
-- `$stringify`
-- `$typeof`
 - `$eval`
 - `$evaltype`
+- `$extnameof`
+- `$nameof`
+- `$offsetof`
+- `$qnameof`
+- `$sizeof`
+- `$stringify`
+- `$typeof`
 
 ### $alignof
 
@@ -155,6 +201,17 @@ Returns the alignment in bytes needed for the type or member.
     $alignof(Foo);   // => returns 8 on 64 bit
     $alignof(g);     // => returns 4
 
+### $checks
+
+Returns true if the expression can be parsed and analysed, false otherwise.
+
+    int a;
+    typeid b;
+    bool x = $checks(a + a); // x = true
+    bool y = $checks(b + b); // y = false
+
+This function can be very useful when checking macro arguments.
+
 ### $defined
 
 Returns true if the expression inside is defined.
@@ -169,6 +226,19 @@ Converts a compile time string with the corresponding variable:
     int a = 123;         // => a is now 123
     $eval("a") = 222;    // => a is now 222
     $eval("mymodule::fooFunc")(a); // => same as mymodule::fooFunc(a) 
+
+`$eval` is limited to a single, optionally path prefixed, identifier.
+Consequently methods cannot be evaluated directly:
+
+    struct Foo { ... }
+    fn int Foo.test(Foo* f) { ... }
+ 
+    fn void test()
+    {
+       void* test1 = &$eval("test"); // Works
+       void* test2 = &Foo.$eval("test"); // Works
+       // void* test3 = &$eval("Foo.test"); // Error
+    }
 
 ### $evaltype
 
@@ -211,7 +281,13 @@ Returns the same as `$nameof`, but with the full module name prepended.
     char[] c = $nameof(Foo[4]); // => "test::bar::Foo[4]" 
     char[] d = $nameof(g); // => "test::bar::g"
     
+### $sizeof
 
+This is used on a value to determine the allocation size needed. `$sizeof(a)` is equivalent
+to doing `$typeof(a).sizeof`. Note that this is only used on values and not on types.
+
+    $typeof(a)* x = allocate_bytes($sizeof(a));
+    *x = a;
 
 ### $stringify
 
@@ -226,23 +302,3 @@ Returns the type of an expression or variable as a type itself.
     Foo f;
     $typeof(f) x = f;
 
-
-** The following are not yet implemented **
-
-#### $kindof
-
-Returns the TypeKind of the variable.
-
-    union Bar { ... }
-    TypeKind a = $kindof(Foo); // STRUCT
-    TypeKind b = $kindof(Bar); // BAR
-    TypeKind c = $kindof(int); // INTEGER
-
-#### $elementof
-
-*Only available for array, optional, pointer, vector and subarray types.*
-Returns the element (underlying) type of an array, pointer, vector or subarray.
-
-    char x = $nameof($elementof(Foo[])); // "Foo"
-    char y = $nameof($elementof(Foo[4])); // "Foo"
-    char z = $nameof($elementof(Foo*)); // "Foo"

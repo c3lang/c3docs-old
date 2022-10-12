@@ -20,29 +20,22 @@ The macro capabilities of C3 reaches across several constructs: macros (prefixed
 
     // C
     #define M(x) ((x) + 2)
-    #define RETURN(x) return x;
-    #define u32 unsigned int
+    #define UInt32 unsigned int
     
     // Use:
     int y = M(foo() + 2);
-    RETURN(bar());
-    u32 b = y;
+    UInt32 b = y;
     
     // C3
     macro m(x)
     {
         return x + 2;
     }
-    macro ret(x) @escape
-    {
-        return x;
-    }
-    define u32 = uint;
+    define UInt32 = uint;
     
     // Use:
     int y = @m(foo() + 2);
-    @ret(bar());
-    u32 b = y;
+    UInt32 b = y;
 
 ### Dynamic scoping
 
