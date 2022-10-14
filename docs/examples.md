@@ -20,7 +20,7 @@ fn void example_for()
     // the for-loop is the same as C99. 
     for (int i = 0; i < 10; i++) 
     {
-        libc::printf("%d\n", i);
+        io::printf("%d\n", i);
     }
 
     // also equal
@@ -37,7 +37,7 @@ fn void example_foreach(float[] values)
 {
     foreach (index, value : values) 
     {
-        libc::printf("%d: %f\n", index, value);
+        io::printf("%d: %f\n", index, value);
     }
 }
 ```
@@ -191,7 +191,7 @@ fn void! test(int x)
     defer io::println();
     defer io::print("A");
     defer catch io::print("B")
-    defer catch (err) libc::printf("%s", err.message);
+    defer catch (err) io::printf("%s", err.message);
     if (x == 1) return FooError!;
     print("!")
 }
@@ -306,15 +306,15 @@ fn void main()
     if (catch err = ratio)
     {
         case MathError.DIVISION_BY_ZERO:
-            libc::printf("Division by zero\n");
+            io::printf("Division by zero\n");
             return;
         default:
-            libc::printf("Unexpected error!");
+            io::printf("Unexpected error!");
             return;
     }
     // Flow typing makes "ratio"
     // have the plain type 'double' here.
-    libc::printf("Ratio was %f\n", ratio);
+    io::printf("Ratio was %f\n", ratio);
 }
 ```
 
@@ -324,14 +324,14 @@ fn void printFile(char[] filename)
     char[]! file = io::load_file(filename);
 
     // The following function is not executed on error.
-    libc::printf("Loaded %s and got:\n%s", filename, file);
+    io::printf("Loaded %s and got:\n%s", filename, file);
 
     if (catch err = file)
     {
         case IoError.FILE_NOT_FOUND:
-            libc::printf("I could not find the file %s\n", filename);
+            io::printf("I could not find the file %s\n", filename);
         default:
-            libc::printf("Could not load %s.\n", filename);
+            io::printf("Could not load %s.\n", filename);
     }
 }
 ```
