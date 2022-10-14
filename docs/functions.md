@@ -11,7 +11,7 @@ Regular functions are the same as C aside from the keyword `fn`, which is follow
     {
         for (int i = 0; i < times; i++)
         {
-            libc::printf("Hello %d\n", i);
+            io::printf("Hello %d\n", i);
         }
     }
 

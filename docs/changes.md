@@ -1,5 +1,8 @@
 # Change log
 
+##### Revision 2022-10-14'
+- libc::printf replaced with io::printf
+
 ##### Revision 2022-10-01
 - Expanded and updated [types](../types).
 - 

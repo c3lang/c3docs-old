@@ -5,7 +5,7 @@
 ```
 fn void main()
 {
-    libc::printf("Hello world!\n");
+    io::printf("Hello world!\n");
 }
 ```
 
