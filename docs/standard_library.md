@@ -17,7 +17,7 @@ Swap values in `a` and `b`.
 int a = 3;
 int b = 5;
 @swap(a, b);
-io::printf("%d\n", a); // Prints 5
+io::printfln("%d", a); // Prints 5
 ```
 
 ### varcast(variant v, $Type)
@@ -85,7 +85,7 @@ int a = 3;
 };
 
 // Prints a = 3
-io::printf("a = %d\n", a, b);
+io::printfln("a = %d", a, b);
 ```
 
 ### less, greater, less_eq, greater_eq, equals

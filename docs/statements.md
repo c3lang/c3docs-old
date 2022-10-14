@@ -30,7 +30,7 @@ Expression blocks may also return values:
             if (x == 0) return 100;
             return -x;
         |};            
-        io::printf("The result was %d\n", a);
+        io::printfln("The result was %d", a);
     }
 
 ## Labelled break and continue
@@ -44,7 +44,7 @@ Labelled `break` and `continue` lets you break out of an outer scope. Labels can
         {
            while (1)
            {
-               io::printf("%d\n", i);
+               io::printfln("%d", i);
                // Break out of the top if statement.
                if (i++ > 10) break FOO;
            }
@@ -57,13 +57,13 @@ Do-while statements can skip the ending `while`. In that case it acts as if the 
 
     do 
     {
-        io::printf("FOO\n");
+        io::println("FOO");
     } while (0);
     
     // Equivalent to the above.
     do 
     {
-        io::printf("FOO\n");
+        io::println("FOO");
     };
 
 ## Nextcase and labelled nextcase
@@ -91,7 +91,7 @@ It's also possible to use `nextcase` with an expression, to jump to an arbitrary
         case 3:
             nextcase rand(); // Jump to random case
         default:
-            io::printf("Ended\n");
+            io::println("Ended");
     }  
 
 Which can be used as structured `goto` when creating state machines.

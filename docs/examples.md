@@ -20,7 +20,7 @@ fn void example_for()
     // the for-loop is the same as C99. 
     for (int i = 0; i < 10; i++) 
     {
-        io::printf("%d\n", i);
+        io::printfln("%d", i);
     }
 
     // also equal
@@ -37,7 +37,7 @@ fn void example_foreach(float[] values)
 {
     foreach (index, value : values) 
     {
-        io::printf("%d: %f\n", index, value);
+        io::printfln("%d: %f", index, value);
     }
 }
 ```
@@ -188,10 +188,10 @@ Because it's often relevant to run different defers when having an error return 
 ```
 fn void! test(int x)
 {
-    defer io::println();
-    defer io::print("A");
-    defer catch io::print("B")
-    defer catch (err) io::printf("%s", err.message);
+    defer io::println("");
+    defer io::println("A");
+    defer catch io::println("B")
+    defer catch (err) io::printfln("%s", err.message);
     if (x == 1) return FooError!;
     print("!")
 }
@@ -306,15 +306,15 @@ fn void main()
     if (catch err = ratio)
     {
         case MathError.DIVISION_BY_ZERO:
-            io::printf("Division by zero\n");
+            io::println("Division by zero\n");
             return;
         default:
-            io::printf("Unexpected error!");
+            io::println("Unexpected error!");
             return;
     }
     // Flow typing makes "ratio"
     // have the plain type 'double' here.
-    io::printf("Ratio was %f\n", ratio);
+    io::printfln("Ratio was %f", ratio);
 }
 ```
 
@@ -324,14 +324,14 @@ fn void printFile(char[] filename)
     char[]! file = io::load_file(filename);
 
     // The following function is not executed on error.
-    io::printf("Loaded %s and got:\n%s", filename, file);
+    io::printfln("Loaded %s and got:\n%s", filename, file);
 
     if (catch err = file)
     {
         case IoError.FILE_NOT_FOUND:
-            io::printf("I could not find the file %s\n", filename);
+            io::printfln("I could not find the file %s", filename);
         default:
-            io::printf("Could not load %s.\n", filename);
+            io::printfln("Could not load %s.", filename);
     }
 }
 ```

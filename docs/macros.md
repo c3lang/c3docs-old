@@ -257,7 +257,7 @@ Here's an example to illustrate its use:
         double[] a = { 1.0, 2.0, 3.0 };
         @foreach(a; int index, double value)
         {
-            io::printf("a[%d] = %f\n", index, value);
+            io::printfln("a[%d] = %f", index, value);
         }
     }
     
@@ -269,7 +269,7 @@ Here's an example to illustrate its use:
             int[] __a = a;
             for (int __i = 0; i < __a.len; i++)
             {
-                io::printf("Value: %d, x2: %d\n", __value1, __value2);
+                io::printfln("Value: %d, x2: %d", __value1, __value2);
             }
         }
     }
@@ -413,7 +413,7 @@ Compile time looping:
     macro foo($a)
     {
         $for (var $x = 0; $x < $a; $x++):
-            io::printf("%d\n", $x);     
+            io::printfln("%d", $x);     
         $endfor;
     }
     
@@ -421,8 +421,8 @@ Compile time looping:
     {
         foo(2);
         // Expands to ->
-        // io::printf("%d\n", 0);     
-        // io::printf("%d\n", 1);         
+        // io::printfln("%d", 0);     
+        // io::printfln("%d", 1);         
     }
 
 Looping over enums:
@@ -430,7 +430,7 @@ Looping over enums:
     macro foo_enum($SomeEnum)
     {
         $foreach ($x : $SomeEnum.values):
-            io::printf("%d\n", (int)$x);     
+            io::printfln("%d", (int)$x);     
         $endforeach;
     }
     
@@ -444,8 +444,8 @@ Looping over enums:
     {
         foo_enum(MyEnum);
         // Expands to ->
-        // io::printf("%d\n", (int)MyEnum.A);
-        // io::printf("%d\n", (int)MyEnum.B);    
+        // io::printfln("%d", (int)MyEnum.A);
+        // io::printfln("%d", (int)MyEnum.B);    
     }
 
 An important thing to note is that the content of the `$foreeach` or `$for` body must be a complete statement.

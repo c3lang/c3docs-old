@@ -5,7 +5,7 @@
 ```
 fn void main()
 {
-    io::printf("Hello world!\n");
+    io::println("Hello world!");
 }
 ```
 
