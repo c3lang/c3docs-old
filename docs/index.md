@@ -8,7 +8,7 @@ It has evolved significantly, not just in syntax but also in regard to error han
 
 The C3 compiler can be found on github: [https://github.com/c3lang/c3c](https://github.com/c3lang/c3c).
 
-Last updated: [Revision 2022-10-01](changes).
+Last updated: [Revision 2022-10-14](changes).
 
 ## Features
 
