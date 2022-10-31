@@ -135,13 +135,13 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#targets">targets</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#libs">libs</a>
+    <li class="toctree-l3"><a class="reference internal" href="#dependencies">dependencies</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#sources">sources</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#cc">cc</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#csources">csources</a>
+    <li class="toctree-l3"><a class="reference internal" href="#c-sources">c-sources</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#version">version</a>
     </li>
@@ -223,21 +223,17 @@
     &quot;John Doe &lt;john.doe@example.com&gt;&quot;
   ],
   &quot;langrev&quot;: &quot;1&quot;,
-  &quot;warnings&quot;: [
-    &quot;no-unused&quot;
-  ],
+  &quot;warnings&quot;: [ &quot;no-unused&quot; ],
   // sources compiled
-  &quot;sources&quot;: [
-    &quot;./**&quot;
-  ],
+  &quot;sources&quot;: [ &quot;./**&quot; ],
+  // directories where C3 library files may be found
+  &quot;dependency-search-paths&quot;: [ &quot;lib&quot; ],
   // libraries to use
-  &quot;libs&quot;: [],
+  &quot;dependencies&quot;: [],
   // c compiler
   &quot;cc&quot;: &quot;cc&quot;,
   // c sources
-  &quot;csources&quot;: [
-    &quot;./csource/**&quot;
-  ],
+  &quot;c-sources&quot;: [ &quot;./c-source/**&quot; ],
   &quot;targets&quot;: {
     &quot;hello_world&quot;: {
       &quot;type&quot;: &quot;executable&quot;
@@ -255,13 +251,13 @@ and the actual target defines it to be <code>windows-x64</code>, then the <code>
 <p>Similarly, compiler command line parameters can be used in turn to override the target setting.</p>
 <h4 id="targets">targets</h4>
 <p>The list of targets that can be built.</p>
-<h4 id="libs">libs</h4>
-<p>List of libraries to use when compiling the target.</p>
+<h4 id="dependencies">dependencies</h4>
+<p>List of C3 libraries (".c3l") to use when compiling the target.</p>
 <h4 id="sources">sources</h4>
 <p>List of source files to compile.</p>
 <h4 id="cc">cc</h4>
 <p>C compiler to use for compiling C sources (if C sources are compiled together with C3 files).</p>
-<h4 id="csources">csources</h4>
+<h4 id="c-sources">c-sources</h4>
 <p>List of C sources to compile.</p>
 <h4 id="version">version</h4>
 <p><em>Not handled yet</em></p>
