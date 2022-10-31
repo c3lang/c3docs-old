@@ -1,5 +1,9 @@
 # Change log
 
+##### Revision 2022-10-31
+- Updated project.json description.
+- Added information about static initializers and finalizers.
+
 ##### Revision 2022-10-14
 - libc::printf replaced with io::printf
 

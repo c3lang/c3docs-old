@@ -10,21 +10,17 @@ A new project is provided with a barebone structure in `project.c3p`:
     "John Doe <john.doe@example.com>"
   ],
   "langrev": "1",
-  "warnings": [
-    "no-unused"
-  ],
+  "warnings": [ "no-unused" ],
   // sources compiled
-  "sources": [
-    "./**"
-  ],
+  "sources": [ "./**" ],
+  // directories where C3 library files may be found
+  "dependency-search-paths": [ "lib" ],
   // libraries to use
-  "libs": [],
+  "dependencies": [],
   // c compiler
   "cc": "cc",
   // c sources
-  "csources": [
-    "./csource/**"
-  ],
+  "c-sources": [ "./c-source/**" ],
   "targets": {
     "hello_world": {
       "type": "executable"
@@ -51,9 +47,9 @@ Similarly, compiler command line parameters can be used in turn to override the 
 
 The list of targets that can be built.
 
-#### libs
+#### dependencies
 
-List of libraries to use when compiling the target.
+List of C3 libraries (".c3l") to use when compiling the target.
 
 #### sources
 
@@ -63,7 +59,7 @@ List of source files to compile.
 
 C compiler to use for compiling C sources (if C sources are compiled together with C3 files).
 
-#### csources
+#### c-sources
 
 List of C sources to compile.
 

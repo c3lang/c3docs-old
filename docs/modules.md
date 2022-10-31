@@ -221,6 +221,28 @@ This means that the rule for the common case can be summarized as
 
 > Types are used without prefix; functions, variables, macros and constants are prefixed with the sub module name.
 
+## Static initializer and finalizers
+
+It is sometimes useful to run code at startup. Modules allow you to use static initializers (run at startup) 
+and finalizers (run at shutdown).
+
+    static initialize
+    {
+        // Run at startup
+        some_function.init(512);
+    } 
+
+    static finalize
+    {
+        some_thing.shutdown();
+    }
+
+
+### Changing priority
+
+It is possible to use the attribute `@priority(<priority>)` to set the actual priority. It is recommended
+that programs use a priority of 1024 or higher. The higher the value, the later it
+will be called. The lowest priority is 65535. 
 
 ## Versioning and dynamic inclusion
 
