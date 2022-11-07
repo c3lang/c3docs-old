@@ -132,6 +132,8 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#enum-type-inference">Enum type inference</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#enum-associated-values">Enum associated values</a>
+    </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#faults">Faults</a>
@@ -669,13 +671,29 @@ test(RUNNING); // State.RUNNING is inferred
 
 fn void testState(State s) { ... }
 
-State RUNNING = State.TERMINATED; // Don't do this!
+const State RUNNING = State.TERMINATED; // Don't do this!
 
 ...
 
 test(RUNNING); // Ambiguous
 test(test::RUNNING); // Uses global.
 test(State.RUNNING); // Uses enum constant.
+</code></pre>
+<h3 id="enum-associated-values">Enum associated values</h3>
+<p>It is possible to associate each enum value with a static value.</p>
+<pre><code>enum State : int (char[] state_desc, bool active) 
+{
+    PENDING("pending start", false),
+    RUNNING("running", true),
+    TERMINATED("ended", false)
+}
+
+...
+
+State s = get_state();
+
+io::printfln("Currently the process is %s", s.state_desc);
+if (s.active) do_something();
 </code></pre>
 <h2 id="faults">Faults</h2>
 <p><code>fault</code> defines a set of optional result values, that are similar to enums, but are used for 
