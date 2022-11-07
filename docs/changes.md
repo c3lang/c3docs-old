@@ -1,5 +1,8 @@
 # Change log
 
+##### Revision 2022-11-07
+- Added information on enum associated values.
+
 ##### Revision 2022-10-31
 - Updated project.json description.
 - Added information about static initializers and finalizers.

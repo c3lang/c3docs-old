@@ -347,7 +347,7 @@ In the case that it collides with a global in the same scope, it needs the quali
 
     fn void testState(State s) { ... }
 
-    State RUNNING = State.TERMINATED; // Don't do this!
+    const State RUNNING = State.TERMINATED; // Don't do this!
 
     ... 
 
@@ -356,6 +356,23 @@ In the case that it collides with a global in the same scope, it needs the quali
     test(State.RUNNING); // Uses enum constant.
 
 
+### Enum associated values
+
+It is possible to associate each enum value with a static value.
+
+    enum State : int (char[] state_desc, bool active) 
+    {
+        PENDING("pending start", false),
+        RUNNING("running", true),
+        TERMINATED("ended", false)
+    }
+
+    ...
+    
+    State s = get_state();
+
+    io::printfln("Currently the process is %s", s.state_desc);
+    if (s.active) do_something();
 
 ## Faults
 
