@@ -122,6 +122,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
@@ -349,15 +351,14 @@ foreach (int idx, Foo* &amp;f : a)
 }
 </code></pre>
 <p>It is possible to enable foreach on any type 
-by implementing "length" and "element at" methods
-and annotating them using the <code>@operator</code> attribute:</p>
+by implementing "len" and "[]" methods and annotating them using the <code>@operator</code> attribute:</p>
 <pre><code>struct Vector
 {
     usize size;
     int* elements;
 }
 
-macro int Vector.get(Vector* vector, usize element) @operator(elementat)
+macro int Vector.get(Vector* vector, usize element) @operator([]])
 {
     return vector.elements[element];
 }
@@ -377,6 +378,7 @@ foreach (int i : v)
     printf("%d\n");
 }
 </code></pre>
+<p>For more information, see <a href="../operators">operator overloading</a></p>
               
             </div>
           </div>

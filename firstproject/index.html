@@ -108,6 +108,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
@@ -208,21 +210,16 @@ $
 $ tree .
 .
 └── hello_world
+    ├── project.json
     ├── LICENSE
     ├── README.md
     ├── build
     ├── docs
-    │   ├── about.md
-    │   └── src
-    │       └── index.html
     ├── lib
-    ├── project.c3p
     ├── resources
     ├── src
-    │   └── hello_world
-    │       └── main.c3
-    └── test
-        └── hello_world
+    │   └── main.c3
+    └── test        
 </code></pre>
 <p>Enter main.c3 and write the same code as above, then anywhere in the project structure:</p>
 <pre><code>$ c3c run

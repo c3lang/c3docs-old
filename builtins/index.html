@@ -154,6 +154,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
@@ -268,26 +270,26 @@ architectures (e.g. RDTSC on x86), otherwise $$sysclock will yield 0.</p>
 <h4 id="syscall">$$syscall</h4>
 <p>Makes a syscall according to the platform convention on platforms where it is supported.</p>
 <h3 id="math-functions">Math functions</h3>
-<p>Functions $$ceil, $$trunc, $$sin, $$cos, $$log, $$log2, $$log10, $$rint, $$round
-$$sqrt, $$roundeven, $$floor, $$sqrt, $$pow, $$exp, $$fma and $$fabs, $$copysign,
-$$round, $$nearbyint.</p>
+<p>Functions <code>$$ceil</code>, <code>$$trunc</code>, <code>$$sin</code>, <code>$$cos</code>, <code>$$log</code>, <code>$$log2</code>, <code>$$log10</code>, <code>$$rint</code>, <code>$$round</code>
+<code>$$sqrt</code>, <code>$$roundeven</code>, <code>$$floor</code>, <code>$$sqrt</code>, <code>$$pow</code>, <code>$$exp</code>, <code>$$fma</code> and <code>$$fabs</code>, <code>$$copysign</code>,
+<code>$$round</code>, <code>$$nearbyint</code>.</p>
 <p>Can be applied to float vectors or numbers. Returns the same type.</p>
-<p>Functions $$min, $$abs and $$max can be applied to any integer or float number or vector.</p>
+<p>Functions <code>$$min</code>, <code>$$abs</code> and <code>$$max</code> can be applied to any integer or float number or vector.</p>
 <p>Function $pow_int takes a float or floating vector + an integer and returns
 the same type as the first parameter.</p>
 <p>Saturated addition, subtraction and left shift for integers and integer vectors:
-$$sat_add, $$sat_shl, $$sat_sub.</p>
+<code>$$sat_add</code>, <code>$$sat_shl</code>, <code>$$sat_sub</code>.</p>
 <h3 id="bit-functions">Bit functions</h3>
 <h4 id="fshl-and-fshr">$$fshl and $$fshr</h4>
 <p>Funnel shift left and right, takes either two integers or two integer vectors.</p>
 <h4 id="ctz-clz-bitreverse-bswap-popcount">$$ctz, $$clz, $$bitreverse, $$bswap, $$popcount</h4>
 <p>Bit functions work on an integer or an integer vector.</p>
 <h3 id="vector-functions">Vector functions</h3>
-<p>$$reduce_add, $$reduce_mul, $$reduce_and, $$reduce_or, $$reduce_xor work on integer vectors.</p>
-<p>$$reduce_fadd, $$reduce_fmul works on float vectors.</p>
-<p>$$reduce_max, $$reduce_min works on any vector.</p>
-<p>$$reverse reverses the values in any vector.</p>
-<p>$$shufflevector rearranges the values of two vectors using a fixed mask into
+<p><code>$$reduce_add</code>, <code>$$reduce_mul</code>, <code>$$reduce_and</code>, <code>$$reduce_or</code>, <code>$$reduce_xor</code> work on integer vectors.</p>
+<p><code>$$reduce_fadd</code>, <code>$$reduce_fmul</code> works on float vectors.</p>
+<p><code>$$reduce_max</code>, <code>$$reduce_min</code> works on any vector.</p>
+<p><code>$$reverse</code> reverses the values in any vector.</p>
+<p><code>$$shufflevector</code> rearranges the values of two vectors using a fixed mask into
 a resulting vector.</p>
               
             </div>

@@ -88,12 +88,6 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#using-functions-and-types-from-other-modules">Using functions and types from other modules</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#static-initializer-and-finalizers">Static initializer and finalizers</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#changing-priority">Changing priority</a>
-    </li>
-        </ul>
-    </li>
     <li class="toctree-l2"><a class="reference internal" href="#versioning-and-dynamic-inclusion">Versioning and dynamic inclusion</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#textual-includes">Textual includes</a>
@@ -129,6 +123,8 @@
                     <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
                     </li>
@@ -387,24 +383,6 @@ fn void test()
 <blockquote>
 <p>Types are used without prefix; functions, variables, macros and constants are prefixed with the sub module name.</p>
 </blockquote>
-<h2 id="static-initializer-and-finalizers">Static initializer and finalizers</h2>
-<p>It is sometimes useful to run code at startup. Modules allow you to use static initializers (run at startup) 
-and finalizers (run at shutdown).</p>
-<pre><code>static initialize
-{
-    // Run at startup
-    some_function.init(512);
-}
-
-static finalize
-{
-    some_thing.shutdown();
-}
-</code></pre>
-<h3 id="changing-priority">Changing priority</h3>
-<p>It is possible to use the attribute <code>@priority(&lt;priority&gt;)</code> to set the actual priority. It is recommended
-that programs use a priority of 1024 or higher. The higher the value, the later it
-will be called. The lowest priority is 65535. </p>
 <h2 id="versioning-and-dynamic-inclusion">Versioning and dynamic inclusion</h2>
 <p><em>NOTE: This feature may significantly change.</em></p>
 <p>When including <em>dynamic</em> libraries, it is possible to use optional functions and globals. This is done using the

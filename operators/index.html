@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Define - C3 Documentation</title>
+  <title>Operator overloading - C3 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Define";
-    var mkdocs_page_input_path = "define.md";
+    var mkdocs_page_name = "Operator overloading";
+    var mkdocs_page_input_path = "operators.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -76,19 +76,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
                     </li>
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Define</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#defining-a-type-alias">Defining a type alias</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#distinct-types">Distinct types</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#function-and-variable-aliases">Function and variable aliases</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#using-define-to-create-generic-types-functions-and-variables">Using define to create generic types, functions and variables</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#function-pointer-default-arguments-and-named-parameters">Function pointer default arguments and named parameters</a>
-    </li>
-    </ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
@@ -116,7 +104,19 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Operator overloading</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#element-at-operator">"Element at" operator []</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#element-ref-operator">"Element ref" operator &amp;[]</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#element-set-operator">"Element set" operator []=</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#len-operator">"len" operator</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#enabling-foreach">Enabling 'foreach'</a>
+    </li>
+    </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
                     </li>
@@ -182,7 +182,7 @@
         
       
     
-    <li>Define</li>
+    <li>Operator overloading</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -193,93 +193,67 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="the-define-statement">The "define" statement</h1>
-<p>The <code>define</code> statement in C3 encompasses the <code>typedef</code> of C, as well as aliasing using 
-<code>#define</code>.</p>
-<h2 id="defining-a-type-alias">Defining a type alias</h2>
-<p><code>define &lt;type alias&gt; = &lt;type&gt;</code> creates a type alias, just as if one had used 
-<code>typedef</code> in C. Type aliases need to follow the name convention of user defined types (i.e. capitalized
-names with at least one lower case letter).</p>
-<pre><code>define CharPtr = char*;
-define Numbers = int[10];
-</code></pre>
-<p>Function pointers <em>must</em> be aliased in C3. The syntax is somewhat different from C:</p>
-<pre><code>define Callback = fn void(int a, bool b);
-</code></pre>
-<p>This defines an alias to function pointer type of a function that returns nothing and requires two arguments: an int and a bool. Here is a sample usage:</p>
-<pre><code>Callback cb = my_callback;
-cb(10, false);
-</code></pre>
-<h2 id="distinct-types">Distinct types</h2>
-<p><code>define</code> may also be used to create distinct new types. Unlike type aliases,
-they do not implicitly convert to any other type.</p>
-<pre><code>define Foo = distinct int;
-Foo f = 0;
-f = f + 1;
-int i = 1;
-// f = f + i Error!
-f = f + (Foo)i; // Valid
-</code></pre>
-<h2 id="function-and-variable-aliases">Function and variable aliases</h2>
-<p>It's possible to use <code>define</code> to create aliases for functions and variables.</p>
-<p>The syntax is <code>define &lt;alias&gt; = &lt;original identifier&gt;</code>.</p>
-<pre><code>fn void foo() { ... }
-int foo_var;
-
-define bar = foo;
-define bar_var = foo_var;
-
-fn void test() 
+                <h1 id="operator-overloading">Operator overloading</h1>
+<p>C3 allows some limited operator overloading for working with containers.</p>
+<h2 id="element-at-operator">"Element at" operator []</h2>
+<p>Implementing <code>[]</code> allows a type to use the <code>my_type[&lt;value&gt;]</code> syntax:</p>
+<pre><code>struct Foo
 {
-  // These are the same:
-  foo();
-  bar();
-
-  // These access the same variable:
-  int x = foo_var;
-  int y = bar_var;
-}  
-</code></pre>
-<h2 id="using-define-to-create-generic-types-functions-and-variables">Using define to create generic types, functions and variables</h2>
-<p>Generic modules uses <code>define</code> to create aliases to parameterized types, functions 
-and variables:</p>
-<pre><code> import generic_foo;
-
- // Parameterized function aliases
- define int_foo_call = generic_foo::foo_call&lt;int&gt;;
- define double_foo_call = generic_foo::foo_call&lt;double&gt;;
-
- // Parameterized type aliases
- define IntFoo = Foo&lt;int&gt;;
- define DoubleFoo = Foo&lt;double&gt;;
-
- // Parameterized global aliases
- define int_max_foo = generic_foo::max_foo&lt;int&gt;;
- define double_max_foo = generic_foo::max_foo&lt;double&gt;;
-</code></pre>
-<p>For more information, see the chapter on <a href="../generics">generics</a>.</p>
-<h2 id="function-pointer-default-arguments-and-named-parameters">Function pointer default arguments and named parameters</h2>
-<p>It is possible to attach default arguments to function pointer aliases. There is no requirement
-that the function has the same default arguments. In fact, the function pointer may have 
-default arguments where the function doesn't have it and vice-versa. Calling the function
-directly will then use the function's default arguments, and calling through the function pointer
-will yield the function pointer alias' default argument.</p>
-<p>Similarly, named parameter arguments follow the alias definition when calling through the 
-function pointer:</p>
-<pre><code>define TestFn = fn void(int y = 123);
-
-fn void test(int x = 5)
-{
-    io::printfln("X = %d");
+  double[] x;
 }
 
-fn void main()
+fn double Foo.get(Foo* this, usize i) @operator([])
 {
-    TestFn test2 = &amp;test;
-    test();        // Prints X = 5
-    test2();       // Prints X = 123
-    test(.x = 3);  // Prints X = 3 
-    test2(.y = 4); // Prints X = 4
+    return this.x[i];
+}
+</code></pre>
+<p>It's possible to use any type as argument, such as a string:</p>
+<pre><code>fn double Bar.get(Bar* this, char[] str) @operator([])
+{
+    return this.get_val_by_key(str);
+}
+</code></pre>
+<p>Only a single [] overload is allowed.</p>
+<h2 id="element-ref-operator">"Element ref" operator &amp;[]</h2>
+<p>Similar to [], the operator returns a value for <code>&amp;my_type[&lt;value&gt;]</code>, which may
+be retrieved in a different way. If this overload isn't defined, then <code>&amp;my_type[&lt;value&gt;]</code> would
+be a syntax error.</p>
+<pre><code>fn double* Foo.get_ref(Foo* this, usize i) @operator(&amp;[])
+{
+    return &amp;this.x[i];
+}
+</code></pre>
+<h2 id="element-set-operator">"Element set" operator []=</h2>
+<p>The counterpart of [] allows setting an element using <code>my_type[&lt;index&gt;] = &lt;value&gt;</code>.</p>
+<pre><code>fn void Foo.get_ref(Foo* this, usize i, double new_val) @operator([]=)
+{
+    return this.x[i] = new_val;
+}
+</code></pre>
+<h2 id="len-operator">"len" operator</h2>
+<p>Unlike the previous operator overloads, the "len" operator simply enables functionality
+which augments the <code>[]</code>-family of operators: you can use the "from end" syntax e.g <code>my_type[^1]</code> 
+to get the last element assuming the indexing uses integers.</p>
+<h2 id="enabling-foreach">Enabling 'foreach'</h2>
+<p>In order to use a type with foreach, e.g. <code>foreach(d : foo)</code>, at a minimum <code>[]</code> and <code>len</code> need to
+be implemented. If <code>&amp;[]</code> is implemented, foreach by reference is enabled (e.g. <code>foreach(double* &amp;d : foo)</code>)</p>
+<pre><code>fn double Foo.get(Foo* this, usize i) @operator([])
+{
+    return this.x[i];
+}
+
+fn usize Foo.len(Foo* this) @operator(len)
+{
+    return this.x.len;
+}
+
+fn void test(Foo f)
+{
+    // Print all elements in f
+    foreach (d : f)
+    {
+        io::printfln("%f", d);
+    }
 }
 </code></pre>
               
@@ -289,10 +263,10 @@ fn void main()
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../arrays/" class="btn btn-neutral float-right" title="Arrays">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../libraries/" class="btn btn-neutral float-right" title="Libraries">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../types/" class="btn btn-neutral" title="Types"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../contracts/" class="btn btn-neutral" title="Contracts"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -318,10 +292,10 @@ fn void main()
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../types/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../contracts/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../arrays/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../libraries/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
