@@ -36,21 +36,16 @@ $ c3c init hello_world
 $ tree .
 .
 └── hello_world
+    ├── project.json
     ├── LICENSE
     ├── README.md
     ├── build
     ├── docs
-    │   ├── about.md
-    │   └── src
-    │       └── index.html
     ├── lib
-    ├── project.c3p
     ├── resources
     ├── src
-    │   └── hello_world
-    │       └── main.c3
-    └── test
-        └── hello_world
+    │   └── main.c3
+    └── test        
 ```
 
 Enter main.c3 and write the same code as above, then anywhere in the project structure:

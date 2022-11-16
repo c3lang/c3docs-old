@@ -27,6 +27,7 @@ nav:
     - Reflection: 'reflection.md'
     - Builtins: 'builtins.md'
     - Contracts: 'contracts.md'
+    - Operator overloading: 'operators.md'
     - Libraries: 'libraries.md'
     - Standard Library: 'standard_library.md'
     - Crazy ideas: 'ideas.md'

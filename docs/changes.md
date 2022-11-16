@@ -1,5 +1,11 @@
 # Change log
 
+##### Revision 2022-11-16
+- Move description of static initialize
+- Info on operator overload
+- More details on function pointers
+- Updated project tree
+
 ##### Revision 2022-11-07
 - Added information on enum associated values.
 

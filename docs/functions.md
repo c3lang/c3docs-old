@@ -278,3 +278,41 @@ May be optimized to:
 In this case the compiler can look at the post condition of `result > 0` to determine that `testFoo(foo) == 0` must always be false.
 
 Looking closely at this code, we not that nothing guarantees that `bar` is not violating the preconditions. In Safe builds this will usually be checked in runtime, but a sufficiently smart compiler will warn about the lack of checks on `bar`. Execution of code violating pre and post conditions has unspecified behaviour.
+
+## Static initializer and finalizers
+
+It is sometimes useful to run code at startup and shutdown. Static initializers and finalizers
+are special functions that are run at startup and shutdown respectively:
+
+    static initialize
+    {
+        // Run at startup
+        some_function.init(512);
+    } 
+
+    static finalize
+    {
+        some_thing.shutdown();
+    }
+
+Note that invoking `static finalize` is an best effort attempt by the OS and may not
+be called during abnormal shutdown.
+
+### Changing priority of static initializers and finalizers
+
+It is possible to use the attribute `@priority(<priority>)` to set the actual priority. It is recommended
+that programs use a priority of 1024 or higher. The higher the value, the later it
+will be called. The lowest priority is 65535.
+
+
+    // Print "Hello World" at startup.
+ 
+    static initialize @priority(3000)
+    {
+        io::println("World");
+    }
+    static initialize @priority(2000)
+    {
+        io::print("Hello ");
+    }
+

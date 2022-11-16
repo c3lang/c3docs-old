@@ -1,6 +1,6 @@
 # Customizing A Project
 
-A new project is provided with a barebone structure in `project.c3p`:
+A new project is provided with a barebone structure in `project.json`:
 
 
 ```json5

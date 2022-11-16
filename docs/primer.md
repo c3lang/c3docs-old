@@ -425,4 +425,6 @@ C.
 - [Generic modules](../generics)
 - [Contracts](../contracts)
 - [Reflection](../reflection)
+- [Operator overloading](../operators)
 - Macro methods
+- [Static initialize and finalize functions](../functions)

@@ -68,19 +68,19 @@ Makes a syscall according to the platform convention on platforms where it is su
 
 ### Math functions
 
-Functions $$ceil, $$trunc, $$sin, $$cos, $$log, $$log2, $$log10, $$rint, $$round
-$$sqrt, $$roundeven, $$floor, $$sqrt, $$pow, $$exp, $$fma and $$fabs, $$copysign,
-$$round, $$nearbyint.
+Functions `$$ceil`, `$$trunc`, `$$sin`, `$$cos`, `$$log`, `$$log2`, `$$log10`, `$$rint`, `$$round`
+`$$sqrt`, `$$roundeven`, `$$floor`, `$$sqrt`, `$$pow`, `$$exp`, `$$fma` and `$$fabs`, `$$copysign`,
+`$$round`, `$$nearbyint`.
 
 Can be applied to float vectors or numbers. Returns the same type.
 
-Functions $$min, $$abs and $$max can be applied to any integer or float number or vector.
+Functions `$$min`, `$$abs` and `$$max` can be applied to any integer or float number or vector.
 
 Function $pow_int takes a float or floating vector + an integer and returns
 the same type as the first parameter.
 
 Saturated addition, subtraction and left shift for integers and integer vectors:
-$$sat_add, $$sat_shl, $$sat_sub.
+`$$sat_add`, `$$sat_shl`, `$$sat_sub`.
 
 ### Bit functions
 
@@ -94,14 +94,14 @@ Bit functions work on an integer or an integer vector.
 
 ### Vector functions
 
-$$reduce_add, $$reduce_mul, $$reduce_and, $$reduce_or, $$reduce_xor work on integer vectors.
+`$$reduce_add`, `$$reduce_mul`, `$$reduce_and`, `$$reduce_or`, `$$reduce_xor` work on integer vectors.
 
-$$reduce_fadd, $$reduce_fmul works on float vectors.
+`$$reduce_fadd`, `$$reduce_fmul` works on float vectors.
 
-$$reduce_max, $$reduce_min works on any vector.
+`$$reduce_max`, `$$reduce_min` works on any vector.
 
-$$reverse reverses the values in any vector.
+`$$reverse` reverses the values in any vector.
 
-$$shufflevector rearranges the values of two vectors using a fixed mask into
+`$$shufflevector` rearranges the values of two vectors using a fixed mask into
 a resulting vector.
 

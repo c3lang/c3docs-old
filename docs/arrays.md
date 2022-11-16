@@ -148,8 +148,7 @@ index:
     }
 
 It is possible to enable foreach on any type 
-by implementing "length" and "element at" methods
-and annotating them using the `@operator` attribute:
+by implementing "len" and "[]" methods and annotating them using the `@operator` attribute:
 
     struct Vector
     {
@@ -157,7 +156,7 @@ and annotating them using the `@operator` attribute:
         int* elements;
     }
 
-    macro int Vector.get(Vector* vector, usize element) @operator(elementat)
+    macro int Vector.get(Vector* vector, usize element) @operator([]])
     {
         return vector.elements[element];
     }
@@ -176,3 +175,5 @@ and annotating them using the `@operator` attribute:
     {
         printf("%d\n");
     }
+
+For more information, see [operator overloading](../operators)
