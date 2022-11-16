@@ -183,10 +183,10 @@
           <div role="main">
             <div class="section">
               
-                <h2 id="the-define-statement">The "define" statement</h2>
+                <h1 id="the-define-statement">The "define" statement</h1>
 <p>The <code>define</code> statement in C3 encompasses the <code>typedef</code> of C, as well as aliasing using 
 <code>#define</code></p>
-<h3 id="define-a-type-alias">Define a type alias</h3>
+<h2 id="define-a-type-alias">Define a type alias</h2>
 <p><code>define &lt;type alias&gt; = &lt;type&gt;</code> creates a type alias, just as if one had used 
 <code>typedef</code> in C. All type aliases need to follow the name convention of user defined types.</p>
 <pre><code>define CharPtr = char*;
@@ -198,7 +198,7 @@ define Numbers = int[10];
 <pre><code>Callback cb = my_callback;
 cb(10, false);
 </code></pre>
-<h2 id="distinct-types">Distinct types</h2>
+<h1 id="distinct-types">Distinct types</h1>
 <p><code>define</code> may also be used to create distinct new types. Unlike type aliases,
 they do not implicitly convert to any other type.</p>
 <pre><code>define Foo = distinct int;
@@ -208,7 +208,7 @@ int i = 1;
 // f = f + i Error!
 f = f + (Foo)i; // Valid
 </code></pre>
-<h2 id="function-and-variable-aliases">Function and variable aliases</h2>
+<h1 id="function-and-variable-aliases">Function and variable aliases</h1>
 <p>It's possible to use <code>define</code> to create aliases for functions and variables.</p>
 <p>The syntax is <code>define &lt;alias&gt; = &lt;original identifier&gt;</code>.</p>
 <pre><code>fn void foo() { ... }
@@ -228,7 +228,7 @@ fn void test()
   int y = bar_var;
 }  
 </code></pre>
-<h2 id="using-define-to-create-generic-types">Using define to create generic types</h2>
+<h1 id="using-define-to-create-generic-types">Using define to create generic types</h1>
 <p>Generic modules uses <code>define</code> to create aliases to parameterized types, functions 
 and variables. For more information, see the chapter on <a href="../generics">generics</a>.</p>
               
