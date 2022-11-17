@@ -148,7 +148,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#free-free_aligned">free, free_aligned</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#char-alloc_bytesusize-bytes">char[] alloc_bytes(usize bytes)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#char-alloc_bytesusz-bytes">char[] alloc_bytes(usz bytes)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#alloctype">alloc($Type)</a>
     </li>
@@ -156,11 +156,11 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#tscoped-body">@tscoped(; @body())</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#void-tmallocusize-size-usize-alignment-0">void* tmalloc(usize size, usize alignment = 0)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-tmallocusz-size-usz-alignment-0">void* tmalloc(usz size, usz alignment = 0)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#void-tcallocusize-size-usize-alignment-0">void* tcalloc(usize size, usize alignment = 0)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-tcallocusz-size-usz-alignment-0">void* tcalloc(usz size, usz alignment = 0)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#void-treallocvoid-ptr-usize-size-usize-alignment-0">void trealloc(void ptr, usize size, usize alignment = 0)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-treallocvoid-ptr-usz-size-usz-alignment-0">void trealloc(void ptr, usz size, usz alignment = 0)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#talloctype">talloc($Type)</a>
     </li>
@@ -170,17 +170,17 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#volatile_storex-y">@volatile_store(&amp;x, y)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#usize-aligned_offsetusize-offset-usize-alignment">usize aligned_offset(usize offset, usize alignment)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-aligned_offsetusz-offset-usz-alignment">usz aligned_offset(usz offset, usz alignment)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#usize-aligned_pointervoid-ptr-usize-alignment">usize aligned_pointer(void* ptr, usize alignment)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-aligned_pointervoid-ptr-usz-alignment">usz aligned_pointer(void* ptr, usz alignment)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#bool-ptr_is_alignedvoid-ptr-usize-alignment">bool ptr_is_aligned(void* ptr, usize alignment)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#bool-ptr_is_alignedvoid-ptr-usz-alignment">bool ptr_is_aligned(void* ptr, usz alignment)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#void-copyvoid-dst-void-src-usize-len-usize-dst_align-0-usize-src_align-0-bool-is_volatile-false">void copy(void dst, void src, usize len, usize $dst_align = 0, usize $src_align = 0, bool $is_volatile = false)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-copyvoid-dst-void-src-usz-len-usz-dst_align-0-usz-src_align-0-bool-is_volatile-false">void copy(void dst, void src, usz len, usz $dst_align = 0, usz $src_align = 0, bool $is_volatile = false)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#void-setvoid-dst-char-val-usize-len-usize-dst_align-0-bool-is_volatile-false">void set(void* dst, char val, usize len, usize $dst_align = 0, bool $is_volatile = false)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-setvoid-dst-char-val-usz-len-usz-dst_align-0-bool-is_volatile-false">void set(void* dst, char val, usz len, usz $dst_align = 0, bool $is_volatile = false)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#void-clearvoid-dst-usize-len-usize-dst_align-0-bool-is_volatile-false">void clear(void* dst, usize len, usize $dst_align = 0, bool $is_volatile = false)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-clearvoid-dst-usz-len-usz-dst_align-0-bool-is_volatile-false">void clear(void* dst, usz len, usz $dst_align = 0, bool $is_volatile = false)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#clonevalue">@clone(&amp;value)</a>
     </li>
@@ -190,9 +190,9 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#stdcorememarray">std::core::mem::array</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#alloctype-usize-elements">alloc($Type, usize elements)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#alloctype-usz-elements">alloc($Type, usz elements)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#maketype-usize-elements">make($Type, usize elements)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#maketype-usz-elements">make($Type, usz elements)</a>
     </li>
         </ul>
     </li>
@@ -212,7 +212,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#stdcorestringconv">std::core::string::conv</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#usize-char32_to_utf8char32-c-char-output-usize-available">usize! char32_to_utf8(Char32 c, char* output, usize available)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-char32_to_utf8char32-c-char-output-usz-available">usz! char32_to_utf8(Char32 c, char* output, usz available)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#void-char32_to_utf16_unsafechar32-c-char16-output">void char32_to_utf16_unsafe(Char32 c, Char16** output)</a>
     </li>
@@ -220,11 +220,11 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#stdio">std::io</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#usize-printfchar-format-args-maydiscard">usize! printf(char[] format, args...) @maydiscard</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-printfchar-format-args-maydiscard">usz! printf(char[] format, args...) @maydiscard</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#usize-stringprintfstring-str-char-format-args-maydiscard">usize! String.printf(String* str, char[] format, args...) @maydiscard</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-stringprintfstring-str-char-format-args-maydiscard">usz! String.printf(String* str, char[] format, args...) @maydiscard</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#usize-fileprintffile-file-char-format-args-maydiscard">usize! File.printf(File file, char[] format, args...) @maydiscard</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-fileprintffile-file-char-format-args-maydiscard">usz! File.printf(File file, char[] format, args...) @maydiscard</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#void-fileopenfile-file-char-filename-char-mode">void! File.open(File* file, char[] filename, char[] mode)</a>
     </li>
@@ -236,9 +236,9 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#void-fileputcfile-file-char-c">void! File.putc(File *file, char c)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#usize-filereadfile-file-void-buffer-usize-items-usize-element_size-1">usize File.read(File file, void buffer, usize items, usize element_size = 1)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-filereadfile-file-void-buffer-usz-items-usz-element_size-1">usz File.read(File file, void buffer, usz items, usz element_size = 1)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#usize-filewritefile-file-void-buffer-usize-items-usize-element_size-1">usize File.write(File file, void buffer, usize items, usize element_size = 1)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-filewritefile-file-void-buffer-usz-items-usz-element_size-1">usz File.write(File file, void buffer, usz items, usz element_size = 1)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#stdout-stdin-stderr">stdout(), stdin(), stderr()</a>
     </li>
@@ -252,9 +252,9 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#type-listpop_firstlist-list">Type List.pop_first(List *list)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#void-listremove_atlist-list-usize-index">void List.remove_at(List *list, usize index)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-listremove_atlist-list-usz-index">void List.remove_at(List *list, usz index)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#void-listinsert_atlist-list-usize-index-type-type">void List.insert_at(List *list, usize index, Type type)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-listinsert_atlist-list-usz-index-type-type">void List.insert_at(List *list, usz index, Type type)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#void-listpush_frontlist-list-type-type">void List.push_front(List *list, Type type)</a>
     </li>
@@ -268,13 +268,13 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#listis_emptylist-list">List.is_empty(List *list)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#usize-listlenlist-list">usize List.len(List *list)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-listlenlist-list">usz List.len(List *list)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#type-listgetlist-list-usize-index">Type List.get(List *list, usize index)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#type-listgetlist-list-usz-index">Type List.get(List *list, usz index)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#void-listfreelist-list">void List.free(List *list)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#void-listswaplist-list-usize-i-usize-j">void List.swap(List *list, usize i, usize j)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-listswaplist-list-usz-i-usz-j">void List.swap(List *list, usz i, usz j)</a>
     </li>
         </ul>
     </li>
@@ -454,7 +454,7 @@ guaranteed to be zeroed out. <code>realloc_aligned</code> can only be used with
 pointers created using <code>calloc_aligned</code> or <code>alloc_aligned</code>.</p>
 <h3 id="free-free_aligned">free, free_aligned</h3>
 <p>Frees memory allocated using <code>malloc</code> or <code>calloc</code>.</p>
-<h3 id="char-alloc_bytesusize-bytes">char[] alloc_bytes(usize bytes)</h3>
+<h3 id="char-alloc_bytesusz-bytes">char[] alloc_bytes(usz bytes)</h3>
 <p>Similar to malloc, but returns the data as a subarray. Will panic on out of memory.</p>
 <h3 id="alloctype">alloc($Type)</h3>
 <p>Will allocate enough memory for exactly the type provided:</p>
@@ -476,11 +476,11 @@ dynamic_arena.destroy();
 <h3 id="tscoped-body">@tscoped(; @body())</h3>
 <p>Same as @scoped, but uses the temporary allocator rather than any
 arbitrary allocator.</p>
-<h3 id="void-tmallocusize-size-usize-alignment-0">void* tmalloc(usize size, usize alignment = 0)</h3>
+<h3 id="void-tmallocusz-size-usz-alignment-0">void* tmalloc(usz size, usz alignment = 0)</h3>
 <p>Allocates memory using the temporary allocator. Panic on failure.</p>
-<h3 id="void-tcallocusize-size-usize-alignment-0">void* tcalloc(usize size, usize alignment = 0)</h3>
+<h3 id="void-tcallocusz-size-usz-alignment-0">void* tcalloc(usz size, usz alignment = 0)</h3>
 <p>Same as <code>tmalloc</code> but clears the memory.</p>
-<h3 id="void-treallocvoid-ptr-usize-size-usize-alignment-0">void<em> trealloc(void</em> ptr, usize size, usize alignment = 0)</h3>
+<h3 id="void-treallocvoid-ptr-usz-size-usz-alignment-0">void<em> trealloc(void</em> ptr, usz size, usz alignment = 0)</h3>
 <p><code>realloc</code> but on memory received using <code>tcalloc</code> or <code>tmalloc</code>.</p>
 <h3 id="talloctype">talloc($Type)</h3>
 <p>Like <code>alloc</code> but using the temporary allocator.</p>
@@ -505,14 +505,14 @@ y = @volatile_load(my_global);
 @volatile_store(y, 1);
 @volatile_store(y, 1);
 </code></pre>
-<h3 id="usize-aligned_offsetusize-offset-usize-alignment">usize aligned_offset(usize offset, usize alignment)</h3>
+<h3 id="usz-aligned_offsetusz-offset-usz-alignment">usz aligned_offset(usz offset, usz alignment)</h3>
 <p>Returns an aligned size based on the current offset. The alignment
 must be a power of two. E.g. <code>mem::aligned_offset(17, 8)</code> would return <code>24</code></p>
-<h3 id="usize-aligned_pointervoid-ptr-usize-alignment">usize aligned_pointer(void* ptr, usize alignment)</h3>
+<h3 id="usz-aligned_pointervoid-ptr-usz-alignment">usz aligned_pointer(void* ptr, usz alignment)</h3>
 <p>Returns a pointer aligned to the given alignment, using <code>aligned_offset</code>.</p>
-<h3 id="bool-ptr_is_alignedvoid-ptr-usize-alignment">bool ptr_is_aligned(void* ptr, usize alignment)</h3>
+<h3 id="bool-ptr_is_alignedvoid-ptr-usz-alignment">bool ptr_is_aligned(void* ptr, usz alignment)</h3>
 <p>Return true if the pointer is aligned, false otherwise.</p>
-<h3 id="void-copyvoid-dst-void-src-usize-len-usize-dst_align-0-usize-src_align-0-bool-is_volatile-false">void copy(void<em> dst, void</em> src, usize len, usize $dst_align = 0, usize $src_align = 0, bool $is_volatile = false)</h3>
+<h3 id="void-copyvoid-dst-void-src-usz-len-usz-dst_align-0-usz-src_align-0-bool-is_volatile-false">void copy(void<em> dst, void</em> src, usz len, usz $dst_align = 0, usz $src_align = 0, bool $is_volatile = false)</h3>
 <p>Copies bytes from one pointer to another. It may optionally be set as volatile,
 in which case the copy may not be optimized away. Furthermore the source
 and destination alignment may be used.</p>
@@ -520,9 +520,9 @@ and destination alignment may be used.</p>
 Foo* f = talloc(data_size);
 mem::copy(f, slice.ptr, size); 
 </code></pre>
-<h3 id="void-setvoid-dst-char-val-usize-len-usize-dst_align-0-bool-is_volatile-false">void set(void* dst, char val, usize len, usize $dst_align = 0, bool $is_volatile = false)</h3>
+<h3 id="void-setvoid-dst-char-val-usz-len-usz-dst_align-0-bool-is_volatile-false">void set(void* dst, char val, usz len, usz $dst_align = 0, bool $is_volatile = false)</h3>
 <p>Sets bytes to a value. This operation may be aligned and/or volatile. See the <code>copy</code> method.</p>
-<h3 id="void-clearvoid-dst-usize-len-usize-dst_align-0-bool-is_volatile-false">void clear(void* dst, usize len, usize $dst_align = 0, bool $is_volatile = false)</h3>
+<h3 id="void-clearvoid-dst-usz-len-usz-dst_align-0-bool-is_volatile-false">void clear(void* dst, usz len, usz $dst_align = 0, bool $is_volatile = false)</h3>
 <p>Sets bytes to zero. This operation may be aligned and/or volatile. See the <code>copy</code> method.</p>
 <h3 id="clonevalue">@clone(&amp;value)</h3>
 <p>Makes a shallow copy of a value using the regular allocator.</p>
@@ -534,13 +534,13 @@ return @clone(f);
 <h3 id="tclonevalue">@tclone(&amp;value)</h3>
 <p>Same as <code>@clone</code> but uses the temporary allocator.</p>
 <h2 id="stdcorememarray">std::core::mem::array</h2>
-<h3 id="alloctype-usize-elements">alloc($Type, usize elements)</h3>
+<h3 id="alloctype-usz-elements">alloc($Type, usz elements)</h3>
 <p>Allocate a slice with <code>elements</code> number of elements, returning
 a subarray of the given length. Elements are not initialized.
 <code>array::talloc</code> variant uses the temporary allocator.</p>
 <pre><code class="language-c">int[] ints = array::alloc(int, 100);
 </code></pre>
-<h3 id="maketype-usize-elements">make($Type, usize elements)</h3>
+<h3 id="maketype-usz-elements">make($Type, usz elements)</h3>
 <p>Like <code>array::alloc</code> but all elements are cleared. <code>tmake</code> variant uses
 the temporary allocator.</p>
 <h2 id="stdcoretypes">std::core::types</h2>
@@ -559,7 +559,7 @@ short y = variant_to_int(v, short)!!; // Works
 ichar z = variant_to_int(v, ichar)!!; // Panics VALUE_OUT_OF_RANGE
 </code></pre>
 <h2 id="stdcorestringconv">std::core::string::conv</h2>
-<h3 id="usize-char32_to_utf8char32-c-char-output-usize-available">usize! char32_to_utf8(Char32 c, char* output, usize available)</h3>
+<h3 id="usz-char32_to_utf8char32-c-char-output-usz-available">usz! char32_to_utf8(Char32 c, char* output, usz available)</h3>
 <p>Convert a UTF32 codepoint to an UTF8 buffer. <code>size</code> has the number of
 writable bytes left. It returns the number of bytes used, or 
 <code>UnicodeResult.CONVERSION_FAILED</code> if the buffer is too small.</p>
@@ -567,12 +567,12 @@ writable bytes left. It returns the number of bytes used, or
 <p>Convert a UTF32 codepoint to an UTF16 buffer without bounds checking,
 moving the output pointer 1 or 2 steps.</p>
 <h2 id="stdio">std::io</h2>
-<h3 id="usize-printfchar-format-args-maydiscard">usize! printf(char[] format, args...) @maydiscard</h3>
+<h3 id="usz-printfchar-format-args-maydiscard">usz! printf(char[] format, args...) @maydiscard</h3>
 <p>Regular printf functionality: <code>%s</code>, <code>%x</code>, <code>%d</code>, <code>%f</code> and <code>%p</code> are supported.
 Will also print enums and vectors.</p>
-<h3 id="usize-stringprintfstring-str-char-format-args-maydiscard">usize! String.printf(String* str, char[] format, args...) @maydiscard</h3>
+<h3 id="usz-stringprintfstring-str-char-format-args-maydiscard">usz! String.printf(String* str, char[] format, args...) @maydiscard</h3>
 <p>Same as printf but on strings.</p>
-<h3 id="usize-fileprintffile-file-char-format-args-maydiscard">usize! File.printf(File file, char[] format, args...) @maydiscard</h3>
+<h3 id="usz-fileprintffile-file-char-format-args-maydiscard">usz! File.printf(File file, char[] format, args...) @maydiscard</h3>
 <p>Same as printf but on files.</p>
 <h3 id="void-fileopenfile-file-char-filename-char-mode">void! File.open(File* file, char[] filename, char[] mode)</h3>
 <p>Open a file with the given file name with the given mode (r, w etc)</p>
@@ -584,9 +584,9 @@ Will also print enums and vectors.</p>
 <p>True if EOF has been reached. Based on the libc function.</p>
 <h3 id="void-fileputcfile-file-char-c">void! File.putc(File *file, char c)</h3>
 <p>Write a single byte to a file. See the libc function.</p>
-<h3 id="usize-filereadfile-file-void-buffer-usize-items-usize-element_size-1">usize File.read(File<em> file, void</em> buffer, usize items, usize element_size = 1)</h3>
+<h3 id="usz-filereadfile-file-void-buffer-usz-items-usz-element_size-1">usz File.read(File<em> file, void</em> buffer, usz items, usz element_size = 1)</h3>
 <p>Read into a buffer, based on the libc function.</p>
-<h3 id="usize-filewritefile-file-void-buffer-usize-items-usize-element_size-1">usize File.write(File<em> file, void</em> buffer, usize items, usize element_size = 1)</h3>
+<h3 id="usz-filewritefile-file-void-buffer-usz-items-usz-element_size-1">usz File.write(File<em> file, void</em> buffer, usz items, usz element_size = 1)</h3>
 <p>Write to a buffer, based on the libc function.</p>
 <h3 id="stdout-stdin-stderr">stdout(), stdin(), stderr()</h3>
 <p>Return stdout, stdin and stderr respectively.</p>
@@ -607,9 +607,9 @@ list.free();
 <p>Removes and returns the last entry in the list.</p>
 <h3 id="type-listpop_firstlist-list">Type List.pop_first(List *list)</h3>
 <p>Removes the first entry in the list.</p>
-<h3 id="void-listremove_atlist-list-usize-index">void List.remove_at(List *list, usize index)</h3>
+<h3 id="void-listremove_atlist-list-usz-index">void List.remove_at(List *list, usz index)</h3>
 <p>Removes the entry at <code>index</code>.</p>
-<h3 id="void-listinsert_atlist-list-usize-index-type-type">void List.insert_at(List *list, usize index, Type type)</h3>
+<h3 id="void-listinsert_atlist-list-usz-index-type-type">void List.insert_at(List *list, usz index, Type type)</h3>
 <p>Inserts a value at <code>index</code>.</p>
 <h3 id="void-listpush_frontlist-list-type-type">void List.push_front(List *list, Type type)</h3>
 <p>Inserts a value to the front of the list.</p>
@@ -623,13 +623,13 @@ list.free();
 <p>Return the last element in the list if available.</p>
 <h3 id="listis_emptylist-list">List.is_empty(List *list)</h3>
 <p>Return <code>true</code> if the list is empty.</p>
-<h3 id="usize-listlenlist-list">usize List.len(List *list)</h3>
+<h3 id="usz-listlenlist-list">usz List.len(List *list)</h3>
 <p>Return the number of elements in the list.</p>
-<h3 id="type-listgetlist-list-usize-index">Type List.get(List *list, usize index)</h3>
+<h3 id="type-listgetlist-list-usz-index">Type List.get(List *list, usz index)</h3>
 <p>Return the value at <code>index</code>.</p>
 <h3 id="void-listfreelist-list">void List.free(List *list)</h3>
 <p>Free all memory associated with this list.</p>
-<h3 id="void-listswaplist-list-usize-i-usize-j">void List.swap(List *list, usize i, usize j)</h3>
+<h3 id="void-listswaplist-list-usz-i-usz-j">void List.swap(List *list, usz i, usz j)</h3>
 <p>Swap two elements in the list.</p>
               
             </div>

@@ -350,13 +350,13 @@ long h = (long)a + ((long)b + (long)c);
 <ol>
 <li>Resolve the operands.</li>
 <li>If the rhs is not an integer, this is an error.   </li>
-<li>If the rhs has a bit width that exceeds iptrdiff, this is an error.</li>
+<li>If the rhs has a bit width that exceeds isz, this is an error.</li>
 <li>The result of the expression is the lhs type.</li>
 </ol>
 <h3 id="3-subtraction-with-lhs-pointer-and-rhs-integer">3. Subtraction with lhs pointer and rhs integer</h3>
 <ol>
 <li>Resolve the operands.</li>
-<li>If the right hand type has a bit width that exceeds iptrdiff, this is an error.</li>
+<li>If the right hand type has a bit width that exceeds isz, this is an error.</li>
 <li>The result of the expression is the left hand type.</li>
 </ol>
 <h3 id="4-subtraction-with-both-sides-pointers">4. Subtraction with both sides pointers</h3>
@@ -364,7 +364,7 @@ long h = (long)a + ((long)b + (long)c);
 <li>Resolve the operands.</li>
 <li>If the either side is a <code>void *</code>, it is cast to the other type.</li>
 <li>If the types of the sides are different, this is an error.   </li>
-<li>The result of the expression is iptrdiff.</li>
+<li>The result of the expression is isz.</li>
 <li>If this result exceeds the target width, this is an error.</li>
 </ol>
 <h3 id="6-bit-operations">6. Bit operations <code>^</code> <code>&amp;</code> <code>|</code></h3>

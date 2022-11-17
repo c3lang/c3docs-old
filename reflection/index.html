@@ -313,7 +313,7 @@ int x = FooEnum.elements; // 2
 </code></pre>
 <h4 id="len">len</h4>
 <p>Returns the length of the array.</p>
-<pre><code>usize len = int[4].len; // 4
+<pre><code>usz len = int[4].len; // 4
 </code></pre>
 <h4 id="max">max</h4>
 <p>Returns the maximum value of the type (only valid for integer and float types).</p>
@@ -357,7 +357,7 @@ char[] s = $nameof($typeform(TestFunc.returns)); // "int"
 </code></pre>
 <h4 id="sizeof">sizeof</h4>
 <p>Returns the size in bytes for the given type, like C <code>sizeof</code>.</p>
-<pre><code>usize x = Foo.sizeof;
+<pre><code>usz x = Foo.sizeof;
 </code></pre>
 <h4 id="typeid">typeid</h4>
 <p>Returns the typeid for the given type. Typedefs will return the typeid of the underlying type. The typeid size is the same as that of an <code>iptr</code>.</p>

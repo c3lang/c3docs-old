@@ -352,10 +352,10 @@ macro for_each(list; @body(it))
 #define offsetof(T, field) (size_t)(&amp;((T*)0)-&gt;field)
 
 // C3
-macro usize offset($Type, #field)
+macro usz offset($Type, #field)
 {
     $Type* t = null;
-    return (usize)(uptr)&amp;t.#field;
+    return (usz)(uptr)&amp;t.#field;
 }
 </code></pre>
 <h3 id="declaration-attributes">Declaration attributes</h3>

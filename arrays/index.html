@@ -325,12 +325,12 @@ int[4]* g = (int[4]*)f;
 int[] h = f[0..2];
 </code></pre>
 <h4 id="internals">Internals</h4>
-<p>Internally the layout of a slice is guaranteed to be <code>struct { &lt;type&gt;* ptrToArray; usize arraySize; }</code>.</p>
+<p>Internally the layout of a slice is guaranteed to be <code>struct { &lt;type&gt;* ptrToArray; usz arraySize; }</code>.</p>
 <p>There is a built in struct <code>std::runtime::SubArrayContainer</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
 <pre><code>struct SubArrayContainer
 {
     void* ptr;
-    usize len;
+    usz len;
 }
 </code></pre>
 <h2 id="iteration-over-arrays">Iteration over arrays</h2>
@@ -354,16 +354,16 @@ foreach (int idx, Foo* &amp;f : a)
 by implementing "len" and "[]" methods and annotating them using the <code>@operator</code> attribute:</p>
 <pre><code>struct Vector
 {
-    usize size;
+    usz size;
     int* elements;
 }
 
-macro int Vector.get(Vector* vector, usize element) @operator([]])
+macro int Vector.get(Vector* vector, usz element) @operator([]])
 {
     return vector.elements[element];
 }
 
-macro usize Vector.size(Vector* vector) @operator(len)
+macro usz Vector.size(Vector* vector) @operator(len)
 {
     return vector.size;
 }
