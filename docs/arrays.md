@@ -117,14 +117,14 @@ For example:
 
 #### Internals
 
-Internally the layout of a slice is guaranteed to be `struct { <type>* ptrToArray; usize arraySize; }`.
+Internally the layout of a slice is guaranteed to be `struct { <type>* ptrToArray; usz arraySize; }`.
 
 There is a built in struct `std::runtime::SubArrayContainer` which has the exact data layout of the fat array pointers. It is defined to be
 
     struct SubArrayContainer
     {
         void* ptr;
-        usize len;
+        usz len;
     }
 
 ## Iteration over arrays
@@ -152,16 +152,16 @@ by implementing "len" and "[]" methods and annotating them using the `@operator`
 
     struct Vector
     {
-        usize size;
+        usz size;
         int* elements;
     }
 
-    macro int Vector.get(Vector* vector, usize element) @operator([]])
+    macro int Vector.get(Vector* vector, usz element) @operator([]])
     {
         return vector.elements[element];
     }
 
-    macro usize Vector.size(Vector* vector) @operator(len)
+    macro usz Vector.size(Vector* vector) @operator(len)
     {
         return vector.size;
     }

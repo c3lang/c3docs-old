@@ -86,7 +86,7 @@ Returns the underlying `TypeKind` as defined in std::core::types.
 
 Returns the length of the array.
 
-    usize len = int[4].len; // 4
+    usz len = int[4].len; // 4
 
 #### max
 
@@ -147,7 +147,7 @@ Returns the type of the return type.
 
 Returns the size in bytes for the given type, like C `sizeof`.
 
-    usize x = Foo.sizeof;
+    usz x = Foo.sizeof;
 
 #### typeid
 

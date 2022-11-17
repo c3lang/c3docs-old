@@ -138,7 +138,7 @@ pointers created using `calloc_aligned` or `alloc_aligned`.
 
 Frees memory allocated using `malloc` or `calloc`.
 
-### char[] alloc_bytes(usize bytes)
+### char[] alloc_bytes(usz bytes)
 
 Similar to malloc, but returns the data as a subarray. Will panic on out of memory.
 
@@ -172,15 +172,15 @@ dynamic_arena.destroy();
 Same as @scoped, but uses the temporary allocator rather than any
 arbitrary allocator.
 
-### void* tmalloc(usize size, usize alignment = 0)
+### void* tmalloc(usz size, usz alignment = 0)
 
 Allocates memory using the temporary allocator. Panic on failure.
 
-### void* tcalloc(usize size, usize alignment = 0)
+### void* tcalloc(usz size, usz alignment = 0)
 
 Same as `tmalloc` but clears the memory.
 
-### void* trealloc(void* ptr, usize size, usize alignment = 0)
+### void* trealloc(void* ptr, usz size, usz alignment = 0)
 
 `realloc` but on memory received using `tcalloc` or `tmalloc`.
 
@@ -222,20 +222,20 @@ Store the value `y` in `x` using a volatile store.
 @volatile_store(y, 1);
 @volatile_store(y, 1);
 ```
-### usize aligned_offset(usize offset, usize alignment)
+### usz aligned_offset(usz offset, usz alignment)
 
 Returns an aligned size based on the current offset. The alignment
 must be a power of two. E.g. `mem::aligned_offset(17, 8)` would return `24`
 
-### usize aligned_pointer(void* ptr, usize alignment)
+### usz aligned_pointer(void* ptr, usz alignment)
 
 Returns a pointer aligned to the given alignment, using `aligned_offset`.
 
-### bool ptr_is_aligned(void* ptr, usize alignment)
+### bool ptr_is_aligned(void* ptr, usz alignment)
 
 Return true if the pointer is aligned, false otherwise.
 
-### void copy(void* dst, void* src, usize len, usize $dst_align = 0, usize $src_align = 0, bool $is_volatile = false)
+### void copy(void* dst, void* src, usz len, usz $dst_align = 0, usz $src_align = 0, bool $is_volatile = false)
 
 Copies bytes from one pointer to another. It may optionally be set as volatile,
 in which case the copy may not be optimized away. Furthermore the source
@@ -247,11 +247,11 @@ Foo* f = talloc(data_size);
 mem::copy(f, slice.ptr, size); 
 ```
 
-### void set(void* dst, char val, usize len, usize $dst_align = 0, bool $is_volatile = false)
+### void set(void* dst, char val, usz len, usz $dst_align = 0, bool $is_volatile = false)
 
 Sets bytes to a value. This operation may be aligned and/or volatile. See the `copy` method.
 
-### void clear(void* dst, usize len, usize $dst_align = 0, bool $is_volatile = false)
+### void clear(void* dst, usz len, usz $dst_align = 0, bool $is_volatile = false)
 
 Sets bytes to zero. This operation may be aligned and/or volatile. See the `copy` method.
 
@@ -272,7 +272,7 @@ Same as `@clone` but uses the temporary allocator.
 
 ## std::core::mem::array
 
-### alloc($Type, usize elements)
+### alloc($Type, usz elements)
 
 Allocate a slice with `elements` number of elements, returning
 a subarray of the given length. Elements are not initialized.
@@ -282,7 +282,7 @@ a subarray of the given length. Elements are not initialized.
 int[] ints = array::alloc(int, 100);
 ```
 
-### make($Type, usize elements)
+### make($Type, usz elements)
 
 Like `array::alloc` but all elements are cleared. `tmake` variant uses
 the temporary allocator.
@@ -315,7 +315,7 @@ ichar z = variant_to_int(v, ichar)!!; // Panics VALUE_OUT_OF_RANGE
 
 ## std::core::string::conv
 
-### usize! char32_to_utf8(Char32 c, char* output, usize available)
+### usz! char32_to_utf8(Char32 c, char* output, usz available)
 Convert a UTF32 codepoint to an UTF8 buffer. `size` has the number of
 writable bytes left. It returns the number of bytes used, or 
 `UnicodeResult.CONVERSION_FAILED` if the buffer is too small.
@@ -326,14 +326,14 @@ moving the output pointer 1 or 2 steps.
 
 ## std::io
 
-### usize! printf(char[] format, args...) @maydiscard
+### usz! printf(char[] format, args...) @maydiscard
 Regular printf functionality: `%s`, `%x`, `%d`, `%f` and `%p` are supported.
 Will also print enums and vectors.
 
-### usize! String.printf(String* str, char[] format, args...) @maydiscard
+### usz! String.printf(String* str, char[] format, args...) @maydiscard
 Same as printf but on strings.
 
-### usize! File.printf(File file, char[] format, args...) @maydiscard
+### usz! File.printf(File file, char[] format, args...) @maydiscard
 Same as printf but on files.
 
 ### void! File.open(File* file, char[] filename, char[] mode)
@@ -351,10 +351,10 @@ True if EOF has been reached. Based on the libc function.
 ### void! File.putc(File *file, char c)
 Write a single byte to a file. See the libc function.
 
-### usize File.read(File* file, void* buffer, usize items, usize element_size = 1)
+### usz File.read(File* file, void* buffer, usz items, usz element_size = 1)
 Read into a buffer, based on the libc function.
 
-### usize File.write(File* file, void* buffer, usize items, usize element_size = 1)
+### usz File.write(File* file, void* buffer, usz items, usz element_size = 1)
 Write to a buffer, based on the libc function.
 
 ### stdout(), stdin(), stderr()
@@ -384,10 +384,10 @@ Removes and returns the last entry in the list.
 ### Type List.pop_first(List *list)
 Removes the first entry in the list.
 
-### void List.remove_at(List *list, usize index)
+### void List.remove_at(List *list, usz index)
 Removes the entry at `index`.
 
-### void List.insert_at(List *list, usize index, Type type)
+### void List.insert_at(List *list, usz index, Type type)
 Inserts a value at `index`.
 
 ### void List.push_front(List *list, Type type)
@@ -408,15 +408,15 @@ Return the last element in the list if available.
 ### List.is_empty(List *list)
 Return `true` if the list is empty.
 
-### usize List.len(List *list)
+### usz List.len(List *list)
 Return the number of elements in the list.
 
-### Type List.get(List *list, usize index)
+### Type List.get(List *list, usz index)
 Return the value at `index`.
 
 ### void List.free(List *list)
 Free all memory associated with this list.
 
-### void List.swap(List *list, usize i, usize j)
+### void List.swap(List *list, usz i, usz j)
 Swap two elements in the list.
 

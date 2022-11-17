@@ -108,10 +108,10 @@ Use `&` in front of a parameter to capture the a variable and pass it by referen
     #define offsetof(T, field) (size_t)(&((T*)0)->field)
     
     // C3
-    macro usize offset($Type, #field)
+    macro usz offset($Type, #field)
     {
         $Type* t = null;
-        return (usize)(uptr)&t.#field;
+        return (usz)(uptr)&t.#field;
     }
 
 ### Declaration attributes

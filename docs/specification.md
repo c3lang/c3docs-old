@@ -156,7 +156,8 @@ bool        quad        double
 float       long        ulong
 int         uint        byte
 short       ushort      char
-isize       usize       half
+isz         usz         float16
+float128
 
 $assert     $case       $default
 $if         $for        $else
@@ -344,7 +345,7 @@ An array has the alignment of its element. Zero sized arrays are allowed and hav
 
 ### Subarray types
 
-The subarray consist of a pointer, followed by a usize length, having the alignment of pointers.
+The subarray consist of a pointer, followed by a usz length, having the alignment of pointers.
 
 ### Pointer types
 ### Struct types

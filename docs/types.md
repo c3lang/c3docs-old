@@ -57,10 +57,8 @@ Basic types are divided into floating point types, and integer types. Integer ty
 | ulong        | 64       | no     |
 | iptr**       | varies   | yes    |
 | uptr**       | varies   | no     |
-| iptrdiff**   | varies   | yes    |
-| uptrdiff**   | varies   | no     |
-| isize**      | varies   | yes    |
-| usize**      | varies   | no     |
+| isz**        | varies   | yes    |
+| usz**        | varies   | no     |
 
 \* `bool` will be stored as a byte.  
 \*\* size, pointer and pointer sized types depend on platform.

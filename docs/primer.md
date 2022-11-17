@@ -242,10 +242,9 @@ Several C types that would be variable sized are fixed size, and others changed 
     int b;      // Guaranteed 32 bits
     long c;     // Guaranteed 64 bits
     ulong d;    // Guaranteed 64 bits
-    usize e;    // Same as C size_t, depends on target
-    isize f;    // Same width as usize but signed
-    iptrdiff g; // Same as C ptrdiff_t depends on target
-    iptr h;     // Same as intptr_t depends on target
+    usz e;      // Same as C size_t, depends on target
+    isz f;      // Same as C ptrdiff_t
+    iptr g;     // Same as intptr_t depends on target
     ireg i;     // Register sized integer
 
 Read more about types [here](../types).

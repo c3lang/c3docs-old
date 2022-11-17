@@ -13,7 +13,7 @@ generic, if, import, local, macro, module, nextcase, nil,
 private, return, struct, switch, throw, throws, true, 
 try, type, union, until, var, void, while,
 float, double 
-char, bool, byte, short, ushort, int, uint, long, ulong, isize, usize,
+char, bool, byte, short, ushort, int, uint, long, ulong, isz, usz,
 
 
 In addition to those, the following 12 are reserved but currently not used:

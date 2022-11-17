@@ -11,7 +11,7 @@ Implementing `[]` allows a type to use the `my_type[<value>]` syntax:
       double[] x;
     }
 
-    fn double Foo.get(Foo* this, usize i) @operator([])
+    fn double Foo.get(Foo* this, usz i) @operator([])
     {
         return this.x[i];
     }
@@ -31,7 +31,7 @@ Similar to [], the operator returns a value for `&my_type[<value>]`, which may
 be retrieved in a different way. If this overload isn't defined, then `&my_type[<value>]` would
 be a syntax error.
 
-    fn double* Foo.get_ref(Foo* this, usize i) @operator(&[])
+    fn double* Foo.get_ref(Foo* this, usz i) @operator(&[])
     {
         return &this.x[i];
     }
@@ -40,7 +40,7 @@ be a syntax error.
 
 The counterpart of [] allows setting an element using `my_type[<index>] = <value>`.
 
-    fn void Foo.get_ref(Foo* this, usize i, double new_val) @operator([]=)
+    fn void Foo.get_ref(Foo* this, usz i, double new_val) @operator([]=)
     {
         return this.x[i] = new_val;
     }
@@ -56,12 +56,12 @@ to get the last element assuming the indexing uses integers.
 In order to use a type with foreach, e.g. `foreach(d : foo)`, at a minimum `[]` and `len` need to
 be implemented. If `&[]` is implemented, foreach by reference is enabled (e.g. `foreach(double* &d : foo)`)
 
-    fn double Foo.get(Foo* this, usize i) @operator([])
+    fn double Foo.get(Foo* this, usz i) @operator([])
     {
         return this.x[i];
     }
 
-    fn usize Foo.len(Foo* this) @operator(len)
+    fn usz Foo.len(Foo* this) @operator(len)
     {
         return this.x.len;
     }

@@ -127,13 +127,13 @@ These operations are only valid for integer and float types.
 
 1. Resolve the operands.
 2. If the rhs is not an integer, this is an error.   
-3. If the rhs has a bit width that exceeds iptrdiff, this is an error.
+3. If the rhs has a bit width that exceeds isz, this is an error.
 4. The result of the expression is the lhs type.
 
 ### 3. Subtraction with lhs pointer and rhs integer 
 
 1. Resolve the operands.
-2. If the right hand type has a bit width that exceeds iptrdiff, this is an error.
+2. If the right hand type has a bit width that exceeds isz, this is an error.
 3. The result of the expression is the left hand type.
 
 ### 4. Subtraction with both sides pointers
@@ -141,7 +141,7 @@ These operations are only valid for integer and float types.
 1. Resolve the operands.
 2. If the either side is a `void *`, it is cast to the other type.
 3. If the types of the sides are different, this is an error.   
-4. The result of the expression is iptrdiff.
+4. The result of the expression is isz.
 5. If this result exceeds the target width, this is an error.
 
 ### 6. Bit operations `^` `&` `|`

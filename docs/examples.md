@@ -471,8 +471,8 @@ Generic modules implements a generic system.
 module stack <Type>;
 struct Stack
 {
-    usize capacity;
-    usize size;
+    usz capacity;
+    usz size;
     Type* elems;
 }
 

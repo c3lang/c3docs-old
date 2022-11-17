@@ -34,7 +34,7 @@ const uint OFFSET = 8;
 /**
  * @require heap != nil, start > 0
  */
-void Heap.init(Heap* heap, usize start) 
+void Heap.init(Heap* heap, usz start) 
 {
     Node* init_region = (Node*)start;
     init_region.hole = 1;
@@ -48,7 +48,7 @@ void Heap.init(Heap* heap, usize start)
     heap.end   = (void*)(start + HEAP_INIT_SIZE);
 }
 
-void* Heap.alloc(Heap* heap, usize size) 
+void* Heap.alloc(Heap* heap, usz size) 
 {
     uint index = get_bin_index(size);
     Bin* temp = (Bin*)heap.bins[index];
@@ -107,7 +107,7 @@ fn void Heap.free(Heap* heap, void *p)
     Footer& new_foot, old_foot;
 
     Node* head = (Node*)((char*)p - OFFSET);
-    if (head == (Node*)((usize)heap.start)) 
+    if (head == (Node*)((uptr)heap.start)) 
     {
         head.hole = 1; 
         heap.bins[get_bin_index(head.size)].addNode(head);
@@ -149,17 +149,17 @@ fn void Heap.free(Heap* heap, void *p)
     heap.bins[get_bin_index(head.size)].addNode(head);
 }
 
-fn uint Heap.expand(Heap* heap, usize sz) 
+fn uint Heap.expand(Heap* heap, usz sz) 
 {
     return 0;
 }
 
-fn void Heap.contract(Heap* heap, usize sz) 
+fn void Heap.contract(Heap* heap, usz sz) 
 {
     return;
 }
 
-fn uint get_bin_index(usize sz) 
+fn uint get_bin_index(usz sz) 
 {
     uint index = 0;
     sz = sz < 4 ? 4 : sz;
