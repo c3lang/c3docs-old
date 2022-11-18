@@ -1,5 +1,8 @@
 # Change log
 
+##### Revision 2022-11-18
+- Documented inline asm
+ 
 ##### Revision 2022-11-16
 - Move description of static initialize
 - Info on operator overload

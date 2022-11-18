@@ -34,6 +34,7 @@ nav:
     - Naming rules: 'naming.md'
     - Comments & Docs: 'comments.md'
     - Attributes: 'attributes.md'
+    - Inline asm: 'asm.md'
     - C Interop: 'cinterop.md'
     - Grammar: 'syntax.md'
     - More code examples: 'sample.md'
