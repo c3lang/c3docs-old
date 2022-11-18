@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Your first project - C3 Documentation</title>
+  <title>Inline asm - C3 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Your first project";
-    var mkdocs_page_input_path = "firstproject.md";
+    var mkdocs_page_name = "Inline asm";
+    var mkdocs_page_input_path = "asm.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -56,20 +56,16 @@
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">Installing</span></p>
-                <ul class="current">
+                <ul>
                     <li class="toctree-l1"><a class="reference internal" href="../setup/">Setup</a>
                     </li>
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Your first project</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#a-real-project">A real project</a>
-    </li>
-    </ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../firstproject/">Your first project</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../primer/">A quick primer on C3</a>
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">Documentation</span></p>
-                <ul>
+                <ul class="current">
                     <li class="toctree-l1"><a class="reference internal" href="../changesfromc/">Changes from C</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../compare/">Comparisons with other languages</a>
@@ -122,7 +118,13 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../attributes/">Attributes</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../asm/">Inline asm</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Inline asm</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#asm-strings">Asm strings</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#asm-block">Asm block</a>
+    </li>
+    </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../cinterop/">C Interop</a>
                     </li>
@@ -172,11 +174,11 @@
     
       
         
-          <li>Installing &raquo;</li>
+          <li>Documentation &raquo;</li>
         
       
     
-    <li>Your first project</li>
+    <li>Inline asm</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -187,47 +189,52 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="your-first-project">Your First Project</h1>
-<p>Starting out with C3, you probably want to get a feel for the language, without using the integrated build system.</p>
-<p>Open a text editor and enter the following in a file you call <code>hello_world.c3</code>:</p>
-<pre><code>module hello_world;
-import std::io;
-
-fn int main(char[][] argv) 
+                <h1 id="inline-assembly">Inline assembly</h1>
+<p>C3 provides two ways to insert inline assembly: asm strings and asm blocks. </p>
+<h2 id="asm-strings">Asm strings</h2>
+<p>This form takes a single compile time string and passes it directly to the underlying
+backend without any changes.</p>
+<pre><code>int x = 0;
+asm("nop");
+int y = x;
+</code></pre>
+<h2 id="asm-block">Asm block</h2>
+<p>Asm blocks uses a common grammar for all types of processors. It assumes that
+all assembly statements can be reduced to the format:</p>
+<pre><code>instruction (arg (',' arg)*)?;
+</code></pre>
+<p>Where an arg is:</p>
+<ol>
+<li>An identifier, e.g. <code>FOO</code>, <code>x</code>.</li>
+<li>A numeric constant <code>1</code> <code>0xFF</code> etc.</li>
+<li>A register name (always lower case with a '$' prefix) e.g. <code>$eax</code> <code>$r7</code>.</li>
+<li>The address of a variable e.g. <code>&amp;x</code>.</li>
+<li>An indirect address: <code>[addr]</code> or <code>[addr + index * &lt;const&gt; + offset]</code>.</li>
+<li>Any expression inside of "()" (will be evaluated before entering the <code>asm</code> block).</li>
+</ol>
+<p>An example:</p>
+<pre><code>int aa = 3;
+int g;
+int* gp = &amp;g;
+int* xa = &amp;a;
+usz asf = 1;
+asm
 {
-    io::println(&quot;Hello World!&quot;);
-    return 0;
+    movl x, 4;                  // Move 4 into the variable x
+    movl [gp], x;               // Move the value of x into the address in gp
+    movl x, 1;                  // Move 1 into x
+    movl [xa + asf * 4 + 4], x; // Move x into the address at xa[asf + 1]
+    movl $eax, (23 + x);        // Move 23 + x into EAX
+    movl x, $eax;               // Move EAX into x
+    movq [&amp;z], 33;              // Move 33 into the memory address of z
 }
 </code></pre>
-<p>Now in the terminal type:</p>
-<pre><code>$ c3c compile hello_world.c3
-$ ./hello_world
-Hello World
-$ 
-</code></pre>
-<h2 id="a-real-project">A real project</h2>
-<p>Once you go beyond simple files, you want to create a real project. Do so by entering <code>c3c init hello_world</code>.</p>
-<p>You will get the following structure:</p>
-<pre><code>$ c3c init hello_world 
-$ tree .
-.
-└── hello_world
-    ├── project.json
-    ├── LICENSE
-    ├── README.md
-    ├── build
-    ├── docs
-    ├── lib
-    ├── resources
-    ├── src
-    │   └── main.c3
-    └── test        
-</code></pre>
-<p>Enter main.c3 and write the same code as above, then anywhere in the project structure:</p>
-<pre><code>$ c3c run
-Hello World
-$ 
-</code></pre>
+<p>The asm block will infer register clobbers and in/out parameters.</p>
+<p><em>*Please note that the current state of inline asm is a <strong>work in progress</strong>,
+only a subset of x86 and aarch64 instructions are available, other platforms
+have no support at all. It is likely that the grammar will be extended as more 
+architectures are supported. More instructions can be added as they are needed,
+so please file issues when you encounter missing instructions you need.</em></p>
               
             </div>
           </div>
@@ -235,10 +242,10 @@ $
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../primer/" class="btn btn-neutral float-right" title="A quick primer on C3">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../cinterop/" class="btn btn-neutral float-right" title="C Interop">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../setup/" class="btn btn-neutral" title="Setup"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../attributes/" class="btn btn-neutral" title="Attributes"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -264,10 +271,10 @@ $
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../setup/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../attributes/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../primer/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../cinterop/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
