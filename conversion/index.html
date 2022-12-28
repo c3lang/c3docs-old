@@ -278,7 +278,7 @@
 </ol>
 <p>Basically, if all the sub expressions originally are small enough it's ok to implicitly convert the result.</p>
 <p>Examples</p>
-<pre><code>f16 h = 12.0;
+<pre><code>float16 h = 12.0;
 float f = 13.0;
 double d = 22.0;
 
@@ -289,7 +289,7 @@ ulong w = -0xFFFFFFF;
 
 x = x + x; // =&gt; calculated as x = (char)((int)x + (int)x);
 x = y + x; // =&gt; Error, narrowing not allowed as y &gt; char
-h = x * h; // =&gt; calculated as h = (f16)((float)x * (float)h);
+h = x * h; // =&gt; calculated as h = (float16)((float)x * (float)h);
 h = f + x; // =&gt; Error, narrowing not allowed since f &gt; f16
 </code></pre>
 <h2 id="implicit-widening">Implicit widening</h2>
