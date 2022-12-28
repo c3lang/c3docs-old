@@ -515,3 +515,95 @@ the placement of struct / union names is different to match the difference in de
         }
     }
 
+## Bitstructs
+
+Bitstructs allows storing fields in a specific bit layout. A bitstruct may only contain
+integer types and booleans, in most other respects it works like a struct.
+
+The main differences is that the bitstruct has a *backing type* and each field
+has a specific bit range. In addition it's not possible *to take the address* of a
+bitstruct field.
+
+    bitstruct Foo : char
+    {
+        int a : 0..2;
+        int b : 4..6;
+        bool c : 7;
+    }
+
+    ...
+    
+    Foo f;
+    f.a = 2;
+    char x = (char)f;
+    io::printfln("%d", (char)f); // prints 2
+    f.b = 1;
+    io::printfln("%d", (char)f); // prints 18 
+    f.c = true;
+    io::printfln("%d", (char)f); // prints 146
+
+
+The bitstruct will follow the endianness of the underlying type:
+
+    bitstruct Test : uint
+    {
+        ushort a : 0..15;
+        ushort b : 16..31;
+    }
+
+    ...
+
+    Test t;
+    t.a = 0xABCD;
+    t.b = 0x789A;
+    char* c = (char*)&t;
+    io::printfln("%X", (uint)t); // Prints 789AABCD
+    for (int i = 0; i < 4; i++) io::printf("%X", c[i]); // Prints CDAB9A78
+    io::println();
+
+It is however possible to pick a different endianness, in which case the entire representation
+will internally assume big endian layout:
+
+    bitstruct Test : uint @bigendian
+    {
+        ushort a : 0..15;
+        ushort b : 16..31;
+    }
+
+In this case the same example yields `CDAB9A78` and `789AABCD` respectively.
+
+Bitstruct backing types may be integers or char arrays. The difference in layout is somewhat subtle:
+
+    bitstruct Test1 : char[4]
+    {
+        ushort a : 0..15;
+        ushort b : 16..31;
+    }
+    bitstruct Test2 : char[4] @bigendian
+    {
+        ushort a : 0..15;
+        ushort b : 16..31;
+    }
+
+    ...
+
+    Test1 t1;
+    Test2 t2;
+    t1.a = t2.a = 0xABCD;
+    t1.b = t2.b = 0x789A;
+    char* c = (char*)&t1;
+    for (int i = 0; i < 4; i++) io::printf("%X", c[i]); // Prints CDAB9A78 on x86
+    io::println();
+    c = (char*)&t2;
+    for (int i = 0; i < 4; i++) io::printf("%X", c[i]); // Prints ABCD789A
+    io::println();
+
+Bitstructs can be made to have ovelapping bit fields. This is useful when modelling
+a layout which has multiple different layouts depending on flag bits:
+
+    bitstruct Foo : char @overlap
+    {
+        int a : 2..5;
+        int b : 1..3; // Only valid due to the @overlap attribute
+    }
+

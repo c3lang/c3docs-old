@@ -37,7 +37,7 @@ Basically, if all the sub expressions originally are small enough it's ok to imp
 
 Examples
 ```
-f16 h = 12.0;
+float16 h = 12.0;
 float f = 13.0;
 double d = 22.0;
 
@@ -48,7 +48,7 @@ ulong w = -0xFFFFFFF;
 
 x = x + x; // => calculated as x = (char)((int)x + (int)x);
 x = y + x; // => Error, narrowing not allowed as y > char
-h = x * h; // => calculated as h = (f16)((float)x * (float)h);
+h = x * h; // => calculated as h = (float16)((float)x * (float)h);
 h = f + x; // => Error, narrowing not allowed since f > f16
 ```
 

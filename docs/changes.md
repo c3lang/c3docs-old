@@ -1,5 +1,8 @@
 # Change log
 
+##### Revision 2022-12-28
+- Bitstruct documented
+
 ##### Revision 2022-11-18
 - Documented inline asm
  
