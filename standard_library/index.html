@@ -220,13 +220,13 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#stdio">std::io</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#usz-printfchar-format-args-maydiscard">usz! printf(char[] format, args...) @maydiscard</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-printfstring-format-args-maydiscard">usz! printf(String format, args...) @maydiscard</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#usz-stringprintfstring-str-char-format-args-maydiscard">usz! String.printf(String* str, char[] format, args...) @maydiscard</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-varstringprintfvarstring-str-string-format-args-maydiscard">usz! VarString.printf(VarString* str, String format, args...) @maydiscard</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#usz-fileprintffile-file-char-format-args-maydiscard">usz! File.printf(File file, char[] format, args...) @maydiscard</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-fileprintffile-file-string-format-args-maydiscard">usz! File.printf(File file, String format, args...) @maydiscard</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#void-fileopenfile-file-char-filename-char-mode">void! File.open(File* file, char[] filename, char[] mode)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#void-fileopenfile-file-string-filename-string-mode">void! File.open(File* file, String filename, String mode)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#void-fileseekfile-file-long-offset-seek-seekmode-seekset">void! File.seek(File *file, long offset, Seek seekMode = Seek.SET)</a>
     </li>
@@ -569,14 +569,14 @@ writable bytes left. It returns the number of bytes used, or
 <p>Convert a UTF32 codepoint to an UTF16 buffer without bounds checking,
 moving the output pointer 1 or 2 steps.</p>
 <h2 id="stdio">std::io</h2>
-<h3 id="usz-printfchar-format-args-maydiscard">usz! printf(char[] format, args...) @maydiscard</h3>
+<h3 id="usz-printfstring-format-args-maydiscard">usz! printf(String format, args...) @maydiscard</h3>
 <p>Regular printf functionality: <code>%s</code>, <code>%x</code>, <code>%d</code>, <code>%f</code> and <code>%p</code> are supported.
 Will also print enums and vectors.</p>
-<h3 id="usz-stringprintfstring-str-char-format-args-maydiscard">usz! String.printf(String* str, char[] format, args...) @maydiscard</h3>
-<p>Same as printf but on strings.</p>
-<h3 id="usz-fileprintffile-file-char-format-args-maydiscard">usz! File.printf(File file, char[] format, args...) @maydiscard</h3>
+<h3 id="usz-varstringprintfvarstring-str-string-format-args-maydiscard">usz! VarString.printf(VarString* str, String format, args...) @maydiscard</h3>
+<p>Same as printf but on varstrings.</p>
+<h3 id="usz-fileprintffile-file-string-format-args-maydiscard">usz! File.printf(File file, String format, args...) @maydiscard</h3>
 <p>Same as printf but on files.</p>
-<h3 id="void-fileopenfile-file-char-filename-char-mode">void! File.open(File* file, char[] filename, char[] mode)</h3>
+<h3 id="void-fileopenfile-file-string-filename-string-mode">void! File.open(File* file, String filename, String mode)</h3>
 <p>Open a file with the given file name with the given mode (r, w etc)</p>
 <h3 id="void-fileseekfile-file-long-offset-seek-seekmode-seekset">void! File.seek(File *file, long offset, Seek seekMode = Seek.SET)</h3>
 <p>Seek in a file. Based on the libc function.</p>

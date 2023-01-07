@@ -468,9 +468,9 @@ fn void main()
     io::printfln(&quot;Ratio was %f&quot;, ratio);
 }
 </code></pre>
-<pre><code>fn void printFile(char[] filename)
+<pre><code>fn void printFile(String filename)
 {
-    char[]! file = io::load_file(filename);
+    String! file = io::load_file(filename);
 
     // The following function is not executed on error.
     io::printfln(&quot;Loaded %s and got:\n%s&quot;, filename, file);

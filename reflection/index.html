@@ -279,12 +279,12 @@
 <p><em>Not yet implemented</em></p>
 <p><em>Only available for enums.</em>
 Returns an array containing the types of associated values if any.</p>
-<pre><code>enum Foo : int(double d, char[] s)
+<pre><code>enum Foo : int(double d, String s)
 {
     BAR(1.0, "normal"),
     BAZ(2.0, "exceptional")
 }
-char[] s = $nameof(Foo.associated[0]); // "double"
+String s = $nameof(Foo.associated[0]); // "double"
 </code></pre>
 <h4 id="elements">elements</h4>
 <p>Returns the element count of an enum or fault.</p>
@@ -329,7 +329,7 @@ int x = FooEnum.elements; // 2
     int x;
     Foo* z;
 }
-char[] x = $nameof($typefrom(Baz.membersof[1])); // "z"
+String x = $nameof($typefrom(Baz.membersof[1])); // "z"
 </code></pre>
 <h4 id="min">min</h4>
 <p>Returns the minimum value of the type (only valid for integer and float types).</p>
@@ -342,20 +342,20 @@ char[] x = $nameof($typefrom(Baz.membersof[1])); // "z"
     BAR,
     BAZ
 }
-char[][] x = FooEnum.names; // ["BAR", "BAZ"]
+String[] x = FooEnum.names; // ["BAR", "BAZ"]
 </code></pre>
 <h4 id="params">params</h4>
 <p><em>Not yet implemented</em></p>
 <p><em>Only available for function types.</em>
 Returns a list of all parameters.</p>
 <pre><code>define TestFunc = fn int(int, double);
-char[] s = $nameof(TestFunc.params[1]); // "double"
+String s = $nameof(TestFunc.params[1]); // "double"
 </code></pre>
 <h4 id="returns">returns</h4>
 <p><em>Only available for function types.</em>
 Returns the type of the return type.</p>
 <pre><code>define TestFunc = fn int(int, double);
-char[] s = $nameof($typeform(TestFunc.returns)); // "int"
+String s = $nameof($typeform(TestFunc.returns)); // "int"
 </code></pre>
 <h4 id="sizeof">sizeof</h4>
 <p>Returns the size in bytes for the given type, like C <code>sizeof</code>.</p>
@@ -372,7 +372,7 @@ char[] s = $nameof($typeform(TestFunc.returns)); // "int"
     BAR,
     BAZ
 }
-char[] x = $nameof(FooEnum.values[1]); // "BAR"
+String x = $nameof(FooEnum.values[1]); // "BAR"
 </code></pre>
 <h3 id="compile-time-functions">Compile time functions</h3>
 <p>There are several built-in functions to inspect the code during compile time.</p>
@@ -445,16 +445,16 @@ fn void test()
 <p>Returns the external name of a type, variable or function. The external name is
 the one used by the linker.</p>
 <pre><code>fn void testfn(int x) { }
-char[] a = $extnameof(g); // =&gt; "test.bar.g";
+String a = $extnameof(g); // =&gt; "test.bar.g";
 string b = $extnameof(testfn); // =&gt; "test.bar.testfn"
 </code></pre>
 <h3 id="nameof">$nameof</h3>
 <p>Returns the name of a function, type or variable as a string without module prefixes.</p>
 <pre><code>define Bar = Foo;
-char[] a = $nameof(int[4]); // =&gt; "int[4]"
-char[] b = $nameof(Foo) // =&gt; "Foo"
-char[] c = $nameof(Bar); // =&gt; "Foo" 
-char[] d = $nameof(g); // =&gt; "g"
+String a = $nameof(int[4]); // =&gt; "int[4]"
+String b = $nameof(Foo) // =&gt; "Foo"
+String c = $nameof(Bar); // =&gt; "Foo" 
+String d = $nameof(g); // =&gt; "g"
 </code></pre>
 <h3 id="offsetof">$offsetof</h3>
 <p>Returns the offset of a member in a struct.</p>
@@ -463,10 +463,10 @@ char[] d = $nameof(g); // =&gt; "g"
 <h3 id="qnameof">$qnameof</h3>
 <p>Returns the same as <code>$nameof</code>, but with the full module name prepended.</p>
 <pre><code>int x;
-char[] a = $nameof(int[4]); // =&gt; "int[4]"
-char[] b = $nameof(Foo) // =&gt; "test::bar::Foo"
-char[] c = $nameof(Foo[4]); // =&gt; "test::bar::Foo[4]" 
-char[] d = $nameof(g); // =&gt; "test::bar::g"
+String a = $nameof(int[4]); // =&gt; "int[4]"
+String b = $nameof(Foo) // =&gt; "test::bar::Foo"
+String c = $nameof(Foo[4]); // =&gt; "test::bar::Foo[4]" 
+String d = $nameof(g); // =&gt; "test::bar::g"
 </code></pre>
 <h3 id="sizeof_1">$sizeof</h3>
 <p>This is used on a value to determine the allocation size needed. <code>$sizeof(a)</code> is equivalent
