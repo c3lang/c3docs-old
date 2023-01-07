@@ -38,12 +38,12 @@ It is possible to access properties on the type itself:
 *Only available for enums.*
 Returns an array containing the types of associated values if any.
 
-    enum Foo : int(double d, char[] s)
+    enum Foo : int(double d, String s)
     {
         BAR(1.0, "normal"),
         BAZ(2.0, "exceptional")
     }
-    char[] s = $nameof(Foo.associated[0]); // "double"
+    String s = $nameof(Foo.associated[0]); // "double"
 
 #### elements
 
@@ -105,7 +105,7 @@ Returns an array containing the fields in a struct or enum.
         int x;
         Foo* z;
     }
-    char[] x = $nameof($typefrom(Baz.membersof[1])); // "z"
+    String x = $nameof($typefrom(Baz.membersof[1])); // "z"
 
 #### min
 
@@ -123,7 +123,7 @@ Returns a subarray containing the names of an enum or fault.
         BAR,
         BAZ
     }
-    char[][] x = FooEnum.names; // ["BAR", "BAZ"]
+    String[] x = FooEnum.names; // ["BAR", "BAZ"]
 
 #### params
 
@@ -133,7 +133,7 @@ Returns a subarray containing the names of an enum or fault.
 Returns a list of all parameters.
 
     define TestFunc = fn int(int, double);
-    char[] s = $nameof(TestFunc.params[1]); // "double"
+    String s = $nameof(TestFunc.params[1]); // "double"
 
 #### returns
 
@@ -141,7 +141,7 @@ Returns a list of all parameters.
 Returns the type of the return type.
 
     define TestFunc = fn int(int, double);
-    char[] s = $nameof($typeform(TestFunc.returns)); // "int"
+    String s = $nameof($typeform(TestFunc.returns)); // "int"
 
 #### sizeof
 
@@ -164,7 +164,7 @@ Returns a subarray containing the values of an enum or fault.
         BAR,
         BAZ
     }
-    char[] x = $nameof(FooEnum.values[1]); // "BAR"
+    String x = $nameof(FooEnum.values[1]); // "BAR"
 
 ### Compile time functions
 
@@ -252,7 +252,7 @@ Returns the external name of a type, variable or function. The external name is
 the one used by the linker.
 
     fn void testfn(int x) { }
-    char[] a = $extnameof(g); // => "test.bar.g";
+    String a = $extnameof(g); // => "test.bar.g";
     string b = $extnameof(testfn); // => "test.bar.testfn"
 
 ### $nameof
@@ -260,10 +260,10 @@ the one used by the linker.
 Returns the name of a function, type or variable as a string without module prefixes.
 
     define Bar = Foo;
-    char[] a = $nameof(int[4]); // => "int[4]"
-    char[] b = $nameof(Foo) // => "Foo"
-    char[] c = $nameof(Bar); // => "Foo" 
-    char[] d = $nameof(g); // => "g"
+    String a = $nameof(int[4]); // => "int[4]"
+    String b = $nameof(Foo) // => "Foo"
+    String c = $nameof(Bar); // => "Foo" 
+    String d = $nameof(g); // => "g"
 
 ### $offsetof
 
@@ -276,10 +276,10 @@ Returns the offset of a member in a struct.
 Returns the same as `$nameof`, but with the full module name prepended.
 
     int x;
-    char[] a = $nameof(int[4]); // => "int[4]"
-    char[] b = $nameof(Foo) // => "test::bar::Foo"
-    char[] c = $nameof(Foo[4]); // => "test::bar::Foo[4]" 
-    char[] d = $nameof(g); // => "test::bar::g"
+    String a = $nameof(int[4]); // => "int[4]"
+    String b = $nameof(Foo) // => "test::bar::Foo"
+    String c = $nameof(Foo[4]); // => "test::bar::Foo[4]" 
+    String d = $nameof(g); // => "test::bar::g"
     
 ### $sizeof
 

@@ -18,7 +18,7 @@ Implementing `[]` allows a type to use the `my_type[<value>]` syntax:
 
 It's possible to use any type as argument, such as a string:
 
-    fn double Bar.get(Bar* this, char[] str) @operator([])
+    fn double Bar.get(Bar* this, String str) @operator([])
     {
         return this.get_val_by_key(str);
     }

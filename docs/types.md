@@ -358,7 +358,7 @@ In the case that it collides with a global in the same scope, it needs the quali
 
 It is possible to associate each enum value with a static value.
 
-    enum State : int (char[] state_desc, bool active) 
+    enum State : int (String state_desc, bool active) 
     {
         PENDING("pending start", false),
         RUNNING("running", true),
@@ -424,7 +424,7 @@ Structs are always named:
     struct Person  
     {
         char age;
-        char[] name;
+        String name;
     }
 
 A struct's members may be accessed using dot notation, even for pointers to structs.
@@ -451,7 +451,7 @@ C3 allows creating struct subtypes using `inline`:
     struct ImportantPerson 
     {
         inline Person person;
-        char[] title;
+        String title;
     }
 
     fn void printPerson(Person p)
@@ -502,7 +502,7 @@ the placement of struct / union names is different to match the difference in de
     struct Person  
     {
         char age;
-        char[] name;
+        String name;
         union 
         {
             int employee_nr;

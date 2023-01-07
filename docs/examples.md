@@ -319,9 +319,9 @@ fn void main()
 ```
 
 ```
-fn void printFile(char[] filename)
+fn void printFile(String filename)
 {
-    char[]! file = io::load_file(filename);
+    String! file = io::load_file(filename);
 
     // The following function is not executed on error.
     io::printfln("Loaded %s and got:\n%s", filename, file);

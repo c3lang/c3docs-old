@@ -8,7 +8,7 @@ Open a text editor and enter the following in a file you call `hello_world.c3`:
 module hello_world;
 import std::io;
 
-fn int main(char[][] argv) 
+fn int main(String[] argv) 
 {
     io::println("Hello World!");
     return 0;

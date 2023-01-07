@@ -2,6 +2,7 @@
 
 ##### Revision 2023-01-07
 - Direct download links added.
+- Prefer "String" over char[]
 
 ##### Revision 2022-12-28
 - Bitstruct documented.

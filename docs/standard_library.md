@@ -326,17 +326,17 @@ moving the output pointer 1 or 2 steps.
 
 ## std::io
 
-### usz! printf(char[] format, args...) @maydiscard
+### usz! printf(String format, args...) @maydiscard
 Regular printf functionality: `%s`, `%x`, `%d`, `%f` and `%p` are supported.
 Will also print enums and vectors.
 
-### usz! String.printf(String* str, char[] format, args...) @maydiscard
-Same as printf but on strings.
+### usz! VarString.printf(VarString* str, String format, args...) @maydiscard
+Same as printf but on varstrings.
 
-### usz! File.printf(File file, char[] format, args...) @maydiscard
+### usz! File.printf(File file, String format, args...) @maydiscard
 Same as printf but on files.
 
-### void! File.open(File* file, char[] filename, char[] mode)
+### void! File.open(File* file, String filename, String mode)
 Open a file with the given file name with the given mode (r, w etc)
 
 ### void! File.seek(File *file, long offset, Seek seekMode = Seek.SET)
