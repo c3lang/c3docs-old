@@ -1,16 +1,19 @@
 # Change log
 
+##### Revision 2023-01-07
+- Direct download links added.
+
 ##### Revision 2022-12-28
-- Bitstruct documented
+- Bitstruct documented.
 
 ##### Revision 2022-11-18
-- Documented inline asm
+- Documented inline asm.
  
 ##### Revision 2022-11-16
-- Move description of static initialize
-- Info on operator overload
-- More details on function pointers
-- Updated project tree
+- Move description of static initialize.
+- Info on operator overload.
+- More details on function pointers.
+- Updated project tree.
 
 ##### Revision 2022-11-07
 - Added information on enum associated values.

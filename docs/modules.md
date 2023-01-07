@@ -288,8 +288,8 @@ This allows things like optionally loading dynamic libraries on the platforms wh
 ## Textual includes
 
 It's sometimes useful to include an entire file, doing so employs the `$include` function.
+Includes are only valid at the top level.
 
-_NOTE: This feature may significantly change._
 
 File `Foo.c3`
 ```
@@ -328,5 +328,6 @@ fn void test()
 ```
 
 The include may use an absolute or relative path, the relative path is always relative to the source file in which the include appears.
+
 
 
