@@ -219,26 +219,26 @@
 {
     for (int i = 0; i &lt; times; i++)
     {
-        io::printfln("Hello %d", i);
+        io::printfn("Hello %d", i);
     }
 }
 </code></pre>
 <h3 id="function-arguments">Function arguments</h3>
 <p>C3 allows use of default arguments as well as named arguments. Note that
 any unnamed arguments must appear before any named arguments.</p>
-<pre><code>fn int testWithDefault(int foo = 1)
+<pre><code>fn int test_with_default(int foo = 1)
 {
     return foo;
 }
 
 fn void test()
 {
-    testWithDefault();
-    testWithDefault(100);
+    test_with_default();
+    test_with_default(100);
 }
 </code></pre>
 <p>Named arguments</p>
-<pre><code>fn void testNamed(int times, double data)
+<pre><code>fn void test_named(int times, double data)
 {
     for (int i = 0; i &lt; times; i++)
     {
@@ -249,37 +249,37 @@ fn void test()
 fn void test()
 {
     // Named only
-    testNamed(.data = 3.0, .times = 1)
+    test_named(.data = 3.0, .times = 1);
 
     // Unnamed only
-    testNamed(3, 4.0);
+    test_named(3, 4.0);
 
     // Mixing named and unnamed        
-    testNamed(15, .data = 3.141592);
+    test_named(15, .data = 3.141592);
 }
 </code></pre>
 <p>Named arguments with defaults:</p>
-<pre><code>fn void testNamedDefault(int times = 1, double data = 3.0, bool dummy = false)
+<pre><code>fn void test_named_default(int times = 1, double data = 3.0, bool dummy = false)
 {
     for (int i = 0; i &lt; times; i++)
     {
-        printf("Hello %d\n", i + data);
+        printfn("Hello %d", i + data);
     }
 }
 
 fn void test()
 {
     // Named only
-    testNamedDefault(.data = 3.5, .times = 10);
+    test_named_default(.data = 3.5, .times = 10);
 
     // Unnamed and named
-    testNamedDefault(3, .dummy = false);
+    test_named_default(3, .dummy = false);
 
     // Overwriting an unnamed argument with named is an error:
-    // testNamedDefault(2, .times = 3); ERROR!
+    // test_named_default(2, .times = 3); ERROR!
 
     // Unnamed may not follow named arguments.
-    // testNamedDefault(.times = 3, 4.0); ERROR!
+    // test_named_default(.times = 3, 4.0); ERROR!
 }
 </code></pre>
 <h4 id="varargs">Varargs</h4>

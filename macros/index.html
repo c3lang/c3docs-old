@@ -483,7 +483,7 @@ fn void test()
     double[] a = { 1.0, 2.0, 3.0 };
     @foreach(a; int index, double value)
     {
-        io::printfln("a[%d] = %f", index, value);
+        io::printfn("a[%d] = %f", index, value);
     }
 }
 
@@ -495,7 +495,7 @@ fn void test()
         int[] __a = a;
         for (int __i = 0; i &lt; __a.len; i++)
         {
-            io::printfln("Value: %d, x2: %d", __value1, __value2);
+            io::printfn("Value: %d, x2: %d", __value1, __value2);
         }
     }
 }
@@ -567,11 +567,11 @@ e.g. <code>$varef(1) = 123</code>.</p>
 implicitly converted to initializer lists:</p>
 <pre><code>var $a = { 1, 2 };
 $foreach ($x : $a):
-    io::printfln("%d", $x);
+    io::printfn("%d", $x);
 $endforeach;
 int[2] x = $a;
-io::printfln("%s", x);
-io::printfln("%s", $a[1]);
+io::printfn("%s", x);
+io::printfn("%s", $a[1]);
 // Will print
 // 1
 // 2
@@ -608,7 +608,7 @@ fn void test()
 <pre><code>macro foo($a)
 {
     $for (var $x = 0; $x &lt; $a; $x++):
-        io::printfln("%d", $x);     
+        io::printfn("%d", $x);     
     $endfor;
 }
 
@@ -616,15 +616,15 @@ fn void test()
 {
     foo(2);
     // Expands to -&gt;
-    // io::printfln("%d", 0);     
-    // io::printfln("%d", 1);         
+    // io::printfn("%d", 0);     
+    // io::printfn("%d", 1);         
 }
 </code></pre>
 <p>Looping over enums:</p>
 <pre><code>macro foo_enum($SomeEnum)
 {
     $foreach ($x : $SomeEnum.values):
-        io::printfln("%d", (int)$x);     
+        io::printfn("%d", (int)$x);     
     $endforeach;
 }
 
@@ -638,8 +638,8 @@ fn void test()
 {
     foo_enum(MyEnum);
     // Expands to -&gt;
-    // io::printfln("%d", (int)MyEnum.A);
-    // io::printfln("%d", (int)MyEnum.B);    
+    // io::printfn("%d", (int)MyEnum.A);
+    // io::printfn("%d", (int)MyEnum.B);    
 }
 </code></pre>
 <p>An important thing to note is that the content of the <code>$foreeach</code> or <code>$for</code> body must be a complete statement.

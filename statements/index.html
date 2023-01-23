@@ -220,7 +220,7 @@ Jumps cannot be done into or out of a function block, and <code>return</code> ex
         if (x == 0) return 100;
         return -x;
     |};            
-    io::printfln("The result was %d", a);
+    io::printfn("The result was %d", a);
 }
 </code></pre>
 <h2 id="labelled-break-and-continue">Labelled break and continue</h2>
@@ -232,7 +232,7 @@ Jumps cannot be done into or out of a function block, and <code>return</code> ex
     {
        while (1)
        {
-           io::printfln("%d", i);
+           io::printfn("%d", i);
            // Break out of the top if statement.
            if (i++ &gt; 10) break FOO;
        }

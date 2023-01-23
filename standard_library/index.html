@@ -365,7 +365,7 @@ sub modules are implicitly imported.</p>
 <pre><code class="language-c">int a = 3;
 int b = 5;
 @swap(a, b);
-io::printfln(&quot;%d&quot;, a); // Prints 5
+io::printfn(&quot;%d&quot;, a); // Prints 5
 </code></pre>
 <h3 id="varcastvariant-v-type">varcast(variant v, $Type)</h3>
 <p>Optionally cast the value <code>v</code> to type <code>$Type*</code> on failure returns <code>VarCastResult.TYPE_MISMATCH</code>.</p>
@@ -416,7 +416,7 @@ fn void! test()
 };
 
 // Prints a = 3
-io::printfln(&quot;a = %d&quot;, a, b);
+io::printfn(&quot;a = %d&quot;, a, b);
 </code></pre>
 <h3 id="less-greater-less_eq-greater_eq-equals">less, greater, less_eq, greater_eq, equals</h3>
 <p>All macros take two values and compare them. Any type implementing <code>Type.less</code> 

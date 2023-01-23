@@ -77,8 +77,6 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#variable-declaration">Variable declaration</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#casts">Casts</a>
-    </li>
     <li class="toctree-l2"><a class="reference internal" href="#compound-literals">Compound literals</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#typedef">Typedef</a>
@@ -362,14 +360,6 @@ int b;
 // C3
 int a;
 int b = void;
-</code></pre>
-<h4 id="casts">Casts</h4>
-<p>You can cast one struct to another as long as they are structurally equivalent:</p>
-<pre><code>struct Foo { int a; int b; }
-struct Bar { int x; int y; }
-
-Foo f = { 1, 2 };
-Bar b = (Bar)f;
 </code></pre>
 <h4 id="compound-literals">Compound literals</h4>
 <p>Compound literals use C++ style brace initialization, not cast style like in C.
