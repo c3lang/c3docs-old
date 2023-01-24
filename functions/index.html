@@ -102,6 +102,10 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#contracts">Contracts</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#short-function-declaration-syntax">Short function declaration syntax</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lambdas">Lambdas</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#static-initializer-and-finalizers">Static initializer and finalizers</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#changing-priority-of-static-initializers-and-finalizers">Changing priority of static initializers and finalizers</a>
@@ -463,6 +467,38 @@ fn int testFoo(int foo)
 </code></pre>
 <p>In this case the compiler can look at the post condition of <code>result &gt; 0</code> to determine that <code>testFoo(foo) == 0</code> must always be false.</p>
 <p>Looking closely at this code, we not that nothing guarantees that <code>bar</code> is not violating the preconditions. In Safe builds this will usually be checked in runtime, but a sufficiently smart compiler will warn about the lack of checks on <code>bar</code>. Execution of code violating pre and post conditions has unspecified behaviour.</p>
+<h2 id="short-function-declaration-syntax">Short function declaration syntax</h2>
+<p>For very short functions, C3 offers a "short declaration" syntax using <code>=&gt;</code>:</p>
+<pre><code>// Regular
+fn int square(int x)
+{
+    return x * x;
+}
+// Short
+fn int square_short(int x) =&gt; x * x;
+</code></pre>
+<h2 id="lambdas">Lambdas</h2>
+<p>It's possible to create anonymous functions using the regular <code>fn</code> syntax. Anonymous 
+functions are identical to regular functions and do not capture variables from the 
+surrounding scope:</p>
+<pre><code>define IntTransform = fn int(int);
+
+fn void apply(int[] arr, IntTransform t)
+{
+    foreach (&amp;i : arr) *i = t(*i);
+}
+
+fn void main()
+{
+    int[] x = { 1, 2, 5 };
+    // Short syntax with inference:
+    apply(x, fn (i) =&gt; i * i);
+    // Regular syntax without inference: 
+    // apply(x, fn int(int i) { return i * i; });
+    // Prints [1, 4, 25]
+    io::printfln("%s", x);        
+}
+</code></pre>
 <h2 id="static-initializer-and-finalizers">Static initializer and finalizers</h2>
 <p>It is sometimes useful to run code at startup and shutdown. Static initializers and finalizers
 are special functions that are run at startup and shutdown respectively:</p>
