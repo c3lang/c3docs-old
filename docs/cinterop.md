@@ -49,5 +49,5 @@ Calling from C:
 - C assumes the enum size is `CInt`
 - C3 uses fixed integer sizes, this means that `int` and `CInt` does not need to be the same.
 - Passing arrays by value like in C3 must be represented as passing a struct containing the array.
-- Atomic types is not supported by C3.
+- Atomic types are not supported by C3.
 - Volatile and const have no representation in C3.

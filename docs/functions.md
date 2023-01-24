@@ -11,7 +11,7 @@ Regular functions are the same as C aside from the keyword `fn`, which is follow
     {
         for (int i = 0; i < times; i++)
         {
-            io::printfln("Hello %d", i);
+            io::printfn("Hello %d", i);
         }
     }
 
@@ -20,20 +20,20 @@ Regular functions are the same as C aside from the keyword `fn`, which is follow
 C3 allows use of default arguments as well as named arguments. Note that
 any unnamed arguments must appear before any named arguments.
 
-    fn int testWithDefault(int foo = 1)
+    fn int test_with_default(int foo = 1)
     {
         return foo;
     }
 
     fn void test()
     {
-        testWithDefault();
-        testWithDefault(100);
+        test_with_default();
+        test_with_default(100);
     }
 
 Named arguments
 
-    fn void testNamed(int times, double data)
+    fn void test_named(int times, double data)
     {
         for (int i = 0; i < times; i++)
         {
@@ -44,38 +44,38 @@ Named arguments
     fn void test()
     {
         // Named only
-        testNamed(.data = 3.0, .times = 1)
+        test_named(.data = 3.0, .times = 1);
 
         // Unnamed only
-        testNamed(3, 4.0);
+        test_named(3, 4.0);
 
         // Mixing named and unnamed        
-        testNamed(15, .data = 3.141592);
+        test_named(15, .data = 3.141592);
     }
 
 Named arguments with defaults:
 
-    fn void testNamedDefault(int times = 1, double data = 3.0, bool dummy = false)
+    fn void test_named_default(int times = 1, double data = 3.0, bool dummy = false)
     {
         for (int i = 0; i < times; i++)
         {
-            printf("Hello %d\n", i + data);
+            printfn("Hello %f", i + data);
         }
     }
 
     fn void test()
     {
         // Named only
-        testNamedDefault(.data = 3.5, .times = 10);
+        test_named_default(.data = 3.5, .times = 10);
     
         // Unnamed and named
-        testNamedDefault(3, .dummy = false);
+        test_named_default(3, .dummy = false);
     
         // Overwriting an unnamed argument with named is an error:
-        // testNamedDefault(2, .times = 3); ERROR!
+        // test_named_default(2, .times = 3); ERROR!
         
         // Unnamed may not follow named arguments.
-        // testNamedDefault(.times = 3, 4.0); ERROR!
+        // test_named_default(.times = 3, 4.0); ERROR!
     }
 
 #### Varargs
@@ -278,6 +278,42 @@ May be optimized to:
 In this case the compiler can look at the post condition of `result > 0` to determine that `testFoo(foo) == 0` must always be false.
 
 Looking closely at this code, we not that nothing guarantees that `bar` is not violating the preconditions. In Safe builds this will usually be checked in runtime, but a sufficiently smart compiler will warn about the lack of checks on `bar`. Execution of code violating pre and post conditions has unspecified behaviour.
+
+## Short function declaration syntax
+
+For very short functions, C3 offers a "short declaration" syntax using `=>`:
+
+    // Regular
+    fn int square(int x)
+    {
+        return x * x;
+    }
+    // Short
+    fn int square_short(int x) => x * x;
+    
+## Lambdas
+
+It's possible to create anonymous functions using the regular `fn` syntax. Anonymous 
+functions are identical to regular functions and do not capture variables from the 
+surrounding scope:
+
+    define IntTransform = fn int(int);
+
+    fn void apply(int[] arr, IntTransform t)
+    {
+        foreach (&i : arr) *i = t(*i);
+    }
+
+    fn void main()
+    {
+        int[] x = { 1, 2, 5 };
+        // Short syntax with inference:
+        apply(x, fn (i) => i * i);
+        // Regular syntax without inference: 
+        // apply(x, fn int(int i) { return i * i; });
+        // Prints [1, 4, 25]
+        io::printfln("%s", x);        
+    }
 
 ## Static initializer and finalizers
 

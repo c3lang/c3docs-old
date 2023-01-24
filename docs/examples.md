@@ -20,7 +20,7 @@ fn void example_for()
     // the for-loop is the same as C99. 
     for (int i = 0; i < 10; i++) 
     {
-        io::printfln("%d", i);
+        io::printfn("%d", i);
     }
 
     // also equal
@@ -37,7 +37,7 @@ fn void example_foreach(float[] values)
 {
     foreach (index, value : values) 
     {
-        io::printfln("%d: %f", index, value);
+        io::printfn("%d: %f", index, value);
     }
 }
 ```
@@ -191,7 +191,7 @@ fn void! test(int x)
     defer io::println("");
     defer io::println("A");
     defer catch io::println("B")
-    defer catch (err) io::printfln("%s", err.message);
+    defer catch (err) io::printfn("%s", err.message);
     if (x == 1) return FooError!;
     print("!")
 }
@@ -314,7 +314,7 @@ fn void main()
     }
     // Flow typing makes "ratio"
     // have the plain type 'double' here.
-    io::printfln("Ratio was %f", ratio);
+    io::printfn("Ratio was %f", ratio);
 }
 ```
 
@@ -324,14 +324,14 @@ fn void printFile(String filename)
     String! file = io::load_file(filename);
 
     // The following function is not executed on error.
-    io::printfln("Loaded %s and got:\n%s", filename, file);
+    io::printfn("Loaded %s and got:\n%s", filename, file);
 
     if (catch err = file)
     {
         case IoError.FILE_NOT_FOUND:
-            io::printfln("I could not find the file %s", filename);
+            io::printfn("I could not find the file %s", filename);
         default:
-            io::printfln("Could not load %s.", filename);
+            io::printfn("Could not load %s.", filename);
     }
 }
 ```

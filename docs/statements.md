@@ -30,7 +30,7 @@ Expression blocks may also return values:
             if (x == 0) return 100;
             return -x;
         |};            
-        io::printfln("The result was %d", a);
+        io::printfn("The result was %d", a);
     }
 
 ## Labelled break and continue
@@ -44,7 +44,7 @@ Labelled `break` and `continue` lets you break out of an outer scope. Labels can
         {
            while (1)
            {
-               io::printfln("%d", i);
+               io::printfn("%d", i);
                // Break out of the top if statement.
                if (i++ > 10) break FOO;
            }

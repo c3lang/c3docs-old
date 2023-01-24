@@ -95,7 +95,7 @@ function pointer:
 
     fn void test(int x = 5)
     {
-        io::printfln("X = %d");
+        io::printfn("X = %d");
     }
 
     fn void main()

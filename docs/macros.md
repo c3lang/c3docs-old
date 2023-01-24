@@ -257,7 +257,7 @@ Here's an example to illustrate its use:
         double[] a = { 1.0, 2.0, 3.0 };
         @foreach(a; int index, double value)
         {
-            io::printfln("a[%d] = %f", index, value);
+            io::printfn("a[%d] = %f", index, value);
         }
     }
     
@@ -269,7 +269,7 @@ Here's an example to illustrate its use:
             int[] __a = a;
             for (int __i = 0; i < __a.len; i++)
             {
-                io::printfln("Value: %d, x2: %d", __value1, __value2);
+                io::printfn("Value: %d, x2: %d", __value1, __value2);
             }
         }
     }
@@ -364,11 +364,11 @@ implicitly converted to initializer lists:
 
     var $a = { 1, 2 };
     $foreach ($x : $a):
-        io::printfln("%d", $x);
+        io::printfn("%d", $x);
     $endforeach;
     int[2] x = $a;
-    io::printfln("%s", x);
-    io::printfln("%s", $a[1]);
+    io::printfn("%s", x);
+    io::printfn("%s", $a[1]);
     // Will print
     // 1
     // 2
@@ -413,7 +413,7 @@ Compile time looping:
     macro foo($a)
     {
         $for (var $x = 0; $x < $a; $x++):
-            io::printfln("%d", $x);     
+            io::printfn("%d", $x);     
         $endfor;
     }
     
@@ -421,8 +421,8 @@ Compile time looping:
     {
         foo(2);
         // Expands to ->
-        // io::printfln("%d", 0);     
-        // io::printfln("%d", 1);         
+        // io::printfn("%d", 0);     
+        // io::printfn("%d", 1);         
     }
 
 Looping over enums:
@@ -430,7 +430,7 @@ Looping over enums:
     macro foo_enum($SomeEnum)
     {
         $foreach ($x : $SomeEnum.values):
-            io::printfln("%d", (int)$x);     
+            io::printfn("%d", (int)$x);     
         $endforeach;
     }
     
@@ -444,8 +444,8 @@ Looping over enums:
     {
         foo_enum(MyEnum);
         // Expands to ->
-        // io::printfln("%d", (int)MyEnum.A);
-        // io::printfln("%d", (int)MyEnum.B);    
+        // io::printfn("%d", (int)MyEnum.A);
+        // io::printfn("%d", (int)MyEnum.B);    
     }
 
 An important thing to note is that the content of the `$foreeach` or `$for` body must be a complete statement.

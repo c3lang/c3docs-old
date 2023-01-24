@@ -1,5 +1,10 @@
 # Change log
 
+##### Revision 2023-01-24
+- Consistently use printfn rather than printfln
+- Added [short function](../functions) syntax.
+- Added [lambdas](../functions).
+
 ##### Revision 2023-01-07
 - Direct download links added.
 - Prefer "String" over char[]

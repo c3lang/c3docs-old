@@ -369,7 +369,7 @@ It is possible to associate each enum value with a static value.
     
     State s = get_state();
 
-    io::printfln("Currently the process is %s", s.state_desc);
+    io::printfn("Currently the process is %s", s.state_desc);
     if (s.active) do_something();
 
 ## Faults
@@ -536,11 +536,11 @@ bitstruct field.
     Foo f;
     f.a = 2;
     char x = (char)f;
-    io::printfln("%d", (char)f); // prints 2
+    io::printfn("%d", (char)f); // prints 2
     f.b = 1;
-    io::printfln("%d", (char)f); // prints 18 
+    io::printfn("%d", (char)f); // prints 18 
     f.c = true;
-    io::printfln("%d", (char)f); // prints 146
+    io::printfn("%d", (char)f); // prints 146
 
 
 The bitstruct will follow the endianness of the underlying type:
@@ -557,7 +557,7 @@ The bitstruct will follow the endianness of the underlying type:
     t.a = 0xABCD;
     t.b = 0x789A;
     char* c = (char*)&t;
-    io::printfln("%X", (uint)t); // Prints 789AABCD
+    io::printfn("%X", (uint)t); // Prints 789AABCD
     for (int i = 0; i < 4; i++) io::printf("%X", c[i]); // Prints CDAB9A78
     io::println();
 

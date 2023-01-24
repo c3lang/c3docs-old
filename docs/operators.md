@@ -71,6 +71,6 @@ be implemented. If `&[]` is implemented, foreach by reference is enabled (e.g. `
         // Print all elements in f
         foreach (d : f)
         {
-            io::printfln("%f", d);
+            io::printfn("%f", d);
         }
     }
