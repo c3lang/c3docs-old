@@ -7,18 +7,42 @@ name prefix.
 
 These can all safely be used by the user.
 
-#### $$LINE
-The current line as an integer.
-
-#### $$FUNC
-The current function name, will return "<GLOBAL>" on the global level.
+#### $$DATE
+The current date.
 
 #### $$FILE
 The current file name.
 
-#### $$LINEREAL
+#### $$FILEPATH
+The current file with path.
+
+#### $$FUNC
+The current function name, will return "<GLOBAL>" on the global level.
+
+#### $$FUNCTION
+The current function as an expression.
+
+#### $$LINE
+The current line as an integer.
+
+#### $$LINE_RAW
 Usually the same as $$LINE, but in case of a macro inclusion it returns the line in the macro rather than
 the line where the macro was included.
+
+#### $$MODULE
+The current module name.
+
+#### $$TEST_NAMES
+An array of names of the test functions.
+
+#### $$TEST_FNS
+An array of addresses to the test functions.
+
+#### $$TIME
+The current time.
+
+
+
 
 ## Builtin functions
 
