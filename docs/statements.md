@@ -14,7 +14,7 @@ The function below prints `World!`
     {
         int a = 0;
         {|
-            if (a != 0) return;
+            if (a) return;
             io::printf("Hello ");
             return;
         |};

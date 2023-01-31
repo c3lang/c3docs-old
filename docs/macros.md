@@ -12,7 +12,7 @@ The macro capabilities of C3 reaches across several constructs: macros (prefixed
     #endif
     
     // C3
-    $if $defined(x) && $y > 3:
+    $if ($defined(x) && $y > 3):
         int z;
     $endif;
 
