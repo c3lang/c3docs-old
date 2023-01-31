@@ -215,7 +215,7 @@
 <p>Unlike usual exception handling, errors in C3 build on optional returns. 
 An <em>optional result</em> works as a union containing either the <em>expected result</em> or an <em>optional result value</em>.</p>
 <h3 id="error-returns">Error returns</h3>
-<p>For C the interface to C3, the <em>optional result value</em> is returned as the regular value, while the return value 
+<p>For C the interface to C3, the <em>fault</em> is returned as the regular value, while the return value 
 is instead returned as an out parameter.</p>
 <p>C3 code:</p>
 <pre><code>fn int! getValue();
