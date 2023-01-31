@@ -205,7 +205,7 @@ Jumps cannot be done into or out of a function block, and <code>return</code> ex
 {
     int a = 0;
     {|
-        if (a != 0) return;
+        if (a) return;
         io::printf("Hello ");
         return;
     |};
