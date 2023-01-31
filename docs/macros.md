@@ -136,7 +136,7 @@ Use `&` in front of a parameter to capture the a variable and pass it by referen
     // C3
     ... currently no corresponding functionality ...
 
-### Stringingification
+### Stringification
 
     #define CHECK(x) do { if (!x) abort(#x); } while(0)
     
