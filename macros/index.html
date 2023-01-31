@@ -391,7 +391,7 @@ macro fn check(#expr)
 <p>Script languages, and also upcoming languages like <em>Jai</em>, usually have unbounded top level evaluation. The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. </p>
 <p>In C3, top level compile time evaluation is limited to <code>$if</code> and <code>$switch</code> constructs + macros with constant expression evaluation. This makes the code easier to read, but at the cost of expressive power.</p>
 <h2 id="macro-declarations">Macro declarations</h2>
-<p>A macro is defined using <code>macro &lt;name&gt;(&lt;parameters&gt;)</code>. All user defined macros use the @ symbol.</p>
+<p>A macro is defined using <code>macro &lt;name&gt;(&lt;parameters&gt;)</code>. All user defined macros use the @ symbol if they use the <code>&amp;</code> or <code>#</code> parameters.</p>
 <p>The parameters have different sigils: <code>$</code> means compile time evaluated (constant expression or type). <code>#</code> indicates an expression that is not yet evaluated, but is bound to where it was defined. Finally <code>&amp;</code> is used to <em>implicitly</em> pass a parameter by reference.
 <code>@</code> is required on macros that use <code>#</code> and <code>&amp;</code> parameters.</p>
 <p>A basic swap:</p>
