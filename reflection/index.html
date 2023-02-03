@@ -463,10 +463,10 @@ String d = $nameof(g); // =&gt; "g"
 <h3 id="qnameof">$qnameof</h3>
 <p>Returns the same as <code>$nameof</code>, but with the full module name prepended.</p>
 <pre><code>int x;
-String a = $nameof(int[4]); // =&gt; "int[4]"
-String b = $nameof(Foo) // =&gt; "test::bar::Foo"
-String c = $nameof(Foo[4]); // =&gt; "test::bar::Foo[4]" 
-String d = $nameof(g); // =&gt; "test::bar::g"
+String a = $qnameof(int[4]); // =&gt; "int[4]"
+String b = $qnameof(Foo) // =&gt; "test::bar::Foo"
+String c = $qnameof(Foo[4]); // =&gt; "test::bar::Foo[4]" 
+String d = $qnameof(g); // =&gt; "test::bar::g"
 </code></pre>
 <h3 id="sizeof_1">$sizeof</h3>
 <p>This is used on a value to determine the allocation size needed. <code>$sizeof(a)</code> is equivalent
