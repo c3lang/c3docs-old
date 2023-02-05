@@ -1,9 +1,9 @@
 # What is C3?
 
-C3 is a system programming language based on C. It is an evolution of C enabling the same paradigms and 
+C3 is a system programming language based on C. It is an evolution of C enabling the same paradigms and
 retaining the same syntax as far as possible.
 
-C3 started as an extension of the [C2 language](http://www.c2lang.org/) by [Bas van den Berg](https://github.com/bvdberg). 
+C3 started as an extension of the [C2 language](http://www.c2lang.org/) by [Bas van den Berg](https://github.com/bvdberg).
 It has evolved significantly, not just in syntax but also in regard to error handling, macros, generics and strings.
 
 The C3 compiler can be found on github: [https://github.com/c3lang/c3c](https://github.com/c3lang/c3c).
@@ -13,15 +13,17 @@ Binaries are directly downloadable for the following platforms:
 - Debian x64 [download](https://github.com/c3lang/c3c/releases/download/latest/c3-linux.tar.gz), [install instructions](https://github.com/c3lang/c3c#installing-on-debian-with-precompiled-binaries).
 - MacOS x64 [download](https://github.com/c3lang/c3c/releases/download/untagged-6fcf1b0c7b17361947ce/c3-macos.zip), [install instructions](https://github.com/c3lang/c3c#installing-on-mac-with-precompiled-binaries).
 
+For an interactive learning experience, [Learn C3](https://www.learn-c3.org/) is now online.
+
 Last updated: [Revision 2023-01-07](changes).
 
 ## Features
 
-- Full C ABI compatibility  
-- Module system 
+- Full C ABI compatibility
+- Module system
 - Generic modules
 - Zero overhead errors
-- Struct subtyping 
+- Struct subtyping
 - Semantic macro system
 - Safe array access using sub arrays
 - Zero cost simple gradual & opt-in pre/post conditions
