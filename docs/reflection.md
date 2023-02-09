@@ -276,10 +276,10 @@ Returns the offset of a member in a struct.
 Returns the same as `$nameof`, but with the full module name prepended.
 
     int x;
-    String a = $nameof(int[4]); // => "int[4]"
-    String b = $nameof(Foo) // => "test::bar::Foo"
-    String c = $nameof(Foo[4]); // => "test::bar::Foo[4]" 
-    String d = $nameof(g); // => "test::bar::g"
+    String a = $qnameof(int[4]); // => "int[4]"
+    String b = $qnameof(Foo) // => "test::bar::Foo"
+    String c = $qnameof(Foo[4]); // => "test::bar::Foo[4]" 
+    String d = $qnameof(g); // => "test::bar::g"
     
 ### $sizeof
 

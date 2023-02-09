@@ -6,7 +6,7 @@ An *optional result* works as a union containing either the *expected result* or
 
 ### Error returns
 
-For C the interface to C3, the *optional result value* is returned as the regular value, while the return value 
+For C the interface to C3, the *fault* is returned as the regular value, while the return value 
 is instead returned as an out parameter.
 
 C3 code:

@@ -360,12 +360,12 @@ Write to a buffer, based on the libc function.
 ### stdout(), stdin(), stderr()
 Return stdout, stdin and stderr respectively.
 
-## std::array::list<Type>
+## std::collections::list<Type>
 
 Generic list module, elements are of `Type`.
 
 ```c
-import std::array::list;
+import std::collections::list;
 define MyIntList = List<int>;
 
 ...

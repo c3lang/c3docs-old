@@ -49,7 +49,7 @@ The macro capabilities of C3 reaches across several constructs: macros (prefixed
 
 ### Reference arguments
 
-Use `&` in front of a parameter to capture the a variable and pass it by reference without having to explicitly use `&` and pass a pointer. 
+Use `&` in front of a parameter to capture the variable and pass it by reference without having to explicitly use `&` and pass a pointer. 
 (Note that in C++ this is allowed for normal functions, whereas for C3 it is only permitted with macros.)
 
     // C
@@ -154,7 +154,7 @@ In C3, top level compile time evaluation is limited to `$if` and `$switch` const
 
 ## Macro declarations
 
-A macro is defined using `macro <name>(<parameters>)`. All user defined macros use the @ symbol.
+A macro is defined using `macro <name>(<parameters>)`. All user defined macros use the @ symbol if they use the `&` or `#` parameters.
 
 The parameters have different sigils: `$` means compile time evaluated (constant expression or type). `#` indicates an expression that is not yet evaluated, but is bound to where it was defined. Finally `&` is used to *implicitly* pass a parameter by reference.
 `@` is required on macros that use `#` and `&` parameters.

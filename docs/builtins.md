@@ -46,8 +46,8 @@ The current time.
 
 ## Builtin functions
 
-These functions are *not guaranteed* to exist on all platforms. They are intended for use standard library
-use, and typically the standard library has macros that wrap these builtins, so they should not be used on its own.
+These functions are *not guaranteed* to exist on all platforms. They are intended for standard library
+internal use, and typically the standard library has macros that wrap these builtins, so they should not be used on its own.
 
 #### $$trap
 
