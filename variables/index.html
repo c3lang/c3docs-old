@@ -182,12 +182,12 @@
                 <h1 id="variables">Variables</h1>
 <h3 id="zero-init-by-default">Zero init by default</h3>
 <p>Unlike C, C3 local variables are zero-initialized by default. To avoid zero-init, you need to explicitly opt-out.</p>
-<pre><code>int x;              // x = 0
-int y = void;       // y is explicitly undefined and must be assigned before use.
+<pre><code>int x;               // x = 0
+int y @noinit;       // y is explicitly undefined and must be assigned before use.
 
-AStruct foo;        // foo is implicitly zeroed
-AStruct bar = {};   // boo is explicitly zeroed
-AStruct baz = void; // baz is explicitly undefined
+AStruct foo;         // foo is implicitly zeroed
+AStruct bar = {};    // boo is explicitly zeroed
+AStruct baz @noinit; // baz is explicitly undefined
 </code></pre>
 <p>Using a variable that is explicitly undefined before will trap in debug builds and is undefined behaviour in release builds.</p>
               

@@ -352,14 +352,14 @@ int a, b; // Not allowed in C3
 int a;
 int b;
 </code></pre>
-<p>In C3, variables are always zero initialized, unless you explicitly opt out using <code>void</code>:</p>
+<p>In C3, variables are always zero initialized, unless you explicitly opt out using <code>@noinit</code>:</p>
 <pre><code>// C
 int a = 0;
 int b;
 
 // C3
 int a;
-int b = void;
+int b @noinit;
 </code></pre>
 <h4 id="compound-literals">Compound literals</h4>
 <p>Compound literals use C++ style brace initialization, not cast style like in C.
