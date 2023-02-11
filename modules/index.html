@@ -86,6 +86,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#private-modules">Private modules</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#linker-visibility-and-exports">Linker visibility and exports</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#using-functions-and-types-from-other-modules">Using functions and types from other modules</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#versioning-and-dynamic-inclusion">Versioning and dynamic inclusion</a>
@@ -327,6 +329,13 @@ import private foo; // Allowed
 module baz;
 import foo; // Error, trying to import private module. 
 </code></pre>
+<h2 id="linker-visibility-and-exports">Linker visibility and exports</h2>
+<p>A function or global prefixed <code>extern</code> will be assumed to be linked in later.
+An "extern" function may not have a body, and global variables are prohibited
+from having an init expression.</p>
+<p>The attribute <code>@export</code> explicitly marks a function as being exported when 
+creating a (static or dynamic) library. It has no particular effect when
+compiling as an executable.</p>
 <h2 id="using-functions-and-types-from-other-modules">Using functions and types from other modules</h2>
 <p>As a rule, functions, macros, constants, variables and types in the same module do not need any namespace prefix. For imported modules the following rules hold:</p>
 <ol>

@@ -203,8 +203,8 @@
 <p>C3 introduces fairly strict naming rules to reduce ambiguity. </p>
 <p>As a basic rule, all identifiers are limited to a-z, A-Z, 0-9 and <code>_</code>. The initial character can not be a number. Furthermore, all identifiers are limited to 31 character.</p>
 <h3 id="structs-unions-enums-and-faults">Structs, unions, enums and faults</h3>
-<p>All user defined types must start with A-Z after any optional initial <code>_</code> and include at least 1 lower case letter. <code>Bar</code>, <code>_T_i12</code> and <code>TTi</code> are all valid names. <code>_1</code>, <code>bAR</code> and <code>BAR</code> are not. For C-compatibility it's possible to alias the type to a external name using the attribute "externname".</p>
-<pre><code>struct Foo @extname(&quot;foo&quot;)
+<p>All user defined types must start with A-Z after any optional initial <code>_</code> and include at least 1 lower case letter. <code>Bar</code>, <code>_T_i12</code> and <code>TTi</code> are all valid names. <code>_1</code>, <code>bAR</code> and <code>BAR</code> are not. For C-compatibility it's possible to alias the type to a external name using the attribute "extern".</p>
+<pre><code>struct Foo @extern(&quot;foo&quot;)
 {
     int x;
     Bar bar;

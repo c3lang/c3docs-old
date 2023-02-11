@@ -265,7 +265,7 @@
 <p>All user defined types in C3 starts with upper case. So <code>MyStruct</code> or <code>Mystruct</code> would be fine, <code>mystruct_t</code> or <code>mystruct</code> would not.
 This naming requirement ensures that the language is easy to parse for tools.
 It is possible to use attributes to change the external name of a type:</p>
-<pre><code>struct Stat @extname(&quot;stat&quot;)
+<pre><code>struct Stat @extern(&quot;stat&quot;)
 {
     // ...
 } 
