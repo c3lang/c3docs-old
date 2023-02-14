@@ -183,17 +183,17 @@ For convenience, assigning to a struct will infer the type even if it's not an i
     callFoo(Foo{ 2, 3 });
 
 
-#### Typedef
+#### Typedef and #define
 
-Instead of `typedef`, use `define`
+Note the change in `typedef` syntax:
 
     // C
     typedef Foo* FooPtr;
 
     // C3
-    define FooPtr = Foo*;
+    typedef FooPtr = Foo*;
 
-`define` also allows you to do things that otherwise you'd use `#define` for:
+`define` also allows you to do things that C uses `#define` for:
 
     // C
     #define puts println
@@ -211,7 +211,7 @@ Instead of `typedef`, use `define`
     ...
     println(my_excellent_string);
 
-Read more about `define` [here](../define).
+Read more about `define` and `typedef` [here](../define).
 
 #### Basic types
 

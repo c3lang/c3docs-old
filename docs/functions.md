@@ -297,7 +297,7 @@ It's possible to create anonymous functions using the regular `fn` syntax. Anony
 functions are identical to regular functions and do not capture variables from the 
 surrounding scope:
 
-    define IntTransform = fn int(int);
+    typedef IntTransform = fn int(int);
 
     fn void apply(int[] arr, IntTransform t)
     {

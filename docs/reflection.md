@@ -132,7 +132,7 @@ Returns a subarray containing the names of an enum or fault.
 *Only available for function types.*
 Returns a list of all parameters.
 
-    define TestFunc = fn int(int, double);
+    typedef TestFunc = fn int(int, double);
     String s = $nameof(TestFunc.params[1]); // "double"
 
 #### returns
@@ -140,7 +140,7 @@ Returns a list of all parameters.
 *Only available for function types.*
 Returns the type of the return type.
 
-    define TestFunc = fn int(int, double);
+    typedef TestFunc = fn int(int, double);
     String s = $nameof($typeform(TestFunc.returns)); // "int"
 
 #### sizeof
@@ -259,7 +259,7 @@ the one used by the linker.
 
 Returns the name of a function, type or variable as a string without module prefixes.
 
-    define Bar = Foo;
+    typedef Bar = Foo;
     String a = $nameof(int[4]); // => "int[4]"
     String b = $nameof(Foo) // => "Foo"
     String c = $nameof(Bar); // => "Foo" 

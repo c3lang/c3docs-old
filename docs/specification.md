@@ -391,7 +391,7 @@ Example:
 
 ```
 fn void test() { ... }
-define VoidFunc = fn void test();
+typedef VoidFunc = fn void test();
 
 VoidFunc a = &test;
 int b = (int)null;

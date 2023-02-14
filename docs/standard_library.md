@@ -366,7 +366,7 @@ Generic list module, elements are of `Type`.
 
 ```c
 import std::collections::list;
-define MyIntList = List<int>;
+typedef MyIntList = List<int>;
 
 ...
 

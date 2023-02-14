@@ -31,7 +31,7 @@ The macro capabilities of C3 reaches across several constructs: macros (prefixed
     {
         return x + 2;
     }
-    define UInt32 = uint;
+    typedef UInt32 = uint;
     
     // Use:
     int y = @m(foo() + 2);
@@ -122,7 +122,7 @@ Use `&` in front of a parameter to capture the variable and pass it by reference
     int foo(int x) PURE_INLINE { ... }
     
     // C3
-    define @PureInline = @pure, @inline
+    define @PureInline = { @pure @inline };
     fn int foo(int) @PureInline { ... }    
 
 

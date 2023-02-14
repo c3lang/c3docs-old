@@ -1,5 +1,8 @@
 # Change log
 
+##### Revision 2023-02-15
+- Updated typedef / define
+
 ##### Revision 2023-02-11
 - Changed @extname to @extern following compiler changes.
 - Document @export
