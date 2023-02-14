@@ -1,5 +1,9 @@
 # Change log
 
+##### Revision 2023-02-11
+- Changed @extname to @extern following compiler changes.
+- Document @export
+
 ##### Revision 2023-01-24
 - Consistently use printfn rather than printfln
 - Added [short function](../functions) syntax.

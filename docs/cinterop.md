@@ -14,7 +14,7 @@ C3 function but with `extern` in front of it. As long as the function is linked,
     }
 
 While C3 functions are available from C using their external name, it's often useful to
-define an external name using `@extname` to match C usage.
+define an external name using `@extern` to match C usage.
 
 
     module foo;
@@ -23,7 +23,7 @@ define an external name using `@extname` to match C usage.
         return x * x;
     }
 
-    fn int square2(int x) @extname("square")
+    fn int square2(int x) @extern("square")
     {
         return x * x;
     }

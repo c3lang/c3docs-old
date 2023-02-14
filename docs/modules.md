@@ -159,6 +159,16 @@ module baz;
 import foo; // Error, trying to import private module. 
 ```
 
+## Linker visibility and exports
+
+A function or global prefixed `extern` will be assumed to be linked in later.
+An "extern" function may not have a body, and global variables are prohibited
+from having an init expression.
+
+The attribute `@export` explicitly marks a function as being exported when 
+creating a (static or dynamic) library. It has no particular effect when
+compiling as an executable.
+
 ## Using functions and types from other modules
 
 As a rule, functions, macros, constants, variables and types in the same module do not need any namespace prefix. For imported modules the following rules hold:

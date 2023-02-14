@@ -9,7 +9,7 @@ This naming requirement ensures that the language is easy to parse for tools.
 It is possible to use attributes to change the external name of a type:
 
 ```
-struct Stat @extname("stat")
+struct Stat @extern("stat")
 {
     // ...
 } 

@@ -116,9 +116,9 @@ In order to link with other libraries, you either need to explicitly tell
 the compiler to link them.
 
 If you want to use a different identifier inside of your C3 code compared to
-the function or variable's external name – use the `@extname` attribute:
+the function or variable's external name – use the `@extern` attribute:
 
-    extern fn int _puts(char* message) @extname("puts");
+    extern fn int _puts(char* message) @extern("puts");
     ...
     _puts("Hello world"); // <- calls the puts function in libc
 
@@ -157,7 +157,7 @@ Declaring more than one variable at a time is not allowed:
     int a;
     int b;
 
-In C3, variables are always zero initialized, unless you explicitly opt out using `void`:
+In C3, variables are always zero initialized, unless you explicitly opt out using `@noinit`:
 
     // C
     int a = 0;
@@ -165,7 +165,7 @@ In C3, variables are always zero initialized, unless you explicitly opt out usin
 
     // C3
     int a;
-    int b = void;
+    int b @noinit;
 
 #### Compound literals
 
