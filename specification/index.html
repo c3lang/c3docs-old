@@ -581,7 +581,7 @@ int* d = (int*)0; // Valid and constant value.
 <p>A pointer may be cast to any integer, truncating the pointer value if the size of the pointer is larger than the pointer size. A pointer to integer cast is considered non-constant, except in the special case of a null pointer, where it is equal to the integer value 0.</p>
 <p>Example:</p>
 <pre><code>fn void test() { ... }
-define VoidFunc = fn void test();
+typedef VoidFunc = fn void test();
 
 VoidFunc a = &amp;test;
 int b = (int)null;

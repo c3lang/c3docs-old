@@ -205,7 +205,7 @@ fn Type2 test(Type2 b, Foo *foo)
 }
 </code></pre>
 <p>Including a generic module works as usual, but to use a type, it must be <em>defined</em> before use.</p>
-<pre><code>define FooFloat = Foo&lt;float, double&gt;;
+<pre><code>typedef FooFloat = Foo&lt;float, double&gt;;
 define testFloat = foo_test::test&lt;float, double&gt;;
 
 ...

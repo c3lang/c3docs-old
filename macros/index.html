@@ -285,7 +285,7 @@ macro m(x)
 {
     return x + 2;
 }
-define UInt32 = uint;
+typedef UInt32 = uint;
 
 // Use:
 int y = @m(foo() + 2);
@@ -366,7 +366,7 @@ macro usz offset($Type, #field)
 int foo(int x) PURE_INLINE { ... }
 
 // C3
-define @PureInline = @pure, @inline
+define @PureInline = { @pure @inline };
 fn int foo(int) @PureInline { ... }
 </code></pre>
 <h3 id="declaration-macros">Declaration macros</h3>

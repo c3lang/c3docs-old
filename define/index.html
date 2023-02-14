@@ -84,7 +84,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#function-and-variable-aliases">Function and variable aliases</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#using-define-to-create-generic-types-functions-and-variables">Using define to create generic types, functions and variables</a>
+    <li class="toctree-l2"><a class="reference internal" href="#using-define-and-typedef-to-create-generic-types-functions-and-variables">Using define and typedef to create generic types, functions and variables</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#function-pointer-default-arguments-and-named-parameters">Function pointer default arguments and named parameters</a>
     </li>
@@ -195,27 +195,27 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="the-define-statement">The "define" statement</h1>
-<p>The <code>define</code> statement in C3 encompasses the <code>typedef</code> of C, as well as aliasing using 
-<code>#define</code>.</p>
+                <h1 id="the-define-and-typedef-statements">The "define" and "typedef" statements</h1>
+<p>The <code>define</code> statement in C3 is intended for aliasing identifiers. <code>typedef</code> is used
+like in C to create type aliases. The syntax is slightly different from C in both cases
+in order to increase clarity.</p>
 <h2 id="defining-a-type-alias">Defining a type alias</h2>
-<p><code>define &lt;type alias&gt; = &lt;type&gt;</code> creates a type alias, just as if one had used 
-<code>typedef</code> in C. Type aliases need to follow the name convention of user defined types (i.e. capitalized
+<p><code>typedef &lt;type alias&gt; = &lt;type&gt;</code> creates a type alias. Type aliases need to follow the name convention of user defined types (i.e. capitalized
 names with at least one lower case letter).</p>
-<pre><code>define CharPtr = char*;
-define Numbers = int[10];
+<pre><code>typedef CharPtr = char*;
+typedef Numbers = int[10];
 </code></pre>
 <p>Function pointers <em>must</em> be aliased in C3. The syntax is somewhat different from C:</p>
-<pre><code>define Callback = fn void(int a, bool b);
+<pre><code>typedef Callback = fn void(int a, bool b);
 </code></pre>
 <p>This defines an alias to function pointer type of a function that returns nothing and requires two arguments: an int and a bool. Here is a sample usage:</p>
 <pre><code>Callback cb = my_callback;
 cb(10, false);
 </code></pre>
 <h2 id="distinct-types">Distinct types</h2>
-<p><code>define</code> may also be used to create distinct new types. Unlike type aliases,
+<p><code>typedef</code> may also be used to create distinct new types. Unlike type aliases,
 they do not implicitly convert to any other type.</p>
-<pre><code>define Foo = distinct int;
+<pre><code>typedef Foo = distinct int;
 Foo f = 0;
 f = f + 1;
 int i = 1;
@@ -223,7 +223,7 @@ int i = 1;
 f = f + (Foo)i; // Valid
 </code></pre>
 <h2 id="function-and-variable-aliases">Function and variable aliases</h2>
-<p>It's possible to use <code>define</code> to create aliases for functions and variables.</p>
+<p>The <code>define</code> is used to create aliases for functions and variables.</p>
 <p>The syntax is <code>define &lt;alias&gt; = &lt;original identifier&gt;</code>.</p>
 <pre><code>fn void foo() { ... }
 int foo_var;
@@ -242,8 +242,8 @@ fn void test()
   int y = bar_var;
 }  
 </code></pre>
-<h2 id="using-define-to-create-generic-types-functions-and-variables">Using define to create generic types, functions and variables</h2>
-<p>Generic modules uses <code>define</code> to create aliases to parameterized types, functions 
+<h2 id="using-define-and-typedef-to-create-generic-types-functions-and-variables">Using define and typedef to create generic types, functions and variables</h2>
+<p>Generic modules uses <code>typedef</code> and <code>define</code> to create aliases to parameterized types, functions 
 and variables:</p>
 <pre><code> import generic_foo;
 
@@ -252,8 +252,8 @@ and variables:</p>
  define double_foo_call = generic_foo::foo_call&lt;double&gt;;
 
  // Parameterized type aliases
- define IntFoo = Foo&lt;int&gt;;
- define DoubleFoo = Foo&lt;double&gt;;
+ typedef IntFoo = Foo&lt;int&gt;;
+ typedef DoubleFoo = Foo&lt;double&gt;;
 
  // Parameterized global aliases
  define int_max_foo = generic_foo::max_foo&lt;int&gt;;
@@ -268,7 +268,7 @@ directly will then use the function's default arguments, and calling through the
 will yield the function pointer alias' default argument.</p>
 <p>Similarly, named parameter arguments follow the alias definition when calling through the 
 function pointer:</p>
-<pre><code>define TestFn = fn void(int y = 123);
+<pre><code>typedef TestFn = fn void(int y = 123);
 
 fn void test(int x = 5)
 {

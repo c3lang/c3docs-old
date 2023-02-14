@@ -348,13 +348,13 @@ String[] x = FooEnum.names; // ["BAR", "BAZ"]
 <p><em>Not yet implemented</em></p>
 <p><em>Only available for function types.</em>
 Returns a list of all parameters.</p>
-<pre><code>define TestFunc = fn int(int, double);
+<pre><code>typedef TestFunc = fn int(int, double);
 String s = $nameof(TestFunc.params[1]); // "double"
 </code></pre>
 <h4 id="returns">returns</h4>
 <p><em>Only available for function types.</em>
 Returns the type of the return type.</p>
-<pre><code>define TestFunc = fn int(int, double);
+<pre><code>typedef TestFunc = fn int(int, double);
 String s = $nameof($typeform(TestFunc.returns)); // "int"
 </code></pre>
 <h4 id="sizeof">sizeof</h4>
@@ -450,7 +450,7 @@ string b = $extnameof(testfn); // =&gt; "test.bar.testfn"
 </code></pre>
 <h3 id="nameof">$nameof</h3>
 <p>Returns the name of a function, type or variable as a string without module prefixes.</p>
-<pre><code>define Bar = Foo;
+<pre><code>typedef Bar = Foo;
 String a = $nameof(int[4]); // =&gt; "int[4]"
 String b = $nameof(Foo) // =&gt; "Foo"
 String c = $nameof(Bar); // =&gt; "Foo" 

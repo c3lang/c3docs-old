@@ -481,7 +481,7 @@ fn int square_short(int x) =&gt; x * x;
 <p>It's possible to create anonymous functions using the regular <code>fn</code> syntax. Anonymous 
 functions are identical to regular functions and do not capture variables from the 
 surrounding scope:</p>
-<pre><code>define IntTransform = fn int(int);
+<pre><code>typedef IntTransform = fn int(int);
 
 fn void apply(int[] arr, IntTransform t)
 {

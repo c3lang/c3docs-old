@@ -79,7 +79,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#compound-literals">Compound literals</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#typedef">Typedef</a>
+    <li class="toctree-l2"><a class="reference internal" href="#typedef-and-define">Typedef and #define</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#basic-types">Basic types</a>
     </li>
@@ -374,15 +374,15 @@ Foo f = { 1, 2 };
 f = { 1, 2 };
 callFoo(Foo{ 2, 3 });
 </code></pre>
-<h4 id="typedef">Typedef</h4>
-<p>Instead of <code>typedef</code>, use <code>define</code></p>
+<h4 id="typedef-and-define">Typedef and #define</h4>
+<p>Note the change in <code>typedef</code> syntax:</p>
 <pre><code>// C
 typedef Foo* FooPtr;
 
 // C3
-define FooPtr = Foo*;
+typedef FooPtr = Foo*;
 </code></pre>
-<p><code>define</code> also allows you to do things that otherwise you'd use <code>#define</code> for:</p>
+<p><code>define</code> also allows you to do things that C uses <code>#define</code> for:</p>
 <pre><code>// C
 #define puts println
 #define my_string my_excellent_string
@@ -399,7 +399,7 @@ char* my_string = "Party on";
 ...
 println(my_excellent_string);
 </code></pre>
-<p>Read more about <code>define</code> <a href="../define">here</a>.</p>
+<p>Read more about <code>define</code> and <code>typedef</code> <a href="../define">here</a>.</p>
 <h4 id="basic-types">Basic types</h4>
 <p>Several C types that would be variable sized are fixed size, and others changed names:</p>
 <pre><code>// C
