@@ -277,13 +277,13 @@ abc::Context c = {};
 </ol>
 <h2 id="visibility">Visibility</h2>
 <p>All files in the same module share the same global declaration namespace. By default a symbol is visible to all other modules.
-To make a symbol only visible inside the module, use the keyword 
-<code>private</code>.</p>
+To make a symbol only visible inside the module, use the 
+<code>@private</code> attribute.</p>
 <pre><code>module foo;
 
 fn void init() { .. }
 
-private fn void open() { .. }
+fn void open() @private { .. }
 </code></pre>
 <p>In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it is specified as <code>private</code>.</p>
 <h2 id="overriding-symbol-visibility-rules">Overriding symbol visibility rules</h2>
@@ -298,12 +298,12 @@ does not seem to exist, but inside of your library you use it as a shared depend
 <pre><code class="language-c">// File a.c3
 module a;
 
-private fn void aFunction() { ... }
+fn void aFunction() @private { ... }
 
 // File b.c3
 module b;
 
-private fn void bFunction() { ... }
+fn void bFunction() @private { ... }
 
 // File c.c3
 module c;

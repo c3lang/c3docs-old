@@ -345,6 +345,16 @@ fn Callback getCallback() { ... } // Ok!
 <td align="center">no</td>
 </tr>
 <tr>
+<td align="left">int128</td>
+<td align="right">128</td>
+<td align="center">yes</td>
+</tr>
+<tr>
+<td align="left">uint128</td>
+<td align="right">128</td>
+<td align="center">no</td>
+</tr>
+<tr>
 <td align="left">iptr**</td>
 <td align="right">varies</td>
 <td align="center">yes</td>
@@ -378,6 +388,7 @@ fn Callback getCallback() { ... } // Ok!
 <li>in octal with the prefix 0o e.g. <code>0o0770</code>, <code>0o12345670</code></li>
 <li>in hexadecimal with the prefix 0x e.g. <code>0xdeadbeef</code> <code>0x7f7f7f</code></li>
 </ul>
+<p>In the case of binary, octal and hexadecimal, the type is assumed to be <em>unsigned</em>.</p>
 <p>Furthermore, underscore <code>_</code> may be used to add space between digits to improve readability e.g. <code>0xFFFF_1234_4511_0000</code>, <code>123_000_101_100</code></p>
 <h5 id="twocc-fourcc-and-eightcc">TwoCC, FourCC and EightCC</h5>
 <p><a href="https://en.wikipedia.org/wiki/FourCC">FourCC</a> codes are often used to identify binary format types. C3 adds direct support for 4 character codes, but also 2 and 8 characters:</p>
