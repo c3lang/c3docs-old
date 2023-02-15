@@ -330,7 +330,7 @@ fn void test()
   b::b_function(); // Allowed since import converted it to "public" in this context.
 }
 </code></pre>
-<p><em>Note: <code>@local</code> variables, types and functions are hidden even if <code>@public</code> is used.</em></p>
+<p><em>Note: <code>@local</code> visibility cannot be overridden using a "@public" import.</em></p>
 <h2 id="changing-the-default-visibility">Changing the default visibility</h2>
 <p>In a normal module, global declarations will be public by default. If some other
 visibility is desired, it's possible to declare <code>@private</code> or <code>@local</code> after the module name.
