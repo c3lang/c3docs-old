@@ -94,70 +94,99 @@ The module system will also implicitly import:
 ## Visibility
 
 All files in the same module share the same global declaration namespace. By default a symbol is visible to all other modules.
-To make a symbol only visible inside the module, use the 
-`@private` attribute.
+To make a symbol only visible inside the module, use the `@private` attribute.
 
-```
-module foo;
+    module foo;
 
-fn void init() { .. }
+    fn void init() { .. }
 
-fn void open() @private { .. }
-```
+    fn void open() @private { .. }
+
 
 In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it is specified as `private`.
 
+It's possible to further restrict visibility: `@local` works like `@private` except it's only visible in the 
+local context.
+
+    // File foo.c3
+    module foo;
+    fn void abc() @private { ... }
+    fn void def() @local { ... }
+
+    // File foo2.c3
+    module foo;
+    fn void test()
+    {
+        abc(); // Access of private in the same module is ok
+        // def(); <- Error: function is local to foo.c3
+    }
+
 ## Overriding symbol visibility rules
 
-By using `import private`, it's possible to access another module´s private symbols.
-Many other module systems have hierarchal visibility rules, but the `import private` feature allows 
+By using `import <module> @public`, it's possible to access another module´s private symbols.
+Many other module systems have hierarchal visibility rules, but the `import @public` feature allows 
 visibility to be manipulated in a more ad-hoc manner without imposing hard rules.
 
 For example, you may provide a library with two modules: "mylib::net" and "mylib::file" - which both use functions
-and types from a common "mylib::internals" module. The two libraries use `import private mylib::internals`
+and types from a common "mylib::internals" module. The two libraries use `import mylib::internals @public`
 to access this module's private functions and type. To an external user of the library, the "mylib::internals"
 does not seem to exist, but inside of your library you use it as a shared dependency.
 
 A simple example:
-```c
-// File a.c3
-module a;
+    
+    // File a.c3
+    module a;
+    
+    fn void a_function() @private { ... }
+    
+    // File b.c3
+    module b;
+    
+    fn void b_function() @private { ... }
+    
+    // File c.c3
+    module c;
+    import a;
+    import b @public;
+    
+    fn void test() 
+    {
+      a::a_function(); // <-- error, a_function is private
+      b::b_function(); // Allowed since import converted it to "public" in this context.
+    }
+    
 
-fn void aFunction() @private { ... }
+*Note: `@local` visibility cannot be overridden using a "@public" import.*
 
-// File b.c3
-module b;
+## Changing the default visibility
 
-fn void bFunction() @private { ... }
+In a normal module, global declarations will be public by default. If some other
+visibility is desired, it's possible to declare `@private` or `@local` after the module name.
+It will affect all declaration in the same section.
 
-// File c.c3
-module c;
-import a;
-import private b;
+    module foo @private;
 
-fn void test() 
-{
-  a::aFunction(); // <-- error, aFunction is private
-  b::bFunction(); // Allowed since import was "private"
-}
-```
+    fn void ab_private() { ... } // Private
 
-## Private modules
+    module foo;
 
-Modules may be declared using `private`, this makes the whole module private. Such a module must
-always be imported using `import private`. Note that `import private` is *not* recursive.
+    fn void ab_public() { ... } // Public
 
-```
-module private foo;
-...
+    module bar;
+    import foo;
 
-module bar;
-import private foo; // Allowed
-...
+    fn void test()
+    {
+        foo::ab_public(); // Works
+        // foo::ab_private(); <- Error, private method
+    }
 
-module baz;
-import foo; // Error, trying to import private module. 
-```
+If the default visibility is `@private` or `@local`, using `@public` sets the visibility to public:
+
+    module foo @private;
+
+    fn void ab_private() { ... }        // Private
+    fn void ab_public() @public { ... } // Public
 
 ## Linker visibility and exports
 

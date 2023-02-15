@@ -2,6 +2,7 @@
 
 ##### Revision 2023-02-15
 - Added uint128 / int128 to the documentation.
+- @private, @public and @local
 
 ##### Revision 2023-02-14
 - Updated typedef / define
