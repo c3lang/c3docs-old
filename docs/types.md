@@ -54,6 +54,8 @@ Basic types are divided into floating point types, and integer types. Integer ty
 | uint         | 32       | no     |
 | long         | 64       | yes    |
 | ulong        | 64       | no     |
+| int128       | 128      | yes    |
+| uint128      | 128      | no     |
 | iptr**       | varies   | yes    |
 | uptr**       | varies   | no     |
 | isz**        | varies   | yes    |
@@ -75,6 +77,8 @@ Integers may be written in decimal, but also
 - in binary with the prefix 0b e.g. `0b0101000111011`, `0b011`
 - in octal with the prefix 0o e.g. `0o0770`, `0o12345670`
 - in hexadecimal with the prefix 0x e.g. `0xdeadbeef` `0x7f7f7f`
+
+In the case of binary, octal and hexadecimal, the type is assumed to be *unsigned*.
 
 Furthermore, underscore `_` may be used to add space between digits to improve readability e.g. `0xFFFF_1234_4511_0000`, `123_000_101_100`
 

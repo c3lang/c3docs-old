@@ -94,15 +94,15 @@ The module system will also implicitly import:
 ## Visibility
 
 All files in the same module share the same global declaration namespace. By default a symbol is visible to all other modules.
-To make a symbol only visible inside the module, use the keyword 
-`private`.
+To make a symbol only visible inside the module, use the 
+`@private` attribute.
 
 ```
 module foo;
 
 fn void init() { .. }
 
-private fn void open() { .. }
+fn void open() @private { .. }
 ```
 
 In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it is specified as `private`.
@@ -123,12 +123,12 @@ A simple example:
 // File a.c3
 module a;
 
-private fn void aFunction() { ... }
+fn void aFunction() @private { ... }
 
 // File b.c3
 module b;
 
-private fn void bFunction() { ... }
+fn void bFunction() @private { ... }
 
 // File c.c3
 module c;

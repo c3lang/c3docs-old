@@ -1,6 +1,9 @@
 # Change log
 
 ##### Revision 2023-02-15
+- Added uint128 / int128 to the documentation.
+
+##### Revision 2023-02-14
 - Updated typedef / define
 
 ##### Revision 2023-02-11
