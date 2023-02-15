@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Yet another module system - C3 Modules - C3 Documentation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Yet another module system - C3 Modules";
+    var mkdocs_page_input_path = "test.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> C3 Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">About C3</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Installing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../setup/">Setup</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../firstproject/">Your first project</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../primer/">A quick primer on C3</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../changesfromc/">Changes from C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../compare/">Comparisons with other languages</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../modules/">Modules</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../statements/">Statements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../expressions/">Expressions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../errorhandling/">Errors</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../macros/">Macros</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../ideas/">Crazy ideas</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../naming/">Naming rules</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../comments/">Comments & Docs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../attributes/">Attributes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../asm/">Inline asm</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../cinterop/">C Interop</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../syntax/">Grammar</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../sample/">More code examples</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../specification/">Specification</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Build system</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../buildintro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../project/">Project Structure</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../buildcommands/">Commands</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Development</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../contribute/">Contribute</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../changes/">Changes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../rejectedideas/">Rejected ideas</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">C3 Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Yet another module system - C3 Modules</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="yet-another-module-system-c3-modules">Yet another module system - C3 Modules</h1>
+<p>Despite being a general concept, modules are often very different from language 
+to language. One major reason for this is that overall language semantics puts many 
+constraints on how modules may work. However, despite these constraints there
+are a lot of specific design work required.</p>
+<p>I'm going to look at the current state of the C3 modules and also talk a little about
+alternative solutions.</p>
+<h2 id="an-initial-observation">An initial observation</h2>
+<p>When making a module system one first have to decide whether a module is a separate
+concept or not. Because if the language has the idea of static variables and 
+functions attached to a type there is actually already a sort of module system present.</p>
+<p>Here is a short snippet written in the <a href="http://c2lang.org/site/language/struct_functions/">C2 language</a> to illustrate this:</p>
+<pre><code class="language-c">// File bar.c2
+module bar;
+// Plain function
+func int get_one() {
+    return 1;
+}  
+
+// File foo.c2
+module foo;
+import bar;
+type Bar struct {
+  int x;
+}  
+// Static function
+func int Bar.get_one() {
+    return 1;
+}
+
+func void test() {
+    int a = Bar.get_one();
+    int b = bar.get_one();
+}
+</code></pre>
+<p>The type here acts as namespace in itself. If we extend the type with static
+variable we can similarly emulate namespaced global variables.</p>
+<p>Most languages with methods on their types gladly accept this ambiguity, but one 
+can draw the conclusion that modules are not needed and only structs are necessary.
+This is the approach taken by <a href="https://ziglang.org">Zig</a>. The downside is that it also leads
+to counter-intuitive things such as "a file is a struct" and having
+to explicitly arrange sub-modules in the hierarchy.</p>
+<p>The other way to resolve the ambiguity is to have type methods, but abolish
+static methods and globals. This is the approach of C3. The downside is that
+some methods that are naturally static, such as <code>Foo.new_instance()</code> or constants 
+<code>Foo.MAX_VALUE</code> can't be expressed.</p>
+<p>We can also note that Java, while having "packages" use classes as the primary 
+namespacing mechanism for free functions and constants, which is a bit more relaxed
+than Zig's approach, since the hierarchy is external.</p>
+<h2 id="sub-modules-and-paths">Sub-modules and paths</h2>
+<h3 id="flat-vs-hierarchal">Flat vs hierarchal</h3>
+<p>The module namespace can be flat with a single module name or hierarchal, where
+modules have sub-modules. While flat modules are nice to work with and easy
+to implement, there is much more contention for unique names. This can mean that 
+module names may need to have longer names to require uniqueness, e.g. <code>mylib_io</code>
+for the flat module and <code>mylib::io</code> for the hierarchal. 
+But hierarchal modules in general have an even worse problem with length: 
+e.g. <code>std.debug.print("Hello, world!\n", .{});</code> (apologies to Zig). </p>
+<h3 id="aliasing-and-import">Aliasing and import</h3>
+<p>The obvious solutions to long names are aliasing and namespace imports. Here is again
+a C2 example:</p>
+<pre><code class="language-c">import networking as net; // Aliasing
+import filesystem local; // Namespace import
+
+
+// Equivalent:
+doSomething(); // Namespace import
+filesystem.doSomething();
+
+// Equivalent:
+net.connect(); // Aliased
+networking.connect();
+</code></pre>
+<p>The downside of aliasing is that aliases may differ between authors 
+and implementations. So while someone might alias <code>networking</code> to <code>net</code>,
+someone else uses <code>nw</code>. This together with the difficulty of naming aliases
+makes it a less attractive solution. Full namespace import avoids naming
+issues, but makes it much less clear what are local functions and
+what is implemented elsewhere.</p>
+<h3 id="c3-path-shortening">C3 path shortening</h3>
+<p>C3 has a hierarchal module system but employs path shortening. This is
+basically that the first part of a module path may be elided:
+<code>std::net::sockets::new_from_url(url)</code> can be used as <code>sockets::new_from_url(url)</code>
+as long as it is not ambiguous.</p>
+<p>Requiring at least the sub-module name in the path is a design decision
+to avoid the readability problems mentioned with namespace imports. 
+In the example "new_from_url(url)" on its own lacks the context that the "sockets::" 
+prefix gives.</p>
+<p>Surveying other languages it's clear that usually contain sufficient 
+context in their names. For this reason they are exempt from
+the prefix requirement in C3.</p>
+<p>Note how something similar happens in Java in practice: <code>java.math.BigInteger</code> is
+the import, you then use <code>BigInteger</code>, but call static "functions" namespaced:
+<code>BigInteger prime = BigInteger.probablePrime(128, rnd);</code></p>
+<p>In the Java case this comes from <code>import java.math.BigInteger</code> 
+being an actual namespace import, but then the classes 
+themselves provide a second layer or namespacing.</p>
+<h2 id="visibility">Visibility</h2>
+<p>The other major component to modules is visibility between modules. Note
+that nothing is saying that explicit imports are necessary: with full
+paths the correct types, functions and variables may be found anyway.</p>
+<p>With "import" statements the most common scheme is this:</p>
+<ul>
+<li>Modules not imported: no visibility.</li>
+<li>Module imported: public declarations are visible.</li>
+</ul>
+<h3 id="hierarchal-visibility">Hierarchal visibility</h3>
+<p>As a complement to the above in hierarchal module systems, a module 
+may see non-public declarations in sub modules and/or parent modules.</p>
+<p>The desire to have this feature arise from wanting to separate the 
+visible "api layer" module and the internal "implementation layer" modules
+that which contains implementation details that may change over time.</p>
+<p>The downside of this method for modules to peek into other modules is the need
+to build this into the hierarchy.</p>
+<h3 id="friend-visibility">"Friend" visibility</h3>
+<p>As an alternative to the above hierarchal visibility above is to declare "friend"
+modules that may access the module. This has fewer constraints than trying to
+fit modules neatly into the right sort of hierarchy just to get the correct 
+visibility between modules.</p>
+<p>There is still the drawback that in order to "friend" another module, the
+module needs to know of that other module.</p>
+<h3 id="becoming-a-friend">Becoming a "friend"</h3>
+<p>Often the concept of visibility is conflated with some idea of "internal safety": 
+"I make this private to make it <em>safe</em> from other modules". This is trying
+to interpolate the metaphor too far. Visibility and access modifiers are there
+to help the user of the types to use / override functionality in the correct way.
+"Public" communicates that this function is made for general consumption,
+"private" means internal consumption and it not being part of the surface API
+of the functionality.</p>
+<p>However, <em>if one knows what one is doing</em> then circumventing these protections
+can be useful. For example:</p>
+<ul>
+<li>There may be a bug that can be circumvented by calling private methods.</li>
+<li>One may want to exploit the particular functionality of a specific version 
+of a library.</li>
+<li>One may want to modify behaviour for some other reason that the author did not foresee.</li>
+</ul>
+<p>Often languages have convoluted ways of circumventing visibility in these cases,
+e.g. calling functions using reflection in Java, just because the need does arise.</p>
+<p>The obvious way is then for a module to be able to declare itself the friend of a 
+module. A <a href="https://c3-lang.org">C3</a> example:</p>
+<pre><code class="language-c">module test;
+fn void fn_private() @private {}
+
+module foo;
+import test @public; // Override visibility
+
+fn void main()
+{
+    // This is not an error due to the &quot;@private&quot; import.
+    test::fn_private();
+}
+</code></pre>
+<p>We can note that C3 has public by default. It is possible to 
+set a different default:</p>
+<pre><code class="language-c">module test2 @private;
+
+fn void fn_private() {}
+fn void fn_public() @public {} // Explicitly needs @public!
+</code></pre>
+<h2 id="visibility-levels">Visibility levels</h2>
+<p>To talk about visibility at all we need at least two levels 
+to differentiate between. Usually these are <em>public</em> and <em>private</em>,
+where <em>public</em> means visible outside of the
+module and <em>private</em> being visible only inside of the module.</p>
+<p>In fact, we could stop here because this will in most cases be all
+we need. For this reason there is a possibility to not encode this
+in a keyword, but in the name itself: Go's "uppercase means public" and Dart's
+"leading underscore means private" (note: I considered the latter for C3).</p>
+<h3 id="between-private-and-public">Between "private" and "public"</h3>
+<p>If we want hierarchal visibility, then we need another level above 
+private but below public, indicating that something is available
+to other modules (below or above) in the hierarchy.</p>
+<p>Similarly, for the "friend" module visibility we need a visibility level
+for this behaviour. As an example Rust has <code>pub(in path)</code> and <code>pub(crate)</code>
+(although note that both of those are somewhat constrained).</p>
+<h3 id="below-private">Below "private"</h3>
+<p>If modules may span multiple source files, there is the possibility of another
+visibility level, where visibility is restricted to the file with the declaration.
+This is C's <code>static</code>, Swift's <code>fileprivate</code> and C3's <code>@local</code> (Note: 
+while C3 could have used <code>static</code> for globals and functions, it's a 
+poor name for type visibility. This is why <code>@local</code> was chosen instead).</p>
+<p>This is not exhaustive: depending on language features more visibility levels 
+might be possible. For C3 with <code>import @private</code>, having "public", "private" 
+and "local" seems to cover most use cases.</p>
+<h2 id="imports">Imports</h2>
+<p>While imports usually is a good way to determine dependencies, this is not
+guaranteed. As an example: while most Java programmers may think of Java's <code>import</code>
+as importing classes, all it actually does is to fold namespaces.</p>
+<p>The point here is that while import may roughly correspond to the dependency graph,
+it's not guaranteed to exactly do so. <em>This means that imports
+is usually simply a way to limit the pollution of the current namespace</em>.</p>
+<p>This is very valuable, in fact this is a variant of the public / private division:
+importing is picking a set of modules that can be accessed.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
