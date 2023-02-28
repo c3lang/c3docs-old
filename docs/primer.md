@@ -317,7 +317,7 @@ to handle the cases when it is commonly used in C.
     return false; 
         
     // C3, using defer:
-    Foo *foo = @mem::malloc(Foo);
+    Foo *foo = malloc(Foo);
     defer free(foo);
 
     if (tryFoo(foo)) return false;

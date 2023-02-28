@@ -118,15 +118,51 @@ whereas `malloc_checked` and `malloc_aligned` returns an optional value.
 allocated using `malloc_aligned` must be freed using `free_aligned` rather
 the normal `free` or memory corruption may result.
 
+These calls takes an optional `using` parameter, replacing the default
+allocator with a custom one.
+
 ```c
 char* data = malloc(8);
 char*! data2 = malloc_checked(8);
-int[<16>]*! data3 = malloc_aligned(16 * int.sizeof), 128);  
+int[<16>]*! data3 = malloc_aligned(16 * int.sizeof), 128);
+char* data2 = malloc(8, .using = my_allocator);  
 ```
+
+### malloc($Type), malloc($Type, usz elements)
+
+The first form allocates a single element of $Type, returning the pointer,
+the second form allocates a slice with `elements` number of elements, returning
+a subarray of the given length. Elements are not initialized.
+
+```c
+int* int = malloc(int);
+int[] ints = malloc(int, 100); // Allocated int[100] on the heap.
+```
+
+`malloc_checked` has the same two additional forms as `malloc` but the
+return is optional.
+
+Both `malloc` variants has the same optional `using` parameter, but also 
+supports `end_padding` to provide extra allocation space after the regular allocation.
+
+```c
+struct Abc
+{
+    int header;
+    char[*] data;
+}
+
+...
+
+// Allocate a "Type" but add "data_len" bytes
+// for the flexible array member "data":
+Type* t = malloc(Abc, .end_padding = data_len);
+```
+
 
 ### calloc, calloc_checked, calloc_aligned
 
-Identical to `malloc`, except the data is guaranteed to be zeroed out.
+Identical to the `malloc` variants, except the data is guaranteed to be zeroed out.
 
 ### relloc, relloc_checked, realloc_aligned
 
@@ -136,19 +172,9 @@ pointers created using `calloc_aligned` or `alloc_aligned`.
 
 ### free, free_aligned
 
-Frees memory allocated using `malloc` or `calloc`.
+Frees memory allocated using `malloc` or `calloc`. Any memory allocated using "_aligned" variants
+must be freed using `free_aligned`.
 
-### char[] alloc_bytes(usz bytes)
-
-Similar to malloc, but returns the data as a subarray. Will panic on out of memory.
-
-### alloc($Type)
-
-Will allocate enough memory for exactly the type provided:
-
-```c
-Foo* f = mem::alloc(Foo);
-```
 
 ### @scoped(Allocator* allocator; @body())
 
@@ -160,7 +186,7 @@ dynamic_arena.init(1024);
 mem::@scoped(&dynamic_arena) 
 {
     // This allocation uses the dynamic arena 
-    Foo* f = mem::alloc(Foo);
+    Foo* f = malloc(Foo);
 };
 // Release any dynamic arena memory.
 dynamic_arena.destroy();    
@@ -174,7 +200,9 @@ arbitrary allocator.
 
 ### void* tmalloc(usz size, usz alignment = 0)
 
-Allocates memory using the temporary allocator. Panic on failure.
+Allocates memory using the temporary allocator. Panic on failure. It has type
+variants similar to `malloc`, so `tmalloc(Type)` would create a `Type*` using
+the temporary allocator.
 
 ### void* tcalloc(usz size, usz alignment = 0)
 
@@ -183,10 +211,6 @@ Same as `tmalloc` but clears the memory.
 ### void* trealloc(void* ptr, usz size, usz alignment = 0)
 
 `realloc` but on memory received using `tcalloc` or `tmalloc`.
-
-### talloc($Type)
-
-Like `alloc` but using the temporary allocator.
 
 ### void @pool(;@body)
 
@@ -269,23 +293,6 @@ return @clone(f);
 ### @tclone(&value)
 
 Same as `@clone` but uses the temporary allocator.
-
-## std::core::mem::array
-
-### alloc($Type, usz elements)
-
-Allocate a slice with `elements` number of elements, returning
-a subarray of the given length. Elements are not initialized.
-`array::talloc` variant uses the temporary allocator.
-
-```c
-int[] ints = array::alloc(int, 100);
-```
-
-### make($Type, usz elements)
-
-Like `array::alloc` but all elements are cleared. `tmake` variant uses
-the temporary allocator.
 
 ## std::core::types
 
