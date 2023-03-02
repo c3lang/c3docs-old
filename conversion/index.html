@@ -106,6 +106,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#pointer-conversions">Pointer conversions</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#vector-conversions">Vector conversions</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#binary-conversions">Binary conversions</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#1-multiplication-division-remainder-subtraction-addition-with-both-operands-being-numbers">1. Multiplication, division, remainder, subtraction / addition with both operands being numbers</a>
@@ -339,6 +341,12 @@ long h = (long)a + ((long)b + (long)c);
 </ol>
 <h2 id="pointer-conversions">Pointer conversions</h2>
 <p>Pointer conversion between types usually need explicit casts. The exception is <code>void *</code> which any type may implicitly convert <em>to</em> or <em>from</em>. Conversion rules from and to arrays are detailed under <a href="../arrays">arrays</a></p>
+<h2 id="vector-conversions">Vector conversions</h2>
+<p>Conversion between underlying vector types need explicit conversions. They work
+as regular conversions with one notable exception: converting a <code>true</code> boolean
+vector value into an int will yield a value with all bits set. So <code>bool[&lt;2&gt;] { true, false }</code>
+converted to for example <code>char[&lt;2&gt;]</code> will yield <code>{ 255, 0 }</code>.</p>
+<p>Vectors can also be cast to the corresponding array type, so for example: <code>char[&lt;2&gt;]</code> &lt;=&gt; <code>char[2]</code>.</p>
 <h2 id="binary-conversions">Binary conversions</h2>
 <h3 id="1-multiplication-division-remainder-subtraction-addition-with-both-operands-being-numbers">1. Multiplication, division, remainder, subtraction / addition with both operands being numbers</h3>
 <p>These operations are only valid for integer and float types.</p>
