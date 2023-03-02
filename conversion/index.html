@@ -274,11 +274,17 @@
 <h2 id="implicit-narrowing">Implicit narrowing</h2>
 <p>An expression with an integer type, may implicitly narrow to smaller integer type, and similarly a float type may implicitly narrow to less wide floating point type is determined from the following algorithm.</p>
 <ol>
-<li>Look at the expression. If this expression's type is determined by its subexpression(s), recursively visit to find the leaves that determine the type of the expression.</li>
-<li>For each leaf, determine that the type before arithmetic promotion had a width equal or less than the type to convert to.</li>
+<li>Shifts and assign look at the lhs expression.</li>
+<li><code>++</code>, <code>--</code>, <code>~</code>, <code>-</code>, <code>!!</code>, <code>?</code> - check the inner type.</li>
+<li><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>^</code>, <code>|</code>, <code>&amp;</code>, <code>??</code>, <code>?:</code> - check both lhs and rhs.</li>
+<li>Narrowing int/float cast, assume the type is the narrowed type.</li>
+<li>Widening int/float cast, look at the inner expression, ignoring the cast.</li>
+<li>In the case of any other cast, assume it is opaque and the type is that of the cast.</li>
 <li>In the case of an integer literal, instead of looking at the type, check that the integer would fit the type to narrow to.</li>
+<li>For .len access, allow narrowing to C int width.</li>
+<li>For all other expressions, check against the size of the type.</li>
 </ol>
-<p>Basically, if all the sub expressions originally are small enough it's ok to implicitly convert the result.</p>
+<p>As rough guide: if all the sub expressions originally are small enough it's ok to implicitly convert the result.</p>
 <p>Examples</p>
 <pre><code>float16 h = 12.0;
 float f = 13.0;
