@@ -81,10 +81,10 @@ fn void demo_enum(Height h)
     {
         case LOW:
         case MEDIUM:
-            io::println("Not high");
+            io::printn("Not high");
             // Implicit break.
         case HIGH:
-            io::println("High");
+            io::printn("High");
     }
 
     // This also works
@@ -92,10 +92,10 @@ fn void demo_enum(Height h)
     {
         case LOW:
         case MEDIUM:
-            io::println("Not high");
+            io::printn("Not high");
             // Implicit break.
         case Height.HIGH:
-            io::println("High");
+            io::printn("High");
     }
 
     // Completely empty cases are not allowed.
@@ -104,7 +104,7 @@ fn void demo_enum(Height h)
         case LOW:
             break; // Explicit break required, since switches can't be empty.
         case MEDIUM:
-            io::println("Medium");
+            io::printn("Medium");
         case HIGH:
             break;
     }
@@ -126,15 +126,15 @@ fn void demo_enum(Height h)
     {
         case LOW:
             int a = 1;
-            io::println("A");
+            io::printn("A");
             nextcase;
         case MEDIUM:
             int a = 2;
-            io::println("B");
+            io::printn("B");
             nextcase;
         case HIGH:
             // a is not defined here
-            io::println("C");
+            io::printn("C");
     }
 }
 ```
@@ -164,7 +164,7 @@ Defer will be invoked on scope exit.
 ```
 fn void test(int x)
 {
-    defer io::println();
+    defer io::printn();
     defer io::print("A");
     if (x == 1) return;
     {
@@ -183,20 +183,21 @@ fn void main()
 ```
 
 Because it's often relevant to run different defers when having an error return there is also a way to create an error defer, by using the `catch` keyword directly after the defer.
+Similarly using `defer try` to execute of success.
 
-*Note that this is currently not implemented.*
 ```
 fn void! test(int x)
 {
-    defer io::println("");
-    defer io::println("A");
-    defer catch io::println("B")
+    defer io::printn("");
+    defer io::printn("A");
+    defer try io::printn("X");
+    defer catch io::printn("B")
     defer catch (err) io::printfn("%s", err.message);
     if (x == 1) return FooError!;
     print("!")
 }
 
-test(0); // Prints "!A"
+test(0); // Prints "!XA"
 test(1); // Prints "FOOBA" and returns a FooError
 ```
 
@@ -306,10 +307,10 @@ fn void main()
     if (catch err = ratio)
     {
         case MathError.DIVISION_BY_ZERO:
-            io::println("Division by zero\n");
+            io::printn("Division by zero\n");
             return;
         default:
-            io::println("Unexpected error!");
+            io::printn("Unexpected error!");
             return;
     }
     // Flow typing makes "ratio"
@@ -458,7 +459,7 @@ fn void test()
     foo.next();
     foo.next();
     // Prints 4
-    printf("%d", foo.i); 
+    io::printfn("%d", foo.i); 
 }
 ```
 
@@ -511,15 +512,15 @@ fn void test()
     stack.push(1);
     stack.push(2);
     // Prints pop: 2
-    printf("pop: %d\n", stack.pop());
+    io::printfn("pop: %d", stack.pop());
     // Prints pop: 1
-    printf("pop: %d\n", stack.pop());
+    io::printfn("pop: %d", stack.pop());
     
     DoubleStack dstack;
     dstack.push(2.3);
     dstack.push(3.141);
     dstack.push(1.1235);
     // Prints pop: 1.1235
-    printf("pop: %f\n", dstack.pop());
+    io::printfn("pop: %f", dstack.pop());
 }
 ```

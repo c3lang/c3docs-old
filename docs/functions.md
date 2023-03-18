@@ -37,7 +37,7 @@ Named arguments
     {
         for (int i = 0; i < times; i++)
         {
-            printf("Hello %d\n", i + data);
+            io::printf("Hello %d\n", i + data);
         }
     }
 
@@ -59,7 +59,7 @@ Named arguments with defaults:
     {
         for (int i = 0; i < times; i++)
         {
-            printfn("Hello %f", i + data);
+            io::printfn("Hello %f", i + data);
         }
     }
 
@@ -142,12 +142,12 @@ if all optional values contain *expected results*, otherwise *the first* *option
     {
         // The following line is either prints a value less than 0.2
         // or does not print at all:
-        printf("%d\n", testError());
+        io::printf("%d\n", testError());
         
         double x = (testError() + testError()) else 100;
         
         // This prints either a value less than 0.4 or 100:
-        printf("%d\n", x);
+        io::printf("%d\n", x);
     }
 
 This allows us to chain functions:
@@ -161,21 +161,21 @@ This allows us to chain functions:
             int! val = atoi(line);
             if (try val)
             {
-                printf("You typed the number %d\n", val);
+                io::printf("You typed the number %d\n", val);
                 return;
             }
         }
-        printf("You didn't type an integer :(\n");    
+        io::printf("You didn't type an integer :(\n");    
     }
     
     fn void printInputWithChaining()
     {
         if (try int val = atoi(readLine()))
         {
-            printf("You typed the number %d\n", val);
+            io::printf("You typed the number %d\n", val);
             return;
         }
-        printf("You didn't type an integer :(\n");    
+        io::printf("You didn't type an integer :(\n");    
     }
 
 ## Methods
@@ -312,7 +312,7 @@ surrounding scope:
         // Regular syntax without inference: 
         // apply(x, fn int(int i) { return i * i; });
         // Prints [1, 4, 25]
-        io::printfln("%s", x);        
+        io::printfn("%s", x);        
     }
 
 ## Static initializer and finalizers
@@ -345,7 +345,7 @@ will be called. The lowest priority is 65535.
  
     static initialize @priority(3000)
     {
-        io::println("World");
+        io::printn("World");
     }
     static initialize @priority(2000)
     {

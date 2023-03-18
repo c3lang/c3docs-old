@@ -10,7 +10,7 @@ import std::io;
 
 fn int main(String[] argv) 
 {
-    io::println("Hello World!");
+    io::printn("Hello World!");
     return 0;
 }
 ```

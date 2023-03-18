@@ -29,11 +29,17 @@ Like C, C3 uses implicit arithmetic promotion of integer and floating point vari
 
 An expression with an integer type, may implicitly narrow to smaller integer type, and similarly a float type may implicitly narrow to less wide floating point type is determined from the following algorithm.
 
-1. Look at the expression. If this expression's type is determined by its subexpression(s), recursively visit to find the leaves that determine the type of the expression.
-2. For each leaf, determine that the type before arithmetic promotion had a width equal or less than the type to convert to.
-3. In the case of an integer literal, instead of looking at the type, check that the integer would fit the type to narrow to.
+1. Shifts and assign look at the lhs expression.
+2. `++`, `--`, `~`, `-`, `!!`, `?` - check the inner type.
+3. `+`, `-`, `*`, `/`, `%`, `^`, `|`, `&`, `??`, `?:` - check both lhs and rhs.
+4. Narrowing int/float cast, assume the type is the narrowed type.
+5. Widening int/float cast, look at the inner expression, ignoring the cast.
+6. In the case of any other cast, assume it is opaque and the type is that of the cast.
+7. In the case of an integer literal, instead of looking at the type, check that the integer would fit the type to narrow to.
+8. For .len access, allow narrowing to C int width.
+9. For all other expressions, check against the size of the type.
 
-Basically, if all the sub expressions originally are small enough it's ok to implicitly convert the result.
+As rough guide: if all the sub expressions originally are small enough it's ok to implicitly convert the result.
 
 Examples
 ```
@@ -110,7 +116,14 @@ Substructs may be used in place of its parent structs in many cases. The rule is
 
 Pointer conversion between types usually need explicit casts. The exception is `void *` which any type may implicitly convert *to* or *from*. Conversion rules from and to arrays are detailed under [arrays](../arrays)
 
+## Vector conversions
 
+Conversion between underlying vector types need explicit conversions. They work
+as regular conversions with one notable exception: converting a `true` boolean
+vector value into an int will yield a value with all bits set. So `bool[<2>] { true, false }`
+converted to for example `char[<2>]` will yield `{ 255, 0 }`.
+
+Vectors can also be cast to the corresponding array type, so for example: `char[<2>]` <=> `char[2]`.
 
 ## Binary conversions
 

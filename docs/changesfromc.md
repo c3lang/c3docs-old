@@ -82,11 +82,11 @@ uint j = 1;
 // int z = i + j; <- Error, explicit cast needed.
 if (i < j)
 {
-  printf("Hello C3!\n");
+    printf("Hello C3!\n");
 }
 else
 {
-  printf("Hello C!\n");
+    printf("Hello C!\n");
 }
 ```
 

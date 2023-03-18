@@ -71,7 +71,7 @@ fn void test()
 {
     int a = 1;
     lyingFunc(&a);
-    printf("%d", a); // Might print 1!
+    io::printf("%d", a); // Might print 1!
 }
 ```
 
@@ -118,7 +118,7 @@ fn void test()
     foo = &badFunc;
     i = 1;
     lyingFunc();
-    printf("%d", a); // Might print 1!
+    io::printf("%d", a); // Might print 1!
 }
 ```
 

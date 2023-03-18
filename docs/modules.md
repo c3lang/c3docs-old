@@ -338,7 +338,7 @@ $include("Foo.x");
 
 fn void test() 
 {
-    printf("%d", testX(2));
+    io::printf("%d", testX(2));
 }    
 ```
 
@@ -362,7 +362,7 @@ fn testX(int i)
 
 fn void test() 
 {
-    printf("%d", testX(2));
+    io::printf("%d", testX(2));
 }    
 ```
 

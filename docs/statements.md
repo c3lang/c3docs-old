@@ -57,13 +57,13 @@ Do-while statements can skip the ending `while`. In that case it acts as if the 
 
     do 
     {
-        io::println("FOO");
+        io::printn("FOO");
     } while (0);
     
     // Equivalent to the above.
     do 
     {
-        io::println("FOO");
+        io::printn("FOO");
     };
 
 ## Nextcase and labelled nextcase
@@ -91,7 +91,7 @@ It's also possible to use `nextcase` with an expression, to jump to an arbitrary
         case 3:
             nextcase rand(); // Jump to random case
         default:
-            io::println("Ended");
+            io::printn("Ended");
     }  
 
 Which can be used as structured `goto` when creating state machines.

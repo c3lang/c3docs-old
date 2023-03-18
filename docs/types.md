@@ -562,7 +562,7 @@ The bitstruct will follow the endianness of the underlying type:
     char* c = (char*)&t;
     io::printfn("%X", (uint)t); // Prints 789AABCD
     for (int i = 0; i < 4; i++) io::printf("%X", c[i]); // Prints CDAB9A78
-    io::println();
+    io::printn();
 
 It is however possible to pick a different endianness, in which case the entire representation
 will internally assume big endian layout:
@@ -596,10 +596,10 @@ Bitstruct backing types may be integers or char arrays. The difference in layout
     t1.b = t2.b = 0x789A;
     char* c = (char*)&t1;
     for (int i = 0; i < 4; i++) io::printf("%X", c[i]); // Prints CDAB9A78 on x86
-    io::println();
+    io::printn();
     c = (char*)&t2;
     for (int i = 0; i < 4; i++) io::printf("%X", c[i]); // Prints ABCD789A
-    io::println();
+    io::printn();
 
 Bitstructs can be made to have ovelapping bit fields. This is useful when modelling
 a layout which has multiple different layouts depending on flag bits:

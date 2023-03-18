@@ -22,7 +22,7 @@ Here is an example:
  **/
 void bar(int foo)
 {
-    printf("%d", foo);
+    io::printf("%d", foo);
 }
 ```
  

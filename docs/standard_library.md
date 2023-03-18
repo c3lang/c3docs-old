@@ -320,7 +320,7 @@ short y = variant_to_int(v, short)!!; // Works
 ichar z = variant_to_int(v, ichar)!!; // Panics VALUE_OUT_OF_RANGE
 ```
 
-## std::core::string::conv
+## std::core::str::conv
 
 ### usz! char32_to_utf8(Char32 c, char* output, usz available)
 Convert a UTF32 codepoint to an UTF8 buffer. `size` has the number of
@@ -337,8 +337,8 @@ moving the output pointer 1 or 2 steps.
 Regular printf functionality: `%s`, `%x`, `%d`, `%f` and `%p` are supported.
 Will also print enums and vectors.
 
-### usz! VarString.printf(VarString* str, String format, args...) @maydiscard
-Same as printf but on varstrings.
+### usz! DString.printf(DString* str, String format, args...) @maydiscard
+Same as printf but on dynamic strings.
 
 ### usz! File.printf(File file, String format, args...) @maydiscard
 Same as printf but on files.

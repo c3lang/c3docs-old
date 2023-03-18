@@ -173,7 +173,7 @@ by implementing "len" and "[]" methods and annotating them using the `@operator`
     // Will print 3 and 7
     foreach (int i : v)
     {
-        printf("%d\n");
+        io::printfn("%d", i);
     }
 
 For more information, see [operator overloading](../operators)

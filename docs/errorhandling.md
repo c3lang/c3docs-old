@@ -21,28 +21,28 @@ OptEnum getValue(int *value);
 
 The `int!` here is the optional result type, which either contains an optional result value or an int.
 
-*Note: reflection methods on optionals are not complete yet.*
+
 ```
 // Open a file, we will get an optional result:
 // Either a File* or an error.
-File*! file = openFile("foo.txt");
+File*! file = open_file("foo.txt");
 
 // We can extract the optional result value using "catch"
 if (catch err = file)
 {
     // Might print "Error was FILE_NOT_FOUND"
-    printf("Error was %s\n", err.name()); 
+    io::printfn("Error was %s", err.name()); 
     
     // Might print "Error was FileError.FILE_NOT_FOUND"
-    printf("Error was %s\n", err.fullName()); 
+    io::printfn("Error was %s", err.fullName()); 
     
     // Might print "Error code: 931938210"
-    printf("Error code: %ull\n", (ulong)err); 
+    io::printfn("Error code: %d", (uptr)err); 
     return;
 }
 
 // We can also just execute of success:
-File*! file2 = openFile("bar.txt");
+File*! file2 = open_file("bar.txt");
 
 // Only true if there is an expected result.
 if (try file2)
@@ -157,7 +157,7 @@ fn void findFileAndNoErr()
     File*! res = findFile();    
     if (catch res)
     {
-        printf("An error occurred!\n");
+        io::printn("An error occurred!");
         return;
     }
     // res is implicitly unwrapped here.
@@ -173,7 +173,7 @@ fn void doSomethingToFile()
     void! res = findFile();    
     if (try res)
     {
-        printf("I found the file\n");
+        io::printn("I found the file");
     }
 }
 ```
@@ -186,7 +186,7 @@ fn void! findFileAndParse2()
     if (catch err = findFileAndParse())
     {
         case IOError.FILE_NOT_FOUND:
-            printf("Error loading the file!\n");
+            io::printn("Error loading the file!");
         default:
             return err;
     }
@@ -196,8 +196,8 @@ fn void! findFileAndParse2()
 
 ##### Default values
 
-A function returning an optional type may be followed by an `??` and an expression. The expression on the right hand
-side will be returned if the left hand side returns an optional result value.
+It is possible to replace an optional value with using the binary `??` operator. The expression on the right-hand
+side will be returned if the left-hand side returns an optional result value:
 
 ```
 fn int testDefault()
@@ -210,8 +210,59 @@ fn int testDefault()
 fn int testDefault()
 {
     int! i = getIntNumberOrFail();    
-    catch (i) return -1;
+    if (catch i) return -1;
     return i;
 }
 
 ```
+
+##### Get the fault from an optional without `if`
+
+It is possible to just get the fault of an optional value without using `if-catch` using the `catch?` expression:
+
+
+    fn void test_catch()
+    {
+        int! i = get_something();
+        anyerr maybe_err = catch? i;
+        if (maybe_err)
+        {
+            // Do something with the fault
+        }
+    }
+
+##### Test if something has a value without `if`
+
+Similar to `catch?`, the `try?` operator returns `true` if a value it is a real value, `false` otherwise:
+
+
+    fn void test_something()
+    {
+        int! i = try_it();
+        bool worked = try? i;
+        if (worked)
+        {
+            io::printn("Horray! It worked.");
+        }
+    }
+
+
+## Some common techniques
+
+Here follows some common techniques using optional values.
+
+##### Catch and return another error
+
+In this case we don't want to return the underlying fault, but instead return out own replacement error.
+
+    fn void! return_own()
+    {
+        int! i = try_something() ?? OurError.SOMETHING_FAILED!;
+        .. do things ..
+    }
+
+    fn void! return_own_rethrow()
+    {
+        int i = try_something() ?? OurError.SOMETHING_FAILED!?; // Cause immediate rethrow
+        .. do things ..
+    }

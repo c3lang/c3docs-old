@@ -239,7 +239,7 @@ Another example, showing the difference between `#var` and ``` `#var` ```:
 ```
 macro void @foo2(#f)
 {
-    printf("%s was %d\n", #f, `#f`);
+    io::printf("%s was %d\n", #f, `#f`);
 }
 
 funct void test2()
@@ -247,7 +247,7 @@ funct void test2()
     int x = 1;
     @foo2(x);
     // Expands to ->
-    // printf("%s was %d\n", "x", x);
+    // io::printf("%s was %d\n", "x", x);
 }
 ```
 
@@ -312,8 +312,8 @@ enum State [char* name, byte bit] int
 
 funct void test()
 {
-    printf("%s\n", State.START.name); // Prints "begin!"
-    printf("%d\n", State.END.bit); // Prints "16"
+    io::printf("%s\n", State.START.name); // Prints "begin!"
+    io::printf("%d\n", State.END.bit); // Prints "16"
 }
 ```
 
@@ -336,9 +336,9 @@ foo.c = "hello";
 switch(@tag(foo)) 
 {
     case Foo.i: 
-        printf("Was %d\n", foo.i);
+        io::printf("Was %d\n", foo.i);
     case Foo.c: 
-        printf("Was %s\n", foo.c);
+        io::printf("Was %s\n", foo.c);
 }
 ```  
 
