@@ -280,7 +280,7 @@ fn void test()
 {
     int a = 1;
     lyingFunc(&amp;a);
-    printf(&quot;%d&quot;, a); // Might print 1!
+    io::printf(&quot;%d&quot;, a); // Might print 1!
 }
 </code></pre>
 <p>However, compilers will usually detect this:</p>
@@ -320,7 +320,7 @@ fn void test()
     foo = &amp;badFunc;
     i = 1;
     lyingFunc();
-    printf(&quot;%d&quot;, a); // Might print 1!
+    io::printf(&quot;%d&quot;, a); // Might print 1!
 }
 </code></pre>
 <p>However, compilers will usually detect this:</p>

@@ -112,6 +112,10 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#default-values">Default values</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-the-fault-from-an-optional-without-if">Get the fault from an optional without if</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#test-if-something-has-a-value-without-if">Test if something has a value without if</a>
+    </li>
         </ul>
     </li>
     </ul>
@@ -224,27 +228,26 @@ is instead returned as an out parameter.</p>
 <pre><code class="language-c">OptEnum getValue(int *value);
 </code></pre>
 <p>The <code>int!</code> here is the optional result type, which either contains an optional result value or an int.</p>
-<p><em>Note: reflection methods on optionals are not complete yet.</em></p>
 <pre><code>// Open a file, we will get an optional result:
 // Either a File* or an error.
-File*! file = openFile(&quot;foo.txt&quot;);
+File*! file = open_file(&quot;foo.txt&quot;);
 
 // We can extract the optional result value using &quot;catch&quot;
 if (catch err = file)
 {
     // Might print &quot;Error was FILE_NOT_FOUND&quot;
-    printf(&quot;Error was %s\n&quot;, err.name()); 
+    io::printfn(&quot;Error was %s&quot;, err.name()); 
 
     // Might print &quot;Error was FileError.FILE_NOT_FOUND&quot;
-    printf(&quot;Error was %s\n&quot;, err.fullName()); 
+    io::printfn(&quot;Error was %s&quot;, err.fullName()); 
 
     // Might print &quot;Error code: 931938210&quot;
-    printf(&quot;Error code: %ull\n&quot;, (ulong)err); 
+    io::printfn(&quot;Error code: %d&quot;, (uptr)err); 
     return;
 }
 
 // We can also just execute of success:
-File*! file2 = openFile(&quot;bar.txt&quot;);
+File*! file2 = open_file(&quot;bar.txt&quot;);
 
 // Only true if there is an expected result.
 if (try file2)
@@ -330,7 +333,7 @@ if (i &gt; 10) doSomething();
     File*! res = findFile();    
     if (catch res)
     {
-        printf(&quot;An error occurred!\n&quot;);
+        io::printn(&quot;An error occurred!&quot;);
         return;
     }
     // res is implicitly unwrapped here.
@@ -343,7 +346,7 @@ if (i &gt; 10) doSomething();
     void! res = findFile();    
     if (try res)
     {
-        printf(&quot;I found the file\n&quot;);
+        io::printn(&quot;I found the file&quot;);
     }
 }
 </code></pre>
@@ -353,15 +356,15 @@ if (i &gt; 10) doSomething();
     if (catch err = findFileAndParse())
     {
         case IOError.FILE_NOT_FOUND:
-            printf(&quot;Error loading the file!\n&quot;);
+            io::printn(&quot;Error loading the file!&quot;);
         default:
             return err;
     }
 }
 </code></pre>
 <h5 id="default-values">Default values</h5>
-<p>A function returning an optional type may be followed by an <code>??</code> and an expression. The expression on the right hand
-side will be returned if the left hand side returns an optional result value.</p>
+<p>It is possible to replace an optional value with using the binary <code>??</code> operator. The expression on the right-hand
+side will be returned if the left-hand side returns an optional result value:</p>
 <pre><code>fn int testDefault()
 {
     return getIntNumberOrFail() ?? -1;
@@ -372,10 +375,50 @@ side will be returned if the left hand side returns an optional result value.</p
 fn int testDefault()
 {
     int! i = getIntNumberOrFail();    
-    catch (i) return -1;
+    if (catch i) return -1;
     return i;
 }
 
+</code></pre>
+<h5 id="get-the-fault-from-an-optional-without-if">Get the fault from an optional without <code>if</code></h5>
+<p>It is possible to just get the fault of an optional value without using <code>if-catch</code> using the <code>catch?</code> expression:</p>
+<pre><code>fn void test_catch()
+{
+    int! i = get_something();
+    anyerr maybe_err = catch? i;
+    if (maybe_err)
+    {
+        // Do something with the fault
+    }
+}
+</code></pre>
+<h5 id="test-if-something-has-a-value-without-if">Test if something has a value without <code>if</code></h5>
+<p>Similar to <code>catch?</code>, the <code>try?</code> operator returns <code>true</code> if a value it is a real value, <code>false</code> otherwise:</p>
+<pre><code>fn void test_something()
+{
+    int! i = try_it();
+    bool worked = try? i;
+    if (worked)
+    {
+        io::printn("Horray! It worked.");
+    }
+}
+</code></pre>
+<h2 id="some-common-techniques">Some common techniques</h2>
+<p>Here follows some common techniques using optional values.</p>
+<h5 id="catch-and-return-another-error">Catch and return another error</h5>
+<p>In this case we don't want to return the underlying fault, but instead return out own replacement error.</p>
+<pre><code>fn void! return_own()
+{
+    int! i = try_something() ?? OurError.SOMETHING_FAILED!;
+    .. do things ..
+}
+
+fn void! return_own_rethrow()
+{
+    int i = try_something() ?? OurError.SOMETHING_FAILED!?; // Cause immediate rethrow
+    .. do things ..
+}
 </code></pre>
               
             </div>

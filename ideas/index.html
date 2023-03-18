@@ -396,7 +396,7 @@ fn void test()
 <p>Another example, showing the difference between <code>#var</code> and <code>`#var`</code>:</p>
 <pre><code>macro void @foo2(#f)
 {
-    printf(&quot;%s was %d\n&quot;, #f, `#f`);
+    io::printf(&quot;%s was %d\n&quot;, #f, `#f`);
 }
 
 funct void test2()
@@ -404,7 +404,7 @@ funct void test2()
     int x = 1;
     @foo2(x);
     // Expands to -&gt;
-    // printf(&quot;%s was %d\n&quot;, &quot;x&quot;, x);
+    // io::printf(&quot;%s was %d\n&quot;, &quot;x&quot;, x);
 }
 </code></pre>
 <h3 id="compile-time-string-functions">Compile time string functions</h3>
@@ -452,8 +452,8 @@ fn Foo.next(Foo*)
 
 funct void test()
 {
-    printf(&quot;%s\n&quot;, State.START.name); // Prints &quot;begin!&quot;
-    printf(&quot;%d\n&quot;, State.END.bit); // Prints &quot;16&quot;
+    io::printf(&quot;%s\n&quot;, State.START.name); // Prints &quot;begin!&quot;
+    io::printf(&quot;%d\n&quot;, State.END.bit); // Prints &quot;16&quot;
 }
 </code></pre>
 <h5 id="tagged-unions">Tagged unions</h5>
@@ -473,9 +473,9 @@ foo.c = &quot;hello&quot;;
 switch(@tag(foo)) 
 {
     case Foo.i: 
-        printf(&quot;Was %d\n&quot;, foo.i);
+        io::printf(&quot;Was %d\n&quot;, foo.i);
     case Foo.c: 
-        printf(&quot;Was %s\n&quot;, foo.c);
+        io::printf(&quot;Was %s\n&quot;, foo.c);
 }
 </code></pre>
 <p>Alternative syntax etc:</p>

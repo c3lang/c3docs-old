@@ -483,7 +483,7 @@ $include(&quot;Foo.x&quot;);
 
 fn void test() 
 {
-    printf(&quot;%d&quot;, testX(2));
+    io::printf(&quot;%d&quot;, testX(2));
 }    
 </code></pre>
 <p>File <code>Foo.x</code></p>
@@ -502,7 +502,7 @@ fn testX(int i)
 
 fn void test() 
 {
-    printf(&quot;%d&quot;, testX(2));
+    io::printf(&quot;%d&quot;, testX(2));
 }    
 </code></pre>
 <p>The include may use an absolute or relative path, the relative path is always relative to the source file in which the include appears.</p>

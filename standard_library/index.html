@@ -198,7 +198,7 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#stdcorestringconv">std::core::string::conv</a>
+    <li class="toctree-l2"><a class="reference internal" href="#stdcorestrconv">std::core::str::conv</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#usz-char32_to_utf8char32-c-char-output-usz-available">usz! char32_to_utf8(Char32 c, char* output, usz available)</a>
     </li>
@@ -559,7 +559,7 @@ may be converted into the given type. Returns a <code>ConversionResult</code> ot
 short y = variant_to_int(v, short)!!; // Works 
 ichar z = variant_to_int(v, ichar)!!; // Panics VALUE_OUT_OF_RANGE
 </code></pre>
-<h2 id="stdcorestringconv">std::core::string::conv</h2>
+<h2 id="stdcorestrconv">std::core::str::conv</h2>
 <h3 id="usz-char32_to_utf8char32-c-char-output-usz-available">usz! char32_to_utf8(Char32 c, char* output, usz available)</h3>
 <p>Convert a UTF32 codepoint to an UTF8 buffer. <code>size</code> has the number of
 writable bytes left. It returns the number of bytes used, or 

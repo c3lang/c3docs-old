@@ -243,13 +243,13 @@ Jumps cannot be done into or out of a function block, and <code>return</code> ex
 <p>Do-while statements can skip the ending <code>while</code>. In that case it acts as if the <code>while</code> was <code>while(0)</code>:</p>
 <pre><code>do 
 {
-    io::println("FOO");
+    io::printn("FOO");
 } while (0);
 
 // Equivalent to the above.
 do 
 {
-    io::println("FOO");
+    io::printn("FOO");
 };
 </code></pre>
 <h2 id="nextcase-and-labelled-nextcase">Nextcase and labelled nextcase</h2>
@@ -274,7 +274,7 @@ do
     case 3:
         nextcase rand(); // Jump to random case
     default:
-        io::println("Ended");
+        io::printn("Ended");
 }
 </code></pre>
 <p>Which can be used as structured <code>goto</code> when creating state machines.</p>

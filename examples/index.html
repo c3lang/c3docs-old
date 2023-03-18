@@ -255,10 +255,10 @@ fn void demo_enum(Height h)
     {
         case LOW:
         case MEDIUM:
-            io::println(&quot;Not high&quot;);
+            io::printn(&quot;Not high&quot;);
             // Implicit break.
         case HIGH:
-            io::println(&quot;High&quot;);
+            io::printn(&quot;High&quot;);
     }
 
     // This also works
@@ -266,10 +266,10 @@ fn void demo_enum(Height h)
     {
         case LOW:
         case MEDIUM:
-            io::println(&quot;Not high&quot;);
+            io::printn(&quot;Not high&quot;);
             // Implicit break.
         case Height.HIGH:
-            io::println(&quot;High&quot;);
+            io::printn(&quot;High&quot;);
     }
 
     // Completely empty cases are not allowed.
@@ -278,7 +278,7 @@ fn void demo_enum(Height h)
         case LOW:
             break; // Explicit break required, since switches can't be empty.
         case MEDIUM:
-            io::println(&quot;Medium&quot;);
+            io::printn(&quot;Medium&quot;);
         case HIGH:
             break;
     }
@@ -300,15 +300,15 @@ fn void demo_enum(Height h)
     {
         case LOW:
             int a = 1;
-            io::println(&quot;A&quot;);
+            io::printn(&quot;A&quot;);
             nextcase;
         case MEDIUM:
             int a = 2;
-            io::println(&quot;B&quot;);
+            io::printn(&quot;B&quot;);
             nextcase;
         case HIGH:
             // a is not defined here
-            io::println(&quot;C&quot;);
+            io::printn(&quot;C&quot;);
     }
 }
 </code></pre>
@@ -329,7 +329,7 @@ State start = State.values[0];
 <p>Defer will be invoked on scope exit.</p>
 <pre><code>fn void test(int x)
 {
-    defer io::println();
+    defer io::printn();
     defer io::print(&quot;A&quot;);
     if (x == 1) return;
     {
@@ -346,19 +346,20 @@ fn void main()
     test(10); // Prints &quot;B!A&quot;
 }
 </code></pre>
-<p>Because it's often relevant to run different defers when having an error return there is also a way to create an error defer, by using the <code>catch</code> keyword directly after the defer.</p>
-<p><em>Note that this is currently not implemented.</em></p>
+<p>Because it's often relevant to run different defers when having an error return there is also a way to create an error defer, by using the <code>catch</code> keyword directly after the defer.
+Similarly using <code>defer try</code> to execute of success.</p>
 <pre><code>fn void! test(int x)
 {
-    defer io::println(&quot;&quot;);
-    defer io::println(&quot;A&quot;);
-    defer catch io::println(&quot;B&quot;)
+    defer io::printn(&quot;&quot;);
+    defer io::printn(&quot;A&quot;);
+    defer try io::printn(&quot;X&quot;);
+    defer catch io::printn(&quot;B&quot;)
     defer catch (err) io::printfn(&quot;%s&quot;, err.message);
     if (x == 1) return FooError!;
     print(&quot;!&quot;)
 }
 
-test(0); // Prints &quot;!A&quot;
+test(0); // Prints &quot;!XA&quot;
 test(1); // Prints &quot;FOOBA&quot; and returns a FooError
 </code></pre>
 <h5 id="struct-types">struct types</h5>
@@ -457,10 +458,10 @@ fn void main()
     if (catch err = ratio)
     {
         case MathError.DIVISION_BY_ZERO:
-            io::println(&quot;Division by zero\n&quot;);
+            io::printn(&quot;Division by zero\n&quot;);
             return;
         default:
-            io::println(&quot;Unexpected error!&quot;);
+            io::printn(&quot;Unexpected error!&quot;);
             return;
     }
     // Flow typing makes &quot;ratio&quot;
@@ -592,7 +593,7 @@ fn void test()
     foo.next();
     foo.next();
     // Prints 4
-    printf(&quot;%d&quot;, foo.i); 
+    io::printfn(&quot;%d&quot;, foo.i); 
 }
 </code></pre>
 <h5 id="generic-modules">Generic modules</h5>
@@ -637,16 +638,16 @@ fn void test()
     stack.push(1);
     stack.push(2);
     // Prints pop: 2
-    printf(&quot;pop: %d\n&quot;, stack.pop());
+    io::printfn(&quot;pop: %d&quot;, stack.pop());
     // Prints pop: 1
-    printf(&quot;pop: %d\n&quot;, stack.pop());
+    io::printfn(&quot;pop: %d&quot;, stack.pop());
 
     DoubleStack dstack;
     dstack.push(2.3);
     dstack.push(3.141);
     dstack.push(1.1235);
     // Prints pop: 1.1235
-    printf(&quot;pop: %f\n&quot;, dstack.pop());
+    io::printfn(&quot;pop: %f&quot;, dstack.pop());
 }
 </code></pre>
               
