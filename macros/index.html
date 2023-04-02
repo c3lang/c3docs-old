@@ -154,7 +154,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#macro-directives">Macro directives</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#if-else-and-elif">$if, $else and $elif</a>
+    <li class="toctree-l3"><a class="reference internal" href="#if-and-switch">$if and $switch</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#loops-using-foreach-and-for">Loops using $foreach and $for</a>
     </li>
@@ -267,9 +267,9 @@ int z;
 #endif
 
 // C3
-$if ($defined(x) &amp;&amp; $y &gt; 3):
+$if ($defined(x) &amp;&amp; $y &gt; 3)
     int z;
-$endif;
+$endif
 </code></pre>
 <h3 id="macros_1">Macros</h3>
 <pre><code>// C
@@ -535,14 +535,14 @@ the arguments:</p>
 <pre><code>macro compile_time_sum(...)
 {
    var $x = 0;
-   $for (var $i = 0; $i &lt; $vacount(); $i++):
+   $for (var $i = 0; $i &lt; $vacount(); $i++)
        $x += $vaconst($i);
-   $endfor;
+   $endfor
    return $x;
 }
-$if (compile_time_sum(1, 3) &gt; 2): // Will compile to $if (4 &gt; 2)
+$if (compile_time_sum(1, 3) &gt; 2) // Will compile to $if (4 &gt; 2)
   ...
-$endif;
+$endif
 </code></pre>
 <h3 id="vacount">$vacount</h3>
 <p>Returns the number of arguments.</p>
@@ -566,9 +566,9 @@ e.g. <code>$varef(1) = 123</code>.</p>
 <p>Compile time variables may hold untyped lists. Such lists may be iterated over or 
 implicitly converted to initializer lists:</p>
 <pre><code>var $a = { 1, 2 };
-$foreach ($x : $a):
+$foreach ($x : $a)
     io::printfn("%d", $x);
-$endforeach;
+$endforeach
 int[2] x = $a;
 io::printfn("%s", x);
 io::printfn("%s", $a[1]);
@@ -580,15 +580,15 @@ io::printfn("%s", $a[1]);
 </code></pre>
 <h2 id="macro-directives">Macro directives</h2>
 <p>Inside of a macro, we can use the compile time statements <code>$if</code>, <code>$for</code> and <code>$switch</code>. Macros may also be recursively invoked. As previously mentioned, <code>$if</code> and <code>$switch</code> may also be invoked on the top level.</p>
-<h3 id="if-else-and-elif">$if, $else and $elif</h3>
-<p><code>$if (&lt;const expr&gt;):</code> takes a compile time constant value and evaluates it to true or false.</p>
+<h3 id="if-and-switch">$if and $switch</h3>
+<p><code>$if (&lt;const expr&gt;)</code> takes a compile time constant value and evaluates it to true or false.</p>
 <pre><code>macro foo($x, $y)
 {
-    $if ($x &gt; 3):
+    $if ($x &gt; 3)
         $y += $x * $x;
-    $else:
+    $else
         $y += $x;
-    $endif;    
+    $endif
 }
 
 const int FOO = 10;
@@ -602,14 +602,42 @@ fn void test()
     foo(FOO, a); // Allowed, expands to a += FOO * FOO;
 }
 </code></pre>
+<p>For switching between multiple possibilities, use <code>$switch</code>.</p>
+<pre><code>macro foo($x, $y)
+{
+    $switch ($x)
+        $case 1: 
+            $y += $x * $x;
+        $case 2:
+            $y += $x;
+        $case 3:
+            $y *= $x;
+        $default:
+            $y -= $x;
+    $endif
+}
+</code></pre>
+<p>Switching without argument is also allowed, which works like an if-else chain:</p>
+<pre><code>macro foo($x, $y)
+{
+    $switch 
+        $case $x &gt; 10: 
+            $y += $x * $x;
+        $case $x &lt; 0:
+            $y += $x;
+        $default:
+            $y -= $x;
+    $endif
+}
+</code></pre>
 <h3 id="loops-using-foreach-and-for">Loops using $foreach and $for</h3>
-<p><code>$foreach (&lt;range&gt; : &lt;variable&gt;): ... $endforeach;</code> allows compile time recursion. <code>$foreach</code> may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.</p>
+<p><code>$foreach (&lt;range&gt; : &lt;variable&gt;) ... $endforeach</code> allows compile time recursion. <code>$foreach</code> may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.</p>
 <p>Compile time looping:</p>
 <pre><code>macro foo($a)
 {
-    $for (var $x = 0; $x &lt; $a; $x++):
+    $for (var $x = 0; $x &lt; $a; $x++)
         io::printfn("%d", $x);     
-    $endfor;
+    $endfor
 }
 
 fn void test()
@@ -623,9 +651,9 @@ fn void test()
 <p>Looping over enums:</p>
 <pre><code>macro foo_enum($SomeEnum)
 {
-    $foreach ($x : $SomeEnum.values):
+    $foreach ($x : $SomeEnum.values)
         io::printfn("%d", (int)$x);     
-    $endforeach;
+    $endforeach
 }
 
 enum MyEnum
@@ -648,10 +676,10 @@ It's not possible to compile partial statements.</p>
 <p>It's possible to switch on type:</p>
 <pre><code>macro void foo(a, b)
 {
-    $switch(a, b):
+    $switch(a, b)
         $case int, int: 
             return a * b;
-    $endswitch;
+    $endswitch
     return a + b;
 }
 </code></pre>
@@ -664,16 +692,16 @@ meaning of the code that follows.</p>
 three pieces of functionality for the top level: conditional compilation,
 global constants and attributes</p>
 <h3 id="conditional-compilation_1">Conditional compilation</h3>
-<p>Conditional compilation is done with <code>$if</code> and <code>$else</code>, which works just like
+<p>Conditional compilation is done with <code>$if</code> and <code>$switch</code>, which works just like
 inside of functions.</p>
-<pre><code>$if ($defined(platform::OS) &amp;&amp; platform::OS == WIN32):
+<pre><code>$if ($defined(platform::OS) &amp;&amp; platform::OS == WIN32)
 
 fn void doSomethingWin32Specific()
 {
     /* .... */
 }
 
-$endif;
+$endif
 </code></pre>
 <h3 id="global-constants">Global constants</h3>
 <p>Global constant on the top level work like compile time variables in macros – with the exception

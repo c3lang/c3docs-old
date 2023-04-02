@@ -112,8 +112,6 @@
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Crazy ideas</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#static-initializers">Static initializers</a>
-    </li>
     <li class="toctree-l2"><a class="reference internal" href="#module-versioning">Module versioning</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#generic-as-keyword-for-polymorphic-functions">Generic as keyword for polymorphic functions</a>
@@ -125,8 +123,6 @@
     <li class="toctree-l2"><a class="reference internal" href="#allow-slicing-of-user-defined-containers">Allow slicing of user defined containers</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#allow-narrowing-conversions-for-floats">Allow narrowing conversions for floats</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#tests-built-in">Tests built in</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#attribute-to-ensure-alignment">Attribute to ensure alignment</a>
     </li>
@@ -147,8 +143,6 @@
     <li class="toctree-l3"><a class="reference internal" href="#tagged-any">Tagged any</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#easy-to-get-properties">Easy to get properties</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#associate-properties-to-an-enum">Associate properties to an enum</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#tagged-unions">Tagged unions</a>
     </li>
@@ -233,25 +227,6 @@
               
                 <h1 id="ideas">Ideas</h1>
 <p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
-<h2 id="static-initializers">Static initializers</h2>
-<p>Allow initialization of globals before main is invoked. Introduce a general <code>static</code> block.</p>
-<pre><code>module foo;
-
-int x;
-
-static
-{
-    x = rand();
-}
-
-int y = rand();
-
-fn int randomCalculation()
-{
-    return rand();
-}
-</code></pre>
-<p>Sematic roughly work like in Java, except that all know globals are initialized before main, as opposed to when the class is invoked. The order of initialization is unspecified.</p>
 <h2 id="module-versioning">Module versioning</h2>
 <p>Go Modules: </p>
 <ol>
@@ -341,15 +316,15 @@ test3([ 1, 2, 3 ]);
 <pre><code class="language-c">// Supporting the full set.
 macro Foo._slice(Foo* foo, a, b, $a_from_end, $b_from_end)
 {
-    $if ($a_from_end):
-        $if ($b_from_end):
+    $if ($a_from_end)
+        $if ($b_from_end)
             return foo.values[^a..^b];
-        $endif:
+        $endif
         return foo.values[^a..b];
-    $endif;    
-    $if ($b_from_end):
+    $endif    
+    $if ($b_from_end)
         return foo.values[a..^b];
-    $endif;
+    $endif
     return foo.values[a..b];    
 }
 
@@ -362,8 +337,6 @@ macro Bar._slice(Bar *bar, a, b, $a_from_end, $b_from_end)
 </code></pre>
 <h2 id="allow-narrowing-conversions-for-floats">Allow narrowing conversions for floats</h2>
 <p>Narrowing conversions for double -&gt; float are common and might not be sufficiently important to do explicitly.</p>
-<h2 id="tests-built-in">Tests built in</h2>
-<p>Unit tests built in as an integral part of the language like D.</p>
 <h2 id="attribute-to-ensure-alignment">Attribute to ensure alignment</h2>
 <p><code>@assertalign</code> works as GCCs warn_if_not_aligned. On non packed structs, this will prevent compilation if padding is inserted in front of the member. On a packed struct, it will prevent compilation if it is not aligned.</p>
 <h2 id="binary-include">Binary include</h2>
@@ -443,19 +416,6 @@ fn Foo.next(Foo*)
 <li>Query what type of add is the fastest (wrapping, trapped) for the processor (with macros to select type)</li>
 <li>Query what type of overflow the processor supports</li>
 </ul>
-<h5 id="associate-properties-to-an-enum">Associate properties to an enum</h5>
-<pre><code>enum State [char* name, byte bit] int
-{
-    START(&quot;begin!&quot;, 0x01) = 0,
-    END(&quot;end it!&quot;, 0x10)
-}
-
-funct void test()
-{
-    io::printf(&quot;%s\n&quot;, State.START.name); // Prints &quot;begin!&quot;
-    io::printf(&quot;%d\n&quot;, State.END.bit); // Prints &quot;16&quot;
-}
-</code></pre>
 <h5 id="tagged-unions">Tagged unions</h5>
 <pre><code>tagged union Foo {
     int i;

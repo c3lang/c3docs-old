@@ -452,9 +452,9 @@ not considered a regular comment. See <a href="../contracts">contracts</a> for m
 will make it treated as a compile time constant. The constant does not need to be typed.</p>
 <pre><code>const A = false;
 // Compile time 
-$if (A):
+$if (A)
   // This will not be compiled
-$else:
+$else
   // This will be compiled
 $endif
 </code></pre>
