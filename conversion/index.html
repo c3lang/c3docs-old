@@ -88,7 +88,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../variables/">Variables</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../errorhandling/">Errors</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
@@ -277,7 +277,7 @@
 <p>An expression with an integer type, may implicitly narrow to smaller integer type, and similarly a float type may implicitly narrow to less wide floating point type is determined from the following algorithm.</p>
 <ol>
 <li>Shifts and assign look at the lhs expression.</li>
-<li><code>++</code>, <code>--</code>, <code>~</code>, <code>-</code>, <code>!!</code>, <code>?</code> - check the inner type.</li>
+<li><code>++</code>, <code>--</code>, <code>~</code>, <code>-</code>, <code>!!</code>, <code>!</code> - check the inner type.</li>
 <li><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>^</code>, <code>|</code>, <code>&amp;</code>, <code>??</code>, <code>?:</code> - check both lhs and rhs.</li>
 <li>Narrowing int/float cast, assume the type is the narrowed type.</li>
 <li>Widening int/float cast, look at the inner expression, ignoring the cast.</li>

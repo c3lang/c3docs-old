@@ -90,7 +90,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../variables/">Variables</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../errorhandling/">Errors</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
@@ -441,14 +441,14 @@ fn double! divide(int a, int b)
 {
     // We return an optional result of type DIVISION_BY_ZERO
     // when b is zero.
-    if (b == 0) return MathError.DIVISION_BY_ZERO!;
+    if (b == 0) return MathError.DIVISION_BY_ZERO?;
     return (double)a / (double)b;
 }
 
-// Re-returning an optional result uses &quot;?&quot; suffix
+// Re-returning an optional result uses &quot;!&quot; suffix
 fn void! testMayError()
 {
-    divide(foo(), bar())?;
+    divide(foo(), bar())!;
 }
 
 fn void main()

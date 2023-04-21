@@ -120,7 +120,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../variables/">Variables</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../errorhandling/">Errors</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
@@ -335,8 +335,8 @@ the <code>OtherResult</code> type.</p>
 <pre><code>fn double! testError()
 {
     double val = random_value();
-    if (val &gt;= 0.2) return SomeError.BAD_JOSS_ERROR!;
-    if (val &gt; 0.5) return OtherError.BAD_LUCK_ERROR!;
+    if (val &gt;= 0.2) return SomeError.BAD_JOSS_ERROR?;
+    if (val &gt; 0.5) return OtherError.BAD_LUCK_ERROR?;
     return val;
 }
 </code></pre>

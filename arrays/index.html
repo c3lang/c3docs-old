@@ -106,7 +106,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../variables/">Variables</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../errorhandling/">Errors</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
@@ -230,7 +230,7 @@ int[*] b = { 4, 5, 6 }; // Type inferred to be int[3]
 int[] b = &amp;a; // Implicit conversion is always ok.
 int[4] c = (int[4])b; // Will copy the value of b into c.
 int[4]* d = (int[4])a; // Equivalent to d = &amp;a
-b.size; // Returns 4
+b.len; // Returns 4
 e += 1;
 int* f = b; // Equivalent to e = &amp;a
 f = d; // implicit conversion ok.
@@ -329,8 +329,8 @@ int[4]* g = (int[4]*)f;
 int[] h = f[0..2];
 </code></pre>
 <h4 id="internals">Internals</h4>
-<p>Internally the layout of a slice is guaranteed to be <code>struct { &lt;type&gt;* ptrToArray; usz arraySize; }</code>.</p>
-<p>There is a built in struct <code>std::runtime::SubArrayContainer</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
+<p>Internally the layout of a slice is guaranteed to be <code>struct { &lt;type&gt;* ptr; usz len; }</code>.</p>
+<p>There is a built in struct <code>std::core::runtime::SubArrayContainer</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
 <pre><code>struct SubArrayContainer
 {
     void* ptr;
