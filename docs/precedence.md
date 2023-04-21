@@ -2,7 +2,7 @@
 
 Precedence rules in C3 differs from C/C++. Here are all precedence levels in C3, listed from highest (1) to lowest (11):
 
-1. `()`, `[]`, `.`, postfix `++` and `--`
+1. `()`, `[]`, `.`, `!!` postfix `!`, `++` and `--` 
 2. `@`, prefix `-`, `~`, prefix `*`, `&`, prefix `++` and `--`
 3. infix `*`, `/`, `%`, `*%`
 4. `<<`, `>>`
@@ -11,7 +11,7 @@ Precedence rules in C3 differs from C/C++. Here are all precedence levels in C3,
 7. `==`, `!=`, `>=`, `<=`, `>`, `<`
 8. `&&`
 8. `||`
-9. ternary `?:`
+9. ternary `?:` `??`
 10. `=`, `*=`, `/=`, `%=`, `+=`, `-=`, `<<=`, `>>=`, `&=`, `^=`, `|=`
 
 

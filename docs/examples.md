@@ -288,14 +288,14 @@ fn double! divide(int a, int b)
 {
     // We return an optional result of type DIVISION_BY_ZERO
     // when b is zero.
-    if (b == 0) return MathError.DIVISION_BY_ZERO!;
+    if (b == 0) return MathError.DIVISION_BY_ZERO?;
     return (double)a / (double)b;
 }
 
-// Re-returning an optional result uses "?" suffix
+// Re-returning an optional result uses "!" suffix
 fn void! testMayError()
 {
-    divide(foo(), bar())?;
+    divide(foo(), bar())!;
 }
 
 fn void main()

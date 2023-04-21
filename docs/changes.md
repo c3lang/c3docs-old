@@ -1,5 +1,11 @@
 # Change log
 
+##### Revision 2023-??
+- Suffix '?' replaced by '!' and vice versa.
+- Updates to ct statements.
+- Fixes to array descriptions
+- Replace try? / catch? with macros
+
 ##### Revision 2023-03-18
 - try? / catch?
 - println -> printn
@@ -151,14 +157,14 @@
 - Changed cast syntax to `cast(<expr> as <type>)`.
     
 ##### Revision 2020-07-08
-- Additions to [error handling](../errorhandling).
+- Additions to [error handling](../optionals).
 - Introduction of labelled `nextcase`, `break` and `continue`.
 - Removal of `goto`.
 
 ##### Revision 2020-06-17
 - Alternate casts in [idea](../ideas).
 - Method functions simply renamed to "method".
-- Completely revised [error handling](../errorhandling).
+- Completely revised [error handling](../optionals).
 
 ##### Revision 2020-04-23
 - Updated error handling, adding try-else-jump and changed how errors are passed.

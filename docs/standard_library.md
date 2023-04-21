@@ -66,7 +66,7 @@ enum Foo { ABC, CDE, EFG }
 
 fn void! test()
 {
-  Foo f = enum_by_name(Foo, "CDE")?; 
+  Foo f = enum_by_name(Foo, "CDE")!; 
   // same as Foo f = Foo.CDE;
 }
 ```

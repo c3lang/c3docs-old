@@ -130,8 +130,8 @@ the `OtherResult` type.
     fn double! testError()
     {
         double val = random_value();
-        if (val >= 0.2) return SomeError.BAD_JOSS_ERROR!;
-        if (val > 0.5) return OtherError.BAD_LUCK_ERROR!;
+        if (val >= 0.2) return SomeError.BAD_JOSS_ERROR?;
+        if (val > 0.5) return OtherError.BAD_LUCK_ERROR?;
         return val;
     }
 

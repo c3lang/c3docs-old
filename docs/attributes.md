@@ -1,6 +1,6 @@
 # Attributes
 
-Attributes are compile time annotations on functions, types, global constants and variables. Similar to Java annotations, a decoration may also take arguments. A attribute can also represent a bundle of attributes.
+Attributes are compile-time annotations on functions, types, global constants and variables. Similar to Java annotations, a decoration may also take arguments. A attribute can also represent a bundle of attributes.
 
 ## Built in attributes
 

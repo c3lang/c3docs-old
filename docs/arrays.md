@@ -37,7 +37,7 @@ The final type is the subarray `<type>[]`  e.g. `int[]`. A subarray is a view in
     int[] b = &a; // Implicit conversion is always ok.
     int[4] c = (int[4])b; // Will copy the value of b into c.
     int[4]* d = (int[4])a; // Equivalent to d = &a
-    b.size; // Returns 4
+    b.len; // Returns 4
     e += 1;
     int* f = b; // Equivalent to e = &a
     f = d; // implicit conversion ok.
@@ -117,9 +117,9 @@ For example:
 
 #### Internals
 
-Internally the layout of a slice is guaranteed to be `struct { <type>* ptrToArray; usz arraySize; }`.
+Internally the layout of a slice is guaranteed to be `struct { <type>* ptr; usz len; }`.
 
-There is a built in struct `std::runtime::SubArrayContainer` which has the exact data layout of the fat array pointers. It is defined to be
+There is a built in struct `std::core::runtime::SubArrayContainer` which has the exact data layout of the fat array pointers. It is defined to be
 
     struct SubArrayContainer
     {

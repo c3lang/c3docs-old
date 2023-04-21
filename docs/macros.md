@@ -12,9 +12,9 @@ The macro capabilities of C3 reaches across several constructs: macros (prefixed
     #endif
     
     // C3
-    $if ($defined(x) && $y > 3):
+    $if ($defined(x) && $y > 3)
         int z;
-    $endif;
+    $endif
 
 ### Macros
 
@@ -318,14 +318,14 @@ the arguments:
     macro compile_time_sum(...)
     {
        var $x = 0;
-       $for (var $i = 0; $i < $vacount(); $i++):
+       $for (var $i = 0; $i < $vacount(); $i++)
            $x += $vaconst($i);
-       $endfor;
+       $endfor
        return $x;
     }
-    $if (compile_time_sum(1, 3) > 2): // Will compile to $if (4 > 2)
+    $if (compile_time_sum(1, 3) > 2) // Will compile to $if (4 > 2)
       ...
-    $endif;
+    $endif
 
 ### $vacount
 
@@ -363,9 +363,9 @@ Compile time variables may hold untyped lists. Such lists may be iterated over o
 implicitly converted to initializer lists:
 
     var $a = { 1, 2 };
-    $foreach ($x : $a):
+    $foreach ($x : $a)
         io::printfn("%d", $x);
-    $endforeach;
+    $endforeach
     int[2] x = $a;
     io::printfn("%s", x);
     io::printfn("%s", $a[1]);
@@ -379,17 +379,17 @@ implicitly converted to initializer lists:
 
 Inside of a macro, we can use the compile time statements `$if`, `$for` and `$switch`. Macros may also be recursively invoked. As previously mentioned, `$if` and `$switch` may also be invoked on the top level.
 
-### $if, $else and $elif
+### $if and $switch
 
-`$if (<const expr>):` takes a compile time constant value and evaluates it to true or false.
+`$if (<const expr>)` takes a compile time constant value and evaluates it to true or false.
 
     macro foo($x, $y)
     {
-        $if ($x > 3):
+        $if ($x > 3)
             $y += $x * $x;
-        $else:
+        $else
             $y += $x;
-        $endif;    
+        $endif
     }
     
     const int FOO = 10;
@@ -403,18 +403,49 @@ Inside of a macro, we can use the compile time statements `$if`, `$for` and `$sw
         foo(FOO, a); // Allowed, expands to a += FOO * FOO;
     }
 
+For switching between multiple possibilities, use `$switch`.
+
+    macro foo($x, $y)
+    {
+        $switch ($x)
+            $case 1: 
+                $y += $x * $x;
+            $case 2:
+                $y += $x;
+            $case 3:
+                $y *= $x;
+            $default:
+                $y -= $x;
+        $endif
+    }
+
+Switching without argument is also allowed, which works like an if-else chain:
+
+    macro foo($x, $y)
+    {
+        $switch 
+            $case $x > 10: 
+                $y += $x * $x;
+            $case $x < 0:
+                $y += $x;
+            $default:
+                $y -= $x;
+        $endif
+    }
+
+
 ### Loops using $foreach and $for
 
-`$foreach (<range> : <variable>): ... $endforeach;` allows compile time recursion. `$foreach` may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.
+`$foreach (<range> : <variable>) ... $endforeach` allows compile time recursion. `$foreach` may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.
 
 
 Compile time looping:
 
     macro foo($a)
     {
-        $for (var $x = 0; $x < $a; $x++):
+        $for (var $x = 0; $x < $a; $x++)
             io::printfn("%d", $x);     
-        $endfor;
+        $endfor
     }
     
     fn void test()
@@ -429,9 +460,9 @@ Looping over enums:
 
     macro foo_enum($SomeEnum)
     {
-        $foreach ($x : $SomeEnum.values):
+        $foreach ($x : $SomeEnum.values)
             io::printfn("%d", (int)$x);     
-        $endforeach;
+        $endforeach
     }
     
     enum MyEnum
@@ -457,10 +488,10 @@ It's possible to switch on type:
 
     macro void foo(a, b)
     {
-        $switch(a, b):
+        $switch(a, b)
             $case int, int: 
                 return a * b;
-        $endswitch;
+        $endswitch
         return a + b;
     }
 
@@ -479,17 +510,17 @@ global constants and attributes
 
 ### Conditional compilation
 
-Conditional compilation is done with `$if` and `$else`, which works just like
+Conditional compilation is done with `$if` and `$switch`, which works just like
 inside of functions.
 
-    $if ($defined(platform::OS) && platform::OS == WIN32):
+    $if ($defined(platform::OS) && platform::OS == WIN32)
     
     fn void doSomethingWin32Specific()
     {
         /* .... */
     }
     
-    $endif;
+    $endif
 
 ### Global constants
 

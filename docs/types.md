@@ -407,7 +407,7 @@ An optional result type is a tagged union containing either the *expected result
 
     int! i;
     i = 5; // Assigning a real value to i.
-    i = IOResult.IO_ERROR!; // Assigning an optional result to i.
+    i = IOResult.IO_ERROR?; // Assigning an optional result to i.
 
 
 Only variables and return variables may be optionals. Function and macro parameters may not be optionals.
@@ -417,7 +417,7 @@ Only variables and return variables may be optionals. Function and macro paramet
     int! x = 0; // Ok!
 
 
-Read more about the optional types on the page about [error handling](../errorhandling).
+Read more about the optional types on the page about [optionals and error handling](../optionals).
 
 
 ## Struct types

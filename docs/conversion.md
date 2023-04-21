@@ -30,7 +30,7 @@ Like C, C3 uses implicit arithmetic promotion of integer and floating point vari
 An expression with an integer type, may implicitly narrow to smaller integer type, and similarly a float type may implicitly narrow to less wide floating point type is determined from the following algorithm.
 
 1. Shifts and assign look at the lhs expression.
-2. `++`, `--`, `~`, `-`, `!!`, `?` - check the inner type.
+2. `++`, `--`, `~`, `-`, `!!`, `!` - check the inner type.
 3. `+`, `-`, `*`, `/`, `%`, `^`, `|`, `&`, `??`, `?:` - check both lhs and rhs.
 4. Narrowing int/float cast, assume the type is the narrowed type.
 5. Widening int/float cast, look at the inner expression, ignoring the cast.

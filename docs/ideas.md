@@ -2,32 +2,6 @@
 
 **WARNING** Unfinished ideas / brain dumps
 
-
-
-## Static initializers
-
-Allow initialization of globals before main is invoked. Introduce a general `static` block.
-
-```
-module foo;
-
-int x;
-
-static
-{
-    x = rand();
-}
-
-int y = rand();
-
-fn int randomCalculation()
-{
-    return rand();
-}
-```
-
-Sematic roughly work like in Java, except that all know globals are initialized before main, as opposed to when the class is invoked. The order of initialization is unspecified.
-
 ## Module versioning
 
 
@@ -157,15 +131,15 @@ test3([ 1, 2, 3 ]);
 // Supporting the full set.
 macro Foo._slice(Foo* foo, a, b, $a_from_end, $b_from_end)
 {
-    $if ($a_from_end):
-        $if ($b_from_end):
+    $if ($a_from_end)
+        $if ($b_from_end)
             return foo.values[^a..^b];
-        $endif:
+        $endif
         return foo.values[^a..b];
-    $endif;    
-    $if ($b_from_end):
+    $endif    
+    $if ($b_from_end)
         return foo.values[a..^b];
-    $endif;
+    $endif
     return foo.values[a..b];    
 }
 
@@ -180,10 +154,6 @@ macro Bar._slice(Bar *bar, a, b, $a_from_end, $b_from_end)
 ## Allow narrowing conversions for floats
 
 Narrowing conversions for double -> float are common and might not be sufficiently important to do explicitly.
-
-## Tests built in
-
-Unit tests built in as an integral part of the language like D.
 
 ## Attribute to ensure alignment
 
@@ -301,21 +271,6 @@ A tagged pointer union type for any possible type.
 * Query what type of add is the fastest (wrapping, trapped) for the processor (with macros to select type)
 * Query what type of overflow the processor supports
 
-##### Associate properties to an enum
-
-```
-enum State [char* name, byte bit] int
-{
-    START("begin!", 0x01) = 0,
-    END("end it!", 0x10)
-}
-
-funct void test()
-{
-    io::printf("%s\n", State.START.name); // Prints "begin!"
-    io::printf("%d\n", State.END.bit); // Prints "16"
-}
-```
 
 ##### Tagged unions
 
