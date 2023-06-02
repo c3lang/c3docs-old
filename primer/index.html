@@ -79,7 +79,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#compound-literals">Compound literals</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#typedef-and-define">Typedef and #define</a>
+    <li class="toctree-l2"><a class="reference internal" href="#typedef-and-define-becomes-def">typedef and #define becomes 'def'</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#basic-types">Basic types</a>
     </li>
@@ -227,7 +227,7 @@ how it can be converted manually to C3.</p>
 <p>Don't add a <code>;</code> after enum, struct and union declarations, and note the slightly
 different syntax for declaring a named struct inside of a struct.</p>
 <pre><code>// C
-typedef struct
+def struct
 {
   int a;
   struct 
@@ -376,15 +376,15 @@ Foo f = { 1, 2 };
 f = { 1, 2 };
 callFoo(Foo{ 2, 3 });
 </code></pre>
-<h4 id="typedef-and-define">Typedef and #define</h4>
-<p>Note the change in <code>typedef</code> syntax:</p>
+<h4 id="typedef-and-define-becomes-def">typedef and #define becomes 'def'</h4>
+<p><code>typedef</code> is replaced by <code>def</code>:</p>
 <pre><code>// C
 typedef Foo* FooPtr;
 
 // C3
-typedef FooPtr = Foo*;
+def FooPtr = Foo*;
 </code></pre>
-<p><code>define</code> also allows you to do things that C uses <code>#define</code> for:</p>
+<p><code>def</code> also allows you to do things that C uses <code>#define</code> for:</p>
 <pre><code>// C
 #define puts println
 #define my_string my_excellent_string
@@ -394,14 +394,14 @@ char *my_string = "Party on";
 println(my_excellent_string);
 
 // C3
-define println = puts;
-define my_excellent_string = my_string;
+def println = puts;
+def my_excellent_string = my_string;
 
 char* my_string = "Party on";
 ...
 println(my_excellent_string);
 </code></pre>
-<p>Read more about <code>define</code> and <code>typedef</code> <a href="../define">here</a>.</p>
+<p>Read more about <code>def</code> <a href="../define">here</a>.</p>
 <h4 id="basic-types">Basic types</h4>
 <p>Several C types that would be variable sized are fixed size, and others changed names:</p>
 <pre><code>// C

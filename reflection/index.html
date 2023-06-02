@@ -278,7 +278,6 @@
 <li><code>values</code></li>
 </ul>
 <h4 id="associated">associated</h4>
-<p><em>Not yet implemented</em></p>
 <p><em>Only available for enums.</em>
 Returns an array containing the types of associated values if any.</p>
 <pre><code>enum Foo : int(double d, String s)
@@ -286,7 +285,7 @@ Returns an array containing the types of associated values if any.</p>
     BAR(1.0, "normal"),
     BAZ(2.0, "exceptional")
 }
-String s = $nameof(Foo.associated[0]); // "double"
+String s = Foo.associated[0].nameof; // "double"
 </code></pre>
 <h4 id="elements">elements</h4>
 <p>Returns the element count of an enum or fault.</p>
@@ -325,14 +324,16 @@ int x = FooEnum.elements; // 2
 </code></pre>
 <h4 id="membersof">membersof</h4>
 <p><em>Only available for struct and union types.</em></p>
-<p>Returns an array containing the fields in a struct or enum.</p>
+<p>Returns an array containing the fields in a struct or enum. The
+elements have the <em>compile time only</em> type of <code>member_ref</code>, </p>
 <pre><code>struct Baz
 {
     int x;
     Foo* z;
 }
-String x = $nameof($typefrom(Baz.membersof[1])); // "z"
+String x = Baz.membersof[1].nameof; // "z"
 </code></pre>
+<p>A <code>member_ref</code> has properties <code>nameof</code>, <code>typeid</code>, <code>offsetof</code>, <code>alignof</code>, <code>kindof</code>, <code>sizeof</code> and <code>membersof</code>.</p>
 <h4 id="min">min</h4>
 <p>Returns the minimum value of the type (only valid for integer and float types).</p>
 <pre><code>ichar min_ichar = ichar.min; // -128
@@ -347,17 +348,16 @@ String x = $nameof($typefrom(Baz.membersof[1])); // "z"
 String[] x = FooEnum.names; // ["BAR", "BAZ"]
 </code></pre>
 <h4 id="params">params</h4>
-<p><em>Not yet implemented</em></p>
 <p><em>Only available for function types.</em>
-Returns a list of all parameters.</p>
-<pre><code>typedef TestFunc = fn int(int, double);
-String s = $nameof(TestFunc.params[1]); // "double"
+Returns a list typeid for all parameters.</p>
+<pre><code>def TestFunc = fn int(int, double);
+String s = TestFunc.params[1].nameof; // "double"
 </code></pre>
 <h4 id="returns">returns</h4>
 <p><em>Only available for function types.</em>
-Returns the type of the return type.</p>
-<pre><code>typedef TestFunc = fn int(int, double);
-String s = $nameof($typeform(TestFunc.returns)); // "int"
+Returns the typeid of the return type.</p>
+<pre><code>def TestFunc = fn int(int, double);
+String s = TestFunc.returns.nameof; // "int"
 </code></pre>
 <h4 id="sizeof">sizeof</h4>
 <p>Returns the size in bytes for the given type, like C <code>sizeof</code>.</p>
@@ -374,7 +374,7 @@ String s = $nameof($typeform(TestFunc.returns)); // "int"
     BAR,
     BAZ
 }
-String x = $nameof(FooEnum.values[1]); // "BAR"
+String x = FooEnum.values[1].nameof; // "BAR"
 </code></pre>
 <h3 id="compile-time-functions">Compile time functions</h3>
 <p>There are several built-in functions to inspect the code during compile time.</p>
@@ -451,24 +451,26 @@ String a = $extnameof(g); // =&gt; "test.bar.g";
 string b = $extnameof(testfn); // =&gt; "test.bar.testfn"
 </code></pre>
 <h3 id="nameof">$nameof</h3>
-<p>Returns the name of a function, type or variable as a string without module prefixes.</p>
-<pre><code>typedef Bar = Foo;
-String a = $nameof(int[4]); // =&gt; "int[4]"
-String b = $nameof(Foo) // =&gt; "Foo"
-String c = $nameof(Bar); // =&gt; "Foo" 
-String d = $nameof(g); // =&gt; "g"
+<p>Returns the name of a function or variable as a string without module prefixes.</p>
+<pre><code>fn void test() { }
+int g = 1;
+
+String a = $nameof(g); // =&gt; "g"
+String b = $nameof(test); // =&gt; "test"
 </code></pre>
 <h3 id="offsetof">$offsetof</h3>
 <p>Returns the offset of a member in a struct.</p>
-<pre><code>$offsetof(Foo.y); // =&gt; returns 8 on 64 bit, 4 on 32 bit
+<pre><code>Foo z;
+$offsetof(z.y); // =&gt; returns 8 on 64 bit, 4 on 32 bit
 </code></pre>
 <h3 id="qnameof">$qnameof</h3>
 <p>Returns the same as <code>$nameof</code>, but with the full module name prepended.</p>
-<pre><code>int x;
-String a = $qnameof(int[4]); // =&gt; "int[4]"
-String b = $qnameof(Foo) // =&gt; "test::bar::Foo"
-String c = $qnameof(Foo[4]); // =&gt; "test::bar::Foo[4]" 
-String d = $qnameof(g); // =&gt; "test::bar::g"
+<pre><code>module abc;
+fn void test() { }
+int g = 1;
+
+String a = $nameof(g); // =&gt; "abc::g"
+String b = $nameof(test); // =&gt; "abc::test"
 </code></pre>
 <h3 id="sizeof_1">$sizeof</h3>
 <p>This is used on a value to determine the allocation size needed. <code>$sizeof(a)</code> is equivalent

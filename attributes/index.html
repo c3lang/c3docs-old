@@ -227,14 +227,14 @@ functions.</p>
 <p>Emits a weak symbol rather than a global.</p>
 <h2 id="user-defined-attributes">User defined attributes</h2>
 <p>User defined attributes are intended for conditional application of built-in attributes.</p>
-<pre><code>define @MyAttribute = @noreturn @inline;
+<pre><code>def @MyAttribute = @noreturn @inline;
 
 // The following two are equivalent:
 fn void foo() @MyAttribute { ... }
 fn void foo() @noreturn @inline { ... }
 </code></pre>
 <p>A user defined attribute may also be completely empty:</p>
-<pre><code>define @MyAttributeEmpty = void;
+<pre><code>def @MyAttributeEmpty = void;
 </code></pre>
               
             </div>

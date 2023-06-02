@@ -365,7 +365,7 @@ test(0); // Prints &quot;!XA&quot;
 test(1); // Prints &quot;FOOBA&quot; and returns a FooError
 </code></pre>
 <h5 id="struct-types">struct types</h5>
-<pre><code>typedef Callback = fn int(char c);
+<pre><code>def Callback = fn int(char c);
 
 enum Status : int
 {
@@ -414,7 +414,7 @@ struct MyData
 <h5 id="function-pointers">Function pointers</h5>
 <pre><code>module demo;
 
-typedef Callback = fn int(char* text, int value);
+def Callback = fn int(char* text, int value);
 
 fn int my_callback(char* text, int value) 
 {
@@ -631,8 +631,8 @@ fn bool Stack.empty(Stack* this)
 }
 </code></pre>
 <p>Testing it out:</p>
-<pre><code>typedef IntStack = Stack&lt;int&gt;;
-typedef DoubleStack = Stack&lt;double&gt;;
+<pre><code>def IntStack = Stack&lt;int&gt;;
+def DoubleStack = Stack&lt;double&gt;;
 
 fn void test()
 {

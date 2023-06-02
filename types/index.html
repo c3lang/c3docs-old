@@ -116,7 +116,7 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#types-created-using-typedef">Types created using typedef</a>
+    <li class="toctree-l2"><a class="reference internal" href="#types-created-using-def">Types created using def</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#typedef">"typedef"</a>
     </li>
@@ -280,9 +280,9 @@ fn CInt stat(const char* pathname, Stat* buf);
 but is a storage class modifier, not a type qualifier. 
 Instead of <code>volatile</code>, volatile loads and stores are used. 
 In order to signal restrictions on parameter usage, parameter <a href="../preconditions/">preconditions</a> are used.
-<code>typedef</code> has a slightly different syntax.</p>
+<code>typedef</code> has a slightly different syntax and renamed <code>def</code>.</p>
 <p>C3 also requires all function pointers to be used with an alias, so:</p>
-<pre><code>typedef Callback = fn void();
+<pre><code>def Callback = fn void();
 Callback a = null; // Ok!
 fn Callback getCallback() { ... } // Ok!
 
@@ -584,11 +584,11 @@ from the initializer. See the chapter on <a href="../arrays">arrays</a>.</p>
 <p>Vectors use <code>[&lt;size&gt;]</code> after the type, e.g. <code>float[&lt;3&gt;]</code>, with the restriction that vectors may only form out
 of integers, floats and booleans. Similar to arrays, wildcard can be used to infer the size of a vector: <code>int[&lt;*&gt;] a = { 1, 2 }</code>.</p>
 <p><em>Note: C3 will support scaled vectors using the syntax <code>float[&lt;&gt;]</code>, but this is currently not implemented.</em></p>
-<h2 id="types-created-using-typedef">Types created using <code>typedef</code></h2>
+<h2 id="types-created-using-def">Types created using <code>def</code></h2>
 <h3 id="typedef">"typedef"</h3>
-<p>Like in C, C3 has a "typedef" construct, <code>typedef &lt;typename&gt; = &lt;type&gt;</code></p>
-<pre><code>typedef Int32 = int;
-typedef Vector2 = float[&lt;2&gt;];
+<p>Like in C, C3 has a "typedef" construct, <code>def &lt;typename&gt; = &lt;type&gt;</code></p>
+<pre><code>def Int32 = int;
+def Vector2 = float[&lt;2&gt;];
 
 ...
 
@@ -596,17 +596,17 @@ Int32 a = 1;
 int b = a;
 </code></pre>
 <h3 id="function-pointer-types">Function pointer types</h3>
-<p>Function pointers are always used through a <code>typedef</code>:</p>
-<pre><code>typedef Callback = fn void(int value);
+<p>Function pointers are always used through a <code>def</code>:</p>
+<pre><code>def Callback = fn void(int value);
 Callback callback = &amp;test;
 
 fn void test(int a) { ... }
 </code></pre>
 <p>To form a function pointer, write a normal function declaration but skipping the function name. <code>fn int foo(double x)</code> -&gt;
 <code>fn int(double x)</code>.</p>
-<p>Function pointers can have default arguments, e.g. <code>typedef Callback = fn void(int value = 0)</code> but default arguments
+<p>Function pointers can have default arguments, e.g. <code>def Callback = fn void(int value = 0)</code> but default arguments
 and parameter names are not taken into account when determining function pointer assignability:</p>
-<pre><code>typedef Callback = fn void(int value = 1);
+<pre><code>def Callback = fn void(int value = 1);
 fn void test(int a = 0) { ... }
 
 Callback callback = &amp;main; // Ok
@@ -621,10 +621,10 @@ fn void main()
 }
 </code></pre>
 <h3 id="distinct-types">Distinct types</h3>
-<p>Distinct types is a kind of typedef which creates a new type that has the same properties as the original type
+<p>Distinct types is a kind of def which creates a new type that has the same properties as the original type
 but is - as the name suggests - distinct from it. It cannot implicitly convert into the other type. A distinct type
-is created by adding <code>distinct</code> before the type name in a "typedef": <code>typedef &lt;typename&gt; = distinct &lt;type&gt;</code></p>
-<pre><code>typedef MyId = distinct int;
+is created by adding <code>distinct</code> before the type name in a "def": <code>def &lt;typename&gt; = distinct &lt;type&gt;</code></p>
+<pre><code>def MyId = distinct int;
 fn void* get_by_id(MyId id) { ... }
 
 fn void test(MyId id)
@@ -638,13 +638,13 @@ fn void test(MyId id)
 }
 </code></pre>
 <h3 id="generic-types">Generic types</h3>
-<p>Similar to function pointers, generic types are only available using <code>typedef</code>:</p>
+<p>Similar to function pointers, generic types are only available using <code>def</code>:</p>
 <pre><code>import generic_list; // Contains the generic MyList
 
 struct Foo { int x; }
 
-typedef IntMyList = generic_list::MyList&lt;int&gt;;
-typedef FooMyList = generic_list::MyList&lt;Foo&gt;;
+def IntMyList = generic_list::MyList&lt;int&gt;;
+def FooMyList = generic_list::MyList&lt;Foo&gt;;
 </code></pre>
 <p>Read more about generic types on <a href="../generics">the page about generics</a>.</p>
 <h2 id="enum">Enum</h2>
