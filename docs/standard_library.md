@@ -373,7 +373,7 @@ Generic list module, elements are of `Type`.
 
 ```c
 import std::collections::list;
-typedef MyIntList = List<int>;
+def MyIntList = List<int>;
 
 ...
 

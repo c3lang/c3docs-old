@@ -25,11 +25,11 @@ Unlike C, C3 does not use type qualifiers. `const` exists,
 but is a storage class modifier, not a type qualifier. 
 Instead of `volatile`, volatile loads and stores are used. 
 In order to signal restrictions on parameter usage, parameter [preconditions](../preconditions/) are used.
-`typedef` has a slightly different syntax.
+`typedef` has a slightly different syntax and renamed `def`.
 
 C3 also requires all function pointers to be used with an alias, so:
 
-    typedef Callback = fn void();
+    def Callback = fn void();
     Callback a = null; // Ok!
     fn Callback getCallback() { ... } // Ok!
     
@@ -234,14 +234,14 @@ of integers, floats and booleans. Similar to arrays, wildcard can be used to inf
 *Note: C3 will support scaled vectors using the syntax `float[<>]`, but this is currently not implemented.*
 
 
-## Types created using `typedef`
+## Types created using `def`
 
 ### "typedef"
 
-Like in C, C3 has a "typedef" construct, `typedef <typename> = <type>`
+Like in C, C3 has a "typedef" construct, `def <typename> = <type>`
 
-    typedef Int32 = int;
-    typedef Vector2 = float[<2>];
+    def Int32 = int;
+    def Vector2 = float[<2>];
 
     ...
 
@@ -250,9 +250,9 @@ Like in C, C3 has a "typedef" construct, `typedef <typename> = <type>`
 
 ### Function pointer types
 
-Function pointers are always used through a `typedef`:
+Function pointers are always used through a `def`:
 
-    typedef Callback = fn void(int value);
+    def Callback = fn void(int value);
     Callback callback = &test;
 
     fn void test(int a) { ... }
@@ -260,10 +260,10 @@ Function pointers are always used through a `typedef`:
 To form a function pointer, write a normal function declaration but skipping the function name. `fn int foo(double x)` ->
 `fn int(double x)`.
 
-Function pointers can have default arguments, e.g. `typedef Callback = fn void(int value = 0)` but default arguments
+Function pointers can have default arguments, e.g. `def Callback = fn void(int value = 0)` but default arguments
 and parameter names are not taken into account when determining function pointer assignability:
 
-    typedef Callback = fn void(int value = 1);
+    def Callback = fn void(int value = 1);
     fn void test(int a = 0) { ... }
 
     Callback callback = &main; // Ok
@@ -279,11 +279,11 @@ and parameter names are not taken into account when determining function pointer
 
 ### Distinct types
 
-Distinct types is a kind of typedef which creates a new type that has the same properties as the original type
+Distinct types is a kind of def which creates a new type that has the same properties as the original type
 but is - as the name suggests - distinct from it. It cannot implicitly convert into the other type. A distinct type
-is created by adding `distinct` before the type name in a "typedef": `typedef <typename> = distinct <type>`
+is created by adding `distinct` before the type name in a "def": `def <typename> = distinct <type>`
 
-    typedef MyId = distinct int;
+    def MyId = distinct int;
     fn void* get_by_id(MyId id) { ... }
 
     fn void test(MyId id)
@@ -298,14 +298,14 @@ is created by adding `distinct` before the type name in a "typedef": `typedef <t
 
 ### Generic types
 
-Similar to function pointers, generic types are only available using `typedef`:
+Similar to function pointers, generic types are only available using `def`:
 
     import generic_list; // Contains the generic MyList
 
     struct Foo { int x; }
 
-    typedef IntMyList = generic_list::MyList<int>;
-    typedef FooMyList = generic_list::MyList<Foo>;
+    def IntMyList = generic_list::MyList<int>;
+    def FooMyList = generic_list::MyList<Foo>;
 
 Read more about generic types on [the page about generics](../generics).
 

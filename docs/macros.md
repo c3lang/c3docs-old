@@ -31,7 +31,7 @@ The macro capabilities of C3 reaches across several constructs: macros (prefixed
     {
         return x + 2;
     }
-    typedef UInt32 = uint;
+    def UInt32 = uint;
     
     // Use:
     int y = @m(foo() + 2);

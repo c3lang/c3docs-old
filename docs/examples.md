@@ -204,7 +204,7 @@ test(1); // Prints "FOOBA" and returns a FooError
 #####struct types
 
 ```
-typedef Callback = fn int(char c);
+def Callback = fn int(char c);
 
 enum Status : int
 {
@@ -257,7 +257,7 @@ struct MyData
 ```
 module demo;
 
-typedef Callback = fn int(char* text, int value);
+def Callback = fn int(char* text, int value);
 
 fn int my_callback(char* text, int value) 
 {
@@ -503,8 +503,8 @@ fn bool Stack.empty(Stack* this)
 Testing it out:
 
 ```
-typedef IntStack = Stack<int>;
-typedef DoubleStack = Stack<double>;
+def IntStack = Stack<int>;
+def DoubleStack = Stack<double>;
 
 fn void test()
 {

@@ -1,20 +1,18 @@
-# The "define" and "typedef" statements
+# The "def" statement
 
-The `define` statement in C3 is intended for aliasing identifiers. `typedef` is used
-like in C to create type aliases. The syntax is slightly different from C in both cases
-in order to increase clarity.
+The `def` statement in C3 is intended for aliasing identifiers and types.
 
 ## Defining a type alias
 
-`typedef <type alias> = <type>` creates a type alias. Type aliases need to follow the name convention of user defined types (i.e. capitalized
+`def <type alias> = <type>` creates a type alias. Type aliases need to follow the name convention of user defined types (i.e. capitalized
 names with at least one lower case letter).
 
-    typedef CharPtr = char*;
-    typedef Numbers = int[10];
+    def CharPtr = char*;
+    def Numbers = int[10];
 
 Function pointers _must_ be aliased in C3. The syntax is somewhat different from C:
 
-    typedef Callback = fn void(int a, bool b);
+    def Callback = fn void(int a, bool b);
 
 This defines an alias to function pointer type of a function that returns nothing and requires two arguments: an int and a bool. Here is a sample usage:
 
@@ -24,10 +22,10 @@ This defines an alias to function pointer type of a function that returns nothin
 
 ## Distinct types
 
-`typedef` may also be used to create distinct new types. Unlike type aliases,
+`def` may also be used to create distinct new types. Unlike type aliases,
 they do not implicitly convert to any other type.
 
-    typedef Foo = distinct int;
+    def Foo = distinct int;
     Foo f = 0;
     f = f + 1;
     int i = 1;
@@ -36,16 +34,16 @@ they do not implicitly convert to any other type.
 
 ## Function and variable aliases
 
-The `define` is used to create aliases for functions and variables.
+`def` can also be used to create aliases for functions and variables.
 
-The syntax is `define <alias> = <original identifier>`.
+The syntax is `def <alias> = <original identifier>`.
 
 ```
 fn void foo() { ... }
 int foo_var;
 
-define bar = foo;
-define bar_var = foo_var;
+def bar = foo;
+def bar_var = foo_var;
 
 fn void test() 
 {
@@ -59,24 +57,24 @@ fn void test()
 }  
 ```
 
-## Using define and typedef to create generic types, functions and variables
+## Using `def` to create generic types, functions and variables
 
-Generic modules uses `typedef` and `define` to create aliases to parameterized types, functions 
+Generic modules uses `def` to create aliases to parameterized types, functions 
 and variables:
 
      import generic_foo;
 
      // Parameterized function aliases
-     define int_foo_call = generic_foo::foo_call<int>;
-     define double_foo_call = generic_foo::foo_call<double>;
+     def int_foo_call = generic_foo::foo_call<int>;
+     def double_foo_call = generic_foo::foo_call<double>;
   
      // Parameterized type aliases
-     typedef IntFoo = Foo<int>;
-     typedef DoubleFoo = Foo<double>;
+     def IntFoo = Foo<int>;
+     def DoubleFoo = Foo<double>;
 
      // Parameterized global aliases
-     define int_max_foo = generic_foo::max_foo<int>;
-     define double_max_foo = generic_foo::max_foo<double>;
+     def int_max_foo = generic_foo::max_foo<int>;
+     def double_max_foo = generic_foo::max_foo<double>;
 
 For more information, see the chapter on [generics](../generics).
 
@@ -91,7 +89,7 @@ will yield the function pointer alias' default argument.
 Similarly, named parameter arguments follow the alias definition when calling through the 
 function pointer:
 
-    typedef TestFn = fn void(int y = 123);
+    def TestFn = fn void(int y = 123);
 
     fn void test(int x = 5)
     {

@@ -10,7 +10,7 @@ Don't add a `;` after enum, struct and union declarations, and note the slightly
 different syntax for declaring a named struct inside of a struct.
 
     // C
-    typedef struct
+    def struct
     {
       int a;
       struct 
@@ -183,17 +183,17 @@ For convenience, assigning to a struct will infer the type even if it's not an i
     callFoo(Foo{ 2, 3 });
 
 
-#### Typedef and #define
+#### typedef and #define becomes 'def'
 
-Note the change in `typedef` syntax:
+`typedef` is replaced by `def`:
 
     // C
     typedef Foo* FooPtr;
 
     // C3
-    typedef FooPtr = Foo*;
+    def FooPtr = Foo*;
 
-`define` also allows you to do things that C uses `#define` for:
+`def` also allows you to do things that C uses `#define` for:
 
     // C
     #define puts println
@@ -204,14 +204,14 @@ Note the change in `typedef` syntax:
     println(my_excellent_string);
 
     // C3
-    define println = puts;
-    define my_excellent_string = my_string;
+    def println = puts;
+    def my_excellent_string = my_string;
     
     char* my_string = "Party on";
     ...
     println(my_excellent_string);
 
-Read more about `define` and `typedef` [here](../define).
+Read more about `def` [here](../define).
 
 #### Basic types
 

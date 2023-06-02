@@ -1,10 +1,12 @@
 # Change log
 
-##### Revision 2023-??
+##### Revision 2023-06-02
 - Suffix '?' replaced by '!' and vice versa.
 - Updates to ct statements.
 - Fixes to array descriptions
 - Replace try? / catch? with macros
+- Updates to reflection
+- define/typedef is now "def"
 
 ##### Revision 2023-03-18
 - try? / catch?

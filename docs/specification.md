@@ -140,7 +140,7 @@ anyerr
 assert      attribute   break
 case        cast        catch
 const       continue    default
-defer       define      do
+defer       def         do
 else        enum        extern
 errtype     false       fn
 generic     if          import
@@ -391,7 +391,7 @@ Example:
 
 ```
 fn void test() { ... }
-typedef VoidFunc = fn void test();
+def VoidFunc = fn void test();
 
 VoidFunc a = &test;
 int b = (int)null;

@@ -33,8 +33,6 @@ It is possible to access properties on the type itself:
 
 #### associated
 
-*Not yet implemented*
-
 *Only available for enums.*
 Returns an array containing the types of associated values if any.
 
@@ -43,7 +41,7 @@ Returns an array containing the types of associated values if any.
         BAR(1.0, "normal"),
         BAZ(2.0, "exceptional")
     }
-    String s = $nameof(Foo.associated[0]); // "double"
+    String s = Foo.associated[0].nameof; // "double"
 
 #### elements
 
@@ -98,14 +96,17 @@ Returns the maximum value of the type (only valid for integer and float types).
 
 *Only available for struct and union types.*
 
-Returns an array containing the fields in a struct or enum.
+Returns an array containing the fields in a struct or enum. The
+elements have the *compile time only* type of `member_ref`, 
 
     struct Baz
     {
         int x;
         Foo* z;
     }
-    String x = $nameof($typefrom(Baz.membersof[1])); // "z"
+    String x = Baz.membersof[1].nameof; // "z"
+
+A `member_ref` has properties `nameof`, `typeid`, `offsetof`, `alignof`, `kindof`, `sizeof` and `membersof`.
 
 #### min
 
@@ -127,21 +128,19 @@ Returns a subarray containing the names of an enum or fault.
 
 #### params
 
-*Not yet implemented*
-
 *Only available for function types.*
-Returns a list of all parameters.
+Returns a list typeid for all parameters.
 
-    typedef TestFunc = fn int(int, double);
-    String s = $nameof(TestFunc.params[1]); // "double"
+    def TestFunc = fn int(int, double);
+    String s = TestFunc.params[1].nameof; // "double"
 
 #### returns
 
 *Only available for function types.*
-Returns the type of the return type.
+Returns the typeid of the return type.
 
-    typedef TestFunc = fn int(int, double);
-    String s = $nameof($typeform(TestFunc.returns)); // "int"
+    def TestFunc = fn int(int, double);
+    String s = TestFunc.returns.nameof; // "int"
 
 #### sizeof
 
@@ -151,7 +150,7 @@ Returns the size in bytes for the given type, like C `sizeof`.
 
 #### typeid
 
-Returns the typeid for the given type. Typedefs will return the typeid of the underlying type. The typeid size is the same as that of an `iptr`.
+Returns the typeid for the given type. `def`s will return the typeid of the underlying type. The typeid size is the same as that of an `iptr`.
 
     typeid x = Foo.typeid;
 
@@ -164,7 +163,7 @@ Returns a subarray containing the values of an enum or fault.
         BAR,
         BAZ
     }
-    String x = $nameof(FooEnum.values[1]); // "BAR"
+    String x = FooEnum.values[1].nameof; // "BAR"
 
 ### Compile time functions
 
@@ -257,29 +256,31 @@ the one used by the linker.
 
 ### $nameof
 
-Returns the name of a function, type or variable as a string without module prefixes.
+Returns the name of a function or variable as a string without module prefixes.
 
-    typedef Bar = Foo;
-    String a = $nameof(int[4]); // => "int[4]"
-    String b = $nameof(Foo) // => "Foo"
-    String c = $nameof(Bar); // => "Foo" 
-    String d = $nameof(g); // => "g"
+    fn void test() { }
+    int g = 1;
+
+    String a = $nameof(g); // => "g"
+    String b = $nameof(test); // => "test"
 
 ### $offsetof
 
 Returns the offset of a member in a struct.
 
-    $offsetof(Foo.y); // => returns 8 on 64 bit, 4 on 32 bit
+    Foo z;
+    $offsetof(z.y); // => returns 8 on 64 bit, 4 on 32 bit
 
 ### $qnameof
 
 Returns the same as `$nameof`, but with the full module name prepended.
 
-    int x;
-    String a = $qnameof(int[4]); // => "int[4]"
-    String b = $qnameof(Foo) // => "test::bar::Foo"
-    String c = $qnameof(Foo[4]); // => "test::bar::Foo[4]" 
-    String d = $qnameof(g); // => "test::bar::g"
+    module abc;
+    fn void test() { }
+    int g = 1;
+
+    String a = $nameof(g); // => "abc::g"
+    String b = $nameof(test); // => "abc::test"
     
 ### $sizeof
 

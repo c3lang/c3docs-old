@@ -28,8 +28,8 @@ fn Type2 test(Type2 b, Foo *foo)
 Including a generic module works as usual, but to use a type, it must be *defined* before use.
 
 ```
-typedef FooFloat = Foo<float, double>;
-define testFloat = foo_test::test<float, double>;
+def FooFloat = Foo<float, double>;
+def testFloat = foo_test::test<float, double>;
 
 ...
 
@@ -55,7 +55,7 @@ module vector <TypeA, TypeB, TypeC>;
 ```
 
 ```
-define testFunction = vector::testFunc<Bar, float, int>;
+def testFunction = vector::testFunc<Bar, float, int>;
 
 // This would give the error 
 // --> Illegal arguments for generic module vector, 
