@@ -108,7 +108,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#the-typeid-type">The typeid type</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#the-variant-type">The variant type</a>
+    <li class="toctree-l3"><a class="reference internal" href="#the-any-type">The any type</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#array-types">Array types</a>
     </li>
@@ -166,11 +166,9 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../compiletime/">Compile time evaluation</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
                     </li>
@@ -178,11 +176,15 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
                     </li>
@@ -541,17 +543,17 @@ char* bar = &quot;\&quot;Say `hello`\&quot;&quot;;
 <h3 id="the-typeid-type">The <code>typeid</code> type</h3>
 <p>The <code>typeid</code> can hold a runtime identifier for a type. Using <code>&lt;typename&gt;.typeid</code> a type may be converted to its unique runtime id, 
 e.g. <code>typeid a = Foo.typeid;</code>. This value is pointer-sized.</p>
-<h3 id="the-variant-type">The <code>variant</code> type</h3>
+<h3 id="the-any-type">The <code>any</code> type</h3>
 <p>C3 contains a built-in variant type, which is essentially struct containing a <code>typeid</code> plus a <code>void*</code> pointer to a value.
-It is possible to cast the variant type to any pointer type, which will return <code>null</code> if the types don't match,
+It is possible to cast the any type to any pointer type, which will return <code>null</code> if the types don't match,
 or the pointer value otherwise.</p>
 <pre><code>int x;
-variant y = &amp;x;
+any y = &amp;x;
 double *z = (double*)y; // Returns null
 int* w = (int*)x; // Returns the pointer to x
 </code></pre>
-<p>Switching over the variant type is another method to unwrap the pointer inside:</p>
-<pre><code>fn void test(variant z)
+<p>Switching over the <code>any</code> type is another method to unwrap the pointer inside:</p>
+<pre><code>fn void test(any z)
 {
     // Unwrapping switch
     switch (z)
@@ -575,7 +577,7 @@ int* w = (int*)x; // Returns the pointer to x
     }
 }
 </code></pre>
-<p><code>variant.type</code> returns the underlying pointee typeid of the contained value. <code>variant.ptr</code> returns 
+<p><code>any.type</code> returns the underlying pointee typeid of the contained value. <code>any.ptr</code> returns 
 the raw <code>void*</code> pointer.</p>
 <h3 id="array-types">Array types</h3>
 <p>Arrays are indicated by <code>[size]</code> after the type, e.g. <code>int[4]</code>. Subarrays use the <code>type[]</code>. For initialization the wildcard <code>type[*]</code> can be used to infer the size

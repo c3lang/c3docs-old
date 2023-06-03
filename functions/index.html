@@ -122,11 +122,9 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../compiletime/">Compile time evaluation</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
                     </li>
@@ -134,11 +132,15 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
                     </li>
@@ -292,8 +294,8 @@ fn void test()
 <p>There are four types of varargs: </p>
 <ol>
 <li>single typed</li>
-<li>explicitly typed variants: pass non-variant arguments as references</li>
-<li>implicitly typed variants: arguments are implicitly converted to references (use with care)</li>
+<li>explicitly typed any: pass non-any arguments as references</li>
+<li>implicitly typed any: arguments are implicitly converted to references (use with care)</li>
 <li>untyped C-style</li>
 </ol>
 <p>Examples:</p>
@@ -302,14 +304,14 @@ fn void test()
     /* args has type int[] */
 }
 
-fn void va_variants_explicit(variant... args)
+fn void va_variants_explicit(any... args)
 {
-    /* args has type variant[] */
+    /* args has type any[] */
 }
 
 fn void va_variants_implicit(args...)
 {
-    /* args has type variant[] */
+    /* args has type any[] */
 }
 
 extern fn void va_untyped(...); // only used for extern C functions
@@ -319,10 +321,10 @@ fn void test()
     va_singletyped(1, 2, 3);
 
     int x = 1;
-    variant v = &amp;x;
-    va_variants_explicit(&amp;&amp;1, &amp;x, v); // pass references for non-variant arguments
+    any v = &amp;x;
+    va_variants_explicit(&amp;&amp;1, &amp;x, v); // pass references for non-any arguments
 
-    va_variants_implicit(1, x, "foo"); // arguments are implicitly converted to variants
+    va_variants_implicit(1, x, "foo"); // arguments are implicitly converted to anys
 
     va_untyped(1, x, "foo"); // extern C-function
 }

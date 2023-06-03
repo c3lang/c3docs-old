@@ -90,11 +90,9 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../compiletime/">Compile time evaluation</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Generics</a>
     <ul class="current">
@@ -104,11 +102,15 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
                     </li>
@@ -220,7 +222,6 @@ testFloat(1.0, &amp;f);
 
 </code></pre>
 <p>Just like for macros, optional constraints may be added to improve compile errors:</p>
-<p>*Note: constraints are not feature complete </p>
 <pre><code>/**
  * @require $checks(TypeA a = (TypeB)1 + (TypeC)1)
  */ 
@@ -231,8 +232,8 @@ module vector &lt;TypeA, TypeB, TypeC&gt;;
 <pre><code>def testFunction = vector::testFunc&lt;Bar, float, int&gt;;
 
 // This would give the error 
-// --&gt; Illegal arguments for generic module vector, 
-// breaks check 'Bar a = (float)1 + (int)1'
+// --&gt; Parameter(s) failed validation: 
+//     @require &quot;$checks(TypeA a = (TypeB)1 + (TypeC)1)&quot; violated.
 </code></pre>
               
             </div>
@@ -244,7 +245,7 @@ module vector &lt;TypeA, TypeB, TypeC&gt;;
         <a href="../macros/" class="btn btn-neutral float-right" title="Macros">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../precedence/" class="btn btn-neutral" title="Precedence"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../contracts/" class="btn btn-neutral" title="Contracts"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -270,7 +271,7 @@ module vector &lt;TypeA, TypeB, TypeC&gt;;
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../precedence/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../contracts/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../macros/" style="color: #fcfcfc">Next &raquo;</a></span>

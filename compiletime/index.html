@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Inline asm - C3 Documentation</title>
+  <title>Compile time evaluation - C3 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Inline asm";
-    var mkdocs_page_input_path = "asm.md";
+    var mkdocs_page_name = "Compile time evaluation";
+    var mkdocs_page_input_path = "compiletime.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -90,7 +90,25 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../compiletime/">Compile time evaluation</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Compile time evaluation</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#compile-time-values">Compile time values</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#if-and-switch">$if and $switch</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#loops-using-foreach-and-for">Loops using $foreach and $for</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compile-time-macro-execution">Compile time macro execution</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#conditional-compilation-at-the-top-level">Conditional compilation at the top level</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#evaluation-order-of-top-level-conditional-compilation">Evaluation order of top level conditional compilation</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compile-time-introspection">Compile time introspection</a>
+    </li>
+    </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
@@ -122,13 +140,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../attributes/">Attributes</a>
                     </li>
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Inline asm</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#asm-strings">Asm strings</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#asm-block">Asm block</a>
-    </li>
-    </ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../asm/">Inline asm</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../cinterop/">C Interop</a>
                     </li>
@@ -182,7 +194,7 @@
         
       
     
-    <li>Inline asm</li>
+    <li>Compile time evaluation</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -193,52 +205,155 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="inline-assembly">Inline assembly</h1>
-<p>C3 provides two ways to insert inline assembly: asm strings and asm blocks. </p>
-<h2 id="asm-strings">Asm strings</h2>
-<p>This form takes a single compile time string and passes it directly to the underlying
-backend without any changes.</p>
-<pre><code>int x = 0;
-asm("nop");
-int y = x;
-</code></pre>
-<h2 id="asm-block">Asm block</h2>
-<p>Asm blocks uses a common grammar for all types of processors. It assumes that
-all assembly statements can be reduced to the format:</p>
-<pre><code>instruction (arg (',' arg)*)?;
-</code></pre>
-<p>Where an arg is:</p>
-<ol>
-<li>An identifier, e.g. <code>FOO</code>, <code>x</code>.</li>
-<li>A numeric constant <code>1</code> <code>0xFF</code> etc.</li>
-<li>A register name (always lower case with a '$' prefix) e.g. <code>$eax</code> <code>$r7</code>.</li>
-<li>The address of a variable e.g. <code>&amp;x</code>.</li>
-<li>An indirect address: <code>[addr]</code> or <code>[addr + index * &lt;const&gt; + offset]</code>.</li>
-<li>Any expression inside of "()" (will be evaluated before entering the <code>asm</code> block).</li>
-</ol>
-<p>An example:</p>
-<pre><code>int aa = 3;
-int g;
-int* gp = &amp;g;
-int* xa = &amp;a;
-usz asf = 1;
-asm
+                <h1 id="compile-time-introspection-and-execution">Compile time introspection and execution</h1>
+<p>During compilation, constant expressions will automatically be folded. Together with the compile
+time conditional statements <code>$if</code>, <code>$switch</code> and the compile time iteration statments <code>$for</code> <code>$foreach</code>
+it is possible to perform limited compile time execution.</p>
+<h3 id="compile-time-values">Compile time values</h3>
+<p>During compilation, global constants are considered compile time values, as are any 
+derived constant values, such as type names and sizes, variable alignments etc.</p>
+<p>Inside of a macro or a function, it is also possible to define mutable compile time variables. Such
+local variables are prefixed with <code>$</code> (e.g. <code>$foo</code>). It is also possible to define local <em>type</em> variables,
+that are also prefixed using <code>$</code> (e.g. <code>$MyType</code> <code>$ParamType</code>).</p>
+<p>Mutable compile time variables are <em>not</em> allowed in the global scope.</p>
+<h3 id="if-and-switch">$if and $switch</h3>
+<p><code>$if (&lt;const expr&gt;):</code> takes a compile time constant value and evaluates it to true or false.</p>
+<pre><code>macro foo($x, $y)
 {
-    movl x, 4;                  // Move 4 into the variable x
-    movl [gp], x;               // Move the value of x into the address in gp
-    movl x, 1;                  // Move 1 into x
-    movl [xa + asf * 4 + 4], x; // Move x into the address at xa[asf + 1]
-    movl $eax, (23 + x);        // Move 23 + x into EAX
-    movl x, $eax;               // Move EAX into x
-    movq [&amp;z], 33;              // Move 33 into the memory address of z
+    $if ($x &gt; 3):
+        $y += $x * $x;
+    $else
+        $y += $x;
+    $endif
+}
+
+const int FOO = 10;
+
+fn void test()
+{
+    int a = 5;
+    int b = 4;
+    foo(1, a); // Allowed, expands to a += 1;
+    // foo(b, a); // Error: b is not a compile time constant.
+    foo(FOO, a); // Allowed, expands to a += FOO * FOO;
 }
 </code></pre>
-<p>The asm block will infer register clobbers and in/out parameters.</p>
-<p><em>*Please note that the current state of inline asm is a <strong>work in progress</strong>,
-only a subset of x86 and aarch64 instructions are available, other platforms
-have no support at all. It is likely that the grammar will be extended as more 
-architectures are supported. More instructions can be added as they are needed,
-so please file issues when you encounter missing instructions you need.</em></p>
+<p>For switching between multiple possibilities, use <code>$switch</code>.</p>
+<pre><code>macro foo($x, $y)
+{
+    $switch ($x)
+        $case 1: 
+            $y += $x * $x;
+        $case 2:
+            $y += $x;
+        $case 3:
+            $y *= $x;
+        $default:
+            $y -= $x;
+    $endif
+}
+</code></pre>
+<p>Switching without argument is also allowed, which works like an if-else chain:</p>
+<pre><code>macro foo($x, $y)
+{
+    $switch 
+        $case $x &gt; 10: 
+            $y += $x * $x;
+        $case $x &lt; 0:
+            $y += $x;
+        $default:
+            $y -= $x;
+    $endif
+}
+</code></pre>
+<h3 id="loops-using-foreach-and-for">Loops using $foreach and $for</h3>
+<p>Unlike <code>$if</code> and <code>$switch</code>, iteration is only allowed inside of functions and macros. </p>
+<p><code>$for</code> ... <code>$endfor</code> works analogous to <code>for</code>, only it is limited to using compile time variables. <code>$foreach</code> ... <code>$endforeach</code> similarly 
+matches the behaviour of <code>foreach</code>.</p>
+<p>Compile time looping:</p>
+<pre><code>macro foo($a)
+{
+    $for (var $x = 0; $x &lt; $a; $x++)
+        io::printfn("%d", $x);     
+    $endfor
+}
+
+fn void test()
+{
+    foo(2);
+    // Expands to -&gt;
+    // io::printfn("%d", 0);     
+    // io::printfn("%d", 1);         
+}
+</code></pre>
+<p>Looping over enums:</p>
+<pre><code>macro foo_enum($SomeEnum)
+{
+    $foreach ($x : $SomeEnum.values)
+        io::printfn("%d", (int)$x);     
+    $endforeach
+}
+
+enum MyEnum
+{
+    A,
+    B,
+}
+
+fn void test()
+{
+    foo_enum(MyEnum);
+    // Expands to -&gt;
+    // io::printfn("%d", (int)MyEnum.A);
+    // io::printfn("%d", (int)MyEnum.B);    
+}
+</code></pre>
+<p>An important thing to note is that the content of the <code>$foreach</code> or <code>$for</code> body must be at least a complete statement.
+It's not possible to compile partial statements.</p>
+<h3 id="compile-time-macro-execution">Compile time macro execution</h3>
+<p>If a macro only takes compile time parameters, that is only <code>$</code>-prefixed parameters, and then does not generate 
+any other statements than returns, then the macro will be completely compile time executed.</p>
+<pre><code>macro @test($abc)
+{
+    return $abc * 2;
+}
+
+const int MY_CONST = @test(2); // Will fold to "4"
+</code></pre>
+<p>This constant evaluation allows us to write some limited compile time code. For example, this
+macro will compute Fibonacci at compile time:</p>
+<pre><code>macro long @fib(long $n)
+{
+    $if ($n &lt;= 1):
+        return $n;
+    $else
+        return @fib($n - 1) + @fib($n - 2);
+    $endif
+}
+</code></pre>
+<p>It is important to remember that if we had replaced <code>$n</code> with <code>n</code> the compiler would have complained. <code>n &lt;= 1</code> 
+is not be considered to be a constant expression, even if the actual argument to the macro was a constant.
+This limitation is deliberate, to offer control over what is compiled out and what isn't.</p>
+<h3 id="conditional-compilation-at-the-top-level">Conditional compilation at the top level</h3>
+<p>At the top level, conditional compilation is done with <code>$if</code> and <code>$switch</code>, just like the inside of 
+macros and functions, but rather than statements, any <em>complete</em> declarations may be conditionally
+included.</p>
+<pre><code>$if ($defined(platform::OS) &amp;&amp; platform::OS == WIN32)
+
+fn void doSomethingWin32Specific()
+{
+    /* .... */
+}
+
+$endif
+</code></pre>
+<h4 id="evaluation-order-of-top-level-conditional-compilation">Evaluation order of top level conditional compilation</h4>
+<p>Conditional compilation at the top level can cause unexpected ordering issues, especially when combined with 
+<code>$defined</code>. It is strongly recommended to only switch on unconditionally defined values.</p>
+<h2 id="compile-time-introspection">Compile time introspection</h2>
+<p>At compile time, full type information is available. This allows for creation of reusable, code generating, macros for things
+like serialization.</p>
+<p>To read more about all the fields available at compile time, see the page on <a href="../reflection">reflection</a>.</p>
               
             </div>
           </div>
@@ -246,10 +361,10 @@ so please file issues when you encounter missing instructions you need.</em></p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../cinterop/" class="btn btn-neutral float-right" title="C Interop">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../contracts/" class="btn btn-neutral float-right" title="Contracts">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../attributes/" class="btn btn-neutral" title="Attributes"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../optionals/" class="btn btn-neutral" title="Optionals and error handling"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -275,10 +390,10 @@ so please file issues when you encounter missing instructions you need.</em></p>
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../attributes/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../optionals/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../cinterop/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../contracts/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

@@ -92,11 +92,9 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../compiletime/">Compile time evaluation</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
                     </li>
@@ -104,11 +102,15 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
                     </li>
@@ -487,6 +489,7 @@ fn void main()
     }
 }
 </code></pre>
+<p>Read more about optionals and error handling <a href="../optionals">here</a>.</p>
 <h5 id="contracts">Contracts</h5>
 <p>Pre- and postconditions are optionally compiled into asserts helping to optimize the code.</p>
 <pre><code>/**
@@ -510,6 +513,7 @@ fn int getLastElement(int* array, int length)
     return array[length - 1];
 }
 </code></pre>
+<p>Read more about contracts <a href="../contracts">here</a>.</p>
 <h5 id="macros">Macros</h5>
 <p>Macro arguments may be immediately evaluated.</p>
 <pre><code>macro foo(a, b)
@@ -577,6 +581,7 @@ fn void test()
     square(&amp;a); // Error: cannot multiply '&amp;a'
 }
 </code></pre>
+<p>Read more about macros <a href="../macros">here</a>.</p>
 <h5 id="methods">Methods</h5>
 <p>It's possible to namespace functions with a union, struct or enum type to enable "dot syntax" calls:</p>
 <pre><code>struct Foo
@@ -598,6 +603,51 @@ fn void test()
     io::printfn(&quot;%d&quot;, foo.i); 
 }
 </code></pre>
+<h5 id="compile-time-reflection-and-execution">Compile time reflection and execution</h5>
+<p>Access type information and loop over values at compile time:</p>
+<pre><code>import std::io;
+
+struct Foo
+{
+    int a;
+    double b;
+    int* ptr;
+}
+
+macro print_fields($Type)
+{
+    $foreach ($field : $Type.membersof)
+        io::printfn("Field %s, offset: %s, size: %s, type: %s", 
+                $field.nameof, $field.offsetof, $field.sizeof, $field.typeid.nameof);
+    $endforeach
+}
+
+
+fn void main()
+{
+    print_fields(Foo);
+}
+</code></pre>
+<p>This prints on x64:</p>
+<pre><code class="language-text">Field a, offset: 0, size: 4, type: int
+Field b, offset: 8, size: 8, type: double
+Field ptr, offset: 16, size: 8, type: int*
+</code></pre>
+<h4 id="compile-time-execution">Compile time execution</h4>
+<p>Macros with only compile time variables are completely evaluated at compile time:</p>
+<pre><code>macro long @fib(long $n)
+{
+    $if ($n &lt;= 1):
+        return $n;
+    $else
+        return @fib($n - 1) + @fib($n - 2);
+    $endif
+}
+
+const long FIB19 = @fib(19); 
+// Same as const long FIB19 = 4181;
+</code></pre>
+<p>Read more about compile time execution <a href="../compiletime.md">here</a>.</p>
 <h5 id="generic-modules">Generic modules</h5>
 <p>Generic modules implements a generic system.</p>
 <pre><code>module stack &lt;Type&gt;;
@@ -652,6 +702,7 @@ fn void test()
     io::printfn(&quot;pop: %f&quot;, dstack.pop());
 }
 </code></pre>
+<p>Read more about generic modules <a href="../generics">here</a></p>
               
             </div>
           </div>

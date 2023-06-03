@@ -90,11 +90,9 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../compiletime/">Compile time evaluation</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
                     </li>
@@ -155,32 +153,20 @@
     <li class="toctree-l2"><a class="reference internal" href="#untyped-lists">Untyped lists</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#macro-directives">Macro directives</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#if-and-switch">$if and $switch</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#loops-using-foreach-and-for">Loops using $foreach and $for</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#switching-on-type-with-switch">Switching on type with $switch</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#conditional-macros-at-the-top-level">Conditional macros at the top level</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#conditional-compilation_1">Conditional compilation</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#global-constants">Global constants</a>
-    </li>
-        </ul>
     </li>
     </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
                     </li>
@@ -581,133 +567,6 @@ io::printfn("%s", $a[1]);
 // 2
 </code></pre>
 <h2 id="macro-directives">Macro directives</h2>
-<p>Inside of a macro, we can use the compile time statements <code>$if</code>, <code>$for</code> and <code>$switch</code>. Macros may also be recursively invoked. As previously mentioned, <code>$if</code> and <code>$switch</code> may also be invoked on the top level.</p>
-<h3 id="if-and-switch">$if and $switch</h3>
-<p><code>$if (&lt;const expr&gt;)</code> takes a compile time constant value and evaluates it to true or false.</p>
-<pre><code>macro foo($x, $y)
-{
-    $if ($x &gt; 3)
-        $y += $x * $x;
-    $else
-        $y += $x;
-    $endif
-}
-
-const int FOO = 10;
-
-fn void test()
-{
-    int a = 5;
-    int b = 4;
-    foo(1, a); // Allowed, expands to a += 1;
-    // foo(b, a); // Error: b is not a compile time constant.
-    foo(FOO, a); // Allowed, expands to a += FOO * FOO;
-}
-</code></pre>
-<p>For switching between multiple possibilities, use <code>$switch</code>.</p>
-<pre><code>macro foo($x, $y)
-{
-    $switch ($x)
-        $case 1: 
-            $y += $x * $x;
-        $case 2:
-            $y += $x;
-        $case 3:
-            $y *= $x;
-        $default:
-            $y -= $x;
-    $endif
-}
-</code></pre>
-<p>Switching without argument is also allowed, which works like an if-else chain:</p>
-<pre><code>macro foo($x, $y)
-{
-    $switch 
-        $case $x &gt; 10: 
-            $y += $x * $x;
-        $case $x &lt; 0:
-            $y += $x;
-        $default:
-            $y -= $x;
-    $endif
-}
-</code></pre>
-<h3 id="loops-using-foreach-and-for">Loops using $foreach and $for</h3>
-<p><code>$foreach (&lt;range&gt; : &lt;variable&gt;) ... $endforeach</code> allows compile time recursion. <code>$foreach</code> may recurse over enums, struct fields or constant ranges. Everything must be known at compile time.</p>
-<p>Compile time looping:</p>
-<pre><code>macro foo($a)
-{
-    $for (var $x = 0; $x &lt; $a; $x++)
-        io::printfn("%d", $x);     
-    $endfor
-}
-
-fn void test()
-{
-    foo(2);
-    // Expands to -&gt;
-    // io::printfn("%d", 0);     
-    // io::printfn("%d", 1);         
-}
-</code></pre>
-<p>Looping over enums:</p>
-<pre><code>macro foo_enum($SomeEnum)
-{
-    $foreach ($x : $SomeEnum.values)
-        io::printfn("%d", (int)$x);     
-    $endforeach
-}
-
-enum MyEnum
-{
-    A,
-    B,
-}
-
-fn void test()
-{
-    foo_enum(MyEnum);
-    // Expands to -&gt;
-    // io::printfn("%d", (int)MyEnum.A);
-    // io::printfn("%d", (int)MyEnum.B);    
-}
-</code></pre>
-<p>An important thing to note is that the content of the <code>$foreeach</code> or <code>$for</code> body must be a complete statement.
-It's not possible to compile partial statements.</p>
-<h3 id="switching-on-type-with-switch">Switching on type with $switch</h3>
-<p>It's possible to switch on type:</p>
-<pre><code>macro void foo(a, b)
-{
-    $switch(a, b)
-        $case int, int: 
-            return a * b;
-    $endswitch
-    return a + b;
-}
-</code></pre>
-<h2 id="conditional-macros-at-the-top-level">Conditional macros at the top level</h2>
-<p>A limitation with the macros is that they are only used <em>within</em> functions. 
-This is deliberate – macros expanding at the top level are much harder to 
-reason about since they should be able to define new types or change the
-meaning of the code that follows.</p>
-<p>Still, the usefulness of top level macros is great, which is why C3 offers 
-three pieces of functionality for the top level: conditional compilation,
-global constants and attributes</p>
-<h3 id="conditional-compilation_1">Conditional compilation</h3>
-<p>Conditional compilation is done with <code>$if</code> and <code>$switch</code>, which works just like
-inside of functions.</p>
-<pre><code>$if ($defined(platform::OS) &amp;&amp; platform::OS == WIN32)
-
-fn void doSomethingWin32Specific()
-{
-    /* .... */
-}
-
-$endif
-</code></pre>
-<h3 id="global-constants">Global constants</h3>
-<p>Global constant on the top level work like compile time variables in macros – with the exception
-that they must always be declared constant. They are evaluated in order, but will resolve on-demand if needed.</p>
               
             </div>
           </div>

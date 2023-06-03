@@ -124,11 +124,9 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../compiletime/">Compile time evaluation</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
                     </li>
@@ -136,11 +134,15 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
-                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
                     </li>
@@ -386,8 +388,8 @@ def FooPtr = Foo*;
 </code></pre>
 <p><code>def</code> also allows you to do things that C uses <code>#define</code> for:</p>
 <pre><code>// C
-#define puts println
-#define my_string my_excellent_string
+#define println puts
+#define my_excellent_string my_string
 
 char *my_string = "Party on";
 ...
@@ -444,8 +446,8 @@ fn void myCheck()
 }
 </code></pre>
 <h4 id="comments">Comments</h4>
-<p>The <code>/* */</code> comments are nesting:</p>
-<pre><code>/* This /* will all */ be commented out */
+<p>The <code>/* */</code> comments are nesting </p>
+<pre><code class="language-text">/* This /* will all */ be commented out */
 </code></pre>
 <p>Note that doc comments, starting with <code>/**</code> has special rules for parsing it, and is
 not considered a regular comment. See <a href="../contracts">contracts</a> for more information.</p>
@@ -582,6 +584,7 @@ C. </p>
 <li><a href="../macros">Semantic macros</a></li>
 <li><a href="../generics">Generic modules</a></li>
 <li><a href="../contracts">Contracts</a></li>
+<li><a href="../compiletime">Compile time evaluation</a></li>
 <li><a href="../reflection">Reflection</a></li>
 <li><a href="../operators">Operator overloading</a></li>
 <li>Macro methods</li>
