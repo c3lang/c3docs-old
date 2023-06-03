@@ -10,7 +10,7 @@ Don't add a `;` after enum, struct and union declarations, and note the slightly
 different syntax for declaring a named struct inside of a struct.
 
     // C
-    def struct
+    typedef struct
     {
       int a;
       struct 
