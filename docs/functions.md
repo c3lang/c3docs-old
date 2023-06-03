@@ -83,8 +83,8 @@ Named arguments with defaults:
 There are four types of varargs: 
 
 1. single typed
-2. explicitly typed variants: pass non-variant arguments as references
-3. implicitly typed variants: arguments are implicitly converted to references (use with care)
+2. explicitly typed any: pass non-any arguments as references
+3. implicitly typed any: arguments are implicitly converted to references (use with care)
 4. untyped C-style
 
 Examples:
@@ -94,14 +94,14 @@ Examples:
         /* args has type int[] */
     }
 
-    fn void va_variants_explicit(variant... args)
+    fn void va_variants_explicit(any... args)
     {
-        /* args has type variant[] */
+        /* args has type any[] */
     }
 
     fn void va_variants_implicit(args...)
     {
-        /* args has type variant[] */
+        /* args has type any[] */
     }
     
     extern fn void va_untyped(...); // only used for extern C functions
@@ -111,10 +111,10 @@ Examples:
         va_singletyped(1, 2, 3);
         
         int x = 1;
-        variant v = &x;
-        va_variants_explicit(&&1, &x, v); // pass references for non-variant arguments
+        any v = &x;
+        va_variants_explicit(&&1, &x, v); // pass references for non-any arguments
         
-        va_variants_implicit(1, x, "foo"); // arguments are implicitly converted to variants
+        va_variants_implicit(1, x, "foo"); // arguments are implicitly converted to anys
         
         va_untyped(1, x, "foo"); // extern C-function
     }

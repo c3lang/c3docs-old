@@ -1,5 +1,10 @@
 # Change log
 
+##### Revision 2023-06-03
+- Added specific compiletime page
+- Updated examples with references
+- variant -> any
+
 ##### Revision 2023-06-02
 - Suffix '?' replaced by '!' and vice versa.
 - Updates to ct statements.

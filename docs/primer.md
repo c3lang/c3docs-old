@@ -196,8 +196,8 @@ For convenience, assigning to a struct will infer the type even if it's not an i
 `def` also allows you to do things that C uses `#define` for:
 
     // C
-    #define puts println
-    #define my_string my_excellent_string 
+    #define println puts
+    #define my_excellent_string my_string  
     
     char *my_string = "Party on";
     ...
@@ -262,9 +262,11 @@ as the module name. Imports are recursive.
 
 #### Comments
 
-The `/* */` comments are nesting:
+The `/* */` comments are nesting 
 
-    /* This /* will all */ be commented out */
+```text
+/* This /* will all */ be commented out */
+```
 
 Note that doc comments, starting with `/**` has special rules for parsing it, and is
 not considered a regular comment. See [contracts](../contracts) for more information.
@@ -413,6 +415,7 @@ C.
 - [Semantic macros](../macros)
 - [Generic modules](../generics)
 - [Contracts](../contracts)
+- [Compile time evaluation](../compiletime)
 - [Reflection](../reflection)
 - [Operator overloading](../operators)
 - Macro methods

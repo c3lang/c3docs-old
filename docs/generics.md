@@ -43,8 +43,6 @@ testFloat(1.0, &f);
 
 Just like for macros, optional constraints may be added to improve compile errors:
 
-*Note: constraints are not feature complete 
-
 ```
 /**
  * @require $checks(TypeA a = (TypeB)1 + (TypeC)1)
@@ -58,7 +56,7 @@ module vector <TypeA, TypeB, TypeC>;
 def testFunction = vector::testFunc<Bar, float, int>;
 
 // This would give the error 
-// --> Illegal arguments for generic module vector, 
-// breaks check 'Bar a = (float)1 + (int)1'
+// --> Parameter(s) failed validation: 
+//     @require "$checks(TypeA a = (TypeB)1 + (TypeC)1)" violated.
 ```
 

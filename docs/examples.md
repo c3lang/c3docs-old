@@ -337,6 +337,8 @@ fn void printFile(String filename)
 }
 ```
 
+Read more about optionals and error handling [here](../optionals).
+
 ##### Contracts
 
 Pre- and postconditions are optionally compiled into asserts helping to optimize the code.
@@ -362,6 +364,8 @@ fn int getLastElement(int* array, int length)
     return array[length - 1];
 }
 ```
+
+Read more about contracts [here](../contracts).
 
 ##### Macros
 
@@ -438,6 +442,8 @@ fn void test()
 }
 ```
 
+Read more about macros [here](../macros).
+
 ##### Methods
 
 It's possible to namespace functions with a union, struct or enum type to enable "dot syntax" calls:
@@ -463,6 +469,58 @@ fn void test()
 }
 ```
 
+##### Compile time reflection and execution
+
+Access type information and loop over values at compile time:
+
+    import std::io;
+
+    struct Foo
+    {
+        int a;
+        double b;
+        int* ptr;
+    }
+
+    macro print_fields($Type)
+    {
+        $foreach ($field : $Type.membersof)
+            io::printfn("Field %s, offset: %s, size: %s, type: %s", 
+                    $field.nameof, $field.offsetof, $field.sizeof, $field.typeid.nameof);
+        $endforeach
+    }
+
+
+    fn void main()
+    {
+        print_fields(Foo);
+    }
+
+This prints on x64:
+
+```text
+Field a, offset: 0, size: 4, type: int
+Field b, offset: 8, size: 8, type: double
+Field ptr, offset: 16, size: 8, type: int*
+```
+
+#### Compile time execution
+
+Macros with only compile time variables are completely evaluated at compile time:
+
+    macro long @fib(long $n)
+    {
+        $if ($n <= 1):
+            return $n;
+        $else
+            return @fib($n - 1) + @fib($n - 2);
+        $endif
+    }
+
+    const long FIB19 = @fib(19); 
+    // Same as const long FIB19 = 4181;
+
+Read more about compile time execution [here](../compiletime.md).
 
 ##### Generic modules
 
@@ -524,3 +582,5 @@ fn void test()
     io::printfn("pop: %f", dstack.pop());
 }
 ```
+
+Read more about generic modules [here](../generics)

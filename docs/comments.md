@@ -34,15 +34,16 @@ Finally a custom annotation, "@mycustom" is added. The compiler is free to silen
  
 ### Available annotations
 
-| Name         | format             |
-| ------------ | ------------------:|
-| @param       | `@param <param> <description>`|
-| @return      | `@return <description>`|
-| @fails      | `@fails <description>`|
-| @deprecated  | `@deprecated <optional description>`|
-| @require     | `@require <expr1>, <expr2>, ...` |
-| @ensure      | `@ensure <expre1>, <expr2>, ...` |
-| @pure        | `@pure` |    
-| @checked    | `@checked <expr1>, <expr2>, ...` |
+| Name        |                               format |
+|-------------|-------------------------------------:|
+| @param      |       `@param <param> <description>` |
+| @return     |              `@return <description>` |
+| @return!    |   `@return! <fault1>, <fault2>, ...` |
+| @fails      |               `@fails <description>` |
+| @deprecated | `@deprecated <optional description>` |
+| @require    |     `@require <expr1>, <expr2>, ...` |
+| @ensure     |     `@ensure <expre1>, <expr2>, ...` |
+| @pure       |                              `@pure` |    
+| @checked    |     `@checked <expr1>, <expr2>, ...` |
     
 See [contracts](../contracts) for information regarding `@require`, `@ensure`, `@const`, `@pure`, `@checked`.

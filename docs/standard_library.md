@@ -20,13 +20,13 @@ int b = 5;
 io::printfn("%d", a); // Prints 5
 ```
 
-### varcast(variant v, $Type)
+### varcast(any v, $Type)
 
 Optionally cast the value `v` to type `$Type*` on failure returns `VarCastResult.TYPE_MISMATCH`.
 
 ```c
 int b;
-variant a = &b;
+any a = &b;
 float*! c = varcast(a, float); // Will return TYPE_MISMATCH
 int*! d = varcast(a, int);     // Works!
 ```
@@ -98,7 +98,7 @@ are implemented.
 
 - `IteratorResult` returned when reaching the end of an iterator.
 - `SearchResult` used when a search fails.
-- `VarCastResult` when a variant cast fails.
+- `AnyCastResult` when a any cast fails.
 
 ## std::core::env
 
@@ -309,15 +309,15 @@ Return `true` if the value can be compared using the `equals` macro.
 Return `true` if the value can be compared using the comparison macros.
 
 ### kind_is_int(TypeKind kind)
-### variant_to_int(variant v, $Type)
+### any_to_int(any v, $Type)
 
-Returns an optional value of `$Type` if the variant value losslessly
+Returns an optional value of `$Type` if the any value losslessly
 may be converted into the given type. Returns a `ConversionResult` otherwise.
 
 ```c
-variant v = &&128;
-short y = variant_to_int(v, short)!!; // Works 
-ichar z = variant_to_int(v, ichar)!!; // Panics VALUE_OUT_OF_RANGE
+any v = &&128;
+short y = any_to_int(v, short)!!; // Works 
+ichar z = any_to_int(v, ichar)!!; // Panics VALUE_OUT_OF_RANGE
 ```
 
 ## std::core::str::conv
