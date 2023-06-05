@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Comparisons with other languages - C3 Documentation</title>
+  <title>Dynamic code - C3 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Comparisons with other languages";
-    var mkdocs_page_input_path = "compare.md";
+    var mkdocs_page_name = "Dynamic code";
+    var mkdocs_page_input_path = "dynamiccode.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -68,65 +68,7 @@
                 <ul class="current">
                     <li class="toctree-l1"><a class="reference internal" href="../changesfromc/">Changes from C</a>
                     </li>
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Comparisons with other languages</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#c">C</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#in-c3-but-not-in-c">In C3 but not in C</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#in-c-but-not-in-c3">In C but not in C3</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#c_1">C++</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#in-c-but-not-in-c3_1">In C++ but not in C3</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#in-c3-but-not-in-c_1">In C3 but not in C++</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#rust">Rust</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#in-rust-but-not-in-c3">In Rust but not in C3</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#in-c3-but-not-in-rust">In C3 but not in Rust</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#zig">Zig</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#in-zig-but-not-in-c3">In Zig but not in C3</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#in-c3-but-not-in-zig">In C3 but not in Zig</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#jai">Jai</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#in-jai-but-not-in-c3">In Jai but not in C3</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#in-c3-but-not-in-jai">In C3 but not in Jai</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#odin">Odin</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#in-odin-but-not-in-c3">In Odin but not in C3</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#in-c3-but-not-in-odin">In C3 but not in Odin</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#d">D</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#in-d-but-not-in-c3">In D but not in C3</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#in-c3-but-not-in-d">In C3 but not in D</a>
-    </li>
-        </ul>
-    </li>
-    </ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../compare/">Comparisons with other languages</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
                     </li>
@@ -160,7 +102,29 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../dynamiccode/">Dynamic code</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Dynamic code</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#working-with-the-type-of-any-at-runtime">Working with the type of any at runtime.</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dynamic-calls">Dynamic calls</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#defining-an-interface">Defining an interface</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#implementing-the-interface">Implementing the interface</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#calling-dynamic-methods">Calling dynamic methods</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#variable-argument-functions-with-implicit-any">Variable argument functions with implicit any</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#explicit-any-vararg-functions">Explicit any vararg functions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#implicit-any-vararg-functions">Implicit any vararg functions</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
@@ -236,7 +200,7 @@
         
       
     
-    <li>Comparisons with other languages</li>
+    <li>Dynamic code</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -247,174 +211,115 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="language-comparisons">Language comparisons</h1>
-<p>An important question to answer is "How does C3 compare to other similar programming languages?".
-Here is an extremely brief (and not yet complete) overview.</p>
-<h2 id="c">C</h2>
-<p>As C3 is an evolution of C, the languages are quite similar. 
-C3 adds features, but also removes a few.</p>
-<h5 id="in-c3-but-not-in-c">In C3 but not in C</h5>
-<ul>
-<li>Module system</li>
-<li>Integrated build system</li>
-<li>Generics</li>
-<li>Semantic Macros</li>
-<li>Error handling</li>
-<li>Defer</li>
-<li>Value methods</li>
-<li>Associated enum data</li>
-<li>Distinct types and subtypes</li>
-<li>Optional contracts</li>
-<li>Built-in subarrays</li>
-<li>Foreach for iteration over arrays and types</li>
-<li>Dynamic calls and types</li>
-</ul>
-<h5 id="in-c-but-not-in-c3">In C but not in C3</h5>
-<ul>
-<li>Qualified types (<code>const</code>, <code>volatile</code> etc)</li>
-<li>Unsafe implicit conversions</li>
-</ul>
-<h2 id="c_1">C++</h2>
-<p>C++ is a complex object oriented "almost superset" of C. It tries to be everything to everyone,
-while squeezing this into a C syntax. The language is well known for its 
-many pitfalls and quirky corners – as well as its long compile times.</p>
-<p>C3 is in many ways different from C++ in the same way that C is different from C++, 
-but the semantic macro system and the generics close the gap in terms of writing
-reusable generic code. The C3 module system and error handling is also very
-different from how C++ does things. </p>
-<h5 id="in-c-but-not-in-c3_1">In C++ but not in C3</h5>
-<ul>
-<li>Objects and classes</li>
-<li>RAII</li>
-<li>Exceptions</li>
-</ul>
-<h5 id="in-c3-but-not-in-c_1">In C3 but not in C++</h5>
-<ul>
-<li>Module system (yet)</li>
-<li>Integrated build system</li>
-<li>Semantic macros</li>
-<li>Error handling</li>
-<li>Defer</li>
-<li>Associated enum data</li>
-<li>Built-in subarrays</li>
-<li>Dynamic calls</li>
-</ul>
-<h2 id="rust">Rust</h2>
-<p>Rust is a safe systems programming language. While not quite as complex as C++,
-it is still a feature rich programming language with semantic macros, traits and
-pattern matching to mention a few.</p>
-<p>Error handling is handled using <code>Result</code> and <code>Optional</code> which is similar to 
-how C3 works.</p>
-<p>C3 compares to Rust much like C, although the presence of built-in subarrays and 
-strings reduces the places where C3 is unsafe. Rust provides arrays and strings,
-but they are not built in. Subarrays are the same as Rust's slices.</p>
-<h5 id="in-rust-but-not-in-c3">In Rust but not in C3</h5>
-<ul>
-<li>RAII</li>
-<li>Memory safety</li>
-<li>Safe union types with functions</li>
-<li>Different syntax from C</li>
-<li>Pattern matching</li>
-<li>Async built in</li>
-</ul>
-<h5 id="in-c3-but-not-in-rust">In C3 but not in Rust</h5>
-<ul>
-<li>Same ease of programming as C</li>
-<li>Optional contracts</li>
-<li>Familiar C syntax and behaviour</li>
-<li>Dynamic calls</li>
-</ul>
-<h2 id="zig">Zig</h2>
-<p>Zig is a systems programming language with extensive compile time execution to
-enable polymorphic functions and parameterized types. It aims to be a C replacement.</p>
-<p>Compared to C3, Zig tries to be a completely new language in terms of syntax and feel. 
-C3 uses macros to a modest degree where it is more pervasive in Zig, and 
-does not depart from C to the same degree. Like Rust, it features slices as a first
-class type. The standard library uses an explicit allocator to allow it to work
-with many different allocation strategies.</p>
-<p>Zig is a very ambitious project, aiming to support as many types of platforms as
-possible.</p>
-<h5 id="in-zig-but-not-in-c3">In Zig but not in C3</h5>
-<ul>
-<li>Pervasive compile time execution.</li>
-<li>Memory allocation failure is an error.</li>
-<li>Toolchain uses build files written in native Zig.</li>
-<li>Different syntax and behaviour compared to C.</li>
-<li>Structs define namespace.</li>
-<li>Async primitives built in.</li>
-<li>Built in unit tests.</li>
-<li>Arbitrarily integer sizes.</li>
-</ul>
-<h5 id="in-c3-but-not-in-zig">In C3 but not in Zig</h5>
-<ul>
-<li>Module system.</li>
-<li>Integrated build system.</li>
-<li>C ABI compatibility by default.</li>
-<li>Optional contracts.</li>
-<li>Familiar C syntax and behaviour.</li>
-<li>Dynamic calls</li>
-</ul>
-<h2 id="jai">Jai</h2>
-<p>Jai is a programming language aimed at high performance game programming.
-It has an extensive compile time meta programming functionality, even
-to the point of being able to run programs at compile time. It also
-has compile time polymorphism, a powerful macro system and uses 
-an implicit context system to switch allocation schemes.</p>
-<h5 id="in-jai-but-not-in-c3">In Jai but not in C3</h5>
-<ul>
-<li>Pervasive compile time execution.</li>
-<li>Jai's compile time execution is the build system.</li>
-<li>Different syntax and behaviour compared to C.</li>
-<li>More powerful macro system than C3.</li>
-<li>Implicit constructors</li>
-</ul>
-<h5 id="in-c3-but-not-in-jai">In C3 but not in Jai</h5>
-<ul>
-<li>Module system</li>
-<li>Integrated build system</li>
-<li>Optional contracts</li>
-<li>Familiar C syntax and behaviour</li>
-<li>Fairly small language</li>
-<li>Dynamic calls</li>
-</ul>
-<h2 id="odin">Odin</h2>
-<p>Odin is a language built for high performance but tries to remain
-a simple language to learn. Superficially the syntax shares much with
-Jai, and some of Jai's features things – like an implicit context – also shows up
-in Odin. In contrast with both Jai and Zig, Odin uses only minimal compile time evaluation
-and instead only relies on parametric polymorphism to ensure reuse.
-It also contains conveniences, like maps and arrays built into 
-the language. For error handling it relies on Go style tuple returns.</p>
-<h5 id="in-odin-but-not-in-c3">In Odin but not in C3</h5>
-<ul>
-<li>Different syntax and behaviour compared to C</li>
-<li>Ad hoc parametric polymorphism</li>
-<li>Tuple returns</li>
-<li>A rich built in set of types</li>
-</ul>
-<h5 id="in-c3-but-not-in-odin">In C3 but not in Odin</h5>
-<ul>
-<li>Familiar C syntax and behaviour</li>
-<li>Semantic macros</li>
-<li>Value methods</li>
-<li>Optional contracts</li>
-<li>Error handling support</li>
-</ul>
-<h2 id="d">D</h2>
-<p>D is a <em>huge</em> language. Where C++ is big, D provides all that C++ does and adds anything 
-else you might think of. There is very little you can't do in D that isn't supported
-one way or the other. The most impressive thing is that D does this with fewer syntactic quirks than C++.</p>
-<h5 id="in-d-but-not-in-c3">In D but not in C3</h5>
-<ul>
-<li>Objects and classes</li>
-<li>RAII</li>
-<li>Exceptions
-... and a huge amount of features ...</li>
-</ul>
-<h5 id="in-c3-but-not-in-d">In C3 but not in D</h5>
-<ul>
-<li>Small language that provides what you need and not more</li>
-</ul>
+                <h1 id="dynamic-code">Dynamic code</h1>
+<h2 id="working-with-the-type-of-any-at-runtime">Working with the type of <code>any</code> at runtime.</h2>
+<p>The <code>any</code> type is recommended for writing code that is polymorphic at runtime where macros are not appropriate.</p>
+<p>An <code>any</code> value can be created by assigning any pointer to it. You can then query the <code>any</code> type for the typeid of 
+the enclosed type (the type the pointer points to) using the <code>type</code> field.</p>
+<p>This allows switching over the typeid, either using a normal switch:</p>
+<pre><code>switch (my_any.typeid)
+{
+    case Foo.typeid:
+        ...
+    case Bar.typeid:
+        ...
+}
+</code></pre>
+<p>Or the special <code>any</code>-version of the switch:</p>
+<pre><code>switch (my_any)
+{
+    case Foo:
+        // my_any can be used as if it was Foo* here
+    case Bar:
+        // my_any can be used as if it was Bar* here
+}
+</code></pre>
+<p>Sometimes one needs to manually construct an <code>any</code>, and it can be done similar to creating any struct type: <code>any { ptr, type }</code>
+will create an <code>any</code> pointing to <code>ptr</code> and with typeid <code>type</code>.</p>
+<p>Since the runtime <code>typeid</code> is available, we can query for any runtime <code>typeid</code> property available
+at runtime, for example the size, e.g. <code>my_any.typeid.sizeof</code>. This allows us to do a lot of work
+on with the enclosed data without knowing the details of its type.</p>
+<p>For example, this would make a copy of the data and place it in the variable <code>any_copy</code>:</p>
+<pre><code>void* data = malloc(a.type.sizeof);
+mem::copy(data, a.ptr, a.type.sizeof);
+any any_copy = { data, a.type };
+</code></pre>
+<h2 id="dynamic-calls">Dynamic calls</h2>
+<p>Most statically typed object-oriented languages implements extensibility using vtables. In C, and by extension
+C3, this is possible to emulate by passing around structs containing list of function pointers in addition to the data.</p>
+<p>While this is efficient and often the best solution, but it puts certain assumptions on the code and makes interfaces
+more challenging to evolve over time.</p>
+<p>As an alternative there are languages (such as Objective-C) which instead use message passing to dynamically typed
+objects, where the availability of a certain functionality may be queried at runtime.</p>
+<p>C3 provides this latter functionality over the <code>any</code> type using <code>@interface</code> and <code>@dynamic</code> annotations.</p>
+<h3 id="defining-an-interface">Defining an interface</h3>
+<p>The first step is to define an interface, this is done by defining an <code>any</code> method <em>without a body</em> annotated 
+<code>@interface</code>:</p>
+<pre><code>fn String any.myname(void*) @interface;
+</code></pre>
+<p>Note how <code>void*</code> rather than <code>any</code> is the first parameter. Other than this, it is like any other method 
+declaration.</p>
+<h3 id="implementing-the-interface">Implementing the interface</h3>
+<p>After the interface is added, we can create methods that implement this interface.</p>
+<pre><code>struct Bob { int x; }
+fn String Bob.myname(Bob*) @dynamic { return "I am Bob!"; }
+
+fn String int.myname(int*) @dynamic { return "I am int!"; }
+</code></pre>
+<p>One of the interfaces available in the standard library is to_string. If we implemented it for our struct above
+it might look like this:</p>
+<pre><code>fn String Bob.to_string(Bob* bob, Allocator* using) @dynamic
+{
+    return string::printf("Bob(%d)", bob.x, .using = using);
+}
+</code></pre>
+<h3 id="calling-dynamic-methods">Calling dynamic methods</h3>
+<p><code>@dynamic</code> methods are just like normal methods. If called directly, they are just normal function calls. The
+difference is that they may be invoked through <code>any</code>:</p>
+<p>An example helps illustrate the typical use:</p>
+<pre><code>fn void whoareyou(any a)
+{
+    // Query if the function exists
+    if (!&amp;a.myname)
+    {
+        io::printn("I don't know who I am.");
+        return;
+    }
+    // Dynamically call the function
+    io::printn(a.myname());
+}
+</code></pre>
+<p>We first query if the method exists on the value wrapped by <code>any</code>. If it doesn't then we print
+<code>"I don't know who I am."</code> otherwise we the value's <code>myname()</code> method and print it.</p>
+<p>We could use it like this:</p>
+<pre><code>fn void main()
+{
+    int i;
+    double d;
+    Bob bob;
+
+    any a = &amp;i; 
+    whoareyou(a); // Prints "I am int!"
+    a = &amp;d;
+    whoareyou(a); // Prints "I don't know who I am."
+    a = &amp;bob;
+    whoareyou(a); // Prints "I am Bob!"
+}
+</code></pre>
+<h2 id="variable-argument-functions-with-implicit-any">Variable argument functions with implicit <code>any</code></h2>
+<p>Regular typed varargs are of a single type, e.g. <code>fn void abc(int x, double... args)</code>.
+In order to take variable functions that are of multiple types, <code>any</code> may be used. 
+There are two variants:</p>
+<h3 id="explicit-any-vararg-functions">Explicit <code>any</code> vararg functions</h3>
+<p>This type of function has a format like <code>fn void vaargfn(int x, any... args)</code>. Because only
+pointers may be passed to an <code>any</code>, the arguments must explicitly be pointers (e.g. <code>vaargfn(2, &amp;b, &amp;&amp;3.0)</code>).</p>
+<p>While explicit, this may be somewhat less user-friendly than implicit vararg functions:</p>
+<h3 id="implicit-any-vararg-functions">Implicit <code>any</code> vararg functions</h3>
+<p>The implicit <code>any</code> vararg function has instead a format like <code>fn void vaanyfn(int x, args...)</code>.
+Calling this function will implicitly cause taking the pointer of the values (so for
+example in the call <code>vaanyfn(2, b, 3.0)</code>, what is actually passed are <code>&amp;b</code> and <code>&amp;&amp;3.0</code>).</p>
+<p>Because this passes values implicitly by reference, care must be taken <em>not</em> to mutate any
+values passed in this manner. Doing so would very likely break user expectations.</p>
               
             </div>
           </div>
@@ -422,10 +327,10 @@ one way or the other. The most impressive thing is that D does this with fewer s
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../examples/" class="btn btn-neutral float-right" title="Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../undefinedbehaviour/" class="btn btn-neutral float-right" title="Undefined behaviour">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../changesfromc/" class="btn btn-neutral" title="Changes from C"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../operators/" class="btn btn-neutral" title="Operator overloading"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -451,10 +356,10 @@ one way or the other. The most impressive thing is that D does this with fewer s
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../changesfromc/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../operators/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../examples/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../undefinedbehaviour/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

@@ -130,6 +130,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../dynamiccode/">Dynamic code</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
@@ -304,16 +306,16 @@ but this adds a lot of extra boilerplate.
 C3 also offers a way to opt out of zero-initialization, so the change comes at no performance loss.</em></p>
 <h5 id="compound-literal-syntax-changed">Compound literal syntax changed</h5>
 <pre><code class="language-c">// C style:
-callFoo((Foo) { 1, 2, 3 });
+call_foo((Foo) { 1, 2, 3 });
 
 // C++ style (1):
-callFoo(Foo(1, 2, 3));
+call_foo(Foo(1, 2, 3));
 
 // C++ style (2):
-callFoo(Foo { 1, 2, 3 });
+call_foo(Foo { 1, 2, 3 });
 
 // C3:
-callFoo(Foo { 1, 2, 3 } );
+call_foo(Foo { 1, 2, 3 } );
 </code></pre>
               
             </div>

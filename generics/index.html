@@ -104,6 +104,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../dynamiccode/">Dynamic code</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
@@ -210,7 +212,7 @@ fn Type2 test(Type2 b, Foo *foo)
 </code></pre>
 <p>Including a generic module works as usual, but to use a type, it must be <em>defined</em> before use.</p>
 <pre><code>def FooFloat = Foo&lt;float, double&gt;;
-def testFloat = foo_test::test&lt;float, double&gt;;
+def test_float = foo_test::test&lt;float, double&gt;;
 
 ...
 
@@ -218,7 +220,7 @@ FooFloat f;
 
 ...
 
-testFloat(1.0, &amp;f);
+test_float(1.0, &amp;f);
 
 </code></pre>
 <p>Just like for macros, optional constraints may be added to improve compile errors:</p>
