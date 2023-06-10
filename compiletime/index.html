@@ -219,10 +219,10 @@ local variables are prefixed with <code>$</code> (e.g. <code>$foo</code>). It is
 that are also prefixed using <code>$</code> (e.g. <code>$MyType</code> <code>$ParamType</code>).</p>
 <p>Mutable compile time variables are <em>not</em> allowed in the global scope.</p>
 <h3 id="if-and-switch">$if and $switch</h3>
-<p><code>$if (&lt;const expr&gt;):</code> takes a compile time constant value and evaluates it to true or false.</p>
+<p><code>$if &lt;const expr&gt;:</code> takes a compile time constant value and evaluates it to true or false.</p>
 <pre><code>macro foo($x, $y)
 {
-    $if ($x &gt; 3):
+    $if $x &gt; 3:
         $y += $x * $x;
     $else
         $y += $x;
@@ -269,7 +269,6 @@ fn void test()
 }
 </code></pre>
 <h3 id="loops-using-foreach-and-for">Loops using $foreach and $for</h3>
-<p>Unlike <code>$if</code> and <code>$switch</code>, iteration is only allowed inside of functions and macros. </p>
 <p><code>$for</code> ... <code>$endfor</code> works analogous to <code>for</code>, only it is limited to using compile time variables. <code>$foreach</code> ... <code>$endforeach</code> similarly 
 matches the behaviour of <code>foreach</code>.</p>
 <p>Compile time looping:</p>
@@ -326,7 +325,7 @@ const int MY_CONST = @test(2); // Will fold to "4"
 macro will compute Fibonacci at compile time:</p>
 <pre><code>macro long @fib(long $n)
 {
-    $if ($n &lt;= 1):
+    $if $n &lt;= 1:
         return $n;
     $else
         return @fib($n - 1) + @fib($n - 2);
@@ -337,21 +336,28 @@ macro will compute Fibonacci at compile time:</p>
 is not be considered to be a constant expression, even if the actual argument to the macro was a constant.
 This limitation is deliberate, to offer control over what is compiled out and what isn't.</p>
 <h3 id="conditional-compilation-at-the-top-level">Conditional compilation at the top level</h3>
-<p>At the top level, conditional compilation is done with <code>$if</code> and <code>$switch</code>, just like the inside of 
-macros and functions, but rather than statements, any <em>complete</em> declarations may be conditionally
-included.</p>
-<pre><code>$if ($defined(platform::OS) &amp;&amp; platform::OS == WIN32)
-
-fn void doSomethingWin32Specific()
+<p>At the top level, conditional compilation is controlled using with <code>@if</code> attributes on declarations</p>
+<pre><code>fn void doSomethingWin32Specific() @if($defined(env::OS_TYPE) &amp;&amp; env::OS_TYPE == WIN32)
 {
     /* .... */
 }
 
-$endif
+struct Foo
+{
+    int a;
+    int b @if(NO_LIBC);
+}
 </code></pre>
 <h4 id="evaluation-order-of-top-level-conditional-compilation">Evaluation order of top level conditional compilation</h4>
 <p>Conditional compilation at the top level can cause unexpected ordering issues, especially when combined with 
-<code>$defined</code>. It is strongly recommended to only switch on unconditionally defined values.</p>
+<code>$defined</code>. At a high level, there are three phases of evaluation:</p>
+<ol>
+<li>Non-conditional declarations are registered.</li>
+<li>Conditional module sections are either discarded or have all of their non-conditional declarations registered.</li>
+<li>Each module in turn will evaluate <code>@if</code> attributes for each module section. </li>
+</ol>
+<p>The order of module and module section evaluation in (2) and (3) is not deterministic and any use of <code>$defined</code> should not 
+rely on this ordering.</p>
 <h2 id="compile-time-introspection">Compile time introspection</h2>
 <p>At compile time, full type information is available. This allows for creation of reusable, code generating, macros for things
 like serialization.</p>

@@ -639,7 +639,7 @@ Field ptr, offset: 16, size: 8, type: int*
 <p>Macros with only compile time variables are completely evaluated at compile time:</p>
 <pre><code>macro long @fib(long $n)
 {
-    $if ($n &lt;= 1):
+    $if $n &lt;= 1:
         return $n;
     $else
         return @fib($n - 1) + @fib($n - 2);
