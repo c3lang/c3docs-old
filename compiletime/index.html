@@ -100,7 +100,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#compile-time-macro-execution">Compile time macro execution</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#conditional-compilation-at-the-top-level">Conditional compilation at the top level</a>
+    <li class="toctree-l2"><a class="reference internal" href="#conditional-compilation-at-the-top-level-using-if">Conditional compilation at the top level using @if</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#evaluation-order-of-top-level-conditional-compilation">Evaluation order of top level conditional compilation</a>
     </li>
@@ -214,7 +214,7 @@ it is possible to perform limited compile time execution.</p>
 <h3 id="compile-time-values">Compile time values</h3>
 <p>During compilation, global constants are considered compile time values, as are any 
 derived constant values, such as type names and sizes, variable alignments etc.</p>
-<p>Inside of a macro or a function, it is also possible to define mutable compile time variables. Such
+<p>Inside of a macro or a function, it is possible to define mutable compile time variables. Such
 local variables are prefixed with <code>$</code> (e.g. <code>$foo</code>). It is also possible to define local <em>type</em> variables,
 that are also prefixed using <code>$</code> (e.g. <code>$MyType</code> <code>$ParamType</code>).</p>
 <p>Mutable compile time variables are <em>not</em> allowed in the global scope.</p>
@@ -335,9 +335,9 @@ macro will compute Fibonacci at compile time:</p>
 <p>It is important to remember that if we had replaced <code>$n</code> with <code>n</code> the compiler would have complained. <code>n &lt;= 1</code> 
 is not be considered to be a constant expression, even if the actual argument to the macro was a constant.
 This limitation is deliberate, to offer control over what is compiled out and what isn't.</p>
-<h3 id="conditional-compilation-at-the-top-level">Conditional compilation at the top level</h3>
+<h3 id="conditional-compilation-at-the-top-level-using-if">Conditional compilation at the top level using @if</h3>
 <p>At the top level, conditional compilation is controlled using with <code>@if</code> attributes on declarations</p>
-<pre><code>fn void doSomethingWin32Specific() @if($defined(env::OS_TYPE) &amp;&amp; env::OS_TYPE == WIN32)
+<pre><code>fn void foo_win32() @if(env::WIN32)
 {
     /* .... */
 }
@@ -345,8 +345,15 @@ This limitation is deliberate, to offer control over what is compiled out and wh
 struct Foo
 {
     int a;
-    int b @if(NO_LIBC);
+    int b @if(env::NO_LIBC);
 }
+</code></pre>
+<p>The argument to <code>@if</code> must be possible to resolve to a constant at compile time. This means that argument
+may also be a compile time evaluated macro:</p>
+<pre><code>macro bool @foo($x) =&gt; $x &gt; 2;
+
+int x @if(@foo(5)); // Will be included
+int y @if(@foo(0)); // Will not be included
 </code></pre>
 <h4 id="evaluation-order-of-top-level-conditional-compilation">Evaluation order of top level conditional compilation</h4>
 <p>Conditional compilation at the top level can cause unexpected ordering issues, especially when combined with 
@@ -361,6 +368,10 @@ rely on this ordering.</p>
 <h2 id="compile-time-introspection">Compile time introspection</h2>
 <p>At compile time, full type information is available. This allows for creation of reusable, code generating, macros for things
 like serialization.</p>
+<pre><code>usz foo_alignment = Foo.alignof;
+usz foo_member_count = Foo.membersof.len;
+String foo_name = Foo.nameof;
+</code></pre>
 <p>To read more about all the fields available at compile time, see the page on <a href="../reflection">reflection</a>.</p>
               
             </div>
