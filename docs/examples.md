@@ -510,7 +510,7 @@ Macros with only compile time variables are completely evaluated at compile time
 
     macro long @fib(long $n)
     {
-        $if ($n <= 1):
+        $if $n <= 1:
             return $n;
         $else
             return @fib($n - 1) + @fib($n - 2);
@@ -520,7 +520,7 @@ Macros with only compile time variables are completely evaluated at compile time
     const long FIB19 = @fib(19); 
     // Same as const long FIB19 = 4181;
 
-Read more about compile time execution [here](../compiletime.md).
+Read more about compile time execution [here](../compiletime).
 
 ##### Generic modules
 
@@ -584,3 +584,42 @@ fn void test()
 ```
 
 Read more about generic modules [here](../generics)
+
+##### Dynamic calls
+
+Runtime dynamic dispatch through the `any` type is possible for methods marked `@dynamic`:
+
+    import std::io;
+
+    // Define a dynamic interface
+    fn String any.myname(void*) @interface;
+    
+    struct Bob { int x; }
+    fn String Bob.myname(Bob*) @dynamic { return "I am Bob!"; }
+    fn String int.myname(int*) @dynamic { return "I am int!"; }
+
+    fn void whoareyou(any a)
+    {
+        if (!&a.myname)
+        {
+            io::printn("I don't know who I am.");
+            return;
+        }
+        io::printn(a.myname());
+    }
+
+    fn void main()
+    {
+        int i = 1;
+        double d = 1.0;
+        Bob bob;
+
+	    any a = &i;
+	    whoareyou(a);
+	    a = &d;
+	    whoareyou(a);
+	    a = &bob;
+	    whoareyou(a);
+    }
+
+Read more about dynamic calls [here](../dynamiccode).

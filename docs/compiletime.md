@@ -9,7 +9,7 @@ it is possible to perform limited compile time execution.
 During compilation, global constants are considered compile time values, as are any 
 derived constant values, such as type names and sizes, variable alignments etc.
 
-Inside of a macro or a function, it is also possible to define mutable compile time variables. Such
+Inside of a macro or a function, it is possible to define mutable compile time variables. Such
 local variables are prefixed with `$` (e.g. `$foo`). It is also possible to define local *type* variables,
 that are also prefixed using `$` (e.g. `$MyType` `$ParamType`).
 
@@ -17,11 +17,11 @@ Mutable compile time variables are *not* allowed in the global scope.
 
 ### $if and $switch
 
-`$if (<const expr>):` takes a compile time constant value and evaluates it to true or false.
+`$if <const expr>:` takes a compile time constant value and evaluates it to true or false.
 
     macro foo($x, $y)
     {
-        $if ($x > 3):
+        $if $x > 3:
             $y += $x * $x;
         $else
             $y += $x;
@@ -70,8 +70,6 @@ Switching without argument is also allowed, which works like an if-else chain:
     }
 
 ### Loops using $foreach and $for
-
-Unlike `$if` and `$switch`, iteration is only allowed inside of functions and macros. 
 
 `$for` ... `$endfor` works analogous to `for`, only it is limited to using compile time variables. `$foreach` ... `$endforeach` similarly 
 matches the behaviour of `foreach`.
@@ -136,7 +134,7 @@ macro will compute Fibonacci at compile time:
 
     macro long @fib(long $n)
     {
-        $if ($n <= 1):
+        $if $n <= 1:
             return $n;
         $else
             return @fib($n - 1) + @fib($n - 2);
@@ -147,30 +145,50 @@ It is important to remember that if we had replaced `$n` with `n` the compiler w
 is not be considered to be a constant expression, even if the actual argument to the macro was a constant.
 This limitation is deliberate, to offer control over what is compiled out and what isn't.
 
-### Conditional compilation at the top level
+### Conditional compilation at the top level using @if
 
-At the top level, conditional compilation is done with `$if` and `$switch`, just like the inside of 
-macros and functions, but rather than statements, any *complete* declarations may be conditionally
-included.
+At the top level, conditional compilation is controlled using with `@if` attributes on declarations
 
-    $if ($defined(platform::OS) && platform::OS == WIN32)
-    
-    fn void doSomethingWin32Specific()
+    fn void foo_win32() @if(env::WIN32)
     {
         /* .... */
     }
-    
-    $endif
+
+    struct Foo
+    {
+        int a;
+        int b @if(env::NO_LIBC);
+    }
+
+The argument to `@if` must be possible to resolve to a constant at compile time. This means that argument
+may also be a compile time evaluated macro:
+
+    macro bool @foo($x) => $x > 2;
+
+    int x @if(@foo(5)); // Will be included
+    int y @if(@foo(0)); // Will not be included
+
 
 #### Evaluation order of top level conditional compilation
 
 Conditional compilation at the top level can cause unexpected ordering issues, especially when combined with 
-`$defined`. It is strongly recommended to only switch on unconditionally defined values.
+`$defined`. At a high level, there are three phases of evaluation:
+
+1. Non-conditional declarations are registered.
+2. Conditional module sections are either discarded or have all of their non-conditional declarations registered.
+3. Each module in turn will evaluate `@if` attributes for each module section. 
+
+The order of module and module section evaluation in (2) and (3) is not deterministic and any use of `$defined` should not 
+rely on this ordering.
 
 ## Compile time introspection
 
 At compile time, full type information is available. This allows for creation of reusable, code generating, macros for things
 like serialization.
+    
+    usz foo_alignment = Foo.alignof;
+    usz foo_member_count = Foo.membersof.len;
+    String foo_name = Foo.nameof; 
 
 To read more about all the fields available at compile time, see the page on [reflection](../reflection).
 

@@ -278,7 +278,7 @@ will make it treated as a compile time constant. The constant does not need to b
 
     const A = false;
     // Compile time 
-    $if (A)
+    $if A:
       // This will not be compiled
     $else
       // This will be compiled

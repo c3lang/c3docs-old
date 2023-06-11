@@ -29,7 +29,7 @@ Including a generic module works as usual, but to use a type, it must be *define
 
 ```
 def FooFloat = Foo<float, double>;
-def testFloat = foo_test::test<float, double>;
+def test_float = foo_test::test<float, double>;
 
 ...
 
@@ -37,7 +37,7 @@ FooFloat f;
 
 ...
 
-testFloat(1.0, &f);
+test_float(1.0, &f);
 
 ```
 

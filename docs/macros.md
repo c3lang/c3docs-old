@@ -12,9 +12,14 @@ The macro capabilities of C3 reaches across several constructs: macros (prefixed
     #endif
     
     // C3
-    $if ($defined(x) && $y > 3)
+    $if $defined(x) && $y > 3:
         int z;
     $endif
+
+    // or
+    int z @if($defined(x) && $y > 3);
+
+    
 
 ### Macros
 
@@ -148,9 +153,12 @@ Use `&` in front of a parameter to capture the variable and pass it by reference
 
 ## Top level evaluation
 
-Script languages, and also upcoming languages like *Jai*, usually have unbounded top level evaluation. The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. 
+Script languages, and also upcoming languages like *Jai*, 
+usually have unbounded top level evaluation. 
+The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. 
 
-In C3, top level compile time evaluation is limited to `$if` and `$switch` constructs + macros with constant expression evaluation. This makes the code easier to read, but at the cost of expressive power.
+In C3, top level compile time evaluation is limited to `@if` attributes to conditionally enable or 
+disable declarations. This makes the code easier to read, but at the cost of expressive power.
 
 ## Macro declarations
 
@@ -323,7 +331,7 @@ the arguments:
        $endfor
        return $x;
     }
-    $if (compile_time_sum(1, 3) > 2) // Will compile to $if (4 > 2)
+    $if compile_time_sum(1, 3) > 2: // Will compile to $if 4 > 2
       ...
     $endif
 

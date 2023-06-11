@@ -130,14 +130,14 @@ C3 also offers a way to opt out of zero-initialization, so the change comes at n
 
 ```c
 // C style:
-callFoo((Foo) { 1, 2, 3 });
+call_foo((Foo) { 1, 2, 3 });
 
 // C++ style (1):
-callFoo(Foo(1, 2, 3));
+call_foo(Foo(1, 2, 3));
 
 // C++ style (2):
-callFoo(Foo { 1, 2, 3 });
+call_foo(Foo { 1, 2, 3 });
 
 // C3:
-callFoo(Foo { 1, 2, 3 } );
+call_foo(Foo { 1, 2, 3 } );
 ```

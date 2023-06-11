@@ -26,6 +26,7 @@ nav:
     - Macros: 'macros.md'
     - Reflection: 'reflection.md'
     - Operator overloading: 'operators.md'
+    - Dynamic code: 'dynamiccode.md'
     - Undefined behaviour: 'undefinedbehaviour.md'
     - Conversions: 'conversion.md'
     - Precedence: 'precedence.md'

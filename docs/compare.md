@@ -21,6 +21,7 @@ C3 adds features, but also removes a few.
 - Optional contracts
 - Built-in subarrays
 - Foreach for iteration over arrays and types
+- Dynamic calls and types
 
 ##### In C but not in C3
 
@@ -53,7 +54,7 @@ different from how C++ does things.
 - Defer
 - Associated enum data
 - Built-in subarrays
-
+- Dynamic calls
 
 ## Rust
 
@@ -82,7 +83,7 @@ but they are not built in. Subarrays are the same as Rust's slices.
 - Same ease of programming as C
 - Optional contracts
 - Familiar C syntax and behaviour
-
+- Dynamic calls
 
 ## Zig
 
@@ -116,7 +117,7 @@ possible.
 - C ABI compatibility by default.
 - Optional contracts.
 - Familiar C syntax and behaviour.
-
+- Dynamic calls
 
 ## Jai
 
@@ -141,7 +142,7 @@ an implicit context system to switch allocation schemes.
 - Optional contracts
 - Familiar C syntax and behaviour
 - Fairly small language
-
+- Dynamic calls
 
 ## Odin
 

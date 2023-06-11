@@ -1,9 +1,20 @@
 # Change log
 
+##### Revision 2023-06-11
+- Updated list of attributes.
+- Better @if examples
+- 
+##### Revision 2023-06-10
+- Updated with @if directive.
+
 ##### Revision 2023-06-03
 - Added specific compiletime page
 - Updated examples with references
 - variant -> any
+
+##### Revision 2023-06-05
+- Chapter on dynamic code.
+- Updated some pages with references to dynamic calls.
 
 ##### Revision 2023-06-02
 - Suffix '?' replaced by '!' and vice versa.
