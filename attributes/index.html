@@ -126,19 +126,71 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#built-in-attributes">Built in attributes</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#pure-call">pure (call)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#alignalignment-struct-bitstructs-union-var-fn">@align(alignment) (struct, bitstructs, union, var, fn)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#packed-struct-union-enum">packed (struct, union, enum)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#bigendian-bitstruct">@bigendian (bitstruct)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#sectionname-var-fn">section(name) (var, fn)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#builtin-fn-macro-global-const">@builtin (fn, macro, global, const)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#inline-fn">inline (fn)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#callc-fn">@callc (fn)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#alignedalignment-struct-union-var-fn">aligned(alignment) (struct, union, var, fn)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#deprecated-types-fn-macro-global-const-member">@deprecated (types, fn, macro, global, const, member)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#noreturn-fn">noreturn (fn)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#dynamic-fn">@dynamic (fn)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#weak-fn-var">weak (fn, var)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#export-fn-global-const-enum-union-struct-fault">@export (fn, global, const, enum, union, struct, fault)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#extname-fn-global-const-enum-union-struct-fault">@extname (fn, global, const, enum, union, struct, fault)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#if-all-declarations">@if (all declarations)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#inline-fn-call">@inline (fn, call)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#interface-any-method">@interface (any method)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#littleendian-bitstruct">@littleendian (bitstruct)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#local-any-declaration">@local (any declaration)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#maydiscard-fn-macro">@maydiscard (fn, macro)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#naked-fn">@naked (fn)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#nodiscard-fn-macro">@nodiscard (fn, macro)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#noinit-global-local">@noinit (global, local)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#noreturn-fn">@noreturn (fn)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#nostrip-any-declaration">@nostrip (any declaration)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#obfuscate-any-declaration">@obfuscate (any declaration)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#operator-method-macro-method">@operator (method, macro method)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#overlap-bitstruct">@overlap (bitstruct)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#packed-struct-union">@packed (struct, union)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#priority-initializer-finalizer">@priority (initializer, finalizer)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#private-any-declaration">@private (any declaration)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#pure-call">@pure (call)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#packed-struct-union-enum">@packed (struct, union, enum)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#reflect-any-declaration">@reflect (any declaration)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sectionname-fn-const-global">@section(name) (fn, const, global)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#test-fn">@test (fn)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#unused-any-declaration">@unused (any declaration)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#used-any-declaration">@used (any declaration)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#weak-fn-const-global">@weak (fn, const, global)</a>
     </li>
         </ul>
     </li>
@@ -214,31 +266,98 @@
                 <h1 id="attributes">Attributes</h1>
 <p>Attributes are compile-time annotations on functions, types, global constants and variables. Similar to Java annotations, a decoration may also take arguments. A attribute can also represent a bundle of attributes.</p>
 <h2 id="built-in-attributes">Built in attributes</h2>
-<h3 id="pure-call"><code>pure</code> (call)</h3>
+<h3 id="alignalignment-struct-bitstructs-union-var-fn"><code>@align(alignment)</code> (struct, bitstructs, union, var, fn)</h3>
+<p>This attribute sets the minimum alignment for a field or a variable.</p>
+<h3 id="bigendian-bitstruct"><code>@bigendian</code> (bitstruct)</h3>
+<p>Lays out the bits as if the data was stored in a big endian type, regardless of host system endianness.</p>
+<h3 id="builtin-fn-macro-global-const"><code>@builtin</code> (fn, macro, global, const)</h3>
+<p>Allows a macro, function, global or constant be used from another module without the module path prefixed.
+Should be used sparingly.</p>
+<h3 id="callc-fn"><code>@callc</code> (fn)</h3>
+<p>Sets the call convention, which may be ignored if the convention is not supported on the target.
+Valid arguments are <code>veccall</code>, <code>ccall</code>, <code>stdcall</code>.</p>
+<h3 id="deprecated-types-fn-macro-global-const-member"><code>@deprecated</code> (types, fn, macro, global, const, member)</h3>
+<p>Marks the particular type, global, const or member as deprecated, making use trigger a warning.</p>
+<h3 id="dynamic-fn"><code>@dynamic</code> (fn)</h3>
+<p>Declares a function to be accessible through an <code>any</code> type. This requires that an <code>any</code> interface method with the
+same name has been declared.</p>
+<h3 id="export-fn-global-const-enum-union-struct-fault"><code>@export</code> (fn, global, const, enum, union, struct, fault)</h3>
+<p>Marks this declaration as an export, this ensures it is never removed and exposes it as public when linking.
+The attribute takes an optional string value, which is the external name. This acts as if <code>@extname</code> had been
+added with that name.</p>
+<h3 id="extname-fn-global-const-enum-union-struct-fault"><code>@extname</code> (fn, global, const, enum, union, struct, fault)</h3>
+<p>Sets the external (linkage) name of this declaration.</p>
+<h3 id="if-all-declarations"><code>@if</code> (all declarations)</h3>
+<p>Conditionally includes the declaration in the compilation. It takes a constant compile time value argument, if this
+value is <code>true</code> then the declaration is retained, on false it is removed.</p>
+<h3 id="inline-fn-call"><code>@inline</code> (fn, call)</h3>
+<p>Declares a function to always be inlined or if placed on a call, that the call should be inlined.</p>
+<h3 id="interface-any-method"><code>@interface</code> (<code>any</code> method)</h3>
+<p>This attribute may only be used on an <code>any</code> method. The first argument must be <code>void*</code> rather than <code>any</code>. This method
+should also never have a body. It provides the prototype for methods declared with <code>@dynamic</code>.</p>
+<h3 id="littleendian-bitstruct"><code>@littleendian</code> (bitstruct)</h3>
+<p>Lays out the bits as if the data was stored in a little endian type, regardless of host system endianness.</p>
+<h3 id="local-any-declaration"><code>@local</code> (any declaration)</h3>
+<p>Sets the visibility to "local", which means it's only visible in the current module section.</p>
+<h3 id="maydiscard-fn-macro"><code>@maydiscard</code> (fn, macro)</h3>
+<p>Allows the return value of the function or macro to be discarded even if it is an optional. Should be
+used sparingly.</p>
+<h3 id="naked-fn"><code>@naked</code> (fn)</h3>
+<p>This attribute disables prologue / epilogue emission for the function.</p>
+<h3 id="nodiscard-fn-macro"><code>@nodiscard</code> (fn, macro)</h3>
+<p>The return value may not be discarded.</p>
+<h3 id="noinit-global-local"><code>@noinit</code> (global, local)</h3>
+<p>Prevents the compiler from zero initializing the variable.</p>
+<h3 id="noreturn-fn"><code>@noreturn</code> (fn)</h3>
+<p>Declares that the function will never return.</p>
+<h3 id="nostrip-any-declaration"><code>@nostrip</code> (any declaration)</h3>
+<p>This causes the declaration never to be stripped from the executable, even if it's not used. This
+also transitively applies to any dependencies the declaration might have.</p>
+<h3 id="obfuscate-any-declaration"><code>@obfuscate</code> (any declaration)</h3>
+<p>Removes any string values that would identify the declaration in some way. Mostly this is used
+on faults and enums to remove the stored names.</p>
+<h3 id="operator-method-macro-method"><code>@operator</code> (method, macro method)</h3>
+<p>This attribute has arguments <code>[]</code> <code>[]=</code> <code>&amp;[]</code> and <code>len</code> allowing operator overloading for <code>[]</code> and <code>foreach</code>.
+By implementing <code>[]</code> and <code>len</code>, <code>foreach</code> and <code>foreach_r</code> is enabled. In order to do <code>foreach</code> by reference,
+<code>&amp;[]</code> must be implemented as well.</p>
+<h3 id="overlap-bitstruct"><code>@overlap</code> (bitstruct)</h3>
+<p>Allows bitstruct fields to have overlapping bit ranges.</p>
+<h3 id="packed-struct-union"><code>@packed</code> (struct, union)</h3>
+<p>Causes all members to be packed as if they had alignment 1. The alignment of the struct/union is set to 1.
+This alignment can be overridden with <code>@align</code>.</p>
+<h3 id="priority-initializer-finalizer"><code>@priority</code> (initializer, finalizer)</h3>
+<p>This sets the priority of static initializers and finalizers, the lower the earlier. It is not recommended to use
+values less than 128 as they are generally reserved.</p>
+<h3 id="private-any-declaration"><code>@private</code> (any declaration)</h3>
+<p>Sets the visibility to "private", which means it is visible in the same module, but not from other modules.</p>
+<h3 id="pure-call"><code>@pure</code> (call)</h3>
 <p>Used to annotate a non pure function as "pure" when checking for conformance to <code>@pure</code> on 
 functions.</p>
-<h3 id="packed-struct-union-enum"><code>packed</code> (struct, union, enum)</h3>
+<h3 id="packed-struct-union-enum"><code>@packed</code> (struct, union, enum)</h3>
 <p>If used on a struct or enum: packs the type, including any components to minimum size. On an enum, it uses the smallest representation containing all its values.</p>
-<h3 id="sectionname-var-fn"><code>section(name)</code> (var, fn)</h3>
+<h3 id="reflect-any-declaration"><code>@reflect</code> (any declaration)</h3>
+<p>Adds additional reflection information. Has no effect currently.</p>
+<h3 id="sectionname-fn-const-global"><code>@section(name)</code> (fn, const, global)</h3>
 <p>Declares that a global variable or function should appear in a specific section.</p>
-<h3 id="inline-fn"><code>inline</code> (fn)</h3>
-<p>Declares a function to always be inlined.</p>
-<h3 id="alignedalignment-struct-union-var-fn"><code>aligned(alignment)</code> (struct, union, var, fn)</h3>
-<p>This attribute sets the minimum alignment for a field or a variable.</p>
-<h3 id="noreturn-fn"><code>noreturn</code> (fn)</h3>
-<p>Declares that the function will never return.</p>
-<h3 id="weak-fn-var"><code>weak</code> (fn, var)</h3>
+<h3 id="test-fn"><code>@test</code> (fn)</h3>
+<p>Marks the function as a test function. Will be added to the list of test functions when the tests are run,
+otherwise the function will not be included in the compilation.</p>
+<h3 id="unused-any-declaration"><code>@unused</code> (any declaration)</h3>
+<p>Marks the declaration as possibly unused (but should not emit a warning).</p>
+<h3 id="used-any-declaration"><code>@used</code> (any declaration)</h3>
+<p>Marks a parameter, value etc. as must being used.</p>
+<h3 id="weak-fn-const-global"><code>@weak</code> (fn, const, global)</h3>
 <p>Emits a weak symbol rather than a global.</p>
 <h2 id="user-defined-attributes">User defined attributes</h2>
 <p>User defined attributes are intended for conditional application of built-in attributes.</p>
-<pre><code>def @MyAttribute = @noreturn @inline;
+<pre><code>def @MyAttribute = { @noreturn @inline };
 
 // The following two are equivalent:
 fn void foo() @MyAttribute { ... }
 fn void foo() @noreturn @inline { ... }
 </code></pre>
 <p>A user defined attribute may also be completely empty:</p>
-<pre><code>def @MyAttributeEmpty = void;
+<pre><code>def @MyAttributeEmpty = {};
 </code></pre>
               
             </div>
