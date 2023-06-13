@@ -140,7 +140,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#export-fn-global-const-enum-union-struct-fault">@export (fn, global, const, enum, union, struct, fault)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#extname-fn-global-const-enum-union-struct-fault">@extname (fn, global, const, enum, union, struct, fault)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#extern-fn-global-const-enum-union-struct-fault">@extern (fn, global, const, enum, union, struct, fault)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#if-all-declarations">@if (all declarations)</a>
     </li>
@@ -283,9 +283,9 @@ Valid arguments are <code>veccall</code>, <code>ccall</code>, <code>stdcall</cod
 same name has been declared.</p>
 <h3 id="export-fn-global-const-enum-union-struct-fault"><code>@export</code> (fn, global, const, enum, union, struct, fault)</h3>
 <p>Marks this declaration as an export, this ensures it is never removed and exposes it as public when linking.
-The attribute takes an optional string value, which is the external name. This acts as if <code>@extname</code> had been
+The attribute takes an optional string value, which is the external name. This acts as if <code>@extern</code> had been
 added with that name.</p>
-<h3 id="extname-fn-global-const-enum-union-struct-fault"><code>@extname</code> (fn, global, const, enum, union, struct, fault)</h3>
+<h3 id="extern-fn-global-const-enum-union-struct-fault"><code>@extern</code> (fn, global, const, enum, union, struct, fault)</h3>
 <p>Sets the external (linkage) name of this declaration.</p>
 <h3 id="if-all-declarations"><code>@if</code> (all declarations)</h3>
 <p>Conditionally includes the declaration in the compilation. It takes a constant compile time value argument, if this
