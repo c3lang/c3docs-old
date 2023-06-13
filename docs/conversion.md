@@ -183,8 +183,8 @@ These operations are only valid for integers.
 ### 8. Assignment shift `>>=` `<<=`
 
 1. Resolve both operands
-3. In safe mode, insert a trap to ensure that rhs >= 0 and rhs < bit width of the left hand side.
-4. The result of the expression is the lhs type.
+2In safe mode, insert a trap to ensure that rhs >= 0 and rhs < bit width of the left hand side.
+3The result of the expression is the lhs type.
 
 ### 9. `&&` and `||`
 
@@ -249,4 +249,4 @@ Dereferencing 0 is implementation defined.
 ### 2. Constants and literals
 
 1. If the constant is an integer, it is assumed to be the *arithmetic promotion width* and signed. If the suffix `u` is added, it is assumed to be an unsigned number. If a suffix `ixx` or `uxx` is given then it is considered a an integer of that type width and signedness. It cannot be implicitly narrowed. 
-2. If the constant is a floating point value, it is assumed to be a `double` unless suffixed with `f` which is then assumed to be a `float`. If a bitwidth is given after `f`, it is instead a floating point type of that width.
+2. If the constant is a floating point value, it is assumed to be a `double` unless suffixed with `f` which is then assumed to be a `float`. If a bit width is given after `f`, it is instead a floating point type of that width.

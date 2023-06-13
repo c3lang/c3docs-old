@@ -155,7 +155,7 @@ Use `&` in front of a parameter to capture the variable and pass it by reference
 
 Script languages, and also upcoming languages like *Jai*, 
 usually have unbounded top level evaluation. 
-The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. 
+The flexibility of this style of meta programming has a trade-off in making the code more challenging to understand. 
 
 In C3, top level compile time evaluation is limited to `@if` attributes to conditionally enable or 
 disable declarations. This makes the code easier to read, but at the cost of expressive power.
@@ -320,7 +320,7 @@ The maximum recursion depth is limited to the `macro-recursion-depth` build sett
 Macros support the typed vaargs used by C3 functions: `macro void foo(int... args)` and `macro void bar(args...)` 
 but it also supports a unique set of macro vaargs that look like C style vaargs: `macro void baz(...)`
 
-To access the arguments there is a family of $va-* built in functions to retrieve
+To access the arguments there is a family of $va-* built-in functions to retrieve
 the arguments:
 
     macro compile_time_sum(...)

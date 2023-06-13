@@ -1,7 +1,7 @@
 # Compile time introspection and execution
 
 During compilation, constant expressions will automatically be folded. Together with the compile
-time conditional statements `$if`, `$switch` and the compile time iteration statments `$for` `$foreach`
+time conditional statements `$if`, `$switch` and the compile time iteration statements `$for` `$foreach`
 it is possible to perform limited compile time execution.
 
 ### Compile time values

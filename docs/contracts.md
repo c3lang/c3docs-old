@@ -1,10 +1,10 @@
 # Contracts
 
-Contracts are optional pre and post conditions checks that the compiler may use for optimization and runtime checks. Note that _compilers are not obliged to process pre and post conditions at all_. However, violating either pre or post conditions is considered undefined behaviour, so a compiler may optimize as if they always hold – even if a potential bug may cause them to be violated.
+Contracts are optional pre- and post-conditions checks that the compiler may use for optimization and runtime checks. Note that _compilers are not obliged to process pre- and post-conditions at all_. However, violating either pre- or post-conditions is considered undefined behaviour, so a compiler may optimize as if they always hold – even if a potential bug may cause them to be violated.
 
 # Pre conditions
 
-Pre conditions are usually used to validate incoming arguments. Each condition must be an expression that can be evaluated to a boolean. A pre condition use the `@require` annotation.
+Pre-conditions are usually used to validate incoming arguments. Each condition must be an expression that can be evaluated to a boolean. A pre-condition use the `@require` annotation.
 
 ```
 /**
@@ -43,12 +43,12 @@ for pointer arguments. `[in]` disallows writing to the variable,
 `[out]` disallows reading from the variable. Without an annotation,
 pointers may both be read from and written to without checks. 
 
-| Type          | readable? | writable? | use as "in"? | use as "out"? | use as "inout"
-| ------        | :-------: | :-------: | :----------: | :-----------: | :------------: |
-| no annotation | Yes       | Yes       | Yes          | Yes           |  Yes          |
-| `in`          | Yes       | No        | Yes          | No            |  No           |
-| `out`         | No        | Yes       | No           | Yes           |  No           |
-| `inout`       | Yes       | Yes       | Yes          | Yes           |  Yes          |
+| Type          | readable? | writable? | use as "in"? | use as "out"? | use as "inout" |
+|---------------|:---------:|:---------:|:------------:|:-------------:|:--------------:|
+| no annotation |    Yes    |    Yes    |     Yes      |      Yes      |      Yes       |
+| `in`          |    Yes    |    No     |     Yes      |      No       |       No       |
+| `out`         |    No     |    Yes    |      No      |      Yes      |       No       |
+| `inout`       |    Yes    |    Yes    |     Yes      |      Yes      |      Yes       |
 
 
 However, it should be noted that the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:
@@ -89,7 +89,7 @@ fn void badFunc(int* i)
 
 ### Pure in detail
 
-The `pure` annotation allows a program to make assumtions in regards of how the function treats global variables. Unlike for `const`, a pure function is not allowed to call a function which is known to be impure.
+The `pure` annotation allows a program to make assumptions in regard to how the function treats global variables. Unlike for `const`, a pure function is not allowed to call a function which is known to be impure.
 
 However, just like for `const` the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:
 
@@ -141,7 +141,7 @@ fn void lyingFunc()
 }
 ```
 
-Consequently circumventing "pure" annotations is undefined behaviour.
+Consequently, circumventing "pure" annotations is undefined behaviour.
 
 
 # Pre conditions for macros

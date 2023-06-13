@@ -145,9 +145,9 @@
 ##### Revision 2021-05-08
 - Added rationale for some changes from C.
 - Updated undefined and [undefined behaviour](../undefinedbehaviour).
-- Removed many of the fine grained module features.
+- Removed many of the fine-grained module features.
 - Removed "local" visibility in [modules](../modules).
-- All modules are now distinct, parent modules do not have any special access to sub modules.
+- All modules are now distinct, parent modules do not have any special access to submodules.
 - Added `as module` imports.
 
 ##### Revision 2021-04-05
@@ -217,7 +217,7 @@
 ##### Revision 2019-12-25
 - Changes how generic modules work.
 - Switched so that vararrays use `Type[*]` and sub arrays use `Type[]`.
-- Added sub module granularity, partial imports (only importing selected functions and types), removal of `local`, extended aliasing. See [modules](../modules).
+- Added submodule granularity, partial imports (only importing selected functions and types), removal of `local`, extended aliasing. See [modules](../modules).
 - Updated "changes from C" with removal of multiple declarations.
 
 ##### Revision 2019-12-11
@@ -241,7 +241,7 @@
 
 ##### Revision 2019-09-30
 
-- Removed references (non nullable pointers)
+- Removed references (non-nullable pointers)
 - Removed idea with aliasing in import
 
 ##### Revision 2019-08-14
@@ -283,7 +283,7 @@
 
 - Updated grammar with keywords.
 - Added the [docs & comments](../comments) page.
-- Updated the [pre and post conditions](../contracts).
+- Updated the [pre- and post-conditions](../contracts).
 
 ##### Revision 2019-07-24
 
@@ -305,7 +305,7 @@
 - Removed "defer sugar" from ideas.
 - Removed "built in dynamic arrays" from ideas.
 - Added [standard_library](../standard_library) section.
-- Added more about [pre and post conditions](../contracts).
+- Added more about [pre- and post-conditions](../contracts).
 
 ##### Revision 2019-07-22
 
