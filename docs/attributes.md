@@ -34,10 +34,10 @@ same name has been declared.
 ### `@export` (fn, global, const, enum, union, struct, fault)
 
 Marks this declaration as an export, this ensures it is never removed and exposes it as public when linking.
-The attribute takes an optional string value, which is the external name. This acts as if `@extname` had been
+The attribute takes an optional string value, which is the external name. This acts as if `@extern` had been
 added with that name.
 
-### `@extname` (fn, global, const, enum, union, struct, fault)
+### `@extern` (fn, global, const, enum, union, struct, fault)
 
 Sets the external (linkage) name of this declaration.
 
