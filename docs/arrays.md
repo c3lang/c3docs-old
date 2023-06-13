@@ -156,7 +156,7 @@ by implementing "len" and "[]" methods and annotating them using the `@operator`
         int* elements;
     }
 
-    macro int Vector.get(Vector* vector, usz element) @operator([]])
+    macro int Vector.get(Vector* vector, usz element) @operator([])
     {
         return vector.elements[element];
     }
