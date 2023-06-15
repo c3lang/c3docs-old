@@ -43,7 +43,7 @@ you need to do it manually:
 
     // C3
     int[2] x = { 1, 2 };
-    int *y = &x;
+    int* y = &x;
 
 You will probably prefer slices to pointers when passing data around:
 
@@ -97,7 +97,7 @@ Functions are declared like C, but you need to put `fn` in front:
     int foo(Foo *b, int x, void *z) { ... }
 
     // C3
-    fn int foo(Foo* b, int x, void *z) { ... }
+    fn int foo(Foo* b, int x, void* z) { ... }
 
 See more about functions, like named and default arguments [here](../functions).
 
