@@ -90,6 +90,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#using-functions-and-types-from-other-modules">Using functions and types from other modules</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#module-sections">Module sections</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#versioning-and-dynamic-inclusion">Versioning and dynamic inclusion</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#textual-includes">Textual includes</a>
@@ -236,6 +238,9 @@
 <li>Modules can be arbitrarily nested, e.g. <code>module foo::bar::baz;</code> to create the sub module baz in the sub module <code>bar</code> of the module <code>foo</code>.</li>
 <li>Module names must be alphanumeric lower case letters plus the underscore character: <code>_</code>.</li>
 <li>Module names are limited to 31 characters.</li>
+<li>Modules may be spread across multiple files.</li>
+<li>A single file may have multiple module declarations.</li>
+<li>Each declaration of a distinct module is called a <em>module section</em>.</li>
 </ul>
 <h2 id="importing-modules">Importing modules</h2>
 <p>Modules are imported using the <code>import</code> statement. Imports always <em>recursively import</em> sub-modules. Any module
@@ -429,6 +434,30 @@ fn void test()
 <blockquote>
 <p>Types are used without prefix; functions, variables, macros and constants are prefixed with the sub module name.</p>
 </blockquote>
+<h2 id="module-sections">Module sections</h2>
+<p>A single file may have multiple module declarations, even for the same module. This allows us to write
+for example:</p>
+<pre><code>// File foo.c3
+module foo;
+fn int hello_world()
+{
+    return my_hello_world();
+}
+
+module foo @private;
+import std::io;         // The import is only visible in this section.
+fn int my_hello_world() // @private by default
+{
+    io::printn("Hello, world\n");
+    return 0;
+}
+
+module foo @test;
+fn void test_hello() // @test by default
+{
+    assert(hello_world() == 0);
+}
+</code></pre>
 <h2 id="versioning-and-dynamic-inclusion">Versioning and dynamic inclusion</h2>
 <p><em>NOTE: This feature may significantly change.</em></p>
 <p>When including <em>dynamic</em> libraries, it is possible to use optional functions and globals. This is done using the
