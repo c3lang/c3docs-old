@@ -1,9 +1,13 @@
 # Change log
 
+##### Revision 2023-06-23
+- Distinct inline explanation.
+- Module sections.
+
 ##### Revision 2023-06-11
 - Updated list of attributes.
-- Better @if examples
-- 
+- Better @if examples.
+
 ##### Revision 2023-06-10
 - Updated with @if directive.
 

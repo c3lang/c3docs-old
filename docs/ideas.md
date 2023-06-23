@@ -365,36 +365,6 @@ struct Shape
 ```
 
 
-
-
-
-## Built in maps
-
-Same reasoning as arrays. Question about memory management is the same.
-
-```
-int[int] map; // Built-in maps
-map[1] = 11;
-// Retrieving a value
-int i = map[0]!!; // Requires a rethrow
-
-// Retrive or use default
-int i = try map[12] else -1;
-
-// Extend a map:
-fn bool int[int].remove_if_negative(int[int] *map, int index)
-{
-    if (try map[index] >= 0 else true) return false;    
-    map.remove(index);
-    return true;
-}
-
-// The underlying C function becomes:
-// bool module_name__map_int_int__remove_if_negative(struct _map_int_int *map, int32_t index);
-```
-
-
-
 ## Built in managed pointers
 
 Taking a hint from Cyclone, Rust etc one could consider managed pointers / objects. There are several possibilities:
