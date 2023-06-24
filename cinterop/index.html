@@ -128,7 +128,11 @@
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">C Interop</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#gotchas">Gotchas</a>
+    <li class="toctree-l2"><a class="reference internal" href="#linking-static-and-dynamic-libraries">Linking static and dynamic libraries</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#gotchas">Gotchas</a>
+    </li>
+        </ul>
     </li>
     </ul>
                     </li>
@@ -232,6 +236,12 @@ void test()
     printf("%d\n", foo_square(11));
 }
 </code></pre>
+<h2 id="linking-static-and-dynamic-libraries">Linking static and dynamic libraries</h2>
+<p>If you have a library <code>foo.a</code> or <code>foo.so</code> or <code>foo.obj</code> (depending on type and OS), just add
+<code>-l foo</code> on the command line, or in the project file add it to the <code>linked-libraries</code> value, e.g.
+<code>"linked-libraries" = ["foo"]</code>.</p>
+<p>To add library search paths, use <code>-L &lt;directory&gt;</code> from the command line and <code>linker-search-paths</code>
+the project file (e.g. <code>"linker-search-paths" = ["../mylibs/", "/extra-libs/"]</code>)</p>
 <h3 id="gotchas">Gotchas</h3>
 <ul>
 <li>Bitstructs will be seen as its underlying type from C. </li>
