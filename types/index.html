@@ -192,7 +192,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../ideas/">Crazy ideas</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../ideas/">More ideas</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../naming/">Naming rules</a>
                     </li>
@@ -642,13 +642,16 @@ fn void test(MyId id)
 }
 </code></pre>
 <h3 id="generic-types">Generic types</h3>
-<p>Similar to function pointers, generic types are only available using <code>def</code>:</p>
 <pre><code>import generic_list; // Contains the generic MyList
 
 struct Foo { int x; }
 
-def IntMyList = generic_list::MyList&lt;int&gt;;
-def FooMyList = generic_list::MyList&lt;Foo&gt;;
+// Using def - usually recommended:
+def IntMyList = MyList&lt;int&gt;;
+IntMyList abc;
+
+// Inline type definition
+MyList&lt;Foo&gt; bcd = MyList&lt;Foo&gt;;
 </code></pre>
 <p>Read more about generic types on <a href="../generics">the page about generics</a>.</p>
 <h2 id="enum">Enum</h2>

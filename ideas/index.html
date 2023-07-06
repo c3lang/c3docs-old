@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Crazy ideas - C3 Documentation</title>
+  <title>More ideas - C3 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,7 +18,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Crazy ideas";
+    var mkdocs_page_name = "More ideas";
     var mkdocs_page_input_path = "ideas.md";
     var mkdocs_page_url = null;
   </script>
@@ -116,46 +116,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
                     </li>
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Crazy ideas</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">More ideas</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#module-versioning">Module versioning</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#generic-as-keyword-for-polymorphic-functions">Generic as keyword for polymorphic functions</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#associative-array-literals">Associative array literals</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#array-literals">Array literals</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#allow-slicing-of-user-defined-containers">Allow slicing of user defined containers</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#allow-narrowing-conversions-for-floats">Allow narrowing conversions for floats</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#attribute-to-ensure-alignment">Attribute to ensure alignment</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#binary-include">Binary include</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#compile-time-run-include">Compile time run-include</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#macro-text-interpolation">Macro text interpolation</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#compile-time-string-functions">Compile time string functions</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#implicit-this-in-method-functions">Implicit "this" in method functions</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#unsorted">Unsorted</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#tagged-any">Tagged any</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#easy-to-get-properties">Easy to get properties</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#tagged-unions">Tagged unions</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#built-in-managed-pointers">Built in managed pointers</a>
-    </li>
     </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../naming/">Naming rules</a>
@@ -218,7 +180,7 @@
         
       
     
-    <li>Crazy ideas</li>
+    <li>More ideas</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -230,283 +192,7 @@
             <div class="section">
               
                 <h1 id="ideas">Ideas</h1>
-<p><strong>WARNING</strong> Unfinished ideas / brain dumps</p>
-<h2 id="module-versioning">Module versioning</h2>
-<p>Go Modules: </p>
-<ol>
-<li>Build file contains required library versions: e.g. 2.5.7</li>
-<li>First number is major version number and is considered incompatible (basically a different module completely)</li>
-<li>Dependency resolution per major library version is done by picking the minimal version. E.g. module Foo requires Bar 1.5+ and module Baz requires 1.3+. Our module using Bar and Baz will resolve the minimal version to 1.5. This is the version that will be used. Note that if Foo used 2.5+, then both Bar 2.5 and 1.3 would be required.</li>
-</ol>
-<p>Possible design:
-1. Dependency contains no-version, major version, minor version, major + minor + build or list of major versions
-2. Try to resolve the major version to use. If none is selected, pick max. More than one are required -&gt; compile error 
-(example: A needs 1, 2, B needs 2, 3 =&gt; pick 2, A needs 1, 2, B needs 3, 4 =&gt; error)
-3. Pick the maximum minor + build version available. If this is less than minimum minor + build version needed =&gt; error.
-4. Excluding versions should be possible, eg exclude 1.3.4 </p>
-<h2 id="generic-as-keyword-for-polymorphic-functions">Generic as keyword for polymorphic functions</h2>
-<p>For macros that essentially are polymorphic functions, we could use the keyword "generic" instead:</p>
-<pre><code class="language-c">macro swap(&amp;a, &amp;b) { ... } // Cannot be generic, captures are not allowed.
-macro max(a, b) { ... } // Can be generic
-macro doSomething(a, #a) { ... } // Cannot be generic, uses unevaluated expressions
-macro malloc($Type) { ... } // Can be generic.
-
-// Example of &quot;max&quot;:
-generic max(a, b)
-{
-    return a &gt; b ? b : a;
-}
-// Example of &quot;malloc&quot;
-generic malloc($Type)
-{
-    _builtin_malloc($Type.sizeof);
-}
-</code></pre>
-<p>Invocation changes:</p>
-<pre><code class="language-c">int max_value = @max(foo(), bar()); // macro
-int max_value = max(foo(), bar()); // generic
-</code></pre>
-<p>This would furthermore remove the "!" addition for escaping macros, adding it as an attribute:</p>
-<pre><code class="language-c">macro returnme() @escaping
-{
-    return;
-}
-</code></pre>
-<p>Macros could then also more natural invoke defer:</p>
-<pre><code class="language-c">macro deferclose() @scopeless
-{
-    defer close();    
-}
-</code></pre>
-<p>Both would be invoked:</p>
-<pre><code class="language-c">@deferclose();
-@returnme();
-</code></pre>
-<p>It would be possible to define a generic, such a generic could be taken the address of:</p>
-<pre><code class="language-c">#define intmax = max(int, int);
-#define TwoIntfn = fn int(int, int);
-TwoIntFunc x = &amp;intmax;
-</code></pre>
-<h2 id="associative-array-literals">Associative array literals</h2>
-<p><em>Syntax and implementation under consideration!</em></p>
-<p>Associative arrays are mappings between keys and values:</p>
-<pre><code>IntStringMap x = { &quot;a&quot;: 2, &quot;b&quot;: { &quot;3&quot; : &quot;foo&quot; } };
-</code></pre>
-<p>To use an associative array, the struct needs to define
-the following generics: <code>_map_init()</code> and <code>_map_init_add</code>. In the example above, the actual code is compiled to:</p>
-<pre><code>IntStringMap x;
-_map_init(&amp;x);
-_map_init_add(&amp;x, &quot;a&quot;, 2);
-IntStringMap _temp;
-_map_init(&amp;_temp);
-_map_init_add(&amp;x, &quot;3&quot;, &quot;foo&quot;);
-_map_init_add(&amp;x, &quot;b&quot;, _temp);
-</code></pre>
-<h2 id="array-literals">Array literals</h2>
-<p>Arrays can be initialized using compound literals, but there is also a special format for array initialization using <code>[]</code>. In this case, the type is inferred. It allows uniform initialization of all types of arrays:</p>
-<pre><code>int[3] y = [1, 2, 3]; // Fixed array allocated on the stack
-int[] z = [1, 2, 3]; // Slice pointing at literal allocated on the stack
-</code></pre>
-<p>It offers some convenience when calling functions taking arrays:</p>
-<pre><code>fn void test1(int[3] x) { ... }
-fn void test2(int[] y) { ... }
-fn void test2(int[3]* z) { ... }
-
-test1([ 1, 2, 3 ]);
-test2([ 1, 2, 3 ]);
-test3([ 1, 2, 3 ]);
-</code></pre>
-<h2 id="allow-slicing-of-user-defined-containers">Allow slicing of user defined containers</h2>
-<pre><code class="language-c">// Supporting the full set.
-macro Foo._slice(Foo* foo, a, b, $a_from_end, $b_from_end)
-{
-    $if ($a_from_end)
-        $if ($b_from_end)
-            return foo.values[^a..^b];
-        $endif
-        return foo.values[^a..b];
-    $endif    
-    $if ($b_from_end)
-        return foo.values[a..^b];
-    $endif
-    return foo.values[a..b];    
-}
-
-// Not supporting reverse
-macro Bar._slice(Bar *bar, a, b, $a_from_end, $b_from_end)
-{
-    $assert(!$a_from_end &amp;&amp; !$b_from_end, &quot;Slicing from the end is not possible for Bar types.&quot;);
-    return bar.valyes[a..b];
-}
-</code></pre>
-<h2 id="allow-narrowing-conversions-for-floats">Allow narrowing conversions for floats</h2>
-<p>Narrowing conversions for double -&gt; float are common and might not be sufficiently important to do explicitly.</p>
-<h2 id="attribute-to-ensure-alignment">Attribute to ensure alignment</h2>
-<p><code>@assertalign</code> works as GCCs warn_if_not_aligned. On non packed structs, this will prevent compilation if padding is inserted in front of the member. On a packed struct, it will prevent compilation if it is not aligned.</p>
-<h2 id="binary-include">Binary include</h2>
-<p>The ability to include a binary file during compile time.</p>
-<p>An additional <code>embed-path</code> gives search dirs.</p>
-<pre><code>byte[] file = @binary_include(&quot;foo.dat&quot;);
-</code></pre>
-<p>Limiting embed to x bytes:</p>
-<pre><code>byte[] file = @binary_include(&quot;/dev/urandomg&quot;, 16);
-</code></pre>
-<h2 id="compile-time-run-include">Compile time run-include</h2>
-<p>The ability to run a piece of code at compile time and include the result in the code.</p>
-<pre><code>@run_include(&quot;foo.sh&quot;, $some_param, &quot;-x&quot;, $another_param);
-</code></pre>
-<h2 id="macro-text-interpolation">Macro text interpolation</h2>
-<p>For certain cases, pure text interpolation might be needed. Within macros, any text within <code>``</code> can be evaluated and parsed.</p>
-<pre><code>macro void @foo($x, #f)
-{
-    `#f $x * $x`;
-}
-
-fn void test()
-{
-    int x = 1;
-    @foo(4, &quot;x +=&quot;);
-    // Expands to -&gt;
-    // x += 4 * 4;
-}
-</code></pre>
-<p>Another example, showing the difference between <code>#var</code> and <code>`#var`</code>:</p>
-<pre><code>macro void @foo2(#f)
-{
-    io::printf(&quot;%s was %d\n&quot;, #f, `#f`);
-}
-
-funct void test2()
-{
-    int x = 1;
-    @foo2(x);
-    // Expands to -&gt;
-    // io::printf(&quot;%s was %d\n&quot;, &quot;x&quot;, x);
-}
-</code></pre>
-<h3 id="compile-time-string-functions">Compile time string functions</h3>
-<p>In order to facilitate certain types of macros, the following macros are built in:</p>
-<ul>
-<li><code>@strToUpper(#f)</code> Convert string to upper case.</li>
-<li><code>@strToLower(#f)</code> Convert string to lower case.</li>
-<li><code>@strToVarName(#f, #space)</code> Convert string to camel case from a space-based name scheme.</li>
-<li><code>@strToTypeName(#f, #space)</code> Convert string to title case from a space-based name scheme.</li>
-<li><code>@strFromName(#f, #space)</code> Convert title case or lower camel case to a space based scheme.</li>
-<li><code>@strReplace(#str, #pattern, #replacement, #count)</code> Replace a string with another.</li>
-<li><code>@subString(#str, #start, #length)</code> Return a substring of a compile time string.</li>
-<li><code>@strFind(#str, #stringToFind)</code> Find a substring in a compile time string.</li>
-<li><code>@strHash(#str)</code> Return the FNV1a hash of a string.</li>
-<li><code>@strLen(#str)</code> Return a compile time length of a string.</li>
-<li><code>@stringify(#str)</code> Escapes a string so it becomes a valid string.</li>
-</ul>
-<h2 id="implicit-this-in-method-functions">Implicit "this" in method functions</h2>
-<pre><code>struct Foo
-{
-    int i;
-}
-
-fn Foo.next(Foo*)
-{
-    i++;
-}
-</code></pre>
-<h2 id="unsorted">Unsorted</h2>
-<h5 id="tagged-any">Tagged any</h5>
-<p>A tagged pointer union type for any possible type.</p>
-<h5 id="easy-to-get-properties">Easy to get properties</h5>
-<ul>
-<li>Endianness</li>
-<li>Register size</li>
-<li>Query what type of add is the fastest (wrapping, trapped) for the processor (with macros to select type)</li>
-<li>Query what type of overflow the processor supports</li>
-</ul>
-<h5 id="tagged-unions">Tagged unions</h5>
-<pre><code>tagged union Foo {
-    int i;
-    const char *c;
-};
-
-Foo foo;
-foo.i = 3;
-@istag(foo.i) // =&gt; true
-@istag(foo.c) // =&gt; false
-foo.c = &quot;hello&quot;;
-@istag(foo.i) // =&gt; false
-@istag(foo.c) // =&gt; true
-
-switch(@tag(foo)) 
-{
-    case Foo.i: 
-        io::printf(&quot;Was %d\n&quot;, foo.i);
-    case Foo.c: 
-        io::printf(&quot;Was %s\n&quot;, foo.c);
-}
-</code></pre>
-<p>Alternative syntax etc:</p>
-<pre><code>struct Shape
-{
-    int centerX;
-    int centerY;
-    byte kind; // Implicit enum
-    union (kind) 
-    {
-        SQUARE: { int side; }
-        RECTANGLE: { int length, height; }
-        CIRCLE: { int radius; }
-    }
-}
-</code></pre>
-<p>And another...</p>
-<pre><code>struct Shape
-{
-    int centerX;
-    int centerY;
-    byte kind; // Implicit enum
-    union (kind) 
-    {
-        struct square 
-        {
-            int side;
-        }    
-        struct rectangle 
-        {
-            int length;
-            int height;
-        }
-        struct circle
-        {
-            int radius;
-        }
-    }
-}
-
-
-</code></pre>
-<p>And yet another...</p>
-<pre><code>struct Shape
-{
-    int centerX;
-    int centerY;
-    tagged union (kind)
-    {
-        case SQUARE:
-            int side; 
-        case RECTANGLE:
-            int length;
-            int height;
-        case CIRCLE:
-            int radius;            
-    }
-    byte kind;
-}
-</code></pre>
-<h2 id="built-in-managed-pointers">Built in managed pointers</h2>
-<p>Taking a hint from Cyclone, Rust etc one could consider managed pointers / objects. There are several possibilities:</p>
-<ol>
-<li>Introduce something akin to move/borrow syntax with a special pointer type, eg. Foo@ x vs Foo* y and make the code track Foo@ to have unique ownership.</li>
-<li>Introduce ref-counted objects with ref-counted pointers. Again use Foo@ x vs Foo* y with the latter being unretained. This should be internal refcounting to avoid any of the issues going from retained -&gt; unretained that shared_ptr has. Consequently any struct that is RC:ed needs to be explicitly declared as such.</li>
-<li>Managed pointers: you alloc and the pointer gets a unique address that will always be invalid after use. Any overflows will be detected, but use of managed pointers is slower due to redirect and check.</li>
-</ol>
+<p>All ideas have moved to the issue tracker: https://github.com/c3lang/c3c/issues.</p>
               
             </div>
           </div>

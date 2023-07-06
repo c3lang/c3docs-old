@@ -118,7 +118,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../ideas/">Crazy ideas</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../ideas/">More ideas</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../naming/">Naming rules</a>
                     </li>
@@ -652,7 +652,7 @@ const long FIB19 = @fib(19);
 <p>Read more about compile time execution <a href="../compiletime">here</a>.</p>
 <h5 id="generic-modules">Generic modules</h5>
 <p>Generic modules implements a generic system.</p>
-<pre><code>module stack &lt;Type&gt;;
+<pre><code>module stack(&lt;Type&gt;);
 struct Stack
 {
     usz capacity;
@@ -684,7 +684,6 @@ fn bool Stack.empty(Stack* this)
 </code></pre>
 <p>Testing it out:</p>
 <pre><code>def IntStack = Stack&lt;int&gt;;
-def DoubleStack = Stack&lt;double&gt;;
 
 fn void test()
 {
@@ -696,7 +695,7 @@ fn void test()
     // Prints pop: 1
     io::printfn(&quot;pop: %d&quot;, stack.pop());
 
-    DoubleStack dstack;
+    Stack(&lt;double&gt;) dstack;
     dstack.push(2.3);
     dstack.push(3.141);
     dstack.push(1.1235);

@@ -118,7 +118,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../ideas/">Crazy ideas</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../ideas/">More ideas</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../naming/">Naming rules</a>
                     </li>
@@ -195,10 +195,10 @@
 <p>Generic modules are parameterized modules that allow functionality for arbitrary types.</p>
 <p>For generic modules, the generic parameters follows the module name:</p>
 <pre><code>// TypeA, TypeB, TypeC are generic parameters.
-module vector &lt;TypeA, TypeB, TypeC&gt;;
+module vector(&lt;TypeA, TypeB, TypeC&gt;);
 </code></pre>
-<p>The code inside of the module can use the generic parameters as if they were well defined symbols:</p>
-<pre><code>module foo_test &lt;Type1, Type2&gt;;
+<p>Code inside a generic module may use the generic parameters as if they were well-defined symbols:</p>
+<pre><code>module foo_test(&lt;Type1, Type2&gt;);
 
 struct Foo 
 {
@@ -210,28 +210,31 @@ fn Type2 test(Type2 b, Foo *foo)
    return foo.a + b;
 }
 </code></pre>
-<p>Including a generic module works as usual, but to use a type, it must be <em>defined</em> before use.</p>
-<pre><code>def FooFloat = Foo&lt;float, double&gt;;
-def test_float = foo_test::test&lt;float, double&gt;;
+<p>Including a generic module works as usual:</p>
+<pre><code>import foo_test;
+
+def FooFloat = Foo(&lt;float, double&gt;);
+def test_float = foo_test::test(&lt;float, double&gt;);
 
 ...
 
 FooFloat f;
+Foo(&lt;int, double&gt;) g;
 
 ...
 
 test_float(1.0, &amp;f);
-
+foo_test::test(&lt;int, double&gt;)(1.0, &amp;g);
 </code></pre>
 <p>Just like for macros, optional constraints may be added to improve compile errors:</p>
 <pre><code>/**
  * @require $checks(TypeA a = (TypeB)1 + (TypeC)1)
  */ 
-module vector &lt;TypeA, TypeB, TypeC&gt;;
+module vector(&lt;TypeA, TypeB, TypeC&gt;);
 
 /* .. code * ../
 </code></pre>
-<pre><code>def testFunction = vector::testFunc&lt;Bar, float, int&gt;;
+<pre><code>def testFunction = vector::testFunc(&lt;Bar, float, int&gt;);
 
 // This would give the error 
 // --&gt; Parameter(s) failed validation: 
