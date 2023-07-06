@@ -33,7 +33,7 @@ nav:
     - Builtins: 'builtins.md'
     - Libraries: 'libraries.md'
     - Standard Library: 'standard_library.md'
-    - Crazy ideas: 'ideas.md'
+    - More ideas: 'ideas.md'
     - Naming rules: 'naming.md'
     - Comments & Docs: 'comments.md'
     - Attributes: 'attributes.md'

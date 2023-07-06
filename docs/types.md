@@ -298,14 +298,16 @@ is created by adding `distinct` before the type name in a "def": `def <typename>
 
 ### Generic types
 
-Similar to function pointers, generic types are only available using `def`:
-
     import generic_list; // Contains the generic MyList
 
     struct Foo { int x; }
 
-    def IntMyList = generic_list::MyList<int>;
-    def FooMyList = generic_list::MyList<Foo>;
+    // Using def - usually recommended:
+    def IntMyList = MyList<int>;
+    IntMyList abc;
+
+    // Inline type definition
+    MyList<Foo> bcd = MyList<Foo>;
 
 Read more about generic types on [the page about generics](../generics).
 

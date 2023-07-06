@@ -1,5 +1,9 @@
 # Change log
 
+##### Revision 2023-07-07
+- Updated generics syntax and uses.
+- Moved all "ideas" to the issue tracker.
+
 ##### Revision 2023-06-23
 - Distinct inline explanation.
 - Module sections.

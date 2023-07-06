@@ -75,7 +75,7 @@ fn void test()
 
 ## Using `def` to create generic types, functions and variables
 
-Generic modules uses `def` to create aliases to parameterized types, functions 
+It is recommeded to favour using `def` to create aliases for parameterized types, functions 
 and variables:
 
      import generic_foo;
