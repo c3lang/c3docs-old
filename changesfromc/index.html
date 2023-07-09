@@ -262,19 +262,24 @@ int a;    // Fine
 <pre><code>for (int i = 0, int j = 1; i &lt; 10; i++, j++) { ... }
 </code></pre>
 <h5 id="integer-promotions-rules-and-safe-signed-unsigned-comparisons">Integer promotions rules and safe signed-unsigned comparisons</h5>
-<p>Promotion rules for integer types are different from C. Most prominently, C3 does left side widening in the case of <code>long x = intValue1 + intValue2</code>. In C this becomes:
-<code>long x = (long)(intValue1 + intValue2)</code>, whereas in C3 it would behaves as <code>long x = (long)intValue1 + (long)intValue2</code> to minimize chance of overflow. (read more on the <a href="../conversion">conversion page</a>. C3 also adds <em>safe signed-unsigned comparisons</em>: this means that comparing signed and unsigned values will always yield the correct result:</p>
-<pre><code>// The code below will print &quot;Hello C3!&quot; on C3 and &quot;Hello C!&quot; in C.
+<p>Promotion rules for integer types are different from C. 
+C3 allows implicit widening only
+where there is only a single way to widen the expression. To explain the latter:
+take the case of <code>long x = int_val_1 + int_val_2</code>. In C this would widen the result of the addition:
+<code>long x = (long)(int_val_1 + int_val_2)</code>, but there is another possible 
+way to widen: <code>long x = (long)int_val_1 + (long)int_val_2</code>. so in this case, the widening
+is disallowed. However, <code>long x = int_val_1</code> is unambiguous, so C3 permits it just like C (read more on the <a href="../conversion">conversion page</a>. </p>
+<p>C3 also adds <em>safe signed-unsigned comparisons</em>: this means that comparing signed and unsigned values will always yield the correct result:</p>
+<pre><code>// The code below would print "Hello C3!" in C3 and "Hello C!" in C.
 int i = -1;
 uint j = 1;
-// int z = i + j; &lt;- Error, explicit cast needed.
 if (i &lt; j)
 {
-    printf(&quot;Hello C3!\n&quot;);
+    printf("Hello C3!\n");
 }
 else
 {
-    printf(&quot;Hello C!\n&quot;);
+    printf("Hello C!\n");
 }
 </code></pre>
 <h5 id="goto-removed">Goto removed</h5>
