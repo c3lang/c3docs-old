@@ -93,6 +93,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#changes-in-switch">Changes in switch</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#bitfields-are-replace-by-explicit-bitstructs">Bitfields are replace by explicit bitstructs</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#other-changes">Other changes</a>
     </li>
     </ul>
@@ -423,10 +425,12 @@ short a;    // Guaranteed 16 bits
 int b;      // Guaranteed 32 bits
 long c;     // Guaranteed 64 bits
 ulong d;    // Guaranteed 64 bits
-usz e;      // Same as C size_t, depends on target
-isz f;      // Same as C ptrdiff_t
-iptr g;     // Same as intptr_t depends on target
-ireg i;     // Register sized integer
+int128 e;   // Guaranteed 128 bits
+uint128 f;  // Guaranteed 128 bits
+usz g;      // Same as C size_t, depends on target
+isz h;      // Same as C ptrdiff_t
+iptr i;     // Same as intptr_t depends on target
+uptr j;     // Same as uintptr_t depends on target
 </code></pre>
 <p>Read more about types <a href="../types">here</a>.</p>
 <h4 id="instead-of-include-modules-and-import">Instead of #include: Modules and import</h4>
@@ -575,6 +579,25 @@ switch (a)
     return false;
 }
 </code></pre>
+<h4 id="bitfields-are-replace-by-explicit-bitstructs">Bitfields are replace by explicit bitstructs</h4>
+<p>A bitstruct has an explicit container type, and each field has an exact bit range.</p>
+<pre><code class="language-c">bitstruct Foo : short  
+{  
+    int a : 0..2; // Exact bit ranges, bits 0-2
+    uint b : 3..6;
+    MyEnum c : 7..13;
+}
+</code></pre>
+<p>There exists a simplified form for a bitstruct containing only booleans,
+it is the same except the ranges are left out:</p>
+<pre><code class="language-c">struct Flags : char
+{
+    bool has_hyperdrive;
+    bool has_tractorbeam;
+    bool has_plasmatorpedoes;
+}
+</code></pre>
+<p>For more information see <a href="../types/#bitstructs">the section on bitstructs</a>.</p>
 <h4 id="other-changes">Other changes</h4>
 <p>The following things are enhancements to C, that does not have a direct counterpart in
 C. </p>
