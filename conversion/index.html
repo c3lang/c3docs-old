@@ -274,7 +274,7 @@
 <h2 id="common-arithmetic-promotion">Common arithmetic promotion</h2>
 <p>Like C, C3 uses implicit arithmetic promotion of integer and floating point variables before arithmetic operations:</p>
 <ol>
-<li>For any floating point type with a bit width smaller than 32 bits, widen to <code>float</code>. E.g. <code>f16 -&gt; float</code></li>
+<li>For any floating point type with a bitwidth smaller than 32 bits, widen to <code>float</code>. E.g. <code>f16 -&gt; float</code></li>
 <li>For an integer type smaller than the <em>minimum arithmetic width</em> promote the value to a same signed integer of the <em>minimum arithmetic width</em> (this usually corresponds to a c int/uint). E.g. <code>ushort -&gt; uint</code></li>
 </ol>
 <h2 id="implicit-narrowing">Implicit narrowing</h2>

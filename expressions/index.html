@@ -90,6 +90,14 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#constant-expressions">Constant expressions</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#including-binary-data">Including binary data</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#limiting-length">Limiting length</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#failure-to-load-at-compile-time-and-defaults">Failure to load at compile time and defaults</a>
+    </li>
+        </ul>
+    </li>
     </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../variables/">Variables</a>
@@ -215,18 +223,22 @@ it uses C++ syntax: <code>MyStruct { 1, 2 }</code>.</p>
     double b;
 }
 
-fn void test(Foo x) { ... }
+fn void test1(Foo x) { ... }
 
 ...
 
-test(Foo { 1, 2.0 });
+test1(Foo { 1, 2.0 });
 </code></pre>
 <p>Arrays follow the same syntax:</p>
-<pre><code>fn void test(int[3] x) { ... }
+<pre><code>fn void test2(int[3] x) { ... }
 
 ...
 
-test(int[3] { 1, 2, 3 });
+test2(int[3] { 1, 2, 3 });
+</code></pre>
+<p>Note that when it's possible, inferring the type is allowed, so we have for the above examples:</p>
+<pre><code>test1({ 1, 2.0 });
+test2({ 1, 2, 3 });
 </code></pre>
 <p>One may take the address of temporaries, using <code>&amp;&amp;</code> (rather than <code>&amp;</code> for normal variables). This allows the following:</p>
 <p>Passing a slice</p>
@@ -267,6 +279,26 @@ test2(&amp;&amp;int[3]{ 1, 2, 3 }));
 <li>The result of a cast except for casts of constant expressions to a numeric type.</li>
 <li>Compound literals - even when values are constant expressions.</li>
 </ol>
+<h2 id="including-binary-data">Including binary data</h2>
+<p>The <code>$embed(...)</code> function includes the contents of a file into the compilation as a
+constant array of bytes:</p>
+<pre><code>char[*] my_image = $embed("my_image.png");
+</code></pre>
+<p>The result of an embed work similar to a string literal and can implicitly convert to a <code>char*</code>, 
+<code>void*</code>, <code>char[]</code>, <code>char[*]</code> and <code>String</code>.</p>
+<h5 id="limiting-length">Limiting length</h5>
+<p>It's possible to limit the length of included with the optional second parameter.</p>
+<pre><code>char[4] my_data = $embed("foo.txt", 4];
+</code></pre>
+<h5 id="failure-to-load-at-compile-time-and-defaults">Failure to load at compile time and defaults</h5>
+<p>Usually it's a compile time error if the file can't be included, but sometimes it's useful
+to only optionally include it. If this is desired, declare the left hand side to be an optional:</p>
+<pre><code>char[]! my_image = $embed("my_image.png");
+</code></pre>
+<p><code>my_image</code> with be an optional <code>IoError.FILE_NOT_FOUND?</code> if the image is missing.</p>
+<p>This also allows us to pass a default value using <code>??</code>:</p>
+<pre><code>char[] my_image = $embed("my_image.png") ?? DEFAULT_IMAGE_DATA;
+</code></pre>
               
             </div>
           </div>
