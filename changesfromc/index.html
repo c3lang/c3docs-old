@@ -90,9 +90,11 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#implicit-break-in-switches">Implicit break in switches</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#locals-variables-are-implictly-zeroed">Locals variables are implictly zeroed</a>
+    <li class="toctree-l2"><a class="reference internal" href="#locals-variables-are-implicitly-zeroed">Locals variables are implicitly zeroed</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#compound-literal-syntax-changed">Compound literal syntax changed</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#bitfields-replaced-by-bitstructs">Bitfields replaced by bitstructs</a>
     </li>
     </ul>
                     </li>
@@ -303,7 +305,7 @@ the code is harder to understand as well. The replacements together with <code>d
         a = 111;
 }
 </code></pre>
-<h5 id="locals-variables-are-implictly-zeroed">Locals variables are implictly zeroed</h5>
+<h5 id="locals-variables-are-implicitly-zeroed">Locals variables are implicitly zeroed</h5>
 <p>In C global variables are implicitly zeroed out, but local variables aren't. In C3 local variables are zeroed out by default, but may be explicitly undefined to get the C behaviour.</p>
 <p><em>Rationale: In the "zero-is-initialization" paradigm, zeroing variables, in particular structs, is very common. By offering zero initialization by default this avoids a whole class of vulnerabilites.
 Another alternative that was considered for C3 was mandatory initialization,
@@ -324,6 +326,40 @@ call_foo(Foo { 1, 2, 3 } );
 
 // C3 with inference:
 call_foo({ 1, 2, 3 });
+</code></pre>
+<h5 id="bitfields-replaced-by-bitstructs">Bitfields replaced by bitstructs</h5>
+<p>Bitfields are replaced by bitstructs that have a well-defined encapsulating type, and 
+an exact bit layout.</p>
+<pre><code class="language-c">// C
+struct Foo
+{
+    int a : 3;
+    unsigned b : 4;
+    MyEnum c : 7;
+};
+
+struct Flags
+{
+    bool has_hyperdrive : 1;
+    bool has_tractorbeam : 1;
+    bool has_plasmatorpedoes : 1;
+}    
+
+// C3
+bitstruct Foo : short
+{  
+    int a : 0..2;
+    uint b : 3..6;
+    MyEnum c : 7..13;
+}
+
+// Simple form, only allowed when all fields are bools.
+struct Flags : char
+{
+    bool has_hyperdrive;
+    bool has_tractorbeam;
+    bool has_plasmatorpedoes;
+}
 </code></pre>
               
             </div>
