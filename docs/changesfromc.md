@@ -72,23 +72,27 @@ for (int i = 0, int j = 1; i < 10; i++, j++) { ... }
 
 ##### Integer promotions rules and safe signed-unsigned comparisons
 
-Promotion rules for integer types are different from C. Most prominently, C3 does left side widening in the case of `long x = intValue1 + intValue2`. In C this becomes:
-`long x = (long)(intValue1 + intValue2)`, whereas in C3 it would behaves as `long x = (long)intValue1 + (long)intValue2` to minimize chance of overflow. (read more on the [conversion page](../conversion). C3 also adds *safe signed-unsigned comparisons*: this means that comparing signed and unsigned values will always yield the correct result:
+Promotion rules for integer types are different from C. 
+C3 allows implicit widening only
+where there is only a single way to widen the expression. To explain the latter:
+take the case of `long x = int_val_1 + int_val_2`. In C this would widen the result of the addition:
+`long x = (long)(int_val_1 + int_val_2)`, but there is another possible 
+way to widen: `long x = (long)int_val_1 + (long)int_val_2`. so in this case, the widening
+is disallowed. However, `long x = int_val_1` is unambiguous, so C3 permits it just like C (read more on the [conversion page](../conversion). 
 
-```
-// The code below will print "Hello C3!" on C3 and "Hello C!" in C.
-int i = -1;
-uint j = 1;
-// int z = i + j; <- Error, explicit cast needed.
-if (i < j)
-{
-    printf("Hello C3!\n");
-}
-else
-{
-    printf("Hello C!\n");
-}
-```
+C3 also adds *safe signed-unsigned comparisons*: this means that comparing signed and unsigned values will always yield the correct result:
+
+    // The code below would print "Hello C3!" in C3 and "Hello C!" in C.
+    int i = -1;
+    uint j = 1;
+    if (i < j)
+    {
+        printf("Hello C3!\n");
+    }
+    else
+    {
+        printf("Hello C!\n");
+    }
 
 ##### Goto removed
 
@@ -117,7 +121,7 @@ Empty `case` statements have implicit fall through in C3, otherwise the `nextcas
     }
 
 
-##### Locals variables are implictly zeroed
+##### Locals variables are implicitly zeroed
 
 In C global variables are implicitly zeroed out, but local variables aren't. In C3 local variables are zeroed out by default, but may be explicitly undefined to get the C behaviour.
 
@@ -144,3 +148,42 @@ call_foo(Foo { 1, 2, 3 } );
 // C3 with inference:
 call_foo({ 1, 2, 3 });
 ```
+
+##### Bitfields replaced by bitstructs
+
+Bitfields are replaced by bitstructs that have a well-defined encapsulating type, and 
+an exact bit layout.
+
+```c
+// C
+struct Foo
+{
+    int a : 3;
+    unsigned b : 4;
+    MyEnum c : 7;
+};
+
+struct Flags
+{
+    bool has_hyperdrive : 1;
+    bool has_tractorbeam : 1;
+    bool has_plasmatorpedoes : 1;
+}    
+
+// C3
+bitstruct Foo : short
+{  
+    int a : 0..2;
+    uint b : 3..6;
+    MyEnum c : 7..13;
+}
+
+// Simple form, only allowed when all fields are bools.
+struct Flags : char
+{
+    bool has_hyperdrive;
+    bool has_tractorbeam;
+    bool has_plasmatorpedoes;
+}
+```
+

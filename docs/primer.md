@@ -232,10 +232,12 @@ Several C types that would be variable sized are fixed size, and others changed 
     int b;      // Guaranteed 32 bits
     long c;     // Guaranteed 64 bits
     ulong d;    // Guaranteed 64 bits
-    usz e;      // Same as C size_t, depends on target
-    isz f;      // Same as C ptrdiff_t
-    iptr g;     // Same as intptr_t depends on target
-    ireg i;     // Register sized integer
+    int128 e;   // Guaranteed 128 bits
+    uint128 f;  // Guaranteed 128 bits
+    usz g;      // Same as C size_t, depends on target
+    isz h;      // Same as C ptrdiff_t
+    iptr i;     // Same as intptr_t depends on target
+    uptr j;     // Same as uintptr_t depends on target
 
 Read more about types [here](../types).
 
@@ -402,6 +404,32 @@ Note that we can jump to an arbitrary case using C3:
         return false;
     }
 
+#### Bitfields are replace by explicit bitstructs
+
+A bitstruct has an explicit container type, and each field has an exact bit range.
+
+```c
+bitstruct Foo : short  
+{  
+    int a : 0..2; // Exact bit ranges, bits 0-2
+    uint b : 3..6;
+    MyEnum c : 7..13;
+}
+```
+
+There exists a simplified form for a bitstruct containing only booleans,
+it is the same except the ranges are left out:
+
+```c
+struct Flags : char
+{
+    bool has_hyperdrive;
+    bool has_tractorbeam;
+    bool has_plasmatorpedoes;
+}
+```
+
+For more information see [the section on bitstructs](../types/#bitstructs).
 
 #### Other changes
 
