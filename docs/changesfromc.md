@@ -140,4 +140,7 @@ call_foo(Foo { 1, 2, 3 });
 
 // C3:
 call_foo(Foo { 1, 2, 3 } );
+
+// C3 with inference:
+call_foo({ 1, 2, 3 });
 ```

@@ -1,5 +1,8 @@
 # Change log
 
+##### Revision 2023-07-09
+- Update with $embed information
+
 ##### Revision 2023-07-07
 - Updated generics syntax and uses.
 - Moved all "ideas" to the issue tracker.

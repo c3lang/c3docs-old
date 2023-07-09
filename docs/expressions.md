@@ -23,20 +23,25 @@ it uses C++ syntax: `MyStruct { 1, 2 }`.
         double b;
     }
 
-    fn void test(Foo x) { ... }
+    fn void test1(Foo x) { ... }
 
     ... 
 
-    test(Foo { 1, 2.0 });
+    test1(Foo { 1, 2.0 });
 
 Arrays follow the same syntax:
 
-    fn void test(int[3] x) { ... }
+    fn void test2(int[3] x) { ... }
 
     ...
 
-    test(int[3] { 1, 2, 3 });
+    test2(int[3] { 1, 2, 3 });
 
+
+Note that when it's possible, inferring the type is allowed, so we have for the above examples:
+
+    test1({ 1, 2.0 });
+    test2({ 1, 2, 3 });
 
 One may take the address of temporaries, using `&&` (rather than `&` for normal variables). This allows the following:
 
@@ -81,3 +86,32 @@ Some things that are *not* constant expressions:
 1. Any pointer that isn't the `null` literal, even if it's derived from a constant expression.
 2. The result of a cast except for casts of constant expressions to a numeric type.
 3. Compound literals - even when values are constant expressions.
+
+## Including binary data
+
+The `$embed(...)` function includes the contents of a file into the compilation as a
+constant array of bytes:
+
+    char[*] my_image = $embed("my_image.png");
+
+The result of an embed work similar to a string literal and can implicitly convert to a `char*`, 
+`void*`, `char[]`, `char[*]` and `String`.
+
+##### Limiting length
+
+It's possible to limit the length of included with the optional second parameter.
+
+    char[4] my_data = $embed("foo.txt", 4];
+
+##### Failure to load at compile time and defaults
+
+Usually it's a compile time error if the file can't be included, but sometimes it's useful
+to only optionally include it. If this is desired, declare the left hand side to be an optional:
+
+    char[]! my_image = $embed("my_image.png");
+
+`my_image` with be an optional `IoError.FILE_NOT_FOUND?` if the image is missing.
+
+This also allows us to pass a default value using `??`:
+
+    char[] my_image = $embed("my_image.png") ?? DEFAULT_IMAGE_DATA;

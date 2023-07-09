@@ -2,9 +2,9 @@
 
 Contracts are optional pre and post conditions checks that the compiler may use for optimization and runtime checks. Note that _compilers are not obliged to process pre and post conditions at all_. However, violating either pre or post conditions is considered undefined behaviour, so a compiler may optimize as if they always hold – even if a potential bug may cause them to be violated.
 
-# Pre conditions
+# Pre-conditions
 
-Pre conditions are usually used to validate incoming arguments. Each condition must be an expression that can be evaluated to a boolean. A pre condition use the `@require` annotation.
+Pre-conditions are usually used to validate incoming arguments. Each condition must be an expression that can be evaluated to a boolean. A pre condition use the `@require` annotation.
 
 ```
 /**

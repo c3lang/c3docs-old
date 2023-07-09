@@ -75,7 +75,7 @@ fn void test()
 
 ## Using `def` to create generic types, functions and variables
 
-It is recommeded to favour using `def` to create aliases for parameterized types, functions 
+It is recommended to favour using `def` to create aliases for parameterized types, functions 
 and variables:
 
      import generic_foo;
