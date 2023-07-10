@@ -184,8 +184,6 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#array-types">Array types</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#vararray-types">Vararray types</a>
-    </li>
     <li class="toctree-l3"><a class="reference internal" href="#subarray-types">Subarray types</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#pointer-types">Pointer types</a>
@@ -234,9 +232,99 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#statements">Statements</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#if-statement">If statement</a>
+    <li class="toctree-l3"><a class="reference internal" href="#assert-statement">Assert statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#conditional-inclusion">Conditional inclusion</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#switch-stat">Switch stat</a>
+    <li class="toctree-l4"><a class="reference internal" href="#assert-message">Assert message</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#panic-function">Panic function</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#if-statement">If statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#special-parsing-of-the-then-clause">Special parsing of the "then" clause</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#break">Break</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#switch-statement">Switch statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#regular-switch">Regular switch</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#if-switch">If-switch</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#fallthrough">Fallthrough</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#exhaustive-switch">Exhaustive switch</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#break_1">Break</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code">Unreachable code</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#switching-over-typeid">Switching over typeid</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#nextcase-without-expression">Nextcase without expression</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#nextcase-with-expression">Nextcase with expression</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#while-statement">While statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable">Unreachable</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#break_2">Break</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#continue">Continue</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#do-statement">Do statement</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable_1">Unreachable</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#break_3">Break</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#continue_1">Continue</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#do-block">Do block</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#for-statement">For statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#init-expression">Init expression</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#incr-expression">Incr expression</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#cond-expression">Cond expression</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable_2">Unreachable</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#break_4">Break</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#continue_2">Continue</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#equivalence-of-while-and-for">Equivalence of while and for</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#foreach-and-foreach_r-statements">Foreach and foreach_r statements</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#break_5">Break</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#continue_3">Continue</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#iteration-by-value-or-reference">Iteration by value or reference</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#foreach-variable">Foreach variable</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#foreach-index">Foreach index</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#foreach-support">Foreach support</a>
+    </li>
+        </ul>
     </li>
         </ul>
     </li>
@@ -320,7 +408,7 @@ repetition  ::= expression '*'
 *  repetition (0 to n times)
 </code></pre>
 <p>Uppercase production names are used to identify lexical tokens. Non-terminals are in lower case. Lexical tokens are enclosed in single quotes ''.</p>
-<p>The form a..b represents the set of characters from a through b as alternatives.</p>
+<p>The form <code>a..b</code> represents the set of characters from a through b as alternatives.</p>
 <h2 id="source-code-representation">Source code representation</h2>
 <p>A program consists of one or more <em>translation units</em> stored in files written in the Unicode character set,
  stored as a sequence of bytes using the UTF-8 encoding. Except for comments and the contents of character and string literals, all input elements are formed only from the ASCII subset (U+0000 to U+007F) of Unicode.</p>
@@ -368,20 +456,22 @@ DIGIT           ::= [0-9]
 HEX_DIGIT       ::= [0-9a-fA-F]
 BINARY_DIGIT    ::= [01]
 OCTAL_DIGIT     ::= [0-7]
+LC_LETTER_US    ::= LC_LETTER | &quot;_&quot;
 UC_LETTER_US    ::= UC_LETTER | &quot;_&quot;
 ALPHANUM        ::= LETTER | DIGIT
 ALPHANUM_US     ::= ALPHANUM | &quot;_&quot;
 UC_ALPHANUM_US  ::= UC_LETTER_US | DIGIT
+LC_ALPHANUM_US  ::= LC_LETTER_US | DIGIT
 </code></pre>
 <h3 id="comments">Comments</h3>
-<p>Thre are three types of regular comments:</p>
+<p>There are three types of regular comments:</p>
 <ol>
 <li><code>// text</code> a line comment. The text between <code>//</code> and line end is ignored.</li>
 <li><code>/* text */</code> block comments. The text between <code>/*</code> and <code>*/</code> is ignored. It has nesting behaviour, so for every <code>/*</code> discovered between the first <code>/*</code> and the last <code>*/</code> a corresponding <code>*/</code> must be found.</li>
 </ol>
 <h3 id="doc-comments">Doc comments</h3>
 <ol>
-<li><code>/** text **/</code> doc block comment. The text between <code>/**</code> and <code>**/</code> is optionally parsed using the doc comment syntatic grammar. A compiler may choose to read <code>/** text **/</code> as a regular comment.</li>
+<li><code>/** text **/</code> doc block comment. The text between <code>/**</code> and <code>**/</code> is optionally parsed using the doc comment syntactic grammar. A compiler may choose to read <code>/** text **/</code> as a regular comment.</li>
 <li><code>///</code> text doc line comment. The text between <code>///</code> and line end is optionally parsed using the doc comment syntactic grammar. A compiler may choose to read <code>///</code> as a regular comment.</li>
 </ol>
 <h3 id="identifiers">Identifiers</h3>
@@ -395,11 +485,11 @@ TYPE_IDENT      ::=  &quot;_&quot;* UC_LETTER &quot;_&quot;* LC_LETTER ALPHANUM_
 CT_IDENT        ::=  &quot;$&quot; IDENTIFIER
 CT_CONST_IDENT  ::=  &quot;$&quot; CONST_IDENT
 CT_TYPE_IDENT   ::=  &quot;$&quot; TYPE_IDENT
+PATH_SEGMENT    ::= &quot;_&quot;* LC_LETTER LC_ALPHANUM_US*
 </code></pre>
 <h3 id="keywords">Keywords</h3>
 <p>The following keywords are reserved and may not be used as identifiers:</p>
-<pre><code>alias       as          asm
-anyerr
+<pre><code>asm         any         anyfault
 assert      attribute   break
 case        cast        catch
 const       continue    default
@@ -407,12 +497,12 @@ defer       def         do
 else        enum        extern
 errtype     false       fn
 generic     if          import
-in          local       macro
-module      nextcase    nil
+inline      macro
+module      nextcase    null
 public      return      struct
 switch      true        try
-typeid      $typeof     define
-var         volatile    void
+typeid      def
+var         void
 while
 
 bool        quad        double      
@@ -436,11 +526,11 @@ $endforeach
 &gt;       &lt;       #       {       }       -
 (       )       *       [       ]       %
 &gt;=      &lt;=      +       +=      -=      !
-?       ?:      &amp;&amp;      -&gt;      &amp;=      |=
+?       ?:      &amp;&amp;      ??      &amp;=      |=
 ^=      /=      ..      ==      ({      })
--%      +%      *%      ++      --      %=
-!=      ||      ::      &lt;&lt;      &gt;&gt;      !!
-...     *%=     +%=     -%=     &lt;&lt;=     &gt;&gt;=
+[&lt;      &gt;]      (&lt;      &gt;)      ++      --      
+%=      !=      ||      ::      &lt;&lt;      &gt;&gt;      
+!!      ...     &lt;&lt;=     &gt;&gt;=
 </code></pre>
 <h3 id="integer-literals">Integer literals</h3>
 <p>An integer literal is a sequence of digits representing an integer constant. 
@@ -536,7 +626,7 @@ UNICODE_CHAR    ::= unicode_char
 CHARACTER_LIT   ::= &quot;'&quot; (CHAR_LIT_BYTE+) | UNICODE_CHAR &quot;'&quot;
 </code></pre>
 <h3 id="string-literals">String literals</h3>
-<p>A string literal represents a string constant obtained from concatenating a sequence of characters. String literals are character sequences between double quotes, as in "bar". Within the quotes, any character may appear except newline and unescaped double quote. The text between the quotes forms the value of the literal, with backslash escapes interpreted as they are in rune literals, with the same restrictions. The two-digit hexadecimal (\xnn) escapes represent individual bytes of the resulting string; all other escapes represent the (possibly multi-byte) UTF-8 encoding of individual characters. Thus inside a string literal \xFF represent a single byte of value 0xFF=255, while ÿ, \u00FF, \U000000FF and \xc3\xbf represent the two bytes 0xc3 0xbf of the UTF-8 encoding of character U+00FF.</p>
+<p>A string literal represents a string constant obtained from concatenating a sequence of characters. String literals are character sequences between double quotes, as in "bar". Within the quotes, any character may appear except newline and unescaped double quote. The text between the quotes forms the value of the literal, with backslash escapes interpreted as they are in rune literals, with the same restrictions. The two-digit hexadecimal (\xnn) escapes represent individual bytes of the resulting string; all other escapes represent the (possibly multibyte) UTF-8 encoding of individual characters. Thus inside a string literal \xFF represent a single byte of value 0xFF=255, while ÿ, \u00FF, \U000000FF and \xc3\xbf represent the two bytes 0xc3 0xbf of the UTF-8 encoding of character U+00FF.</p>
 <pre><code>STRING_LIT      ::= \x22 (CHAR_LIT_BYTE | UNICODE_CHAR)* \x22
 </code></pre>
 <h2 id="types">Types</h2>
@@ -547,17 +637,9 @@ CHARACTER_LIT   ::= &quot;'&quot; (CHAR_LIT_BYTE+) | UNICODE_CHAR &quot;'&quot;
 <h3 id="floating-point-types">Floating point types</h3>
 <h3 id="vector-types">Vector types</h3>
 <h3 id="complex-types">Complex types</h3>
-<p>A complex type is defined as a struct with two elements of the same floating point type. The first member holds the real part of a complex number, and the second member holds the imaginary part.</p>
-<pre><code>struct Complex
-{
-    float real;
-    float imaginary;
-}
-</code></pre>
 <h3 id="string-types">String types</h3>
 <h3 id="array-types">Array types</h3>
 <p>An array has the alignment of its element. Zero sized arrays are allowed and have the size 0.</p>
-<h3 id="vararray-types">Vararray types</h3>
 <h3 id="subarray-types">Subarray types</h3>
 <p>The subarray consist of a pointer, followed by a usz length, having the alignment of pointers.</p>
 <h3 id="pointer-types">Pointer types</h3>
@@ -615,9 +697,193 @@ range_index        ::= expression | '^' expression
 <h4 id="varargs">Varargs</h4>
 <p>For varargs, a <code>bool</code> or <em>any integer</em> smaller than what the C ABI specifies for the c <code>int</code> type is cast to <code>int</code>. Any float smaller than a double is cast to <code>double</code>. Compile time floats will be cast to double. Compile time integers will be cast to c <code>int</code> type.</p>
 <h2 id="statements">Statements</h2>
+<h3 id="assert-statement">Assert statement</h3>
+<p>The assert statement will evaluate the expression and call the panic function if it evaluates
+to false.</p>
+<pre><code>assert_stmt        ::= &quot;assert&quot; &quot;(&quot; expr (&quot;,&quot; assert_message)? &quot;)&quot; &quot;;&quot;
+assert_message     ::= constant_expr (&quot;,&quot; expr)*
+</code></pre>
+<h4 id="conditional-inclusion">Conditional inclusion</h4>
+<p><code>assert</code> statements are only included in "safe" builds. They may turn into <strong>assume directives</strong> for
+the compiler on "fast" builds.</p>
+<h4 id="assert-message">Assert message</h4>
+<p>The assert message is optional. It can be followed by an arbitrary number of expressions, in which case
+the message is understood to be a format string, and the following arguments are passed as values to the
+format function.</p>
+<p>The assert message must be a compile time constant. There are no restriction on the format argument expressions.</p>
+<h4 id="panic-function">Panic function</h4>
+<p>If the assert message has no format arguments or no assert message is included, 
+then the regular panic function is called. If it has format arguments then <code>panicf</code> is called instead.</p>
+<p>In the case the <code>panicf</code> function does not exist (for example, compiling without the standard library),
+then the format and the format arguments will be ignored and the <code>assert</code> will be treated
+as if no assert message was available.</p>
 <h3 id="if-statement">If statement</h3>
-<h3 id="switch-stat">Switch stat</h3>
+<p>An if statement will evaluate the cond expression, then execute the first statement (the "then clause") in the if-body
+if it evaluates to "true", otherwise execute the else clause. If no else clause exists, then the
+next statement is executed.</p>
+<pre><code>if_stmt            ::= &quot;if&quot; label? &quot;(&quot; cond_expr &quot;)&quot; if_body
+if_body            ::= non_compound_stmt | compound_stmt else_clause?
+else_clause        ::= &quot;else&quot; (if_stmt | compound_stmt)
+</code></pre>
+<h4 id="special-parsing-of-the-then-clause">Special parsing of the "then" clause</h4>
+<p>If the then-clause isn't a compound statement, then it must follow on the same row as the cond expression.
+It may not appear on a consecutive row.</p>
+<h4 id="break">Break</h4>
+<p>It is possible to use labelled break to break out of an if statement. Note that an unlabelled <code>break</code> may not
+be used.</p>
+<h3 id="switch-statement">Switch statement</h3>
+<pre><code>switch_stmt        ::= &quot;switch&quot; label? (&quot;(&quot; cond_expr &quot;)&quot;)? switch body
+switch_body        ::= &quot;{&quot; case_clause* &quot;}&quot;
+case_clause        ::= default_stmt | case_stmt
+default_stmt       ::= &quot;default&quot; &quot;:&quot; stmt*
+case_stmt          ::= &quot;case&quot; label? expr &quot;:&quot; stmt*
+</code></pre>
+<h4 id="regular-switch">Regular switch</h4>
+<p>If the cond expression exists and all case statements have constant expression, then first the
+cond expression is evaluated, next the case corresponding to the expression's value will be jumped to
+and the statement will be executed. After reaching the end of the statements and a new case clause <em>or</em> the
+end of the switch body, the execution will jump to the first statement after the switch.</p>
+<h4 id="if-switch">If-switch</h4>
+<p>If the cond expression is missing or the case statements are non-constant expressions, then each case clause will
+be evaluated in order after the cond expression has been evaluated (if it exists): </p>
+<ol>
+<li>If a cond expression exists, calculate the case expression and execute the case if it is matching the 
+cond expression. A default statement has no expression and will always be considered matching the cond expression
+reached.</li>
+<li>If no con expression exists, calculate the case expression and execute the case if the expression evaluates to 
+"true" when implicitly converted to boolean. A default statement will always be considered having the "true" result.</li>
+</ol>
+<h4 id="fallthrough">Fallthrough</h4>
+<p>If a case clause has no statements, then when executing the case, rather than exiting the switch, the next case clause
+immediately following it will be executed. If that one should also be missing statement, the procedure
+will be repeated until a case clause with statements is encountered (and executed), or the end of the switch is reached.</p>
+<h4 id="exhaustive-switch">Exhaustive switch</h4>
+<p>If a switch case has a default clause <em>or</em> it is switching over an enum and there exists a case for each enum value
+then the switch is exhaustive.</p>
+<h4 id="break_1">Break</h4>
+<p>If an unlabelled break, or a break with the switch's label is encountered, 
+then the execution will jump out of the switch and proceed directly after the end of the switch body.</p>
+<h4 id="unreachable-code">Unreachable code</h4>
+<p>If a switch is exhaustive and all case clauses end with a jump instruction, containing no break statement out 
+of the current switch, then the code directly following the switch will be considered <strong>unreachable</strong>.</p>
+<h4 id="switching-over-typeid">Switching over typeid</h4>
+<p>If the switch cond expression is a typeid, then case declarations may use only the type name after the case,
+which will be interpreted as having an implicit <code>.typeid</code>. Example: <code>case int:</code> will be interpreted as if 
+written <code>case int.typeid</code>.</p>
+<h4 id="nextcase-without-expression">Nextcase without expression</h4>
+<p>Without a value <code>nextcase</code> will jump to the beginning of the next case clause. It is not allowed to
+put <code>nextcase</code> without an expression if there are no following case clauses.</p>
+<h4 id="nextcase-with-expression">Nextcase with expression</h4>
+<p>Nextcase with an expression will evaluate the expression and then jump <em>as if</em> the switch was entered with
+the cond expression corresponding to the value of the nextcase expression. Nextcase with an expression cannot
+be used on a switch without a cond expression.</p>
+<h3 id="while-statement">While statement</h3>
+<p>The while statement evaluates the cond expression and executes the statement if it evaluates to true.
+After this the cond expression is evaluated again and the process is repeated until cond expression returns false.</p>
+<pre><code>while_stmt         ::= &quot;while&quot; label? &quot;(&quot; cond_expr &quot;)&quot; stmt
+</code></pre>
+<h4 id="unreachable">Unreachable</h4>
+<p>The statement after a while is considered unreachable if the cond expression cannot ever be false
+and there is no <code>break</code> out of the while.</p>
+<h4 id="break_2">Break</h4>
+<p><code>break</code> will exit the while with execution continuing on the following statement.</p>
+<h4 id="continue">Continue</h4>
+<p><code>continue</code> will jump directly to the evaluation of the cond, as if the end of the statement had been reached.</p>
+<h4 id="do-statement">Do statement</h4>
+<p>The do statement first evaluates its body (inner statement), then evaluates the cond expression.
+If the cond expression evaluates to true, jumps back into the body and repeats the process.</p>
+<pre><code>do_stmt            ::= &quot;do&quot; label? compound_stmt (&quot;while&quot; &quot;(&quot; cond_expr &quot;)&quot;)? &quot;;&quot; 
+</code></pre>
+<h4 id="unreachable_1">Unreachable</h4>
+<p>The statement after a <code>do</code> is considered unreachable if the cond expression cannot ever be false
+and there is no <code>break</code> out of the do.</p>
+<h4 id="break_3">Break</h4>
+<p><code>break</code> will exit the do with execution continuing on the following statement.</p>
+<h4 id="continue_1">Continue</h4>
+<p><code>continue</code> will jump directly to the evaluation of the cond, as if the end of the statement had been reached.</p>
+<h4 id="do-block">Do block</h4>
+<p>If no <code>while</code> part exists, it will only execute the block once, as if it ended with <code>while (false)</code>, this is 
+called a "do block"</p>
+<h3 id="for-statement">For statement</h3>
+<p>The <code>for</code> statement will perform the (optional) init expression. The cond expression will then be tested. If
+it evaluates to <code>true</code> then the body will execute, followed by the incr expression. After execution will
+jump back to the cond expression and execution will repeat until the cond expression evaluates to <code>false</code>.</p>
+<pre><code>for_stmt           ::= &quot;for&quot; label? &quot;(&quot; init_expr &quot;;&quot; cond_expr? &quot;;&quot; incr_expr &quot;)&quot; stmt
+init_expr          ::= decl_expr_list?
+incr_expr          ::= expr_list? 
+</code></pre>
+<h4 id="init-expression">Init expression</h4>
+<p>The init expression is only executed once before the rest of the for loop is executed.
+Any declarations in the init expression will be in scope until the for loop exits.</p>
+<p>The init expression may optionally be omitted.</p>
+<h4 id="incr-expression">Incr expression</h4>
+<p>The incr expression is evaluated before evaluating the cond expr every time except for the first one.</p>
+<p>The incr expression may optionally be omitted.</p>
+<h4 id="cond-expression">Cond expression</h4>
+<p>The cond expression is evaluated every loop. Any declaration in the cond expression is scoped to the 
+current loop, i.e. it will be reinitialized at the start of every loop.</p>
+<p>The cond expression may optionally be omitted. This is equivalent to setting the cond expression to 
+always return <code>true</code>.</p>
+<h4 id="unreachable_2">Unreachable</h4>
+<p>The statement after a <code>for</code> is considered unreachable if the cond expression cannot ever be false, or is 
+omitted and there is no <code>break</code> out of the loop.</p>
+<h4 id="break_4">Break</h4>
+<p><code>break</code> will exit the <code>for</code> with execution continuing on the following statement after the <code>for</code>.</p>
+<h4 id="continue_2">Continue</h4>
+<p><code>continue</code> will jump directly to the evaluation of the cond, as if the end of the statement had been reached.</p>
+<h4 id="equivalence-of-while-and-for">Equivalence of <code>while</code> and <code>for</code></h4>
+<p>A <code>while</code> loop is functionally equivalent to a <code>for</code> loop without init and incr expressions.</p>
+<h3 id="foreach-and-foreach_r-statements">Foreach and foreach_r statements</h3>
+<p>The <code>foreach</code> statement will loop over a sequence of values. The <code>foreach_r</code> is equivalent to
+<code>foreach</code> but the order of traversal is reversed.
+<code>foreach</code> starts with element <code>0</code> and proceeds step by step to element <code>len - 1</code>.
+<code>foreach_r</code> starts starts with element <code>len - 1</code> and proceeds step by step to element <code>0</code>.</p>
+<pre><code>foreach            ::= &quot;foreach&quot; label? &quot;(&quot; foreach_vars &quot;:&quot; expr &quot;)&quot; stmt
+foreach_r          ::= &quot;foreach_r&quot; label? &quot;(&quot; foreach_vars &quot;:&quot; expr &quot;)&quot; stmt
+foreach_vars       ::= (foreach_index &quot;,&quot;)? foreach_var
+foreach_var        ::= type? &quot;&amp;&quot;? IDENTIFIER
+</code></pre>
+<h4 id="break_5">Break</h4>
+<p><code>break</code> will exit the foreach statement with execution continuing on the following statement after.</p>
+<h4 id="continue_3">Continue</h4>
+<p><code>continue</code> will cause the next iteration to commence, as if the end of the statement had been reached.</p>
+<h4 id="iteration-by-value-or-reference">Iteration by value or reference</h4>
+<p>Normally iteration are by value. Each element is copied into the foreach variable. If <code>&amp;</code> 
+is added before the variable name, the elements will be retrieved by reference instead, and consequently
+the type of the variable will be a pointer to the element type instead.</p>
+<h4 id="foreach-variable">Foreach variable</h4>
+<p>The foreach variable may omit the type. In this case the type is inferred. If the type differs from the element
+type, then an implicit conversion will be attempted. Failing this is a compile time error.</p>
+<h4 id="foreach-index">Foreach index</h4>
+<p>If a variable name is added before the foreach variable, then this variable will receive the index of the element.
+For <code>foreach_r</code> this mean that the first value of the index will be <code>len - 1</code>.</p>
+<p>The index type defaults to <code>usz</code>.</p>
+<p>If an optional type is added to the index, the index will be converted to this type. The type must be an
+integer type. The conversion happens as if the conversion was a direct cast. If the actual index value
+would exceed the maximum representable value of the type, this does not affect the actual iteration, but 
+may cause the index value to take on an incorrect value due to the cast.</p>
+<p>For example, if the optional index type is <code>char</code> and the actual index is <code>256</code>, then the index value would show <code>0</code>
+as <code>(char)256</code> evaluates to zero.</p>
+<p>Modifying the index variable will not affect the foreach iteration.</p>
+<h4 id="foreach-support">Foreach support</h4>
+<p>Foreach is natively supported for any subarray, array, pointer to an array, vector and pointer to a vector.
+These types support both iteration by value and reference.</p>
+<p>In addition, a type with <strong>operator overload</strong> for <code>len</code> and <code>[]</code> will support iteration by value,
+and a type with <strong>operator overload</strong> for <code>len</code> and <code>&amp;[]</code> will support iteration by reference.</p>
 <h2 id="modules">Modules</h2>
+<p>Module paths are hierarchal, with each sub-path appended with '::' + the name:</p>
+<pre><code>path               ::= PATH_SEGMENT (&quot;::&quot; PATH_SEGMENT)
+</code></pre>
+<p>Each module declaration starts its own <strong>module section</strong>. All imports and all <code>@local</code> declarations
+are only visible in the current <strong>module section</strong>.</p>
+<pre><code>module_section     ::= &quot;module&quot; path opt_generic_params? attributes? &quot;;&quot;
+generic_param      ::= TYPE_IDENT | CONST_IDENT
+opt_generic_params ::= &quot;(&lt;&quot; generic_param (&quot;,&quot; generic_param)* &quot;&gt;)&quot;
+</code></pre>
+<p>Any visibility attribute defined in a <strong>module section</strong> will be the default visibility in all 
+declarations in the section.</p>
+<p>If the <code>@test</code> attribute is applied to the <strong>module section</strong> then all function declarations
+will implicitly have the <code>@test</code> attribute.</p>
               
             </div>
           </div>
