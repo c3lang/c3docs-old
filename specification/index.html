@@ -242,8 +242,26 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#break-statement">Break statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#break-labels">Break labels</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code">Unreachable code</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#continue-statement">Continue statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#continue-labels">Continue labels</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_1">Unreachable code</a>
+    </li>
+        </ul>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#if-statement">If statement</a>
         <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#scopes">Scopes</a>
+    </li>
     <li class="toctree-l4"><a class="reference internal" href="#special-parsing-of-the-then-clause">Special parsing of the "then" clause</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#break">Break</a>
@@ -262,7 +280,7 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#break_1">Break</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code">Unreachable code</a>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_2">Unreachable code</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#switching-over-typeid">Switching over typeid</a>
     </li>
@@ -270,23 +288,13 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#nextcase-with-expression">Nextcase with expression</a>
     </li>
-        </ul>
+    <li class="toctree-l4"><a class="reference internal" href="#do-statement">Do statement</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#while-statement">While statement</a>
-        <ul>
     <li class="toctree-l4"><a class="reference internal" href="#unreachable">Unreachable</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#break_2">Break</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#continue">Continue</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#do-statement">Do statement</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#unreachable_1">Unreachable</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#break_3">Break</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#continue_1">Continue</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#do-block">Do block</a>
     </li>
@@ -300,11 +308,11 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#cond-expression">Cond expression</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#unreachable_2">Unreachable</a>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable_1">Unreachable</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#break_4">Break</a>
+    <li class="toctree-l4"><a class="reference internal" href="#break_3">Break</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#continue_2">Continue</a>
+    <li class="toctree-l4"><a class="reference internal" href="#continue_1">Continue</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#equivalence-of-while-and-for">Equivalence of while and for</a>
     </li>
@@ -312,9 +320,9 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#foreach-and-foreach_r-statements">Foreach and foreach_r statements</a>
         <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#break_5">Break</a>
+    <li class="toctree-l4"><a class="reference internal" href="#break_4">Break</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#continue_3">Continue</a>
+    <li class="toctree-l4"><a class="reference internal" href="#continue_2">Continue</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#iteration-by-value-or-reference">Iteration by value or reference</a>
     </li>
@@ -323,6 +331,28 @@
     <li class="toctree-l4"><a class="reference internal" href="#foreach-index">Foreach index</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#foreach-support">Foreach support</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#return-statement">Return statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#jumps-in-return-statements">Jumps in return statements</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#return-from-expression-blocks">Return from expression blocks</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#empty-returns">Empty returns</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_3">Unreachable code</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#while-statement">While statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable_2">Unreachable</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#break_5">Break</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#continue_3">Continue</a>
     </li>
         </ul>
     </li>
@@ -641,7 +671,7 @@ CHARACTER_LIT   ::= &quot;'&quot; (CHAR_LIT_BYTE+) | UNICODE_CHAR &quot;'&quot;
 <h3 id="array-types">Array types</h3>
 <p>An array has the alignment of its element. Zero sized arrays are allowed and have the size 0.</p>
 <h3 id="subarray-types">Subarray types</h3>
-<p>The subarray consist of a pointer, followed by a usz length, having the alignment of pointers.</p>
+<p>The subarray consist of a pointer, followed by an usz length, having the alignment of pointers.</p>
 <h3 id="pointer-types">Pointer types</h3>
 <h3 id="struct-types">Struct types</h3>
 <p>A struct without any members or with only arrays of size 0 have the size 0.</p>
@@ -649,7 +679,6 @@ CHARACTER_LIT   ::= &quot;'&quot; (CHAR_LIT_BYTE+) | UNICODE_CHAR &quot;'&quot;
 <h3 id="union-types">Union types</h3>
 <p>The alignment of a union without any members is 1.</p>
 <h3 id="error-types">Error types</h3>
-<p>Th</p>
 <h3 id="enum-types">Enum types</h3>
 <h3 id="function-types">Function types</h3>
 <h3 id="virtual-types">Virtual types</h3>
@@ -697,6 +726,10 @@ range_index        ::= expression | '^' expression
 <h4 id="varargs">Varargs</h4>
 <p>For varargs, a <code>bool</code> or <em>any integer</em> smaller than what the C ABI specifies for the c <code>int</code> type is cast to <code>int</code>. Any float smaller than a double is cast to <code>double</code>. Compile time floats will be cast to double. Compile time integers will be cast to c <code>int</code> type.</p>
 <h2 id="statements">Statements</h2>
+<pre><code>stmt               ::= compound_stmt | non_compound_stmt
+non_compound_stmt  ::= assert_stmt | if_stmt | while_stmt | do_stmt | foreach_stmt | foreach_r_stmt 
+                       | for_stmt | return_stmt | break_stmt | continue_stmt
+</code></pre>
 <h3 id="assert-statement">Assert statement</h3>
 <p>The assert statement will evaluate the expression and call the panic function if it evaluates
 to false.</p>
@@ -717,14 +750,37 @@ then the regular panic function is called. If it has format arguments then <code
 <p>In the case the <code>panicf</code> function does not exist (for example, compiling without the standard library),
 then the format and the format arguments will be ignored and the <code>assert</code> will be treated
 as if no assert message was available.</p>
+<h3 id="break-statement">Break statement</h3>
+<p>A break statement exits a <code>while</code>, <code>for</code>, <code>do</code>, <code>foreach</code> or <code>switch</code> scope. A labelled break
+may also exit a labelled <code>if</code>.</p>
+<pre><code>break_stmt         ::= &quot;break&quot; label? &quot;;&quot;
+</code></pre>
+<h4 id="break-labels">Break labels</h4>
+<p>If a break has a label, then it will instead exit an outer scope with the label.</p>
+<h4 id="unreachable-code">Unreachable code</h4>
+<p>Any statement following break in the same scope is considered unreachable.</p>
+<h3 id="continue-statement">Continue statement</h3>
+<p>A continue statement jumps to the cond expression of a <code>while</code>, <code>for</code>, <code>do</code> or <code>foreach</code></p>
+<pre><code>continue_stmt      ::= &quot;continue&quot; label? &quot;;&quot;
+</code></pre>
+<h4 id="continue-labels">Continue labels</h4>
+<p>If a <code>continue</code> has a label, then it will jump to the cond of the while/for/do in the outer scope 
+with the corresponding label.</p>
+<h4 id="unreachable-code_1">Unreachable code</h4>
+<p>Any statement following <code>continue</code> in the same scope is considered unreachable.</p>
 <h3 id="if-statement">If statement</h3>
 <p>An if statement will evaluate the cond expression, then execute the first statement (the "then clause") in the if-body
 if it evaluates to "true", otherwise execute the else clause. If no else clause exists, then the
 next statement is executed.</p>
-<pre><code>if_stmt            ::= &quot;if&quot; label? &quot;(&quot; cond_expr &quot;)&quot; if_body
+<pre><code>if_stmt            ::= &quot;if&quot; (label &quot;:&quot;)? &quot;(&quot; cond_expr &quot;)&quot; if_body
 if_body            ::= non_compound_stmt | compound_stmt else_clause?
 else_clause        ::= &quot;else&quot; (if_stmt | compound_stmt)
 </code></pre>
+<h4 id="scopes">Scopes</h4>
+<p>Both the "then" clause and the else clause open new scopes, even if they are non-compound statements.
+The cond expression scope is valid until the exit of the entire statement, so any declarations in the 
+cond expression are available both in then and else clauses. Declarations in the "then" clause is not available
+in the else clause and vice versa.</p>
 <h4 id="special-parsing-of-the-then-clause">Special parsing of the "then" clause</h4>
 <p>If the then-clause isn't a compound statement, then it must follow on the same row as the cond expression.
 It may not appear on a consecutive row.</p>
@@ -763,7 +819,7 @@ then the switch is exhaustive.</p>
 <h4 id="break_1">Break</h4>
 <p>If an unlabelled break, or a break with the switch's label is encountered, 
 then the execution will jump out of the switch and proceed directly after the end of the switch body.</p>
-<h4 id="unreachable-code">Unreachable code</h4>
+<h4 id="unreachable-code_2">Unreachable code</h4>
 <p>If a switch is exhaustive and all case clauses end with a jump instruction, containing no break statement out 
 of the current switch, then the code directly following the switch will be considered <strong>unreachable</strong>.</p>
 <h4 id="switching-over-typeid">Switching over typeid</h4>
@@ -777,29 +833,17 @@ put <code>nextcase</code> without an expression if there are no following case c
 <p>Nextcase with an expression will evaluate the expression and then jump <em>as if</em> the switch was entered with
 the cond expression corresponding to the value of the nextcase expression. Nextcase with an expression cannot
 be used on a switch without a cond expression.</p>
-<h3 id="while-statement">While statement</h3>
-<p>The while statement evaluates the cond expression and executes the statement if it evaluates to true.
-After this the cond expression is evaluated again and the process is repeated until cond expression returns false.</p>
-<pre><code>while_stmt         ::= &quot;while&quot; label? &quot;(&quot; cond_expr &quot;)&quot; stmt
-</code></pre>
-<h4 id="unreachable">Unreachable</h4>
-<p>The statement after a while is considered unreachable if the cond expression cannot ever be false
-and there is no <code>break</code> out of the while.</p>
-<h4 id="break_2">Break</h4>
-<p><code>break</code> will exit the while with execution continuing on the following statement.</p>
-<h4 id="continue">Continue</h4>
-<p><code>continue</code> will jump directly to the evaluation of the cond, as if the end of the statement had been reached.</p>
 <h4 id="do-statement">Do statement</h4>
 <p>The do statement first evaluates its body (inner statement), then evaluates the cond expression.
 If the cond expression evaluates to true, jumps back into the body and repeats the process.</p>
 <pre><code>do_stmt            ::= &quot;do&quot; label? compound_stmt (&quot;while&quot; &quot;(&quot; cond_expr &quot;)&quot;)? &quot;;&quot; 
 </code></pre>
-<h4 id="unreachable_1">Unreachable</h4>
+<h4 id="unreachable">Unreachable</h4>
 <p>The statement after a <code>do</code> is considered unreachable if the cond expression cannot ever be false
 and there is no <code>break</code> out of the do.</p>
-<h4 id="break_3">Break</h4>
+<h4 id="break_2">Break</h4>
 <p><code>break</code> will exit the do with execution continuing on the following statement.</p>
-<h4 id="continue_1">Continue</h4>
+<h4 id="continue">Continue</h4>
 <p><code>continue</code> will jump directly to the evaluation of the cond, as if the end of the statement had been reached.</p>
 <h4 id="do-block">Do block</h4>
 <p>If no <code>while</code> part exists, it will only execute the block once, as if it ended with <code>while (false)</code>, this is 
@@ -824,12 +868,12 @@ Any declarations in the init expression will be in scope until the for loop exit
 current loop, i.e. it will be reinitialized at the start of every loop.</p>
 <p>The cond expression may optionally be omitted. This is equivalent to setting the cond expression to 
 always return <code>true</code>.</p>
-<h4 id="unreachable_2">Unreachable</h4>
+<h4 id="unreachable_1">Unreachable</h4>
 <p>The statement after a <code>for</code> is considered unreachable if the cond expression cannot ever be false, or is 
 omitted and there is no <code>break</code> out of the loop.</p>
-<h4 id="break_4">Break</h4>
+<h4 id="break_3">Break</h4>
 <p><code>break</code> will exit the <code>for</code> with execution continuing on the following statement after the <code>for</code>.</p>
-<h4 id="continue_2">Continue</h4>
+<h4 id="continue_1">Continue</h4>
 <p><code>continue</code> will jump directly to the evaluation of the cond, as if the end of the statement had been reached.</p>
 <h4 id="equivalence-of-while-and-for">Equivalence of <code>while</code> and <code>for</code></h4>
 <p>A <code>while</code> loop is functionally equivalent to a <code>for</code> loop without init and incr expressions.</p>
@@ -838,14 +882,14 @@ omitted and there is no <code>break</code> out of the loop.</p>
 <code>foreach</code> but the order of traversal is reversed.
 <code>foreach</code> starts with element <code>0</code> and proceeds step by step to element <code>len - 1</code>.
 <code>foreach_r</code> starts starts with element <code>len - 1</code> and proceeds step by step to element <code>0</code>.</p>
-<pre><code>foreach            ::= &quot;foreach&quot; label? &quot;(&quot; foreach_vars &quot;:&quot; expr &quot;)&quot; stmt
-foreach_r          ::= &quot;foreach_r&quot; label? &quot;(&quot; foreach_vars &quot;:&quot; expr &quot;)&quot; stmt
+<pre><code>foreach_stmt       ::= &quot;foreach&quot; label? &quot;(&quot; foreach_vars &quot;:&quot; expr &quot;)&quot; stmt
+foreach_r_stmt     ::= &quot;foreach_r&quot; label? &quot;(&quot; foreach_vars &quot;:&quot; expr &quot;)&quot; stmt
 foreach_vars       ::= (foreach_index &quot;,&quot;)? foreach_var
 foreach_var        ::= type? &quot;&amp;&quot;? IDENTIFIER
 </code></pre>
-<h4 id="break_5">Break</h4>
+<h4 id="break_4">Break</h4>
 <p><code>break</code> will exit the foreach statement with execution continuing on the following statement after.</p>
-<h4 id="continue_3">Continue</h4>
+<h4 id="continue_2">Continue</h4>
 <p><code>continue</code> will cause the next iteration to commence, as if the end of the statement had been reached.</p>
 <h4 id="iteration-by-value-or-reference">Iteration by value or reference</h4>
 <p>Normally iteration are by value. Each element is copied into the foreach variable. If <code>&amp;</code> 
@@ -870,6 +914,39 @@ as <code>(char)256</code> evaluates to zero.</p>
 These types support both iteration by value and reference.</p>
 <p>In addition, a type with <strong>operator overload</strong> for <code>len</code> and <code>[]</code> will support iteration by value,
 and a type with <strong>operator overload</strong> for <code>len</code> and <code>&amp;[]</code> will support iteration by reference.</p>
+<h3 id="return-statement">Return statement</h3>
+<p>The return statement evaluates its expression (if present) and returns the result.</p>
+<pre><code>return_stmt        ::= &quot;return&quot; expr? &quot;;&quot;
+</code></pre>
+<h4 id="jumps-in-return-statements">Jumps in return statements</h4>
+<p>If the expression should in itself cause an implicit return, for example due to the rethrow operator <code>!</code>, then this
+jump will happen before the return.</p>
+<p>An example:</p>
+<pre><code>return foo()!;
+// is equivalent to:
+int temp = foo()!;
+return temp;
+</code></pre>
+<h4 id="return-from-expression-blocks">Return from expression blocks</h4>
+<p>A <code>return</code> from an expression block only returns out of the expression block, it never returns from the
+expression block's enclosing scope.</p>
+<h4 id="empty-returns">Empty returns</h4>
+<p>An empty return is equivalent to a return with a void type. Consequently constructs like <code>foo(); return;</code> and <code>return (void)foo();</code>
+are equivalent.</p>
+<h4 id="unreachable-code_3">Unreachable code</h4>
+<p>Any statement directly following a return in the same scope are considered unreachable.</p>
+<h3 id="while-statement">While statement</h3>
+<p>The while statement evaluates the cond expression and executes the statement if it evaluates to true.
+After this the cond expression is evaluated again and the process is repeated until cond expression returns false.</p>
+<pre><code>while_stmt         ::= &quot;while&quot; label? &quot;(&quot; cond_expr &quot;)&quot; stmt
+</code></pre>
+<h4 id="unreachable_2">Unreachable</h4>
+<p>The statement after a while is considered unreachable if the cond expression cannot ever be false
+and there is no <code>break</code> out of the while.</p>
+<h4 id="break_5">Break</h4>
+<p><code>break</code> will exit the while with execution continuing on the following statement.</p>
+<h4 id="continue_3">Continue</h4>
+<p><code>continue</code> will jump directly to the evaluation of the cond, as if the end of the statement had been reached.</p>
 <h2 id="modules">Modules</h2>
 <p>Module paths are hierarchal, with each sub-path appended with '::' + the name:</p>
 <pre><code>path               ::= PATH_SEGMENT (&quot;::&quot; PATH_SEGMENT)
