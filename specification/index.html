@@ -232,6 +232,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#statements">Statements</a>
         <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#asm-block-statement">Asm block statement</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#assert-statement">Assert statement</a>
         <ul>
     <li class="toctree-l4"><a class="reference internal" href="#conditional-inclusion">Conditional inclusion</a>
@@ -247,6 +249,26 @@
     <li class="toctree-l4"><a class="reference internal" href="#break-labels">Break labels</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#unreachable-code">Unreachable code</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compile-time-echo-statement">Compile time echo statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#the-message">The message</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compile-time-assert-statement">Compile time assert statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#evaluated-expression">Evaluated expression</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#error-message">Error message</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compile-time-error-statement">Compile time error statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#error-message_1">Error message</a>
     </li>
         </ul>
     </li>
@@ -307,6 +329,20 @@
         </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#nextcase-statement">Nextcase statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#labels">Labels</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#no-expression-jumps">No expression jumps</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#jumps-to-default">Jumps to default</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#missing-case">Missing case</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#variable-expression">Variable expression</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_2">Unreachable code</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#switch-statement">Switch statement</a>
         <ul>
@@ -314,13 +350,15 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#if-switch">If-switch</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#ranged-cases">Ranged cases</a>
+    </li>
     <li class="toctree-l4"><a class="reference internal" href="#fallthrough">Fallthrough</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#exhaustive-switch">Exhaustive switch</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#break_1">Break</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_2">Unreachable code</a>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_3">Unreachable code</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#switching-over-typeid">Switching over typeid</a>
     </li>
@@ -382,7 +420,7 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#empty-returns">Empty returns</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_3">Unreachable code</a>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_4">Unreachable code</a>
     </li>
         </ul>
     </li>
@@ -775,9 +813,20 @@ range_index        ::= expression | '^' expression
 non_compound_stmt  ::= assert_stmt | if_stmt | while_stmt | do_stmt | foreach_stmt | foreach_r_stmt 
                        | for_stmt | return_stmt | break_stmt | continue_stmt | var_stmt 
                        | declaration_stmt | defer_stmt | nextcase_stmt | asm_block_stmt
-                       | ct_echo_stmt | ct_assert_stmt | ct_if_stmt | ct_switch_stmt 
+                       | ct_echo_stmt | ct_error_stmt | ct_assert_stmt | ct_if_stmt | ct_switch_stmt 
                        | ct_for_stmt | ct_foreach_stmt | expr_stmt 
 </code></pre>
+<h3 id="asm-block-statement">Asm block statement</h3>
+<p>An asm block is either a string expression or a brace enclosed list of asm statements.</p>
+<pre><code>asm_block_stmt      ::= &quot;asm&quot; (&quot;(&quot; constant_expr &quot;)&quot; | &quot;{&quot; asm_stmt* &quot;}&quot;)
+asm_stmt            ::= asm_instr asm_exprs? &quot;;&quot;
+asm_instr           ::= (&quot;int&quot; | IDENTIFIER) (&quot;.&quot; IDENTIFIER)
+asm_expr            ::= CT_IDENT | CT_CONST_IDENT | &quot;&amp;&quot;? IDENTIFIER | CONST_IDENT | FLOAT_LITERAL
+                        | INTEGER | &quot;(&quot; expr &quot;)&quot; | &quot;[&quot; asm_addr &quot;]&quot;
+asm_addr            ::= asm_expr (additive_op asm_expr asm_addr_trail?)?
+asm_addr_trail      ::= &quot;*&quot; INTEGER (additive_op INTEGER)? | (shift_op | additive_op) INTEGER                         
+</code></pre>
+<p>TODO</p>
 <h3 id="assert-statement">Assert statement</h3>
 <p>The assert statement will evaluate the expression and call the panic function if it evaluates
 to false.</p>
@@ -807,6 +856,30 @@ may also exit a labelled <code>if</code>.</p>
 <p>If a break has a label, then it will instead exit an outer scope with the label.</p>
 <h4 id="unreachable-code">Unreachable code</h4>
 <p>Any statement following break in the same scope is considered unreachable.</p>
+<h3 id="compile-time-echo-statement">Compile time echo statement</h3>
+<p>During parsing, the compiler will output the text in the statement when it is semantically checked.
+The statement will be turned into a NOP statement after checking.</p>
+<pre><code>ct_echo_stmt       ::= &quot;$echo&quot; constant_expr &quot;;&quot;
+</code></pre>
+<h4 id="the-message">The message</h4>
+<p>The message must be a compile time constant string.</p>
+<h3 id="compile-time-assert-statement">Compile time assert statement</h3>
+<p>During parsing, the compiler will check the compile time expression
+and create a compile time error with the optional message. After
+evaluation, the <code>$assert</code> becomes a <strong>NOP</strong> statement.</p>
+<pre><code>ct_assert_stmt     ::= &quot;$assert&quot; constant_expr (&quot;:&quot; constant_expr) &quot;;&quot;
+</code></pre>
+<h4 id="evaluated-expression">Evaluated expression</h4>
+<p>The checked expression must evaluate to a boolean compile time constant.</p>
+<h4 id="error-message">Error message</h4>
+<p>The second parameter, which is optional, must evaluate to a constant string.</p>
+<h3 id="compile-time-error-statement">Compile time error statement</h3>
+<p>During parsing, when semantically checked this statement will output
+a compile time error with the message given.</p>
+<pre><code>ct_error_stmt      ::= &quot;$error&quot; constant_expr &quot;;&quot;
+</code></pre>
+<h4 id="error-message_1">Error message</h4>
+<p>The parameter must evaluate to a constant string.</p>
 <h3 id="continue-statement">Continue statement</h3>
 <p>A continue statement jumps to the cond expression of a <code>while</code>, <code>for</code>, <code>do</code> or <code>foreach</code></p>
 <pre><code>continue_stmt      ::= &quot;continue&quot; label? &quot;;&quot;
@@ -906,15 +979,32 @@ It may not appear on a consecutive row.</p>
 be used.</p>
 <h3 id="nextcase-statement">Nextcase statement</h3>
 <p>Nextcase will jump to another <code>switch</code> case.</p>
-<pre><code>nextcase_stmt      ::= &quot;nextcase&quot; (label &quot;:&quot;)? expr? &quot;;&quot; 
+<pre><code>nextcase_stmt      ::= &quot;nextcase&quot; ((label &quot;:&quot;)? (expr | &quot;default&quot;))? &quot;;&quot; 
 </code></pre>
-<p>TODO</p>
+<h4 id="labels">Labels</h4>
+<p>When a nextcase has a label, the jump is to the switch in an outer scope with the corresponding label.</p>
+<h4 id="no-expression-jumps">No expression jumps</h4>
+<p>A <code>nextcase</code> without any expression jumps to the next case clause in the current switch. It is not possible
+to use no expression <code>nextcase</code> with labels.</p>
+<h4 id="jumps-to-default">Jumps to default</h4>
+<p>Using <code>default</code> jumps to the default clause of a switch.</p>
+<h4 id="missing-case">Missing case</h4>
+<p>If the switch has constant case values, and the nextcase expression is constant, then the value of
+the expression must match a case clause. Not matching a case is a compile time error.</p>
+<p>If one or more cases are non-constant and/or the nextcase expression is non-constant, then no compile time check is made.</p>
+<h4 id="variable-expression">Variable expression</h4>
+<p>If the nextcase has a non-constant expression, or the cases are not all constant, then first the nextcase expression
+is evaluated. Next, execution will proceed <em>as if</em> the switch was invoked again, but with the nextcase expression as the 
+switch cond expression. See <strong>switch statement</strong>.</p>
+<p>If the switch does not have a cond expression, nextcase with an expression is not allowed.</p>
+<h4 id="unreachable-code_2">Unreachable code</h4>
+<p>Any statement in the same scope after a <code>nextcase</code> are considered <strong>unreachable</strong>.</p>
 <h3 id="switch-statement">Switch statement</h3>
 <pre><code>switch_stmt        ::= &quot;switch&quot; (label &quot;:&quot;)? (&quot;(&quot; cond_expr &quot;)&quot;)? switch body
 switch_body        ::= &quot;{&quot; case_clause* &quot;}&quot;
 case_clause        ::= default_stmt | case_stmt
 default_stmt       ::= &quot;default&quot; &quot;:&quot; stmt*
-case_stmt          ::= &quot;case&quot; label? expr &quot;:&quot; stmt*
+case_stmt          ::= &quot;case&quot; label? expr (&quot;..&quot; expr)? &quot;:&quot; stmt*
 </code></pre>
 <h4 id="regular-switch">Regular switch</h4>
 <p>If the cond expression exists and all case statements have constant expression, then first the
@@ -931,6 +1021,9 @@ reached.</li>
 <li>If no con expression exists, calculate the case expression and execute the case if the expression evaluates to 
 "true" when implicitly converted to boolean. A default statement will always be considered having the "true" result.</li>
 </ol>
+<h4 id="ranged-cases">Ranged cases</h4>
+<p>Cases may be ranged. The start and end of the range must both be constant integer values. The start must
+be less or equal to the end value. Using non-integers or non-constant values is a compile time error.</p>
 <h4 id="fallthrough">Fallthrough</h4>
 <p>If a case clause has no statements, then when executing the case, rather than exiting the switch, the next case clause
 immediately following it will be executed. If that one should also be missing statement, the procedure
@@ -941,7 +1034,7 @@ then the switch is exhaustive.</p>
 <h4 id="break_1">Break</h4>
 <p>If an unlabelled break, or a break with the switch's label is encountered, 
 then the execution will jump out of the switch and proceed directly after the end of the switch body.</p>
-<h4 id="unreachable-code_2">Unreachable code</h4>
+<h4 id="unreachable-code_3">Unreachable code</h4>
 <p>If a switch is exhaustive and all case clauses end with a jump instruction, containing no break statement out 
 of the current switch, then the code directly following the switch will be considered <strong>unreachable</strong>.</p>
 <h4 id="switching-over-typeid">Switching over typeid</h4>
@@ -1055,7 +1148,7 @@ expression block's enclosing scope.</p>
 <h4 id="empty-returns">Empty returns</h4>
 <p>An empty return is equivalent to a return with a void type. Consequently constructs like <code>foo(); return;</code> and <code>return (void)foo();</code>
 are equivalent.</p>
-<h4 id="unreachable-code_3">Unreachable code</h4>
+<h4 id="unreachable-code_4">Unreachable code</h4>
 <p>Any statement directly following a return in the same scope are considered unreachable.</p>
 <h3 id="while-statement">While statement</h3>
 <p>The while statement evaluates the cond expression and executes the statement if it evaluates to true.
