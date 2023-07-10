@@ -258,15 +258,55 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#declaration-statement">Declaration statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#thread-local-storage">Thread local storage</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#static-storage">Static storage</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#scopes">Scopes</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#multiple-declarations">Multiple declarations</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#no-init-expression">No init expression</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#opt-out-of-zero-initialization">Opt-out of zero initialization</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#self-referencing-initialization">Self referencing initialization</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#defer-statement">Defer statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#defer-in-defer">Defer in defer</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#static-and-tlocal-variables-in-defer">Static and tlocal variables in defer</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#defer-and-return">Defer and return</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#defer-and-jump-statements">Defer and jump statements</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#defer-execution">Defer execution</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#defer-try">Defer try</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#defer-catch">Defer catch</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#non-regular-returns-longjmp-panic-and-other-errors">Non-regular returns - longjmp, panic and other errors</a>
+    </li>
+        </ul>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#if-statement">If statement</a>
         <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#scopes">Scopes</a>
+    <li class="toctree-l4"><a class="reference internal" href="#scopes_1">Scopes</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#special-parsing-of-the-then-clause">Special parsing of the "then" clause</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#break">Break</a>
     </li>
         </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#nextcase-statement">Nextcase statement</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#switch-statement">Switch statement</a>
         <ul>
@@ -355,6 +395,12 @@
     <li class="toctree-l4"><a class="reference internal" href="#continue_3">Continue</a>
     </li>
         </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#var-statement">Var statement</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#inferring-type">Inferring type</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#scope">Scope</a>
     </li>
         </ul>
     </li>
@@ -728,7 +774,10 @@ range_index        ::= expression | '^' expression
 <h2 id="statements">Statements</h2>
 <pre><code>stmt               ::= compound_stmt | non_compound_stmt
 non_compound_stmt  ::= assert_stmt | if_stmt | while_stmt | do_stmt | foreach_stmt | foreach_r_stmt 
-                       | for_stmt | return_stmt | break_stmt | continue_stmt
+                       | for_stmt | return_stmt | break_stmt | continue_stmt | var_stmt 
+                       | declaration_stmt | defer_stmt | nextcase_stmt | asm_block_stmt
+                       | ct_echo_stmt | ct_assert_stmt | ct_if_stmt | ct_switch_stmt 
+                       | ct_for_stmt | ct_foreach_stmt | expr_stmt 
 </code></pre>
 <h3 id="assert-statement">Assert statement</h3>
 <p>The assert statement will evaluate the expression and call the panic function if it evaluates
@@ -768,6 +817,75 @@ may also exit a labelled <code>if</code>.</p>
 with the corresponding label.</p>
 <h4 id="unreachable-code_1">Unreachable code</h4>
 <p>Any statement following <code>continue</code> in the same scope is considered unreachable.</p>
+<h3 id="declaration-statement">Declaration statement</h3>
+<p>A declaration statement adds a new runtime or compile time variable to the current scope. It is available after the declaration statement.</p>
+<pre><code>declaration_stmt   ::= const_declaration | local_decl_storage? optional_type decls_after_type &quot;;&quot;
+local_decl_storage ::= &quot;tlocal&quot; | &quot;static&quot;
+decls_after_type   ::= local_decl_after_type (&quot;,&quot; local_decl_after_type)*
+decl_after_type    ::= CT_IDENT (&quot;=&quot; constant_expr)? | IDENTIFIER opt_attributes (&quot;=&quot; expr)?
+</code></pre>
+<h4 id="thread-local-storage">Thread local storage</h4>
+<p>Using <code>tlocal</code> allocates the runtime variable as a <strong>thread local</strong> variable. In effect this is the same as declaring
+the variable as a global <code>tlocal</code> variable, but the visibility is limited to the function. <code>tlocal</code> may not be
+combined with <code>static</code>.</p>
+<p>The initializer for a <code>tlocal</code> variable must be a valid global init expression.</p>
+<h4 id="static-storage">Static storage</h4>
+<p>Using <code>static</code> allocates the runtime variable as a function <strong>global</strong> variable. In effect this is the same as declaring 
+a global, but visibility is limited to the function. <code>static</code> may not be combined with <code>tlocal</code>.</p>
+<p>The initializer for a <code>static</code> variable must be a valid global init expression.</p>
+<h4 id="scopes">Scopes</h4>
+<p>Runtime variables are added to the runtime scope, compile time variables to the compile time scope. See <strong>var statements</strong>.</p>
+<h4 id="multiple-declarations">Multiple declarations</h4>
+<p>If more than one variable is declared, no init expressions are allowed for any of the variables.</p>
+<h4 id="no-init-expression">No init expression</h4>
+<p>If no init expression is provided, the variable is <strong>zero initialized</strong>.</p>
+<h4 id="opt-out-of-zero-initialization">Opt-out of zero initialization</h4>
+<p>Using the @noinit attribute opts out of <strong>zero initialization</strong>.</p>
+<h4 id="self-referencing-initialization">Self referencing initialization</h4>
+<p>An init expression may refer to the <strong>address</strong> of the same variable that is declared, but not the <strong>value</strong> of the 
+variable.</p>
+<p>Example:</p>
+<pre><code class="language-c">void* a = &amp;a;  // Valid
+int a = a + 1; // Invalid
+</code></pre>
+<h3 id="defer-statement">Defer statement</h3>
+<p>The defer statements are executed at (runtime) scope exit, whether through <code>return</code>, <code>break</code>, <code>continue</code> or rethrow.</p>
+<pre><code>defer_stmt         ::= &quot;defer&quot; (&quot;try&quot; | &quot;catch&quot;)? stmt
+</code></pre>
+<h4 id="defer-in-defer">Defer in defer</h4>
+<p>The defer body (statement) may not be a defer statement. However, if the body is a compound statement then
+this may have any number of defer statements.</p>
+<h4 id="static-and-tlocal-variables-in-defer">Static and tlocal variables in defer</h4>
+<p>Static and tlocal variables are allowed in a defer statement. Only a single variable is instantiated regardless of
+the number of inlining locations.</p>
+<h4 id="defer-and-return">Defer and return</h4>
+<p>If the <code>return</code> has an expression, then it is evaluated before the defer statements (due to exit from the current function scope),
+are executed.</p>
+<p>Example:</p>
+<pre><code class="language-c">int a = 0;
+defer a++;
+return a;
+// This is equivalent to
+int a = 0;
+int temp = a;
+a++;
+return temp;
+</code></pre>
+<h4 id="defer-and-jump-statements">Defer and jump statements</h4>
+<p>A defer body may not contain a <code>break</code>, <code>continue</code>, <code>return</code> or rethrow that would exit the statement.</p>
+<h4 id="defer-execution">Defer execution</h4>
+<p>Defer statements are executed in the reverse order of their declaration, starting from the last declared
+defer statement.</p>
+<h4 id="defer-try">Defer try</h4>
+<p>A <code>defer try</code> type of defer will only execute if the scope is left through normal fallthrough, <code>break</code>, 
+<code>continue</code> or a <code>return</code> with a result.</p>
+<p>It will not execute if the exit is through a rethrow or a <code>return</code> with an optional value.</p>
+<h4 id="defer-catch">Defer catch</h4>
+<p>A <code>defer catch</code> type of defer will only execute if the scope is left through a rethrow or a <code>return</code> with an optional value</p>
+<p>It will not execute if the exit is a normal fallthrough, <code>break</code>, <code>continue</code> or a <code>return</code> with a result.</p>
+<h4 id="non-regular-returns-longjmp-panic-and-other-errors">Non-regular returns - longjmp, panic and other errors</h4>
+<p>Defers will not execute when doing <code>longjmp</code> terminating through a <code>panic</code> or other error. They 
+are only invoked on regular scope exits.</p>
 <h3 id="if-statement">If statement</h3>
 <p>An if statement will evaluate the cond expression, then execute the first statement (the "then clause") in the if-body
 if it evaluates to "true", otherwise execute the else clause. If no else clause exists, then the
@@ -776,7 +894,7 @@ next statement is executed.</p>
 if_body            ::= non_compound_stmt | compound_stmt else_clause?
 else_clause        ::= &quot;else&quot; (if_stmt | compound_stmt)
 </code></pre>
-<h4 id="scopes">Scopes</h4>
+<h4 id="scopes_1">Scopes</h4>
 <p>Both the "then" clause and the else clause open new scopes, even if they are non-compound statements.
 The cond expression scope is valid until the exit of the entire statement, so any declarations in the 
 cond expression are available both in then and else clauses. Declarations in the "then" clause is not available
@@ -787,8 +905,13 @@ It may not appear on a consecutive row.</p>
 <h4 id="break">Break</h4>
 <p>It is possible to use labelled break to break out of an if statement. Note that an unlabelled <code>break</code> may not
 be used.</p>
+<h3 id="nextcase-statement">Nextcase statement</h3>
+<p>Nextcase will jump to another <code>switch</code> case.</p>
+<pre><code>nextcase_stmt      ::= &quot;nextcase&quot; (label &quot;:&quot;)? expr? &quot;;&quot; 
+</code></pre>
+<p>TODO</p>
 <h3 id="switch-statement">Switch statement</h3>
-<pre><code>switch_stmt        ::= &quot;switch&quot; label? (&quot;(&quot; cond_expr &quot;)&quot;)? switch body
+<pre><code>switch_stmt        ::= &quot;switch&quot; (label &quot;:&quot;)? (&quot;(&quot; cond_expr &quot;)&quot;)? switch body
 switch_body        ::= &quot;{&quot; case_clause* &quot;}&quot;
 case_clause        ::= default_stmt | case_stmt
 default_stmt       ::= &quot;default&quot; &quot;:&quot; stmt*
@@ -947,6 +1070,19 @@ and there is no <code>break</code> out of the while.</p>
 <p><code>break</code> will exit the while with execution continuing on the following statement.</p>
 <h4 id="continue_3">Continue</h4>
 <p><code>continue</code> will jump directly to the evaluation of the cond, as if the end of the statement had been reached.</p>
+<h3 id="var-statement">Var statement</h3>
+<p>A var statement declares a variable with inferred type, or a compile time type variable. It can be used both
+for runtime and compile time variables. The use for runtime variables is limited to macros.</p>
+<pre><code>var_stmt           ::= &quot;var&quot; IDENTIFIER | CT_IDENT | CT_TYPE_IDENT (&quot;=&quot; expr)? &quot;;&quot; 
+</code></pre>
+<h3 id="inferring-type">Inferring type</h3>
+<p>In the case of a runtime variable, the type is inferred from the expression. Not providing an expression 
+is a compile time error. The expression must resolve to a runtime type.</p>
+<p>For compile time variables, the expression is optional. The expression may resolve to a runtime or compile time type.</p>
+<h3 id="scope">Scope</h3>
+<p>Runtime variables will follow the runtime scopes, identical to behaviour in a declaration statement. The compile
+time variables will follow the compile time scopes which are delimited by scoping compile time statements (<code>$if</code>, <code>$switch</code>,
+<code>$foreach</code> and <code>$for</code>).</p>
 <h2 id="modules">Modules</h2>
 <p>Module paths are hierarchal, with each sub-path appended with '::' + the name:</p>
 <pre><code>path               ::= PATH_SEGMENT (&quot;::&quot; PATH_SEGMENT)
