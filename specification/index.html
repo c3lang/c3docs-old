@@ -368,7 +368,7 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#do-statement">Do statement</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#unreachable">Unreachable</a>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_4">Unreachable code</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#break_2">Break</a>
     </li>
@@ -386,7 +386,7 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#cond-expression">Cond expression</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#unreachable_1">Unreachable</a>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_5">Unreachable code</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#break_3">Break</a>
     </li>
@@ -420,13 +420,13 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#empty-returns">Empty returns</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_4">Unreachable code</a>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_6">Unreachable code</a>
     </li>
         </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#while-statement">While statement</a>
         <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#unreachable_2">Unreachable</a>
+    <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_7">Unreachable code</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#break_5">Break</a>
     </li>
@@ -1053,7 +1053,7 @@ be used on a switch without a cond expression.</p>
 If the cond expression evaluates to true, jumps back into the body and repeats the process.</p>
 <pre><code>do_stmt            ::= &quot;do&quot; label? compound_stmt (&quot;while&quot; &quot;(&quot; cond_expr &quot;)&quot;)? &quot;;&quot; 
 </code></pre>
-<h4 id="unreachable">Unreachable</h4>
+<h4 id="unreachable-code_4">Unreachable code</h4>
 <p>The statement after a <code>do</code> is considered unreachable if the cond expression cannot ever be false
 and there is no <code>break</code> out of the do.</p>
 <h4 id="break_2">Break</h4>
@@ -1083,7 +1083,7 @@ Any declarations in the init expression will be in scope until the for loop exit
 current loop, i.e. it will be reinitialized at the start of every loop.</p>
 <p>The cond expression may optionally be omitted. This is equivalent to setting the cond expression to 
 always return <code>true</code>.</p>
-<h4 id="unreachable_1">Unreachable</h4>
+<h4 id="unreachable-code_5">Unreachable code</h4>
 <p>The statement after a <code>for</code> is considered unreachable if the cond expression cannot ever be false, or is 
 omitted and there is no <code>break</code> out of the loop.</p>
 <h4 id="break_3">Break</h4>
@@ -1148,14 +1148,14 @@ expression block's enclosing scope.</p>
 <h4 id="empty-returns">Empty returns</h4>
 <p>An empty return is equivalent to a return with a void type. Consequently constructs like <code>foo(); return;</code> and <code>return (void)foo();</code>
 are equivalent.</p>
-<h4 id="unreachable-code_4">Unreachable code</h4>
+<h4 id="unreachable-code_6">Unreachable code</h4>
 <p>Any statement directly following a return in the same scope are considered unreachable.</p>
 <h3 id="while-statement">While statement</h3>
 <p>The while statement evaluates the cond expression and executes the statement if it evaluates to true.
 After this the cond expression is evaluated again and the process is repeated until cond expression returns false.</p>
 <pre><code>while_stmt         ::= &quot;while&quot; label? &quot;(&quot; cond_expr &quot;)&quot; stmt
 </code></pre>
-<h4 id="unreachable_2">Unreachable</h4>
+<h4 id="unreachable-code_7">Unreachable code</h4>
 <p>The statement after a while is considered unreachable if the cond expression cannot ever be false
 and there is no <code>break</code> out of the while.</p>
 <h4 id="break_5">Break</h4>
