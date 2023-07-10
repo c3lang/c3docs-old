@@ -29,7 +29,7 @@ Productions are expressions constructed from terms and the following operators, 
 
 Uppercase production names are used to identify lexical tokens. Non-terminals are in lower case. Lexical tokens are enclosed in single quotes ''.
 
-The form a..b represents the set of characters from a through b as alternatives.
+The form `a..b` represents the set of characters from a through b as alternatives.
 
 ## Source code representation
 
@@ -94,22 +94,24 @@ DIGIT           ::= [0-9]
 HEX_DIGIT       ::= [0-9a-fA-F]
 BINARY_DIGIT    ::= [01]
 OCTAL_DIGIT     ::= [0-7]
+LC_LETTER_US    ::= LC_LETTER | "_"
 UC_LETTER_US    ::= UC_LETTER | "_"
 ALPHANUM        ::= LETTER | DIGIT
 ALPHANUM_US     ::= ALPHANUM | "_"
 UC_ALPHANUM_US  ::= UC_LETTER_US | DIGIT
+LC_ALPHANUM_US  ::= LC_LETTER_US | DIGIT
 ```
 
 ### Comments
 
-Thre are three types of regular comments:
+There are three types of regular comments:
 
 1. `// text` a line comment. The text between `//` and line end is ignored.
 2. `/* text */` block comments. The text between `/*` and `*/` is ignored. It has nesting behaviour, so for every `/*` discovered between the first `/*` and the last `*/` a corresponding `*/` must be found.
 
 ### Doc comments
 
-1. `/** text **/` doc block comment. The text between `/**` and `**/` is optionally parsed using the doc comment syntatic grammar. A compiler may choose to read `/** text **/` as a regular comment.
+1. `/** text **/` doc block comment. The text between `/**` and `**/` is optionally parsed using the doc comment syntactic grammar. A compiler may choose to read `/** text **/` as a regular comment.
 2. `///` text doc line comment. The text between `///` and line end is optionally parsed using the doc comment syntactic grammar. A compiler may choose to read `///` as a regular comment.
 
 ### Identifiers
@@ -127,6 +129,7 @@ TYPE_IDENT      ::=  "_"* UC_LETTER "_"* LC_LETTER ALPHANUM_US*
 CT_IDENT        ::=  "$" IDENTIFIER
 CT_CONST_IDENT  ::=  "$" CONST_IDENT
 CT_TYPE_IDENT   ::=  "$" TYPE_IDENT
+PATH_SEGMENT    ::= "_"* LC_LETTER LC_ALPHANUM_US*
 ```
 
 ### Keywords
@@ -135,8 +138,7 @@ The following keywords are reserved and may not be used as identifiers:
 
 
 ```
-alias       as          asm
-anyerr
+asm         any         anyfault
 assert      attribute   break
 case        cast        catch
 const       continue    default
@@ -144,12 +146,12 @@ defer       def         do
 else        enum        extern
 errtype     false       fn
 generic     if          import
-in          local       macro
-module      nextcase    nil
+inline      macro
+module      nextcase    null
 public      return      struct
 switch      true        try
-typeid      $typeof     define
-var         volatile    void
+typeid      def
+var         void
 while
 
 bool        quad        double      
@@ -177,11 +179,11 @@ The following character sequences represent operators and punctuation.
 >       <       #       {       }       -
 (       )       *       [       ]       %
 >=      <=      +       +=      -=      !
-?       ?:      &&      ->      &=      |=
+?       ?:      &&      ??      &=      |=
 ^=      /=      ..      ==      ({      })
--%      +%      *%      ++      --      %=
-!=      ||      ::      <<      >>      !!
-...     *%=     +%=     -%=     <<=     >>=
+[<      >]      (<      >)      ++      --      
+%=      !=      ||      ::      <<      >>      
+!!      ...     <<=     >>=
 ```
 
 ### Integer literals
@@ -303,7 +305,7 @@ CHARACTER_LIT   ::= "'" (CHAR_LIT_BYTE+) | UNICODE_CHAR "'"
 
 ### String literals
 
-A string literal represents a string constant obtained from concatenating a sequence of characters. String literals are character sequences between double quotes, as in "bar". Within the quotes, any character may appear except newline and unescaped double quote. The text between the quotes forms the value of the literal, with backslash escapes interpreted as they are in rune literals, with the same restrictions. The two-digit hexadecimal (\xnn) escapes represent individual bytes of the resulting string; all other escapes represent the (possibly multi-byte) UTF-8 encoding of individual characters. Thus inside a string literal \xFF represent a single byte of value 0xFF=255, while ÿ, \u00FF, \U000000FF and \xc3\xbf represent the two bytes 0xc3 0xbf of the UTF-8 encoding of character U+00FF.
+A string literal represents a string constant obtained from concatenating a sequence of characters. String literals are character sequences between double quotes, as in "bar". Within the quotes, any character may appear except newline and unescaped double quote. The text between the quotes forms the value of the literal, with backslash escapes interpreted as they are in rune literals, with the same restrictions. The two-digit hexadecimal (\xnn) escapes represent individual bytes of the resulting string; all other escapes represent the (possibly multibyte) UTF-8 encoding of individual characters. Thus inside a string literal \xFF represent a single byte of value 0xFF=255, while ÿ, \u00FF, \U000000FF and \xc3\xbf represent the two bytes 0xc3 0xbf of the UTF-8 encoding of character U+00FF.
 
 ```
 STRING_LIT      ::= \x22 (CHAR_LIT_BYTE | UNICODE_CHAR)* \x22
@@ -325,27 +327,15 @@ The
 ### Vector types
 ### Complex types
 
-A complex type is defined as a struct with two elements of the same floating point type. The first member holds the real part of a complex number, and the second member holds the imaginary part.
-
-
-```
-struct Complex
-{
-    float real;
-    float imaginary;
-}
-```
 
 ### String types
 ### Array types
 
 An array has the alignment of its element. Zero sized arrays are allowed and have the size 0.
 
-### Vararray types
-
 ### Subarray types
 
-The subarray consist of a pointer, followed by a usz length, having the alignment of pointers.
+The subarray consist of a pointer, followed by an usz length, having the alignment of pointers.
 
 ### Pointer types
 ### Struct types
@@ -360,7 +350,7 @@ The alignment of a union without any members is 1.
 
 ### Error types
 
-Th
+
 ### Enum types
 ### Function types
 ### Virtual types
@@ -429,8 +419,537 @@ Taking the address of a compound literal will yield a pointer to stack allocated
 For varargs, a `bool` or *any integer* smaller than what the C ABI specifies for the c `int` type is cast to `int`. Any float smaller than a double is cast to `double`. Compile time floats will be cast to double. Compile time integers will be cast to c `int` type.
 
 ## Statements
+
+```
+stmt               ::= compound_stmt | non_compound_stmt
+non_compound_stmt  ::= assert_stmt | if_stmt | while_stmt | do_stmt | foreach_stmt | foreach_r_stmt 
+                       | for_stmt | return_stmt | break_stmt | continue_stmt | var_stmt 
+                       | declaration_stmt | defer_stmt | nextcase_stmt | asm_block_stmt
+                       | ct_echo_stmt | ct_assert_stmt | ct_if_stmt | ct_switch_stmt 
+                       | ct_for_stmt | ct_foreach_stmt | expr_stmt 
+```
+
+### Assert statement
+
+The assert statement will evaluate the expression and call the panic function if it evaluates
+to false.
+
+```
+assert_stmt        ::= "assert" "(" expr ("," assert_message)? ")" ";"
+assert_message     ::= constant_expr ("," expr)*
+```
+
+#### Conditional inclusion
+
+`assert` statements are only included in "safe" builds. They may turn into **assume directives** for
+the compiler on "fast" builds.
+
+#### Assert message
+
+The assert message is optional. It can be followed by an arbitrary number of expressions, in which case
+the message is understood to be a format string, and the following arguments are passed as values to the
+format function.
+
+The assert message must be a compile time constant. There are no restriction on the format argument expressions.
+
+#### Panic function
+
+If the assert message has no format arguments or no assert message is included, 
+then the regular panic function is called. If it has format arguments then `panicf` is called instead.
+
+In the case the `panicf` function does not exist (for example, compiling without the standard library),
+then the format and the format arguments will be ignored and the `assert` will be treated
+as if no assert message was available.
+
+### Break statement
+
+A break statement exits a `while`, `for`, `do`, `foreach` or `switch` scope. A labelled break
+may also exit a labelled `if`.
+
+```
+break_stmt         ::= "break" label? ";"
+```
+
+#### Break labels
+
+If a break has a label, then it will instead exit an outer scope with the label.
+
+#### Unreachable code
+
+Any statement following break in the same scope is considered unreachable.
+
+### Continue statement
+
+A continue statement jumps to the cond expression of a `while`, `for`, `do` or `foreach`
+
+```
+continue_stmt      ::= "continue" label? ";"
+```
+
+#### Continue labels
+
+If a `continue` has a label, then it will jump to the cond of the while/for/do in the outer scope 
+with the corresponding label.
+
+#### Unreachable code
+
+Any statement following `continue` in the same scope is considered unreachable.
+
+### Declaration statement
+
+A declaration statement adds a new runtime or compile time variable to the current scope. It is available after the declaration statement.
+
+```
+declaration_stmt   ::= const_declaration | local_decl_storage? optional_type decls_after_type ";"
+local_decl_storage ::= "tlocal" | "static"
+decls_after_type   ::= local_decl_after_type ("," local_decl_after_type)*
+decl_after_type    ::= CT_IDENT ("=" constant_expr)? | IDENTIFIER opt_attributes ("=" expr)?
+```
+
+#### Thread local storage
+
+Using `tlocal` allocates the runtime variable as a **thread local** variable. In effect this is the same as declaring
+the variable as a global `tlocal` variable, but the visibility is limited to the function. `tlocal` may not be
+combined with `static`.
+
+The initializer for a `tlocal` variable must be a valid global init expression.
+
+#### Static storage
+
+Using `static` allocates the runtime variable as a function **global** variable. In effect this is the same as declaring 
+a global, but visibility is limited to the function. `static` may not be combined with `tlocal`.
+
+The initializer for a `static` variable must be a valid global init expression.
+
+#### Scopes
+
+Runtime variables are added to the runtime scope, compile time variables to the compile time scope. See **var statements**.
+
+#### Multiple declarations
+
+If more than one variable is declared, no init expressions are allowed for any of the variables.
+
+#### No init expression
+
+If no init expression is provided, the variable is **zero initialized**.
+
+#### Opt-out of zero initialization
+
+Using the @noinit attribute opts out of **zero initialization**.
+
+#### Self referencing initialization
+
+An init expression may refer to the **address** of the same variable that is declared, but not the **value** of the 
+variable.
+
+Example:
+```c
+void* a = &a;  // Valid
+int a = a + 1; // Invalid
+```
+
+### Defer statement
+
+The defer statements are executed at (runtime) scope exit, whether through `return`, `break`, `continue` or rethrow.
+
+```
+defer_stmt         ::= "defer" ("try" | "catch")? stmt
+```
+
+#### Defer in defer
+
+The defer body (statement) may not be a defer statement. However, if the body is a compound statement then
+this may have any number of defer statements.
+
+#### Static and tlocal variables in defer
+
+Static and tlocal variables are allowed in a defer statement. Only a single variable is instantiated regardless of
+the number of inlining locations.
+
+#### Defer and return
+
+If the `return` has an expression, then it is evaluated before the defer statements (due to exit from the current function scope),
+are executed.
+
+Example:
+
+```c
+int a = 0;
+defer a++;
+return a;
+// This is equivalent to
+int a = 0;
+int temp = a;
+a++;
+return temp;
+```
+
+#### Defer and jump statements
+
+A defer body may not contain a `break`, `continue`, `return` or rethrow that would exit the statement.
+
+#### Defer execution
+
+Defer statements are executed in the reverse order of their declaration, starting from the last declared
+defer statement.
+
+#### Defer try
+
+A `defer try` type of defer will only execute if the scope is left through normal fallthrough, `break`, 
+`continue` or a `return` with a result.
+
+It will not execute if the exit is through a rethrow or a `return` with an optional value.
+
+#### Defer catch
+
+A `defer catch` type of defer will only execute if the scope is left through a rethrow or a `return` with an optional value
+
+It will not execute if the exit is a normal fallthrough, `break`, `continue` or a `return` with a result.
+
+#### Non-regular returns - longjmp, panic and other errors
+
+Defers will not execute when doing `longjmp` terminating through a `panic` or other error. They 
+are only invoked on regular scope exits.
+
 ### If statement
 
-### Switch stat
+An if statement will evaluate the cond expression, then execute the first statement (the "then clause") in the if-body
+if it evaluates to "true", otherwise execute the else clause. If no else clause exists, then the
+next statement is executed.
+
+```
+if_stmt            ::= "if" (label ":")? "(" cond_expr ")" if_body
+if_body            ::= non_compound_stmt | compound_stmt else_clause?
+else_clause        ::= "else" (if_stmt | compound_stmt)
+```
+
+#### Scopes
+
+Both the "then" clause and the else clause open new scopes, even if they are non-compound statements.
+The cond expression scope is valid until the exit of the entire statement, so any declarations in the 
+cond expression are available both in then and else clauses. Declarations in the "then" clause is not available
+in the else clause and vice versa.
+
+#### Special parsing of the "then" clause
+
+If the then-clause isn't a compound statement, then it must follow on the same row as the cond expression.
+It may not appear on a consecutive row.
+
+#### Break
+
+It is possible to use labelled break to break out of an if statement. Note that an unlabelled `break` may not
+be used.
+
+### Nextcase statement
+
+Nextcase will jump to another `switch` case.
+
+```
+nextcase_stmt      ::= "nextcase" (label ":")? expr? ";" 
+```
+
+TODO
+
+### Switch statement
+
+```
+switch_stmt        ::= "switch" (label ":")? ("(" cond_expr ")")? switch body
+switch_body        ::= "{" case_clause* "}"
+case_clause        ::= default_stmt | case_stmt
+default_stmt       ::= "default" ":" stmt*
+case_stmt          ::= "case" label? expr ":" stmt*
+```
+
+#### Regular switch
+
+If the cond expression exists and all case statements have constant expression, then first the
+cond expression is evaluated, next the case corresponding to the expression's value will be jumped to
+and the statement will be executed. After reaching the end of the statements and a new case clause *or* the
+end of the switch body, the execution will jump to the first statement after the switch.
+
+#### If-switch
+
+If the cond expression is missing or the case statements are non-constant expressions, then each case clause will
+be evaluated in order after the cond expression has been evaluated (if it exists): 
+
+1. If a cond expression exists, calculate the case expression and execute the case if it is matching the 
+cond expression. A default statement has no expression and will always be considered matching the cond expression
+reached.
+2. If no con expression exists, calculate the case expression and execute the case if the expression evaluates to 
+"true" when implicitly converted to boolean. A default statement will always be considered having the "true" result.
+
+#### Fallthrough
+
+If a case clause has no statements, then when executing the case, rather than exiting the switch, the next case clause
+immediately following it will be executed. If that one should also be missing statement, the procedure
+will be repeated until a case clause with statements is encountered (and executed), or the end of the switch is reached.
+
+#### Exhaustive switch
+
+If a switch case has a default clause *or* it is switching over an enum and there exists a case for each enum value
+then the switch is exhaustive.
+
+#### Break
+
+If an unlabelled break, or a break with the switch's label is encountered, 
+then the execution will jump out of the switch and proceed directly after the end of the switch body.
+
+#### Unreachable code
+
+If a switch is exhaustive and all case clauses end with a jump instruction, containing no break statement out 
+of the current switch, then the code directly following the switch will be considered **unreachable**.
+
+#### Switching over typeid
+
+If the switch cond expression is a typeid, then case declarations may use only the type name after the case,
+which will be interpreted as having an implicit `.typeid`. Example: `case int:` will be interpreted as if 
+written `case int.typeid`.
+
+#### Nextcase without expression
+
+Without a value `nextcase` will jump to the beginning of the next case clause. It is not allowed to
+put `nextcase` without an expression if there are no following case clauses.
+
+#### Nextcase with expression
+
+Nextcase with an expression will evaluate the expression and then jump *as if* the switch was entered with
+the cond expression corresponding to the value of the nextcase expression. Nextcase with an expression cannot
+be used on a switch without a cond expression.
+
+#### Do statement
+
+The do statement first evaluates its body (inner statement), then evaluates the cond expression.
+If the cond expression evaluates to true, jumps back into the body and repeats the process.
+
+```
+do_stmt            ::= "do" label? compound_stmt ("while" "(" cond_expr ")")? ";" 
+```
+
+#### Unreachable
+
+The statement after a `do` is considered unreachable if the cond expression cannot ever be false
+and there is no `break` out of the do.
+
+#### Break
+
+`break` will exit the do with execution continuing on the following statement.
+
+#### Continue
+
+`continue` will jump directly to the evaluation of the cond, as if the end of the statement had been reached.
+
+#### Do block
+
+If no `while` part exists, it will only execute the block once, as if it ended with `while (false)`, this is 
+called a "do block"
+
+### For statement
+
+The `for` statement will perform the (optional) init expression. The cond expression will then be tested. If
+it evaluates to `true` then the body will execute, followed by the incr expression. After execution will
+jump back to the cond expression and execution will repeat until the cond expression evaluates to `false`.
+
+```
+for_stmt           ::= "for" label? "(" init_expr ";" cond_expr? ";" incr_expr ")" stmt
+init_expr          ::= decl_expr_list?
+incr_expr          ::= expr_list? 
+```
+
+#### Init expression
+
+The init expression is only executed once before the rest of the for loop is executed.
+Any declarations in the init expression will be in scope until the for loop exits.
+
+The init expression may optionally be omitted.
+
+#### Incr expression
+
+The incr expression is evaluated before evaluating the cond expr every time except for the first one.
+
+The incr expression may optionally be omitted.
+
+#### Cond expression
+
+The cond expression is evaluated every loop. Any declaration in the cond expression is scoped to the 
+current loop, i.e. it will be reinitialized at the start of every loop.
+
+The cond expression may optionally be omitted. This is equivalent to setting the cond expression to 
+always return `true`.
+
+#### Unreachable
+
+The statement after a `for` is considered unreachable if the cond expression cannot ever be false, or is 
+omitted and there is no `break` out of the loop.
+
+#### Break
+
+`break` will exit the `for` with execution continuing on the following statement after the `for`.
+
+#### Continue
+
+`continue` will jump directly to the evaluation of the cond, as if the end of the statement had been reached.
+
+#### Equivalence of `while` and `for`
+
+A `while` loop is functionally equivalent to a `for` loop without init and incr expressions.
+
+### Foreach and foreach_r statements
+
+The `foreach` statement will loop over a sequence of values. The `foreach_r` is equivalent to
+`foreach` but the order of traversal is reversed.
+`foreach` starts with element `0` and proceeds step by step to element `len - 1`.
+`foreach_r` starts starts with element `len - 1` and proceeds step by step to element `0`.
+
+
+```
+foreach_stmt       ::= "foreach" label? "(" foreach_vars ":" expr ")" stmt
+foreach_r_stmt     ::= "foreach_r" label? "(" foreach_vars ":" expr ")" stmt
+foreach_vars       ::= (foreach_index ",")? foreach_var
+foreach_var        ::= type? "&"? IDENTIFIER
+```
+
+#### Break
+
+`break` will exit the foreach statement with execution continuing on the following statement after.
+
+#### Continue
+
+`continue` will cause the next iteration to commence, as if the end of the statement had been reached.
+
+#### Iteration by value or reference
+
+Normally iteration are by value. Each element is copied into the foreach variable. If `&` 
+is added before the variable name, the elements will be retrieved by reference instead, and consequently
+the type of the variable will be a pointer to the element type instead.
+
+#### Foreach variable
+
+The foreach variable may omit the type. In this case the type is inferred. If the type differs from the element
+type, then an implicit conversion will be attempted. Failing this is a compile time error.
+
+
+#### Foreach index
+
+If a variable name is added before the foreach variable, then this variable will receive the index of the element.
+For `foreach_r` this mean that the first value of the index will be `len - 1`.
+
+The index type defaults to `usz`.
+
+If an optional type is added to the index, the index will be converted to this type. The type must be an
+integer type. The conversion happens as if the conversion was a direct cast. If the actual index value
+would exceed the maximum representable value of the type, this does not affect the actual iteration, but 
+may cause the index value to take on an incorrect value due to the cast.
+
+For example, if the optional index type is `char` and the actual index is `256`, then the index value would show `0`
+as `(char)256` evaluates to zero.
+
+Modifying the index variable will not affect the foreach iteration.
+
+#### Foreach support
+
+Foreach is natively supported for any subarray, array, pointer to an array, vector and pointer to a vector.
+These types support both iteration by value and reference.
+
+In addition, a type with **operator overload** for `len` and `[]` will support iteration by value,
+and a type with **operator overload** for `len` and `&[]` will support iteration by reference.
+
+### Return statement
+
+The return statement evaluates its expression (if present) and returns the result.
+
+```
+return_stmt        ::= "return" expr? ";"
+```
+
+#### Jumps in return statements
+
+If the expression should in itself cause an implicit return, for example due to the rethrow operator `!`, then this
+jump will happen before the return.
+
+An example:
+
+    return foo()!;
+    // is equivalent to:
+    int temp = foo()!;
+    return temp;
+
+#### Return from expression blocks
+
+A `return` from an expression block only returns out of the expression block, it never returns from the
+expression block's enclosing scope.
+
+#### Empty returns
+
+An empty return is equivalent to a return with a void type. Consequently constructs like `foo(); return;` and `return (void)foo();`
+are equivalent.
+
+#### Unreachable code
+
+Any statement directly following a return in the same scope are considered unreachable.
+
+### While statement
+
+The while statement evaluates the cond expression and executes the statement if it evaluates to true.
+After this the cond expression is evaluated again and the process is repeated until cond expression returns false.
+
+```
+while_stmt         ::= "while" label? "(" cond_expr ")" stmt
+```
+
+#### Unreachable
+
+The statement after a while is considered unreachable if the cond expression cannot ever be false
+and there is no `break` out of the while.
+
+#### Break
+
+`break` will exit the while with execution continuing on the following statement.
+
+#### Continue
+
+`continue` will jump directly to the evaluation of the cond, as if the end of the statement had been reached.
+
+### Var statement
+
+A var statement declares a variable with inferred type, or a compile time type variable. It can be used both
+for runtime and compile time variables. The use for runtime variables is limited to macros.
+
+```
+var_stmt           ::= "var" IDENTIFIER | CT_IDENT | CT_TYPE_IDENT ("=" expr)? ";" 
+```
+
+### Inferring type
+
+In the case of a runtime variable, the type is inferred from the expression. Not providing an expression 
+is a compile time error. The expression must resolve to a runtime type.
+
+For compile time variables, the expression is optional. The expression may resolve to a runtime or compile time type.
+
+### Scope
+
+Runtime variables will follow the runtime scopes, identical to behaviour in a declaration statement. The compile
+time variables will follow the compile time scopes which are delimited by scoping compile time statements (`$if`, `$switch`,
+`$foreach` and `$for`).
+
 ## Modules
 
+Module paths are hierarchal, with each sub-path appended with '::' + the name:
+
+```
+path               ::= PATH_SEGMENT ("::" PATH_SEGMENT)
+```
+
+Each module declaration starts its own **module section**. All imports and all `@local` declarations
+are only visible in the current **module section**.
+
+```
+module_section     ::= "module" path opt_generic_params? attributes? ";"
+generic_param      ::= TYPE_IDENT | CONST_IDENT
+opt_generic_params ::= "(<" generic_param ("," generic_param)* ">)"
+```
+
+Any visibility attribute defined in a **module section** will be the default visibility in all 
+declarations in the section.
+
+If the `@test` attribute is applied to the **module section** then all function declarations
+will implicitly have the `@test` attribute.
