@@ -162,9 +162,25 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#floating-point-literals">Floating point literals</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#character-literals">Character literals</a>
+    <li class="toctree-l3"><a class="reference internal" href="#characters">Characters</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#backslash-escapes">Backslash escapes</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#string-literals">String literals</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#compile-time-string-concatenation">Compile time string concatenation</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#raw-string-literals">Raw string literals</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#compile-time-concatenation">Compile time concatenation</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#source-code-pre-filtering">Source code pre-filtering</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#character-literals">Character literals</a>
     </li>
         </ul>
     </li>
@@ -177,8 +193,18 @@
     <li class="toctree-l3"><a class="reference internal" href="#floating-point-types">Floating point types</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#vector-types">Vector types</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#vector-base-type">Vector base type</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#complex-types">Complex types</a>
+    <li class="toctree-l4"><a class="reference internal" href="#min-width">Min width</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#element-access">Element access</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#alignment">Alignment</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#vector-operations">Vector operations</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#array-types">Array types</a>
     </li>
@@ -187,14 +213,28 @@
     <li class="toctree-l3"><a class="reference internal" href="#pointer-types">Pointer types</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#struct-types">Struct types</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#alignment_1">Alignment</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#union-types">Union types</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#alignment_2">Alignment</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#fault-types">Fault types</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#alignment_3">Alignment</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#enum-types">Enum types</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#function-types">Function types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#typeid-type">Typeid type</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#any-type">Any type</a>
     </li>
@@ -676,7 +716,6 @@ LC_ALPHANUM_US  ::= LC_LETTER_US | DIGIT
 <h3 id="doc-comments">Doc comments</h3>
 <ol>
 <li><code>/** text **/</code> doc block comment. The text between <code>/**</code> and <code>**/</code> is optionally parsed using the doc comment syntactic grammar. A compiler may choose to read <code>/** text **/</code> as a regular comment.</li>
-<li><code>///</code> text doc line comment. The text between <code>///</code> and line end is optionally parsed using the doc comment syntactic grammar. A compiler may choose to read <code>///</code> as a regular comment.</li>
 </ol>
 <h3 id="identifiers">Identifiers</h3>
 <p>Identifiers name program entities such as variables and types. An identifier is a sequence of one or more letters and digits. 
@@ -705,8 +744,7 @@ inline      macro
 module      nextcase    null
 public      return      struct
 switch      true        try
-typeid      def
-var         void
+typeid      var         void        
 while
 
 bool        quad        double      
@@ -716,11 +754,13 @@ short       ushort      char
 isz         usz         float16
 float128
 
-$assert     $case       $default
-$if         $for        $else
-$elif       $if         $switch
-$foreach    $endswitch  $endif      
-$endforeach      
+$assert     $case       $checks
+$default    $echo       $else       
+$error      $endfor     $endforeach 
+$endif      $endswitch  $for        
+$foreach    $if         $switch     
+$typef      $vaarg      $vaconst
+$vacount    $varef      $vatype             
 
 </code></pre>
 <h3 id="operators-and-punctuation">Operators and punctuation</h3>
@@ -800,10 +840,20 @@ HEX_MANTISSA    ::= HEX_DIGITS '.' HEX_DIGITS?
                     | '.' HEX_DIGITS 
 HEX_EXPONENT    ::= [pP] [+-] DECIMAL_DIGITS                    
 </code></pre>
-<h3 id="character-literals">Character literals</h3>
-<p>A character literal may either: (a) represent a constant value of up to 8 bytes (16 bytes on platforms with Int128 support) or (b) a single unicode character. Escape sequences can be used to represent byte values 0-31 and 128-255.</p>
-<p>The following backslash escapes are available to escape:</p>
-<pre><code>\0      0x00 zero value
+<h3 id="characters">Characters</h3>
+<p>Characters are the fundamental components of strings and character literals.</p>
+<pre><code>CHAR_ELEMENT    ::= [\x20-\x26] | [\x28-\x5B] | [\x5D-\x7F]
+CHAR_LIT_BYTE   ::= CHAR_ELEMENT | \x5C CHAR_ESCAPE
+CHAR_ESCAPE     ::= [abefnrtv\'\&quot;\\] 
+                    | 'x' HEX_DIGIT HEX_DIGIT
+UNICODE_CHAR    ::= unicode_char                    
+                    | 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+                    | 'U' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT 
+                          HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+</code></pre>
+<h3 id="backslash-escapes">Backslash escapes</h3>
+<p>The following backslash escapes are available for characters and string literals:</p>
+<pre><code class="language-text">\0      0x00 zero value
 \a      0x07 alert/bell
 \b      0x08 backspace
 \e      0x1B escape
@@ -819,28 +869,94 @@ HEX_EXPONENT    ::= [pP] [+-] DECIMAL_DIGITS
 \u      Escapes a two byte unicode hex value 
 \U      Escapes a four byte unicode hex value
 </code></pre>
-<pre><code>CHAR_ELEMENT    ::= [\x20-\x26] | [\x28-\x5B] | [\x5D-\x7F]
-CHAR_LIT_BYTE   ::= CHAR_ELEMENT | \x5C CHAR_ESCAPE
-CHAR_ESCAPE     ::= [abefnrtv\'\&quot;\\] 
-                    | 'x' HEX_DIGIT HEX_DIGIT
-UNICODE_CHAR    ::= unicode_char                    
-                    | 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
-                    | 'U' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT 
-                          HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
-CHARACTER_LIT   ::= &quot;'&quot; (CHAR_LIT_BYTE+) | UNICODE_CHAR &quot;'&quot;
-</code></pre>
 <h3 id="string-literals">String literals</h3>
-<p>A string literal represents a string constant obtained from concatenating a sequence of characters. String literals are character sequences between double quotes, as in "bar". Within the quotes, any character may appear except newline and unescaped double quote. The text between the quotes forms the value of the literal, with backslash escapes interpreted as they are in rune literals, with the same restrictions. The two-digit hexadecimal (\xnn) escapes represent individual bytes of the resulting string; all other escapes represent the (possibly multibyte) UTF-8 encoding of individual characters. Thus inside a string literal \xFF represent a single byte of value 0xFF=255, while ÿ, \u00FF, \U000000FF and \xc3\xbf represent the two bytes 0xc3 0xbf of the UTF-8 encoding of character U+00FF.</p>
+<p>A string literal represents a string constant obtained from concatenating a sequence of characters. 
+String literals are character sequences between double quotes, as in "bar". Within the quotes, 
+any character may appear except newline and unescaped double quote. The text between the 
+quotes forms the value of the literal, with backslash escapes interpreted as they are in 
+rune literals, with the same restrictions. The two-digit hexadecimal (\xnn) escapes represent 
+individual bytes of the resulting string; all other escapes represent the (possibly multibyte) 
+UTF-8 encoding of individual characters. Thus inside a string literal <code>\xFF</code> represent a single 
+byte of value <code>0xFF</code> = 255, while <code>ÿ</code>, <code>\u00FF</code>, <code>\U000000FF</code> and <code>\xc3\xbf</code> represent the two bytes 
+<code>0xc3 0xbf</code> of the UTF-8 encoding of character <code>U+00FF</code>.</p>
 <pre><code>STRING_LIT      ::= \x22 (CHAR_LIT_BYTE | UNICODE_CHAR)* \x22
 </code></pre>
+<h4 id="compile-time-string-concatenation">Compile time string concatenation</h4>
+<p>Strings will concatenate if declared in sequence.</p>
+<p>Example:</p>
+<pre><code class="language-c">String s = &quot;abc&quot; &quot;def&quot; &quot;ghi&quot;;
+// This is equivalent to:
+String s = &quot;abcdefghi&quot;;
+</code></pre>
+<h3 id="raw-string-literals">Raw string literals</h3>
+<p>Raw string literals are enclosed between `` and consist of the raw UTF8 in the source
+code between the "`". A sequence of two "`" will be interpreted as a single escaped "`" that does
+not terminate the literal.</p>
+<h4 id="compile-time-concatenation">Compile time concatenation</h4>
+<p>Raw strings will concatenate with other regular strings and raw strings (see <a href="#compile-time-string-concatenation">string literal compile time concatenation</a>).</p>
+<h4 id="source-code-pre-filtering">Source code pre-filtering</h4>
+<p>The source code will pre-filter <code>\r</code> (<code>0x0D</code>) from the source code. This means that it is also implicitly
+filtered out of raw strings.</p>
+<h3 id="character-literals">Character literals</h3>
+<p>A character literal is enclosed in <code>'</code> and may either consist of 1, 2, 4, 8, 16 bytes.</p>
+<pre><code>CHARACTER_LIT   ::= &quot;'&quot; (CHAR_LIT_BYTE+) | UNICODE_CHAR &quot;'&quot;
+</code></pre>
 <h2 id="types">Types</h2>
-<p>Types consist of built-in types and user-defined types (enums, structs, unions, bitstructs, errtype and distinct).</p>
+<p>Types consist of built-in types and user-defined types (enums, structs, unions, bitstructs, fault and distinct).</p>
 <h3 id="boolean-types">Boolean types</h3>
-<p>The</p>
+<p><code>bool</code> may have the two values <code>true</code> and <code>false</code>. It holds a single bit of information but is
+stored in a <code>char</code> type.</p>
 <h3 id="integer-types">Integer types</h3>
+<p>The built-in integer types:</p>
+<pre><code class="language-text">char      unsigned 8-bit
+ichar     signed 8-bit
+ushort    unsigned 16-bit
+short     signed 16-bit
+uint      unsigned 32-bit
+int       signed 32-bit
+ulong     unsigned 64-bit
+long      signed 64-bit
+uint128   unsigned 128-bit
+int128    singed 128-bit
+</code></pre>
+<p>In addition, the following type aliases exist:</p>
+<pre><code class="language-text">uptr      unsigned pointer size
+iptr      signed pointer size
+usz       unsigned pointer offset / object size
+isz       signed pointer offset  / object size
+</code></pre>
 <h3 id="floating-point-types">Floating point types</h3>
+<p>Built-in floating point types:</p>
+<pre><code>float16   IEEE 16-bit*
+bfloat16  Brainfloat*
+float     IEEE 32-bit
+double    IEEE 64-bit
+float128  IEEE 128-bit*
+</code></pre>
+<p>(* optionally supported)</p>
 <h3 id="vector-types">Vector types</h3>
-<h3 id="complex-types">Complex types</h3>
+<p>A vector lowers to the platform's vector types where available. A vector has a base type and a width.</p>
+<pre><code>vector_type        ::= type &quot;[&lt;&quot; length &quot;&gt;]&quot;
+</code></pre>
+<h4 id="vector-base-type">Vector base type</h4>
+<p>The base type of a vector must be boolean, an integer or a floating point type.</p>
+<h4 id="min-width">Min width</h4>
+<p>The vector width must be at least 1.</p>
+<h4 id="element-access">Element access</h4>
+<p>Vector elements are accessed using <code>[]</code>. It is possible to take the address of a single element.</p>
+<h4 id="alignment">Alignment</h4>
+<p>Alignment of vectors are platform dependent, but is at least the alignment of its element type.</p>
+<h4 id="vector-operations">Vector operations</h4>
+<p>Vectors support the same arithmetics as its underlying type, and will perform the operation 
+element-wise.</p>
+<p>Example:</p>
+<pre><code class="language-c">int[&lt;2&gt;] a = { 1, 3 };
+int[&lt;2&gt;] b = { 2, 7 };
+
+int[&lt;2&gt;] c = a * b;
+// Equivalent to
+int[&lt;2&gt;] c = { a[0] * b[0], a[1] * b[1] };
+</code></pre>
 <h3 id="array-types">Array types</h3>
 <p>An array has the alignment of its elements. An array must have at least one element.</p>
 <h3 id="subarray-types">Subarray types</h3>
@@ -848,12 +964,23 @@ CHARACTER_LIT   ::= &quot;'&quot; (CHAR_LIT_BYTE+) | UNICODE_CHAR &quot;'&quot;
 <h3 id="pointer-types">Pointer types</h3>
 <h3 id="struct-types">Struct types</h3>
 <p>A struct may not have zero members.</p>
+<h4 id="alignment_1">Alignment</h4>
+<p>A non-packed struct has the alignment of the member that has the highest alignment. A packed struct
+has alignment 1. See <a href="#align-attribute">align attribute</a> for details on changing the alignment.</p>
 <h3 id="union-types">Union types</h3>
 <p>A union may not have zero members.</p>
+<h4 id="alignment_2">Alignment</h4>
+<p>A union has the alignment of the member that has the highest alignment. See <a href="#align-attribute">align attribute</a> for details on changing the alignment.</p>
 <h3 id="fault-types">Fault types</h3>
+<p>A fault is an extensible enum which can be used to create an <a href="#optional-types">optional</a>.</p>
+<h4 id="alignment_3">Alignment</h4>
+<p>A fault type has the same alignment as a pointer. See <a href="#align-attribute">align attribute</a> for details on changing the alignment.</p>
 <h3 id="enum-types">Enum types</h3>
 <h3 id="function-types">Function types</h3>
+<h3 id="typeid-type">Typeid type</h3>
+<p>The typeid is a pointer sized value which uniquely identifies a type.</p>
 <h3 id="any-type">Any type</h3>
+<p>The <code>any</code> type holds a pointer to a value and its corresponding <a href="#typeid-type">typeid</a>.</p>
 <h3 id="anyfault-type">Anyfault type</h3>
 <h2 id="declarations-and-scope">Declarations and scope</h2>
 <h2 id="expressions">Expressions</h2>
