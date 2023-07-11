@@ -206,6 +206,56 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#expressions">Expressions</a>
         <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#assignment-expression">Assignment expression</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#type-assign">Type assign</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#combined-assign">Combined assign</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#implicit-conversion">Implicit conversion</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ternary-elvis-and-or-else-expressions">Ternary, elvis and or-else expressions</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#ternary-evaluation">Ternary evaluation</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#elvis-evaluation">Elvis evaluation</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#orelse-evaluation">Orelse evaluation</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#suffix-expression">Suffix expression</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#effect-of">Effect of "?"</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#type-of-the-expression">Type of the expression</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#rethrow-expression">Rethrow expression</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#the-expression-to-rethrow">The expression to rethrow</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#type">Type</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#relational-expression">Relational expression</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#and-expression">And expression</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#type_1">Type</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#or-expression">Or expression</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#type_2">Type</a>
+    </li>
+        </ul>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#casts">Casts</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#pointer-casts">Pointer casts</a>
@@ -272,6 +322,32 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compile-time-if-statement">Compile time if statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#cond-expression">Cond expression</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#scopes">Scopes</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#evaluation">Evaluation</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compile-time-switch-statement">Compile time switch statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#no-cond-expression-switch">No cond expression switch</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#type-expressions">Type expressions</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#ranged-cases">Ranged cases</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#fallthrough">Fallthrough</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#break-and-nextcase">Break and nextcase</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#evaluation-of-statements">Evaluation of statements</a>
+    </li>
+        </ul>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#continue-statement">Continue statement</a>
         <ul>
     <li class="toctree-l4"><a class="reference internal" href="#continue-labels">Continue labels</a>
@@ -286,7 +362,7 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#static-storage">Static storage</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#scopes">Scopes</a>
+    <li class="toctree-l4"><a class="reference internal" href="#scopes_1">Scopes</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#multiple-declarations">Multiple declarations</a>
     </li>
@@ -318,9 +394,15 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#expr-statement">Expr statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#no-discard">No discard</a>
+    </li>
+        </ul>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#if-statement">If statement</a>
         <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#scopes_1">Scopes</a>
+    <li class="toctree-l4"><a class="reference internal" href="#scopes_2">Scopes</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#special-parsing-of-the-then-clause">Special parsing of the "then" clause</a>
     </li>
@@ -350,9 +432,9 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#if-switch">If-switch</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#ranged-cases">Ranged cases</a>
+    <li class="toctree-l4"><a class="reference internal" href="#ranged-cases_1">Ranged cases</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#fallthrough">Fallthrough</a>
+    <li class="toctree-l4"><a class="reference internal" href="#fallthrough_1">Fallthrough</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#exhaustive-switch">Exhaustive switch</a>
     </li>
@@ -384,7 +466,7 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#incr-expression">Incr expression</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cond-expression">Cond expression</a>
+    <li class="toctree-l4"><a class="reference internal" href="#cond-expression_1">Cond expression</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#unreachable-code_5">Unreachable code</a>
     </li>
@@ -767,6 +849,87 @@ CHARACTER_LIT   ::= &quot;'&quot; (CHAR_LIT_BYTE+) | UNICODE_CHAR &quot;'&quot;
 <h3 id="anyfault-type">Anyfault type</h3>
 <h2 id="declarations-and-scope">Declarations and scope</h2>
 <h2 id="expressions">Expressions</h2>
+<h3 id="assignment-expression">Assignment expression</h3>
+<pre><code>assignment_expr    ::= ct_type_assign | unary_expr assignment_op expr
+ct_type_assign     ::= ct_type_ident &quot;=&quot; type
+assignment_op      ::= &quot;=&quot; | &quot;+=&quot; | &quot;-=&quot; | &quot;*=&quot; | &quot;/=&quot; | &quot;%=&quot; | &quot;&lt;&lt;=&quot; | &quot;&gt;&gt;=&quot; | &quot;&amp;=&quot; | &quot;^=&quot; | &quot;|=&quot;
+</code></pre>
+<h4 id="type-assign">Type assign</h4>
+<p>This assigns a new type to a compile time type variable. The value of the expression is the type assigned.</p>
+<h4 id="combined-assign">Combined assign</h4>
+<p>All assignment operations except for "=" are combined assign operation. They first perform the operation indicated
+by the leftmost character(s) in the operator (e.g <code>+</code> for <code>+=</code>, <code>&lt;&lt;</code> for <code>&lt;&lt;=</code> etc) with the lhs and the rhs.
+The result is then assigned to the left hand side. The result of the operation is the new value of the left
+hand side.</p>
+<h4 id="implicit-conversion">Implicit conversion</h4>
+<p>If the left hand side is a pointer and the operation is "+=" or "-=" an attempt to implicitly convert to 
+isz/usz will be tried.</p>
+<p>For all other types and operations, <strong>an implicit conversion</strong> of rhs to the type of lhs will be tried.</p>
+<h3 id="ternary-elvis-and-or-else-expressions">Ternary, elvis and or-else expressions</h3>
+<pre><code>ternary_group_expr ::= suffix_group_expr | ternary_expr | elvis_expr | orelse_expr
+ternary_expr       ::= or_expr &quot;?&quot; expr &quot;:&quot; ternary_group_expr
+elvis_expr         ::= suffix_expr &quot;?:&quot; ternary_group_expr
+orelse_expr        ::= suffix_expr &quot;??&quot; ternary_group_expr
+</code></pre>
+<h4 id="ternary-evaluation">Ternary evaluation</h4>
+<p>The most left-hand expression is evaluated to a boolean. If it is true, the value of the middle 
+expression is returned, otherwise the last expression is returned.</p>
+<p>Only the most left-hand expression and the returned expressions are evaluated.</p>
+<p>The middle and last expression are implicitly converted to their <strong>unified type</strong>.</p>
+<p>The resulting type is the <strong>unified type</strong>.</p>
+<h4 id="elvis-evaluation">Elvis evaluation</h4>
+<p>Lhs and rhs are implicitly converted to their <strong>unified type</strong>.</p>
+<p>The lhs is evaluated, it is then converted to a boolean, if the result it true, return the lhs value
+before its boolean conversion. Otherwise return the right hand side.</p>
+<p>The right hand side is only evaluated if the lhs evaluates to false.</p>
+<p>The resulting type is the <strong>unified type</strong>.</p>
+<h4 id="orelse-evaluation">Orelse evaluation</h4>
+<p>The lhs must be optional. The non-optional type for lhs and rhs are calculated.
+The <strong>unified type</strong> of the result is calculated. Lhs are converted to the unified type 
+preserving their optionality.</p>
+<p>At runtime, lhs is evaluated. If it evaluates to an optional, rhs is returned instead.</p>
+<p>Rhs is only evaluated if lhs evaluates to an optional.</p>
+<p>The resulting type of the orelse is the post conversion type of the rhs.</p>
+<h3 id="suffix-expression">Suffix expression</h3>
+<p>Suffix expressions convert a fault to an optional.</p>
+<pre><code>suffix_group_exp   ::= or_group_expr | suffix_expr
+suffix_expr        ::= or_group_expr &quot;?&quot; &quot;!&quot;?
+</code></pre>
+<h4 id="effect-of">Effect of "?"</h4>
+<p>The "?" will convert the expression into an optional. The left hand side must be a fault type.
+If an optional "!" follows, this optional is immediately returned, as if by a <code>return &lt;expr&gt;?</code> statement.</p>
+<h4 id="type-of-the-expression">Type of the expression</h4>
+<p>The type is a <strong>wildcard optional</strong>. If "!" is added, it is a <strong>wildcard</strong> type.</p>
+<h3 id="rethrow-expression">Rethrow expression</h3>
+<p>If the expression is optional, implicitly return with the optional value.</p>
+<pre><code>rethrow_expr       ::= expr &quot;!&quot;
+</code></pre>
+<h4 id="the-expression-to-rethrow">The expression to rethrow</h4>
+<p>The expression must have an optional type, otherwise this is a compile time error.</p>
+<h4 id="type">Type</h4>
+<p>The type of "rethrow" is the inner expr type without optional.</p>
+<h3 id="relational-expression">Relational expression</h3>
+<pre><code>rel_group_expr     ::= add_group_expr | relational_expr
+relational_expr    ::= rel_group_expr relational_op add_group_expr
+relational_op      ::= &quot;&lt;&quot; | &quot;&gt;&quot; | &quot;&lt;=&quot; | &quot;&gt;=&quot; 
+</code></pre>
+<p>TODO</p>
+<h3 id="and-expression">And expression</h3>
+<p>This binary expression evaluates the lhs, and if the result is <code>true</code> evaluates the rhs. The
+result is true if both lhs and rhs are true.</p>
+<pre><code>and_group_expr     ::= rel_group_expr | and_expr
+and_expr           ::= and_group_expr &quot;&amp;&amp;&quot; rel_group_expr
+</code></pre>
+<h4 id="type_1">Type</h4>
+<p>The type of the and-expression is <code>bool</code>.</p>
+<h3 id="or-expression">Or expression</h3>
+<p>This binary expression evaluates the lhs, and if the result is <code>false</code> evaluates the rhs. The
+result is true if lhs or rhs is true.</p>
+<pre><code>or_group_expr      ::= and_group_expr | or_expr
+or_expr            ::= or_group_expr &quot;||&quot; and_group_expr
+</code></pre>
+<h4 id="type_2">Type</h4>
+<p>The type of the or-expression is <code>bool</code>.</p>
 <h3 id="casts">Casts</h3>
 <h3 id="pointer-casts">Pointer casts</h3>
 <h4 id="integer-to-pointer-cast">Integer to pointer cast</h4>
@@ -880,6 +1043,39 @@ a compile time error with the message given.</p>
 </code></pre>
 <h4 id="error-message_1">Error message</h4>
 <p>The parameter must evaluate to a constant string.</p>
+<h3 id="compile-time-if-statement">Compile time if statement</h3>
+<p>If the cond expression is true, the then-branch is processed by the compiler. If it 
+evaluates to false, the else-branch is processed if it exists.</p>
+<pre><code>ct_if_stmt         ::= &quot;$if&quot; constant_expr &quot;:&quot; stmt* (&quot;$else&quot; stmt*)? &quot;$endif&quot;
+</code></pre>
+<h4 id="cond-expression">Cond expression</h4>
+<p>The cond expression must be possible to evaluate to true or false at compile time.</p>
+<h4 id="scopes">Scopes</h4>
+<p>The "then" and "else" branches will add a compile time scope that is exited when reaching <code>$endif</code>.
+It adds no runtime scope.</p>
+<h4 id="evaluation">Evaluation</h4>
+<p>Statements in the branch not picked will not be semantically checked.</p>
+<h3 id="compile-time-switch-statement">Compile time switch statement</h3>
+<pre><code>ct_switch_stmt     ::= &quot;$switch&quot; (&quot;(&quot; ct_expr_or_type &quot;)&quot;)? ct_case_stmt+ &quot;$endswitch&quot;
+ct_case_stmt       ::= (&quot;$default&quot; | &quot;$case&quot; ct_expr_or_type) &quot;:&quot; stmt* 
+</code></pre>
+<h4 id="no-cond-expression-switch">No cond expression switch</h4>
+<p>If the cond expression is missing, evaluation will go through each case until one case expression
+evaluates to true.</p>
+<h4 id="type-expressions">Type expressions</h4>
+<p>If a cond expression is a type, then all case statement expressions must be types as well.</p>
+<h4 id="ranged-cases">Ranged cases</h4>
+<p>Compile time switch does not support ranged cases.</p>
+<h4 id="fallthrough">Fallthrough</h4>
+<p>If a case clause has no statements, then when executing the case, rather than exiting the switch, 
+the next case clause immediately following it will be used. If that one should also be missing statements, 
+the procedure will be repeated until a case clause with statements is encountered, 
+or the end of the switch is reached.</p>
+<h4 id="break-and-nextcase">Break and nextcase</h4>
+<p>Compile time switches do not support <code>break</code> nor <code>nextcase</code>.</p>
+<h4 id="evaluation-of-statements">Evaluation of statements</h4>
+<p>Only the case which is first matched has its statements processed by the compiler. All other statements
+are ignored and will not be semantically checked.</p>
 <h3 id="continue-statement">Continue statement</h3>
 <p>A continue statement jumps to the cond expression of a <code>while</code>, <code>for</code>, <code>do</code> or <code>foreach</code></p>
 <pre><code>continue_stmt      ::= &quot;continue&quot; label? &quot;;&quot;
@@ -905,7 +1101,7 @@ combined with <code>static</code>.</p>
 <p>Using <code>static</code> allocates the runtime variable as a function <strong>global</strong> variable. In effect this is the same as declaring 
 a global, but visibility is limited to the function. <code>static</code> may not be combined with <code>tlocal</code>.</p>
 <p>The initializer for a <code>static</code> variable must be a valid global init expression.</p>
-<h4 id="scopes">Scopes</h4>
+<h4 id="scopes_1">Scopes</h4>
 <p>Runtime variables are added to the runtime scope, compile time variables to the compile time scope. See <strong>var statements</strong>.</p>
 <h4 id="multiple-declarations">Multiple declarations</h4>
 <p>If more than one variable is declared, no init expressions are allowed for any of the variables.</p>
@@ -958,6 +1154,14 @@ defer statement.</p>
 <h4 id="non-regular-returns-longjmp-panic-and-other-errors">Non-regular returns - longjmp, panic and other errors</h4>
 <p>Defers will not execute when doing <code>longjmp</code> terminating through a <code>panic</code> or other error. They 
 are only invoked on regular scope exits.</p>
+<h3 id="expr-statement">Expr statement</h3>
+<p>An expression statement evaluates an expression.</p>
+<pre><code>expr_stmt          ::= expr &quot;;&quot;
+</code></pre>
+<h4 id="no-discard">No discard</h4>
+<p>If the expression is a function or macro call either returning an optional <em>or</em> annotated <code>@nodiscard</code>, then
+the expression is a compile time error. A function or macro returning an optional can use the <code>@maydiscard</code>
+attribute to suppress this error.</p>
 <h3 id="if-statement">If statement</h3>
 <p>An if statement will evaluate the cond expression, then execute the first statement (the "then clause") in the if-body
 if it evaluates to "true", otherwise execute the else clause. If no else clause exists, then the
@@ -966,7 +1170,7 @@ next statement is executed.</p>
 if_body            ::= non_compound_stmt | compound_stmt else_clause?
 else_clause        ::= &quot;else&quot; (if_stmt | compound_stmt)
 </code></pre>
-<h4 id="scopes_1">Scopes</h4>
+<h4 id="scopes_2">Scopes</h4>
 <p>Both the "then" clause and the else clause open new scopes, even if they are non-compound statements.
 The cond expression scope is valid until the exit of the entire statement, so any declarations in the 
 cond expression are available both in then and else clauses. Declarations in the "then" clause is not available
@@ -1021,10 +1225,10 @@ reached.</li>
 <li>If no con expression exists, calculate the case expression and execute the case if the expression evaluates to 
 "true" when implicitly converted to boolean. A default statement will always be considered having the "true" result.</li>
 </ol>
-<h4 id="ranged-cases">Ranged cases</h4>
+<h4 id="ranged-cases_1">Ranged cases</h4>
 <p>Cases may be ranged. The start and end of the range must both be constant integer values. The start must
 be less or equal to the end value. Using non-integers or non-constant values is a compile time error.</p>
-<h4 id="fallthrough">Fallthrough</h4>
+<h4 id="fallthrough_1">Fallthrough</h4>
 <p>If a case clause has no statements, then when executing the case, rather than exiting the switch, the next case clause
 immediately following it will be executed. If that one should also be missing statement, the procedure
 will be repeated until a case clause with statements is encountered (and executed), or the end of the switch is reached.</p>
@@ -1078,7 +1282,7 @@ Any declarations in the init expression will be in scope until the for loop exit
 <h4 id="incr-expression">Incr expression</h4>
 <p>The incr expression is evaluated before evaluating the cond expr every time except for the first one.</p>
 <p>The incr expression may optionally be omitted.</p>
-<h4 id="cond-expression">Cond expression</h4>
+<h4 id="cond-expression_1">Cond expression</h4>
 <p>The cond expression is evaluated every loop. Any declaration in the cond expression is scoped to the 
 current loop, i.e. it will be reinitialized at the start of every loop.</p>
 <p>The cond expression may optionally be omitted. This is equivalent to setting the cond expression to 
