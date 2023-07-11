@@ -408,6 +408,12 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#break">Break</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#if-try">If-try</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#if-catch">If-catch</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#if-catch-implicit-unwrap">If-catch implicit unwrap</a>
+    </li>
         </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#nextcase-statement">Nextcase statement</a>
@@ -1169,8 +1175,9 @@ attribute to suppress this error.</p>
 if it evaluates to "true", otherwise execute the else clause. If no else clause exists, then the
 next statement is executed.</p>
 <pre><code>if_stmt            ::= &quot;if&quot; (label &quot;:&quot;)? &quot;(&quot; cond_expr &quot;)&quot; if_body
-if_body            ::= non_compound_stmt | compound_stmt else_clause?
+if_body            ::= non_compound_stmt | compound_stmt else_clause? | &quot;{&quot; switch_body &quot;}&quot;
 else_clause        ::= &quot;else&quot; (if_stmt | compound_stmt)
+
 </code></pre>
 <h4 id="scopes_2">Scopes</h4>
 <p>Both the "then" clause and the else clause open new scopes, even if they are non-compound statements.
@@ -1183,6 +1190,37 @@ It may not appear on a consecutive row.</p>
 <h4 id="break">Break</h4>
 <p>It is possible to use labelled break to break out of an if statement. Note that an unlabelled <code>break</code> may not
 be used.</p>
+<h4 id="if-try">If-try</h4>
+<p>The cond expression may be a try-unwrap chain. In this case, the unwrapped variables are 
+scoped to the "then" clause only.</p>
+<h4 id="if-catch">If-catch</h4>
+<p>The cond expression may be a catch-unwrap. The unwrap is scoped to the "then" clause only.
+If one or more variables are in the catch, then the "else" clause have these variables
+implicitly unwrapped.</p>
+<p>Example:</p>
+<pre><code>int! a = foo();
+int! b = foo();
+if (catch a, b)
+{
+    // Do something
+}
+else
+{
+    int x = a + b; // Valid, a and b are implicitly unwrapped.
+}  
+</code></pre>
+<h4 id="if-catch-implicit-unwrap">If-catch implicit unwrap</h4>
+<p>If an if-catch's "then"-clause will jump out of the outer scope in all code paths and
+the catch is on one or more variables, then this variable(s) will be implicitly unwrapped in the outer scope
+after the if-statement.</p>
+<p>Example:</p>
+<pre><code>int! a = foo();
+if (catch a)
+{
+  return;
+}  
+int x = a; // Valid, a is implicitly unwrapped.
+</code></pre>
 <h3 id="nextcase-statement">Nextcase statement</h3>
 <p>Nextcase will jump to another <code>switch</code> case.</p>
 <pre><code>nextcase_stmt      ::= &quot;nextcase&quot; ((label &quot;:&quot;)? (expr | &quot;default&quot;))? &quot;;&quot; 
