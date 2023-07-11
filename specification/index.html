@@ -517,10 +517,12 @@
         </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#var-statement">Var statement</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#inferring-type">Inferring type</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#inferring-type">Inferring type</a>
+    <li class="toctree-l4"><a class="reference internal" href="#scope">Scope</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#scope">Scope</a>
+        </ul>
     </li>
         </ul>
     </li>
@@ -1371,11 +1373,11 @@ and there is no <code>break</code> out of the while.</p>
 for runtime and compile time variables. The use for runtime variables is limited to macros.</p>
 <pre><code>var_stmt           ::= &quot;var&quot; IDENTIFIER | CT_IDENT | CT_TYPE_IDENT (&quot;=&quot; expr)? &quot;;&quot; 
 </code></pre>
-<h3 id="inferring-type">Inferring type</h3>
+<h4 id="inferring-type">Inferring type</h4>
 <p>In the case of a runtime variable, the type is inferred from the expression. Not providing an expression 
 is a compile time error. The expression must resolve to a runtime type.</p>
 <p>For compile time variables, the expression is optional. The expression may resolve to a runtime or compile time type.</p>
-<h3 id="scope">Scope</h3>
+<h4 id="scope">Scope</h4>
 <p>Runtime variables will follow the runtime scopes, identical to behaviour in a declaration statement. The compile
 time variables will follow the compile time scopes which are delimited by scoping compile time statements (<code>$if</code>, <code>$switch</code>,
 <code>$foreach</code> and <code>$for</code>).</p>
