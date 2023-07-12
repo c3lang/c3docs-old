@@ -237,6 +237,12 @@
     <li class="toctree-l3"><a class="reference internal" href="#typeid-type">Typeid type</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#any-type">Any type</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#fields">Fields</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#switching-over-any">Switching over any</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#anyfault-type">Anyfault type</a>
     </li>
@@ -478,6 +484,8 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#if-switch">If-switch</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#any-switch">Any-switch</a>
+    </li>
     <li class="toctree-l4"><a class="reference internal" href="#ranged-cases_1">Ranged cases</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#fallthrough_1">Fallthrough</a>
@@ -572,6 +580,22 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#attributes">Attributes</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#user-defined-attributes">User defined attributes</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#empty-list-of-attributes">Empty list of attributes</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#parameter-arguments">Parameter arguments</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#expansion">Expansion</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#nesting">Nesting</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#modules">Modules</a>
     </li>
     </ul>
@@ -651,21 +675,30 @@ repetition  ::= expression '*'
 ?  option (0 or 1 times)
 *  repetition (0 to n times)
 </code></pre>
-<p>Uppercase production names are used to identify lexical tokens. Non-terminals are in lower case. Lexical tokens are enclosed in single quotes ''.</p>
+<p>Uppercase production names are used to identify lexical tokens. Non-terminals are in lower case. Lexical tokens are
+enclosed in single quotes ''.</p>
 <p>The form <code>a..b</code> represents the set of characters from a through b as alternatives.</p>
 <h2 id="source-code-representation">Source code representation</h2>
 <p>A program consists of one or more <em>translation units</em> stored in files written in the Unicode character set,
- stored as a sequence of bytes using the UTF-8 encoding. Except for comments and the contents of character and string literals, all input elements are formed only from the ASCII subset (U+0000 to U+007F) of Unicode.</p>
-<p>A raw byte stream is translated into a sequence of tokens which white space and non-doc comments are discarded. Doc comments may optionally be discarded as well. The resulting input elements form the tokens that are the terminal symbols of the syntactic grammar.</p>
+stored as a sequence of bytes using the UTF-8 encoding. Except for comments and the contents of character and string
+literals, all input elements are formed only from the ASCII subset (U+0000 to U+007F) of Unicode.</p>
+<p>A raw byte stream is translated into a sequence of tokens which white space and non-doc comments are discarded. Doc
+comments may optionally be discarded as well. The resulting input elements form the tokens that are the terminal symbols
+of the syntactic grammar.</p>
 <h3 id="lexical-translations">Lexical Translations</h3>
-<p>A raw byte stream is translated into a sequence of tokens which white space and non-doc comments are discarded. Doc comments may optionally be discarded as well. The resulting input elements form the tokens that are the terminal symbols of the syntactic grammar.</p>
-<p>The longest possible translation is used at each step, even if the result does not ultimately make a correct program while another lexical translation would.</p>
+<p>A raw byte stream is translated into a sequence of tokens which white space and non-doc comments are discarded. Doc
+comments may optionally be discarded as well. The resulting input elements form the tokens that are the terminal symbols
+of the syntactic grammar.</p>
+<p>The longest possible translation is used at each step, even if the result does not ultimately make a correct program
+while another lexical translation would.</p>
 <blockquote>
-<p>Example: <code>a--b</code> is translated as <code>a</code>, <code>--</code>, <code>b</code>, which does not form a grammatically correct expression, even &gt;though the tokenization <code>a</code>, <code>-</code>, <code>-</code>, <code>b</code> could form a grammatically correct expression.</p>
+<p>Example: <code>a--b</code> is translated as <code>a</code>, <code>--</code>, <code>b</code>, which does not form a grammatically correct expression, even &gt;though
+the tokenization <code>a</code>, <code>-</code>, <code>-</code>, <code>b</code> could form a grammatically correct expression.</p>
 </blockquote>
 <h3 id="line-terminators">Line Terminators</h3>
 <p>The C3 compiler divides the sequence of input bytes into lines by recognizing <em>line terminators</em></p>
-<p>Lines are terminated by the ASCII LF character (U+000A), also known as "newline". A line termination specifies the termination of the // form of a comment.</p>
+<p>Lines are terminated by the ASCII LF character (U+000A), also known as "newline". A line termination specifies the
+termination of the // form of a comment.</p>
 <h3 id="input-elements-and-tokens">Input Elements and Tokens</h3>
 <p>An input element may be:</p>
 <ol>
@@ -687,9 +720,13 @@ repetition  ::= expression '*'
 <li>A stream of descriptive text</li>
 <li>A list of directive Tokens</li>
 </ol>
-<p>Those input elements that are not white space or comments are tokens. The tokens are the terminal symbols of the syntactic grammar. Whitespace and comments can serve to separate tokens that might be tokenized in another manner. For example the characters <code>+</code> and <code>=</code> may form the operator token <code>+=</code> only if there is no intervening white space or comment.</p>
+<p>Those input elements that are not white space or comments are tokens. The tokens are the terminal symbols of the
+syntactic grammar. Whitespace and comments can serve to separate tokens that might be tokenized in another manner. For
+example the characters <code>+</code> and <code>=</code> may form the operator token <code>+=</code> only if there is no intervening white space or
+comment.</p>
 <h3 id="white-space">White Space</h3>
-<p>White space is defined as the ASCII horizontal tab character (U+0009), form feed character (U+000A), vertical tab (U+000B), carriage return (U+000D), space character (U+0020) and the line terminator character (U+000D).</p>
+<p>White space is defined as the ASCII horizontal tab character (U+0009), form feed character (U+000A), vertical tab (
+U+000B), carriage return (U+000D), space character (U+0020) and the line terminator character (U+000D).</p>
 <pre><code>WHITESPACE      ::= [ \t\f\v\r\n]
 </code></pre>
 <h3 id="letters-and-digits">Letters and digits</h3>
@@ -711,23 +748,28 @@ LC_ALPHANUM_US  ::= LC_LETTER_US | DIGIT
 <p>There are three types of regular comments:</p>
 <ol>
 <li><code>// text</code> a line comment. The text between <code>//</code> and line end is ignored.</li>
-<li><code>/* text */</code> block comments. The text between <code>/*</code> and <code>*/</code> is ignored. It has nesting behaviour, so for every <code>/*</code> discovered between the first <code>/*</code> and the last <code>*/</code> a corresponding <code>*/</code> must be found.</li>
+<li><code>/* text */</code> block comments. The text between <code>/*</code> and <code>*/</code> is ignored. It has nesting behaviour, so for every <code>/*</code>
+   discovered between the first <code>/*</code> and the last <code>*/</code> a corresponding <code>*/</code> must be found.</li>
 </ol>
 <h3 id="doc-comments">Doc comments</h3>
 <ol>
-<li><code>/** text **/</code> doc block comment. The text between <code>/**</code> and <code>**/</code> is optionally parsed using the doc comment syntactic grammar. A compiler may choose to read <code>/** text **/</code> as a regular comment.</li>
+<li><code>/** text **/</code> doc block comment. The text between <code>/**</code> and <code>**/</code> is optionally parsed using the doc comment
+   syntactic grammar. A compiler may choose to read <code>/** text **/</code> as a regular comment.</li>
 </ol>
 <h3 id="identifiers">Identifiers</h3>
-<p>Identifiers name program entities such as variables and types. An identifier is a sequence of one or more letters and digits. 
+<p>Identifiers name program entities such as variables and types. An identifier is a sequence of one or more letters and
+digits.
 The first character in an identifier must be a letter or underscore.</p>
-<p>C3 has three types of identifiers: const identifiers - containing only underscore and upper-case letters, 
-type identifiers - starting with an upper case letter followed by at least one underscore letter and regular identifiers, starting with a lower case letter.  </p>
+<p>C3 has three types of identifiers: const identifiers - containing only underscore and upper-case letters,
+type identifiers - starting with an upper case letter followed by at least one underscore letter and regular
+identifiers, starting with a lower case letter.</p>
 <pre><code>IDENTIFIER      ::=  &quot;_&quot;* LC_LETTER ALPHANUM_US*
 CONST_IDENT     ::=  &quot;_&quot;* UC_LETTER UC_ALPHANUM_US*
 TYPE_IDENT      ::=  &quot;_&quot;* UC_LETTER &quot;_&quot;* LC_LETTER ALPHANUM_US*
 CT_IDENT        ::=  &quot;$&quot; IDENTIFIER
 CT_CONST_IDENT  ::=  &quot;$&quot; CONST_IDENT
 CT_TYPE_IDENT   ::=  &quot;$&quot; TYPE_IDENT
+AT_TYPE_IDENT   ::=  &quot;@&quot; TYPE_IDENT
 PATH_SEGMENT    ::= &quot;_&quot;* LC_LETTER LC_ALPHANUM_US*
 </code></pre>
 <h3 id="keywords">Keywords</h3>
@@ -777,12 +819,12 @@ $vacount    $varef      $vatype
 !!      ...     &lt;&lt;=     &gt;&gt;=
 </code></pre>
 <h3 id="integer-literals">Integer literals</h3>
-<p>An integer literal is a sequence of digits representing an integer constant. 
-An optional prefix sets a non-decimal base: 0b or 0B for binary, 
-0o, or 0O for octal, and 0x or 0X for hexadecimal. 
-A single 0 is considered a decimal zero. 
+<p>An integer literal is a sequence of digits representing an integer constant.
+An optional prefix sets a non-decimal base: 0b or 0B for binary,
+0o, or 0O for octal, and 0x or 0X for hexadecimal.
+A single 0 is considered a decimal zero.
 In hexadecimal literals, letters a through f and A through F represent values 10 through 15.</p>
-<p>For readability, an underscore character _ may appear after a base prefix 
+<p>For readability, an underscore character _ may appear after a base prefix
 or between successive digits; such underscores do not change the literal's value.</p>
 <pre><code>INTEGER         ::= DECIMAL_LIT | BINARY_LIT | OCTAL_LIT | HEX_LIT
 DECIMAL_LIT     ::= '0' | [1-9] ('_'* DECIMAL_DIGITS)?
@@ -816,18 +858,18 @@ _42             // an identifier, not an integer literal
 </code></pre>
 <h3 id="floating-point-literals">Floating point literals</h3>
 <p>A floating-point literal is a decimal or hexadecimal representation of a floating-point constant.</p>
-<p>A decimal floating-point literal consists of an integer part (decimal digits), a decimal point, 
-a fractional part (decimal digits), and an exponent part (e or E followed by an optional 
-sign and decimal digits). One of the integer part or the fractional part may be elided; 
-one of the decimal point or the exponent part may be elided. An exponent value exp scales 
+<p>A decimal floating-point literal consists of an integer part (decimal digits), a decimal point,
+a fractional part (decimal digits), and an exponent part (e or E followed by an optional
+sign and decimal digits). One of the integer part or the fractional part may be elided;
+one of the decimal point or the exponent part may be elided. An exponent value exp scales
 the mantissa (integer and fractional part) by powers of 10.</p>
-<p>A hexadecimal floating-point literal consists of a 0x or 0X prefix, an integer part 
-(hexadecimal digits), a radix point, a fractional part (hexadecimal digits), 
-and an exponent part (p or P followed by an optional sign and decimal digits). 
-One of the integer part or the fractional part may be elided; the radix point 
-may be elided as well, but the exponent part is required. 
+<p>A hexadecimal floating-point literal consists of a 0x or 0X prefix, an integer part
+(hexadecimal digits), a radix point, a fractional part (hexadecimal digits),
+and an exponent part (p or P followed by an optional sign and decimal digits).
+One of the integer part or the fractional part may be elided; the radix point
+may be elided as well, but the exponent part is required.
 An exponent value exp scales the mantissa (integer and fractional part) by powers of 2.</p>
-<p>For readability, an underscore character _ may appear after a base prefix or between successive digits; 
+<p>For readability, an underscore character _ may appear after a base prefix or between successive digits;
 such underscores do not change the literal value.</p>
 <pre><code>FLOAT_LIT       ::= DEC_FLOAT_LIT | HEX_FLOAT_LIT
 DEC_FLOAT_LIT   ::= DECIMAL_DIGITS '.' DECIMAL_DIGITS? DEC_EXPONENT? 
@@ -870,14 +912,14 @@ UNICODE_CHAR    ::= unicode_char
 \U      Escapes a four byte unicode hex value
 </code></pre>
 <h3 id="string-literals">String literals</h3>
-<p>A string literal represents a string constant obtained from concatenating a sequence of characters. 
-String literals are character sequences between double quotes, as in "bar". Within the quotes, 
-any character may appear except newline and unescaped double quote. The text between the 
-quotes forms the value of the literal, with backslash escapes interpreted as they are in 
-rune literals, with the same restrictions. The two-digit hexadecimal (\xnn) escapes represent 
-individual bytes of the resulting string; all other escapes represent the (possibly multibyte) 
-UTF-8 encoding of individual characters. Thus inside a string literal <code>\xFF</code> represent a single 
-byte of value <code>0xFF</code> = 255, while <code>ÿ</code>, <code>\u00FF</code>, <code>\U000000FF</code> and <code>\xc3\xbf</code> represent the two bytes 
+<p>A string literal represents a string constant obtained from concatenating a sequence of characters.
+String literals are character sequences between double quotes, as in "bar". Within the quotes,
+any character may appear except newline and unescaped double quote. The text between the
+quotes forms the value of the literal, with backslash escapes interpreted as they are in
+rune literals, with the same restrictions. The two-digit hexadecimal (\xnn) escapes represent
+individual bytes of the resulting string; all other escapes represent the (possibly multibyte)
+UTF-8 encoding of individual characters. Thus inside a string literal <code>\xFF</code> represent a single
+byte of value <code>0xFF</code> = 255, while <code>ÿ</code>, <code>\u00FF</code>, <code>\U000000FF</code> and <code>\xc3\xbf</code> represent the two bytes
 <code>0xc3 0xbf</code> of the UTF-8 encoding of character <code>U+00FF</code>.</p>
 <pre><code>STRING_LIT      ::= \x22 (CHAR_LIT_BYTE | UNICODE_CHAR)* \x22
 </code></pre>
@@ -893,7 +935,8 @@ String s = &quot;abcdefghi&quot;;
 code between the "`". A sequence of two "`" will be interpreted as a single escaped "`" that does
 not terminate the literal.</p>
 <h4 id="compile-time-concatenation">Compile time concatenation</h4>
-<p>Raw strings will concatenate with other regular strings and raw strings (see <a href="#compile-time-string-concatenation">string literal compile time concatenation</a>).</p>
+<p>Raw strings will concatenate with other regular strings and raw strings (
+see <a href="#compile-time-string-concatenation">string literal compile time concatenation</a>).</p>
 <h4 id="source-code-pre-filtering">Source code pre-filtering</h4>
 <p>The source code will pre-filter <code>\r</code> (<code>0x0D</code>) from the source code. This means that it is also implicitly
 filtered out of raw strings.</p>
@@ -947,7 +990,7 @@ float128  IEEE 128-bit*
 <h4 id="alignment">Alignment</h4>
 <p>Alignment of vectors are platform dependent, but is at least the alignment of its element type.</p>
 <h4 id="vector-operations">Vector operations</h4>
-<p>Vectors support the same arithmetics as its underlying type, and will perform the operation 
+<p>Vectors support the same arithmetics as its underlying type, and will perform the operation
 element-wise.</p>
 <p>Example:</p>
 <pre><code class="language-c">int[&lt;2&gt;] a = { 1, 3 };
@@ -970,17 +1013,24 @@ has alignment 1. See <a href="#align-attribute">align attribute</a> for details 
 <h3 id="union-types">Union types</h3>
 <p>A union may not have zero members.</p>
 <h4 id="alignment_2">Alignment</h4>
-<p>A union has the alignment of the member that has the highest alignment. See <a href="#align-attribute">align attribute</a> for details on changing the alignment.</p>
+<p>A union has the alignment of the member that has the highest alignment. See <a href="#align-attribute">align attribute</a> for
+details on changing the alignment.</p>
 <h3 id="fault-types">Fault types</h3>
 <p>A fault is an extensible enum which can be used to create an <a href="#optional-types">optional</a>.</p>
 <h4 id="alignment_3">Alignment</h4>
-<p>A fault type has the same alignment as a pointer. See <a href="#align-attribute">align attribute</a> for details on changing the alignment.</p>
+<p>A fault type has the same alignment as a pointer. See <a href="#align-attribute">align attribute</a> for details on changing the
+alignment.</p>
 <h3 id="enum-types">Enum types</h3>
 <h3 id="function-types">Function types</h3>
 <h3 id="typeid-type">Typeid type</h3>
 <p>The typeid is a pointer sized value which uniquely identifies a type.</p>
 <h3 id="any-type">Any type</h3>
 <p>The <code>any</code> type holds a pointer to a value and its corresponding <a href="#typeid-type">typeid</a>.</p>
+<h4 id="fields">Fields</h4>
+<p><code>.ptr</code> returns a <code>void*</code> pointer to the underlying value <code>.type</code> returns the <a href="#typeid-type">typeid</a>
+of the underlying value.</p>
+<h4 id="switching-over-any">Switching over <code>any</code></h4>
+<p>Switching over an <code>any</code> value creates an <a href="any-switch">any switch</a>.</p>
 <h3 id="anyfault-type">Anyfault type</h3>
 <h2 id="declarations-and-scope">Declarations and scope</h2>
 <h2 id="expressions">Expressions</h2>
@@ -997,7 +1047,7 @@ by the leftmost character(s) in the operator (e.g <code>+</code> for <code>+=</c
 The result is then assigned to the left hand side. The result of the operation is the new value of the left
 hand side.</p>
 <h4 id="implicit-conversion">Implicit conversion</h4>
-<p>If the left hand side is a pointer and the operation is "+=" or "-=" an attempt to implicitly convert to 
+<p>If the left hand side is a pointer and the operation is "+=" or "-=" an attempt to implicitly convert to
 isz/usz will be tried.</p>
 <p>For all other types and operations, <strong>an implicit conversion</strong> of rhs to the type of lhs will be tried.</p>
 <h3 id="ternary-elvis-and-or-else-expressions">Ternary, elvis and or-else expressions</h3>
@@ -1007,7 +1057,7 @@ elvis_expr         ::= suffix_expr &quot;?:&quot; ternary_group_expr
 orelse_expr        ::= suffix_expr &quot;??&quot; ternary_group_expr
 </code></pre>
 <h4 id="ternary-evaluation">Ternary evaluation</h4>
-<p>The most left-hand expression is evaluated to a boolean. If it is true, the value of the middle 
+<p>The most left-hand expression is evaluated to a boolean. If it is true, the value of the middle
 expression is returned, otherwise the last expression is returned.</p>
 <p>Only the most left-hand expression and the returned expressions are evaluated.</p>
 <p>The middle and last expression are implicitly converted to their <strong>unified type</strong>.</p>
@@ -1020,7 +1070,7 @@ before its boolean conversion. Otherwise return the right hand side.</p>
 <p>The resulting type is the <strong>unified type</strong>.</p>
 <h4 id="orelse-evaluation">Orelse evaluation</h4>
 <p>The lhs must be optional. The non-optional type for lhs and rhs are calculated.
-The <strong>unified type</strong> of the result is calculated. Lhs are converted to the unified type 
+The <strong>unified type</strong> of the result is calculated. Lhs are converted to the unified type
 preserving their optionality.</p>
 <p>At runtime, lhs is evaluated. If it evaluates to an optional, rhs is returned instead.</p>
 <p>Rhs is only evaluated if lhs evaluates to an optional.</p>
@@ -1068,7 +1118,8 @@ or_expr            ::= or_group_expr &quot;||&quot; and_group_expr
 <h3 id="casts">Casts</h3>
 <h3 id="pointer-casts">Pointer casts</h3>
 <h4 id="integer-to-pointer-cast">Integer to pointer cast</h4>
-<p>Any integer of pointer size or larger may be explicitly cast to a pointer. An integer to pointer cast is considered non-constant, except in the special case where the integer == 0. In that case, the result is constant <code>null</code>.</p>
+<p>Any integer of pointer size or larger may be explicitly cast to a pointer. An integer to pointer cast is considered
+non-constant, except in the special case where the integer == 0. In that case, the result is constant <code>null</code>.</p>
 <p>Example:</p>
 <pre><code>byte a = 1;
 int* b = (int*)a; // Invalid, pointer type is &gt; 8 bits.
@@ -1076,7 +1127,9 @@ int* c = (int*)1; // Valid, but runtime value.
 int* d = (int*)0; // Valid and constant value.
 </code></pre>
 <h4 id="pointer-to-integer-cast">Pointer to integer cast</h4>
-<p>A pointer may be cast to any integer, truncating the pointer value if the size of the pointer is larger than the pointer size. A pointer to integer cast is considered non-constant, except in the special case of a null pointer, where it is equal to the integer value 0.</p>
+<p>A pointer may be cast to any integer, truncating the pointer value if the size of the pointer is larger than the pointer
+size. A pointer to integer cast is considered non-constant, except in the special case of a null pointer, where it is
+equal to the integer value 0.</p>
 <p>Example:</p>
 <pre><code>fn void test() { ... }
 def VoidFunc = fn void test();
@@ -1087,8 +1140,10 @@ int c = (int)a; // Invalid, not constant
 int d = (int)((int*)1); // Invalid, not constant
 </code></pre>
 <h3 id="subscript-operator">Subscript operator</h3>
-<p>The subscript operator may take as its left side a pointer, array, subarray or vararray. The index may be of any integer type. TODO
-<em>NOTE</em> The subscript operator is not symmetrical as in C. For example in C3 <code>array[n] = 33</code> is allowed, but not <code>n[array] = 33</code>. This is a change from C. </p>
+<p>The subscript operator may take as its left side a pointer, array, subarray or vararray. The index may be of any integer
+type. TODO
+<em>NOTE</em> The subscript operator is not symmetrical as in C. For example in C3 <code>array[n] = 33</code> is allowed, but
+not <code>n[array] = 33</code>. This is a change from C.</p>
 <h3 id="operands">Operands</h3>
 <h3 id="compound-literals">Compound Literals</h3>
 <p>Compound literals have the format</p>
@@ -1105,7 +1160,9 @@ range_index        ::= expression | '^' expression
 <p>Taking the address of a compound literal will yield a pointer to stack allocated temporary.</p>
 <h3 id="function-calls">Function calls</h3>
 <h4 id="varargs">Varargs</h4>
-<p>For varargs, a <code>bool</code> or <em>any integer</em> smaller than what the C ABI specifies for the c <code>int</code> type is cast to <code>int</code>. Any float smaller than a double is cast to <code>double</code>. Compile time floats will be cast to double. Compile time integers will be cast to c <code>int</code> type.</p>
+<p>For varargs, a <code>bool</code> or <em>any integer</em> smaller than what the C ABI specifies for the c <code>int</code> type is cast to <code>int</code>. Any
+float smaller than a double is cast to <code>double</code>. Compile time floats will be cast to double. Compile time integers will
+be cast to c <code>int</code> type.</p>
 <h2 id="statements">Statements</h2>
 <pre><code>stmt               ::= compound_stmt | non_compound_stmt
 non_compound_stmt  ::= assert_stmt | if_stmt | while_stmt | do_stmt | foreach_stmt | foreach_r_stmt 
@@ -1140,7 +1197,7 @@ the message is understood to be a format string, and the following arguments are
 format function.</p>
 <p>The assert message must be a compile time constant. There are no restriction on the format argument expressions.</p>
 <h4 id="panic-function">Panic function</h4>
-<p>If the assert message has no format arguments or no assert message is included, 
+<p>If the assert message has no format arguments or no assert message is included,
 then the regular panic function is called. If it has format arguments then <code>panicf</code> is called instead.</p>
 <p>In the case the <code>panicf</code> function does not exist (for example, compiling without the standard library),
 then the format and the format arguments will be ignored and the <code>assert</code> will be treated
@@ -1179,7 +1236,7 @@ a compile time error with the message given.</p>
 <h4 id="error-message_1">Error message</h4>
 <p>The parameter must evaluate to a constant string.</p>
 <h3 id="compile-time-if-statement">Compile time if statement</h3>
-<p>If the cond expression is true, the then-branch is processed by the compiler. If it 
+<p>If the cond expression is true, the then-branch is processed by the compiler. If it
 evaluates to false, the else-branch is processed if it exists.</p>
 <pre><code>ct_if_stmt         ::= &quot;$if&quot; constant_expr &quot;:&quot; stmt* (&quot;$else&quot; stmt*)? &quot;$endif&quot;
 </code></pre>
@@ -1202,9 +1259,9 @@ evaluates to true.</p>
 <h4 id="ranged-cases">Ranged cases</h4>
 <p>Compile time switch does not support ranged cases.</p>
 <h4 id="fallthrough">Fallthrough</h4>
-<p>If a case clause has no statements, then when executing the case, rather than exiting the switch, 
-the next case clause immediately following it will be used. If that one should also be missing statements, 
-the procedure will be repeated until a case clause with statements is encountered, 
+<p>If a case clause has no statements, then when executing the case, rather than exiting the switch,
+the next case clause immediately following it will be used. If that one should also be missing statements,
+the procedure will be repeated until a case clause with statements is encountered,
 or the end of the switch is reached.</p>
 <h4 id="break-and-nextcase">Break and nextcase</h4>
 <p>Compile time switches do not support <code>break</code> nor <code>nextcase</code>.</p>
@@ -1216,12 +1273,13 @@ are ignored and will not be semantically checked.</p>
 <pre><code>continue_stmt      ::= &quot;continue&quot; label? &quot;;&quot;
 </code></pre>
 <h4 id="continue-labels">Continue labels</h4>
-<p>If a <code>continue</code> has a label, then it will jump to the cond of the while/for/do in the outer scope 
+<p>If a <code>continue</code> has a label, then it will jump to the cond of the while/for/do in the outer scope
 with the corresponding label.</p>
 <h4 id="unreachable-code_1">Unreachable code</h4>
 <p>Any statement following <code>continue</code> in the same scope is considered unreachable.</p>
 <h3 id="declaration-statement">Declaration statement</h3>
-<p>A declaration statement adds a new runtime or compile time variable to the current scope. It is available after the declaration statement.</p>
+<p>A declaration statement adds a new runtime or compile time variable to the current scope. It is available after the
+declaration statement.</p>
 <pre><code>declaration_stmt   ::= const_declaration | local_decl_storage? optional_type decls_after_type &quot;;&quot;
 local_decl_storage ::= &quot;tlocal&quot; | &quot;static&quot;
 decls_after_type   ::= local_decl_after_type (&quot;,&quot; local_decl_after_type)*
@@ -1233,11 +1291,12 @@ the variable as a global <code>tlocal</code> variable, but the visibility is lim
 combined with <code>static</code>.</p>
 <p>The initializer for a <code>tlocal</code> variable must be a valid global init expression.</p>
 <h4 id="static-storage">Static storage</h4>
-<p>Using <code>static</code> allocates the runtime variable as a function <strong>global</strong> variable. In effect this is the same as declaring 
+<p>Using <code>static</code> allocates the runtime variable as a function <strong>global</strong> variable. In effect this is the same as declaring
 a global, but visibility is limited to the function. <code>static</code> may not be combined with <code>tlocal</code>.</p>
 <p>The initializer for a <code>static</code> variable must be a valid global init expression.</p>
 <h4 id="scopes_1">Scopes</h4>
-<p>Runtime variables are added to the runtime scope, compile time variables to the compile time scope. See <strong>var statements</strong>.</p>
+<p>Runtime variables are added to the runtime scope, compile time variables to the compile time scope. See <strong>var statements
+</strong>.</p>
 <h4 id="multiple-declarations">Multiple declarations</h4>
 <p>If more than one variable is declared, no init expressions are allowed for any of the variables.</p>
 <h4 id="no-init-expression">No init expression</h4>
@@ -1245,7 +1304,7 @@ a global, but visibility is limited to the function. <code>static</code> may not
 <h4 id="opt-out-of-zero-initialization">Opt-out of zero initialization</h4>
 <p>Using the @noinit attribute opts out of <strong>zero initialization</strong>.</p>
 <h4 id="self-referencing-initialization">Self referencing initialization</h4>
-<p>An init expression may refer to the <strong>address</strong> of the same variable that is declared, but not the <strong>value</strong> of the 
+<p>An init expression may refer to the <strong>address</strong> of the same variable that is declared, but not the <strong>value</strong> of the
 variable.</p>
 <p>Example:</p>
 <pre><code class="language-c">void* a = &amp;a;  // Valid
@@ -1262,7 +1321,8 @@ this may have any number of defer statements.</p>
 <p>Static and tlocal variables are allowed in a defer statement. Only a single variable is instantiated regardless of
 the number of inlining locations.</p>
 <h4 id="defer-and-return">Defer and return</h4>
-<p>If the <code>return</code> has an expression, then it is evaluated before the defer statements (due to exit from the current function scope),
+<p>If the <code>return</code> has an expression, then it is evaluated before the defer statements (due to exit from the current
+function scope),
 are executed.</p>
 <p>Example:</p>
 <pre><code class="language-c">int a = 0;
@@ -1280,14 +1340,15 @@ return temp;
 <p>Defer statements are executed in the reverse order of their declaration, starting from the last declared
 defer statement.</p>
 <h4 id="defer-try">Defer try</h4>
-<p>A <code>defer try</code> type of defer will only execute if the scope is left through normal fallthrough, <code>break</code>, 
+<p>A <code>defer try</code> type of defer will only execute if the scope is left through normal fallthrough, <code>break</code>,
 <code>continue</code> or a <code>return</code> with a result.</p>
 <p>It will not execute if the exit is through a rethrow or a <code>return</code> with an optional value.</p>
 <h4 id="defer-catch">Defer catch</h4>
-<p>A <code>defer catch</code> type of defer will only execute if the scope is left through a rethrow or a <code>return</code> with an optional value</p>
+<p>A <code>defer catch</code> type of defer will only execute if the scope is left through a rethrow or a <code>return</code> with an optional
+value</p>
 <p>It will not execute if the exit is a normal fallthrough, <code>break</code>, <code>continue</code> or a <code>return</code> with a result.</p>
 <h4 id="non-regular-returns-longjmp-panic-and-other-errors">Non-regular returns - longjmp, panic and other errors</h4>
-<p>Defers will not execute when doing <code>longjmp</code> terminating through a <code>panic</code> or other error. They 
+<p>Defers will not execute when doing <code>longjmp</code> terminating through a <code>panic</code> or other error. They
 are only invoked on regular scope exits.</p>
 <h3 id="expr-statement">Expr statement</h3>
 <p>An expression statement evaluates an expression.</p>
@@ -1308,7 +1369,7 @@ else_clause        ::= &quot;else&quot; (if_stmt | compound_stmt)
 </code></pre>
 <h4 id="scopes_2">Scopes</h4>
 <p>Both the "then" clause and the else clause open new scopes, even if they are non-compound statements.
-The cond expression scope is valid until the exit of the entire statement, so any declarations in the 
+The cond expression scope is valid until the exit of the entire statement, so any declarations in the
 cond expression are available both in then and else clauses. Declarations in the "then" clause is not available
 in the else clause and vice versa.</p>
 <h4 id="special-parsing-of-the-then-clause">Special parsing of the "then" clause</h4>
@@ -1318,7 +1379,7 @@ It may not appear on a consecutive row.</p>
 <p>It is possible to use labelled break to break out of an if statement. Note that an unlabelled <code>break</code> may not
 be used.</p>
 <h4 id="if-try">If-try</h4>
-<p>The cond expression may be a try-unwrap chain. In this case, the unwrapped variables are 
+<p>The cond expression may be a try-unwrap chain. In this case, the unwrapped variables are
 scoped to the "then" clause only.</p>
 <h4 id="if-catch">If-catch</h4>
 <p>The cond expression may be a catch-unwrap. The unwrap is scoped to the "then" clause only.
@@ -1362,10 +1423,11 @@ to use no expression <code>nextcase</code> with labels.</p>
 <h4 id="missing-case">Missing case</h4>
 <p>If the switch has constant case values, and the nextcase expression is constant, then the value of
 the expression must match a case clause. Not matching a case is a compile time error.</p>
-<p>If one or more cases are non-constant and/or the nextcase expression is non-constant, then no compile time check is made.</p>
+<p>If one or more cases are non-constant and/or the nextcase expression is non-constant, then no compile time check is
+made.</p>
 <h4 id="variable-expression">Variable expression</h4>
 <p>If the nextcase has a non-constant expression, or the cases are not all constant, then first the nextcase expression
-is evaluated. Next, execution will proceed <em>as if</em> the switch was invoked again, but with the nextcase expression as the 
+is evaluated. Next, execution will proceed <em>as if</em> the switch was invoked again, but with the nextcase expression as the
 switch cond expression. See <strong>switch statement</strong>.</p>
 <p>If the switch does not have a cond expression, nextcase with an expression is not allowed.</p>
 <h4 id="unreachable-code_2">Unreachable code</h4>
@@ -1384,14 +1446,34 @@ and the statement will be executed. After reaching the end of the statements and
 end of the switch body, the execution will jump to the first statement after the switch.</p>
 <h4 id="if-switch">If-switch</h4>
 <p>If the cond expression is missing or the case statements are non-constant expressions, then each case clause will
-be evaluated in order after the cond expression has been evaluated (if it exists): </p>
+be evaluated in order after the cond expression has been evaluated (if it exists):</p>
 <ol>
-<li>If a cond expression exists, calculate the case expression and execute the case if it is matching the 
-cond expression. A default statement has no expression and will always be considered matching the cond expression
-reached.</li>
-<li>If no con expression exists, calculate the case expression and execute the case if the expression evaluates to 
-"true" when implicitly converted to boolean. A default statement will always be considered having the "true" result.</li>
+<li>If a cond expression exists, calculate the case expression and execute the case if it is matching the
+   cond expression. A default statement has no expression and will always be considered matching the cond expression
+   reached.</li>
+<li>If no con expression exists, calculate the case expression and execute the case if the expression evaluates to
+   "true" when implicitly converted to boolean. A default statement will always be considered having the "true" result.</li>
 </ol>
+<h4 id="any-switch">Any-switch</h4>
+<p>If the cond expression is an <code>any</code> type, the switch is handled as if switching was done over the <code>type</code>
+field of the <code>any</code>. This field has the type of <a href="#typeid-type">typeid</a>, and the cases follows the rules
+for <a href="#switching-over-typeid">switching over typeid</a>.</p>
+<p>If the cond expression is a variable, then this variable is implicitly converted to a pointer with
+the pointee type given by the case statement.</p>
+<p>Example:</p>
+<pre><code class="language-c">any a = abc();
+switch (a)
+{
+    case int:
+        int b = *a;   // a is int*
+    case float:
+        float z = *a; // a is float*
+    case Bar:
+        Bar f = *a;   // a is Bar*
+    default:
+        // a is not unwrapped
+}              
+</code></pre>
 <h4 id="ranged-cases_1">Ranged cases</h4>
 <p>Cases may be ranged. The start and end of the range must both be constant integer values. The start must
 be less or equal to the end value. Using non-integers or non-constant values is a compile time error.</p>
@@ -1403,14 +1485,14 @@ will be repeated until a case clause with statements is encountered (and execute
 <p>If a switch case has a default clause <em>or</em> it is switching over an enum and there exists a case for each enum value
 then the switch is exhaustive.</p>
 <h4 id="break_1">Break</h4>
-<p>If an unlabelled break, or a break with the switch's label is encountered, 
+<p>If an unlabelled break, or a break with the switch's label is encountered,
 then the execution will jump out of the switch and proceed directly after the end of the switch body.</p>
 <h4 id="unreachable-code_3">Unreachable code</h4>
-<p>If a switch is exhaustive and all case clauses end with a jump instruction, containing no break statement out 
+<p>If a switch is exhaustive and all case clauses end with a jump instruction, containing no break statement out
 of the current switch, then the code directly following the switch will be considered <strong>unreachable</strong>.</p>
 <h4 id="switching-over-typeid">Switching over typeid</h4>
 <p>If the switch cond expression is a typeid, then case declarations may use only the type name after the case,
-which will be interpreted as having an implicit <code>.typeid</code>. Example: <code>case int:</code> will be interpreted as if 
+which will be interpreted as having an implicit <code>.typeid</code>. Example: <code>case int:</code> will be interpreted as if
 written <code>case int.typeid</code>.</p>
 <h4 id="nextcase-without-expression">Nextcase without expression</h4>
 <p>Without a value <code>nextcase</code> will jump to the beginning of the next case clause. It is not allowed to
@@ -1432,7 +1514,7 @@ and there is no <code>break</code> out of the do.</p>
 <h4 id="continue">Continue</h4>
 <p><code>continue</code> will jump directly to the evaluation of the cond, as if the end of the statement had been reached.</p>
 <h4 id="do-block">Do block</h4>
-<p>If no <code>while</code> part exists, it will only execute the block once, as if it ended with <code>while (false)</code>, this is 
+<p>If no <code>while</code> part exists, it will only execute the block once, as if it ended with <code>while (false)</code>, this is
 called a "do block"</p>
 <h3 id="for-statement">For statement</h3>
 <p>The <code>for</code> statement will perform the (optional) init expression. The cond expression will then be tested. If
@@ -1450,12 +1532,12 @@ Any declarations in the init expression will be in scope until the for loop exit
 <p>The incr expression is evaluated before evaluating the cond expr every time except for the first one.</p>
 <p>The incr expression may optionally be omitted.</p>
 <h4 id="cond-expression_1">Cond expression</h4>
-<p>The cond expression is evaluated every loop. Any declaration in the cond expression is scoped to the 
+<p>The cond expression is evaluated every loop. Any declaration in the cond expression is scoped to the
 current loop, i.e. it will be reinitialized at the start of every loop.</p>
-<p>The cond expression may optionally be omitted. This is equivalent to setting the cond expression to 
+<p>The cond expression may optionally be omitted. This is equivalent to setting the cond expression to
 always return <code>true</code>.</p>
 <h4 id="unreachable-code_5">Unreachable code</h4>
-<p>The statement after a <code>for</code> is considered unreachable if the cond expression cannot ever be false, or is 
+<p>The statement after a <code>for</code> is considered unreachable if the cond expression cannot ever be false, or is
 omitted and there is no <code>break</code> out of the loop.</p>
 <h4 id="break_3">Break</h4>
 <p><code>break</code> will exit the <code>for</code> with execution continuing on the following statement after the <code>for</code>.</p>
@@ -1478,7 +1560,7 @@ foreach_var        ::= type? &quot;&amp;&quot;? IDENTIFIER
 <h4 id="continue_2">Continue</h4>
 <p><code>continue</code> will cause the next iteration to commence, as if the end of the statement had been reached.</p>
 <h4 id="iteration-by-value-or-reference">Iteration by value or reference</h4>
-<p>Normally iteration are by value. Each element is copied into the foreach variable. If <code>&amp;</code> 
+<p>Normally iteration are by value. Each element is copied into the foreach variable. If <code>&amp;</code>
 is added before the variable name, the elements will be retrieved by reference instead, and consequently
 the type of the variable will be a pointer to the element type instead.</p>
 <h4 id="foreach-variable">Foreach variable</h4>
@@ -1490,7 +1572,7 @@ For <code>foreach_r</code> this mean that the first value of the index will be <
 <p>The index type defaults to <code>usz</code>.</p>
 <p>If an optional type is added to the index, the index will be converted to this type. The type must be an
 integer type. The conversion happens as if the conversion was a direct cast. If the actual index value
-would exceed the maximum representable value of the type, this does not affect the actual iteration, but 
+would exceed the maximum representable value of the type, this does not affect the actual iteration, but
 may cause the index value to take on an incorrect value due to the cast.</p>
 <p>For example, if the optional index type is <code>char</code> and the actual index is <code>256</code>, then the index value would show <code>0</code>
 as <code>(char)256</code> evaluates to zero.</p>
@@ -1517,7 +1599,8 @@ return temp;
 <p>A <code>return</code> from an expression block only returns out of the expression block, it never returns from the
 expression block's enclosing scope.</p>
 <h4 id="empty-returns">Empty returns</h4>
-<p>An empty return is equivalent to a return with a void type. Consequently constructs like <code>foo(); return;</code> and <code>return (void)foo();</code>
+<p>An empty return is equivalent to a return with a void type. Consequently constructs like <code>foo(); return;</code>
+and <code>return (void)foo();</code>
 are equivalent.</p>
 <h4 id="unreachable-code_6">Unreachable code</h4>
 <p>Any statement directly following a return in the same scope are considered unreachable.</p>
@@ -1539,13 +1622,182 @@ for runtime and compile time variables. The use for runtime variables is limited
 <pre><code>var_stmt           ::= &quot;var&quot; IDENTIFIER | CT_IDENT | CT_TYPE_IDENT (&quot;=&quot; expr)? &quot;;&quot; 
 </code></pre>
 <h4 id="inferring-type">Inferring type</h4>
-<p>In the case of a runtime variable, the type is inferred from the expression. Not providing an expression 
+<p>In the case of a runtime variable, the type is inferred from the expression. Not providing an expression
 is a compile time error. The expression must resolve to a runtime type.</p>
 <p>For compile time variables, the expression is optional. The expression may resolve to a runtime or compile time type.</p>
 <h4 id="scope">Scope</h4>
 <p>Runtime variables will follow the runtime scopes, identical to behaviour in a declaration statement. The compile
-time variables will follow the compile time scopes which are delimited by scoping compile time statements (<code>$if</code>, <code>$switch</code>,
+time variables will follow the compile time scopes which are delimited by scoping compile time
+statements (<code>$if</code>, <code>$switch</code>,
 <code>$foreach</code> and <code>$for</code>).</p>
+<h2 id="attributes">Attributes</h2>
+<p>Attributes are modifiers attached to modules, variables, type declarations etc.</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>used with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@align</td>
+<td>fn, const, variables, user-defined types, struct member</td>
+</tr>
+<tr>
+<td>@bigendian</td>
+<td>bitstruct only</td>
+</tr>
+<tr>
+<td>@builtin</td>
+<td>macro, fn, global, constant</td>
+</tr>
+<tr>
+<td>@callconv</td>
+<td>fn, call</td>
+</tr>
+<tr>
+<td>@deprecated</td>
+<td>fn, macro, variables, constants, user-defined types, struct member</td>
+</tr>
+<tr>
+<td>@dynamic</td>
+<td>fn</td>
+</tr>
+<tr>
+<td>@export</td>
+<td>fn, globals, constants, struct, union, enum, fault</td>
+</tr>
+<tr>
+<td>@extern</td>
+<td>fn, globals, constants, user-defined types</td>
+</tr>
+<tr>
+<td>@if</td>
+<td>all except local variables and calls</td>
+</tr>
+<tr>
+<td>@inline</td>
+<td>fn, call</td>
+</tr>
+<tr>
+<td>@interface</td>
+<td>fn</td>
+</tr>
+<tr>
+<td>@littleendian</td>
+<td>bitstruct only</td>
+</tr>
+<tr>
+<td>@local</td>
+<td>module, fn, macro, globals, constants, user-defined types, attributes and aliases</td>
+</tr>
+<tr>
+<td>@maydiscard</td>
+<td>fn, macro</td>
+</tr>
+<tr>
+<td>@naked</td>
+<td>fn</td>
+</tr>
+<tr>
+<td>@nodiscard</td>
+<td>fn, macro</td>
+</tr>
+<tr>
+<td>@noinit</td>
+<td>variables</td>
+</tr>
+<tr>
+<td>@noinline</td>
+<td>fn, call</td>
+</tr>
+<tr>
+<td>@noreturn</td>
+<td>fn, macro</td>
+</tr>
+<tr>
+<td>@nostrip</td>
+<td>fn, globals, constants, struct, union, enum, fault</td>
+</tr>
+<tr>
+<td>@obfuscate</td>
+<td>enum, fault</td>
+</tr>
+<tr>
+<td>@operator</td>
+<td>fn, macro</td>
+</tr>
+<tr>
+<td>@overlap</td>
+<td>bitstruct only</td>
+</tr>
+<tr>
+<td>@packed</td>
+<td>struct, union</td>
+</tr>
+<tr>
+<td>@priority</td>
+<td>initializer/finalizer</td>
+</tr>
+<tr>
+<td>@private</td>
+<td>module, fn, macro, globals, constants, user-defined types, attributes and aliases</td>
+</tr>
+<tr>
+<td>@public</td>
+<td>module, fn, macro, globals, constants, user-defined types, attributes and aliases</td>
+</tr>
+<tr>
+<td>@pure</td>
+<td>call</td>
+</tr>
+<tr>
+<td>@reflect</td>
+<td>fn, globals, constants, user-defined types</td>
+</tr>
+<tr>
+<td>@section</td>
+<td>fn, globals, constants</td>
+</tr>
+<tr>
+<td>@test</td>
+<td>module, fn</td>
+</tr>
+<tr>
+<td>@unused</td>
+<td>all except call and initializer/finalizers</td>
+</tr>
+<tr>
+<td>@used</td>
+<td>all except call and initializer/finalizers</td>
+</tr>
+<tr>
+<td>@weak</td>
+<td>fn, globals, constants</td>
+</tr>
+<tr>
+<td>@winmain</td>
+<td>fn</td>
+</tr>
+</tbody>
+</table>
+<h3 id="user-defined-attributes">User defined attributes</h3>
+<p>User defined attributes group a list of attributes.</p>
+<pre><code>attribute_decl     ::= &quot;def&quot; AT_TYPE_IDENT (&quot;(&quot; parameters &quot;)&quot;)? attribute* &quot;=&quot; &quot;{&quot; attribute* &quot;}&quot; &quot;;&quot; 
+</code></pre>
+<h4 id="empty-list-of-attributes">Empty list of attributes</h4>
+<p>The list of attributes may be empty.</p>
+<h4 id="parameter-arguments">Parameter arguments</h4>
+<p>Arguments given to user defined attributes will be passed on to the attributes in the list.</p>
+<h4 id="expansion">Expansion</h4>
+<p>When a user defined attribute is encountered, its list of attributes is
+copied and appended instead of the user defined attribute. Any argument passed to 
+the attribute is evaluated and passed as a constant by the name of the parameter
+to the evaluation of the attribute parameters in the list.</p>
+<h4 id="nesting">Nesting</h4>
+<p>A user defined attribute can contain other user defined attributes. The definition
+may not be cyclic.</p>
 <h2 id="modules">Modules</h2>
 <p>Module paths are hierarchal, with each sub-path appended with '::' + the name:</p>
 <pre><code>path               ::= PATH_SEGMENT (&quot;::&quot; PATH_SEGMENT)
@@ -1556,7 +1808,7 @@ are only visible in the current <strong>module section</strong>.</p>
 generic_param      ::= TYPE_IDENT | CONST_IDENT
 opt_generic_params ::= &quot;(&lt;&quot; generic_param (&quot;,&quot; generic_param)* &quot;&gt;)&quot;
 </code></pre>
-<p>Any visibility attribute defined in a <strong>module section</strong> will be the default visibility in all 
+<p>Any visibility attribute defined in a <strong>module section</strong> will be the default visibility in all
 declarations in the section.</p>
 <p>If the <code>@test</code> attribute is applied to the <strong>module section</strong> then all function declarations
 will implicitly have the <code>@test</code> attribute.</p>
