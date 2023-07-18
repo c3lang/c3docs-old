@@ -188,11 +188,10 @@
                 <p>Four ways to ways when you need a variably sized list in C3</p>
 <p>In this blog post we'll review four standard ways to handle the case when you need a list with a size which is only known at runtime.</p>
 <h2 id="use-a-generic-list-allocated-on-the-heap">Use a generic List allocated on the heap</h2>
-<pre><code class="language-c">import std::io;
-import std::collections::list;
+<pre><code class="language-c">import std::io, std::collections::list;
 
 // We create a generic List that holds doubles:
-def DoubleList = List&lt;double&gt;;
+def DoubleList = List(&lt;double&gt;);
 
 fn double test_list_on_heap(int len)
 {

@@ -647,11 +647,11 @@ fn void test(MyId id)
 struct Foo { int x; }
 
 // Using def - usually recommended:
-def IntMyList = MyList&lt;int&gt;;
+def IntMyList = MyList(&lt;int&gt;);
 IntMyList abc;
 
 // Inline type definition
-MyList&lt;Foo&gt; bcd = MyList&lt;Foo&gt;;
+MyList&lt;Foo&gt; bcd = MyList(&lt;Foo&gt;);
 </code></pre>
 <p>Read more about generic types on <a href="../generics">the page about generics</a>.</p>
 <h2 id="enum">Enum</h2>

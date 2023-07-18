@@ -238,7 +238,7 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#stdcollectionslist">std::collections::list</a>
+    <li class="toctree-l2"><a class="reference internal" href="#stdcollectionslist">std::collections::list()</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#listpushlist-list-type-element-append">List.push(List *list, Type element), append(...)</a>
     </li>
@@ -597,10 +597,10 @@ Will also print enums and vectors.</p>
 <p>Write to a buffer, based on the libc function.</p>
 <h3 id="stdout-stdin-stderr">stdout(), stdin(), stderr()</h3>
 <p>Return stdout, stdin and stderr respectively.</p>
-<h2 id="stdcollectionslist">std::collections::list<Type></h2>
+<h2 id="stdcollectionslist">std::collections::list(<Type>)</h2>
 <p>Generic list module, elements are of <code>Type</code>.</p>
 <pre><code class="language-c">import std::collections::list;
-def MyIntList = List&lt;int&gt;;
+def MyIntList = List(&lt;int&gt;);
 
 ...
 

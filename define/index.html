@@ -267,16 +267,16 @@ and variables:</p>
 <pre><code> import generic_foo;
 
  // Parameterized function aliases
- def int_foo_call = generic_foo::foo_call&lt;int&gt;;
- def double_foo_call = generic_foo::foo_call&lt;double&gt;;
+ def int_foo_call = generic_foo::foo_call(&lt;int&gt;);
+ def double_foo_call = generic_foo::foo_call(&lt;double&gt;);
 
  // Parameterized type aliases
- def IntFoo = Foo&lt;int&gt;;
- def DoubleFoo = Foo&lt;double&gt;;
+ def IntFoo = Foo(&lt;int&gt;);
+ def DoubleFoo = Foo(&lt;double&gt;);
 
  // Parameterized global aliases
- def int_max_foo = generic_foo::max_foo&lt;int&gt;;
- def double_max_foo = generic_foo::max_foo&lt;double&gt;;
+ def int_max_foo = generic_foo::max_foo(&lt;int&gt;);
+ def double_max_foo = generic_foo::max_foo(&lt;double&gt;);
 </code></pre>
 <p>For more information, see the chapter on <a href="../generics">generics</a>.</p>
 <h2 id="function-pointer-default-arguments-and-named-parameters">Function pointer default arguments and named parameters</h2>

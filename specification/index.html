@@ -211,6 +211,22 @@
     <li class="toctree-l3"><a class="reference internal" href="#subarray-types">Subarray types</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#pointer-types">Pointer types</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#pointee-type">Pointee type</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#iptr-and-uptr">iptr and uptr</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#the-wildcard-pointer-void">The wildcard pointer void*</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#pointer-arithmetic-on-void">Pointer arithmetic on void*</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#subscripting">Subscripting</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#deref">Deref</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#_1"></a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#struct-types">Struct types</a>
         <ul>
@@ -1005,6 +1021,26 @@ int[&lt;2&gt;] c = { a[0] * b[0], a[1] * b[1] };
 <h3 id="subarray-types">Subarray types</h3>
 <p>The subarray consist of a pointer, followed by an usz length, having the alignment of pointers.</p>
 <h3 id="pointer-types">Pointer types</h3>
+<p>A pointer is the address to memory.</p>
+<pre><code class="language-text">pointer_type       ::= type &quot;*&quot;
+</code></pre>
+<h4 id="pointee-type">Pointee type</h4>
+<p>The type of the memory pointed to is the <strong>pointee type</strong>. It may be any runtime type.</p>
+<h4 id="iptr-and-uptr">iptr and uptr</h4>
+<p>A pointer may be losslessly cast to an <code>iptr</code> or <code>uptr</code>. An <code>iptr</code> or <code>uptr</code> may be cast to a pointer of any type.</p>
+<h4 id="the-wildcard-pointer-void">The wildcard pointer void*</h4>
+<p>The <code>void*</code> may implicitly cast into any other pointer type. The <code>void*</code>
+[implicitly casts into any other pointer.</p>
+<p>A void* pointer may never be dereferenced.</p>
+<h4 id="pointer-arithmetic-on-void">Pointer arithmetic on void*</h4>
+<p>Performing pointer arithmetics on void* will assume that the element size is 1. This includes
+pointer arithmetics using subscripting.</p>
+<h4 id="subscripting">Subscripting</h4>
+<p>Subscripting a pointer is equal to performing pointer arithmetics using the index, followed by a deref.
+Subscripts on pointers may be negative and will never do bounds checks.</p>
+<h4 id="deref">Deref</h4>
+<p>Dereferencing a pointer will return the value in the memory location interpreted as the <strong>pointee type</strong>.</p>
+<h4 id="_1"></h4>
 <h3 id="struct-types">Struct types</h3>
 <p>A struct may not have zero members.</p>
 <h4 id="alignment_1">Alignment</h4>
