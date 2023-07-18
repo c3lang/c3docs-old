@@ -561,7 +561,7 @@ fn bool Stack.empty(Stack* this)
 Testing it out:
 
 ```
-def IntStack = Stack<int>;
+def IntStack = Stack(<int>);
 
 fn void test()
 {

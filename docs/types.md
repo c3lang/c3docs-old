@@ -303,11 +303,11 @@ is created by adding `distinct` before the type name in a "def": `def <typename>
     struct Foo { int x; }
 
     // Using def - usually recommended:
-    def IntMyList = MyList<int>;
+    def IntMyList = MyList(<int>);
     IntMyList abc;
 
     // Inline type definition
-    MyList<Foo> bcd = MyList<Foo>;
+    MyList<Foo> bcd = MyList(<Foo>);
 
 Read more about generic types on [the page about generics](../generics).
 

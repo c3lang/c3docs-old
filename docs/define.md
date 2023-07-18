@@ -81,16 +81,16 @@ and variables:
      import generic_foo;
 
      // Parameterized function aliases
-     def int_foo_call = generic_foo::foo_call<int>;
-     def double_foo_call = generic_foo::foo_call<double>;
+     def int_foo_call = generic_foo::foo_call(<int>);
+     def double_foo_call = generic_foo::foo_call(<double>);
   
      // Parameterized type aliases
-     def IntFoo = Foo<int>;
-     def DoubleFoo = Foo<double>;
+     def IntFoo = Foo(<int>);
+     def DoubleFoo = Foo(<double>);
 
      // Parameterized global aliases
-     def int_max_foo = generic_foo::max_foo<int>;
-     def double_max_foo = generic_foo::max_foo<double>;
+     def int_max_foo = generic_foo::max_foo(<int>);
+     def double_max_foo = generic_foo::max_foo(<double>);
 
 For more information, see the chapter on [generics](../generics).
 

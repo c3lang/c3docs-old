@@ -367,13 +367,13 @@ Write to a buffer, based on the libc function.
 ### stdout(), stdin(), stderr()
 Return stdout, stdin and stderr respectively.
 
-## std::collections::list<Type>
+## std::collections::list(<Type>)
 
 Generic list module, elements are of `Type`.
 
 ```c
 import std::collections::list;
-def MyIntList = List<int>;
+def MyIntList = List(<int>);
 
 ...
 
