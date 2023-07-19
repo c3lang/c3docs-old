@@ -2,7 +2,7 @@
 
 Expressions work like in C, with one exception: it is possible to take the address of a temporary. This uses the operator `&&` rather than `&`.
 
-Consequently this is valid:
+Consequently, this is valid:
 
     fn void test(int* x) { ... }
 
@@ -11,6 +11,16 @@ Consequently this is valid:
     // In C:
     // int x = 1;
     // test(&x);
+
+## Well-defined evaluation order
+
+Expressions have a well-defined evaluation order:
+
+1. Binary expressions are evaluated from left to right.
+2. Assignment occurs right to left, so `a = a++` would result in `a` being unchanged.
+3. Call arguments are evaluated in parameter order.
+4. For named parameters, evaluation is in parameter order, not argument order. So the evaluation order of 
+`foo(.a = x++, .b = x--)` depends on the declaration order of `a` and `b`.
 
 ## Compound literals
 

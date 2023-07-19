@@ -187,3 +187,11 @@ struct Flags : char
 }
 ```
 
+##### Evaluation order is well-defined
+
+Evaluation order is left-to-right, and in assignment expressions, assignment
+happens after expression evaluation.
+
+##### Signed overflow is well-defined
+
+Signed integer overflow always wraps using 2s complement. It is never undefined behaviour.
