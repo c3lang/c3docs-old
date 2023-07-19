@@ -96,6 +96,10 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#bitfields-replaced-by-bitstructs">Bitfields replaced by bitstructs</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#evaluation-order-is-well-defined">Evaluation order is well-defined</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#signed-overflow-is-well-defined">Signed overflow is well-defined</a>
+    </li>
     </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../compare/">Comparisons with other languages</a>
@@ -361,6 +365,11 @@ struct Flags : char
     bool has_plasmatorpedoes;
 }
 </code></pre>
+<h5 id="evaluation-order-is-well-defined">Evaluation order is well-defined</h5>
+<p>Evaluation order is left-to-right, and in assignment expressions, assignment
+happens after expression evaluation.</p>
+<h5 id="signed-overflow-is-well-defined">Signed overflow is well-defined</h5>
+<p>Signed integer overflow always wraps using 2s complement. It is never undefined behaviour.</p>
               
             </div>
           </div>

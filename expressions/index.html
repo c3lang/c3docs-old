@@ -86,6 +86,8 @@
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Expressions</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#well-defined-evaluation-order">Well-defined evaluation order</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#compound-literals">Compound literals</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#constant-expressions">Constant expressions</a>
@@ -205,7 +207,7 @@
               
                 <h1 id="expressions">Expressions</h1>
 <p>Expressions work like in C, with one exception: it is possible to take the address of a temporary. This uses the operator <code>&amp;&amp;</code> rather than <code>&amp;</code>.</p>
-<p>Consequently this is valid:</p>
+<p>Consequently, this is valid:</p>
 <pre><code>fn void test(int* x) { ... }
 
 test(&amp;&amp;1);
@@ -214,6 +216,15 @@ test(&amp;&amp;1);
 // int x = 1;
 // test(&amp;x);
 </code></pre>
+<h2 id="well-defined-evaluation-order">Well-defined evaluation order</h2>
+<p>Expressions have a well-defined evaluation order:</p>
+<ol>
+<li>Binary expressions are evaluated from left to right.</li>
+<li>Assignment occurs right to left, so <code>a = a++</code> would result in <code>a</code> being unchanged.</li>
+<li>Call arguments are evaluated in parameter order.</li>
+<li>For named parameters, evaluation is in parameter order, not argument order. So the evaluation order of 
+<code>foo(.a = x++, .b = x--)</code> depends on the declaration order of <code>a</code> and <code>b</code>.</li>
+</ol>
 <h2 id="compound-literals">Compound literals</h2>
 <p>C3 has C's compound literals, but unlike C's cast style syntax <code>(MyStruct) { 1, 2 }</code>, 
 it uses C++ syntax: <code>MyStruct { 1, 2 }</code>.</p>
