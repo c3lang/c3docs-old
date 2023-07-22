@@ -457,10 +457,11 @@ fn void test()
 <p>Similar to regular <em>methods</em> a macro may also be associated with a particular type:</p>
 <pre><code>struct Foo { ... }
 
-macro Foo.generate(Foo *foo) { ... }
+macro Foo.generate(&amp;self) { ... }
 Foo f;
 f.generate();
 </code></pre>
+<p>See the chapter on <a href="../functions">functions</a> for more details.</p>
 <h2 id="capturing-a-trailing-block">Capturing a trailing block</h2>
 <p>It is often useful for a macro to take a trailing compound statement as an argument. In C++ this pattern is usually expressed with a lambda, but in C3 this is completely inlined.</p>
 <p>To accept a trailing block, <code>; @name(param1, ...)</code> is placed after declaring the regular macro parameters.</p>
