@@ -114,6 +114,7 @@ Changes relating to literals, identifiers etc.
 15. `$defined(...)` returns true if the variable or type is defined.
 16. `$checks(...)` returns true if the expressions and declarations inside type checks.
 17. Lambdas (anonymous functions) may be defined, they work just like functions and do not capture any state.
+18. Simple bitstructs (only containing booleans) may be manipulated using bit operations `& ^ |`.
 
 ### Changed
 
