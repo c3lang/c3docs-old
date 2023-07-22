@@ -132,10 +132,12 @@
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#modules">Modules</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#added_7">Added</a>
     </li>
-        </ul>
+    <li class="toctree-l2"><a class="reference internal" href="#contracts">Contracts</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#safe-fast">Safe / fast</a>
     </li>
     </ul>
                     </li>
@@ -445,6 +447,7 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li><code>$nameof</code> turns an identifier into its local string name.</li>
 <li><code>$qnameof</code> turns an identifier into its local string name with the module prefixed.</li>
 <li>Compile time constant values are always compile time folded for arithmetic operations and casts.</li>
+<li><code>$$FUNCTION</code> returns the current function as an identifier.</li>
 </ol>
 <h3 id="changed_4">Changed</h3>
 <ol>
@@ -452,6 +455,7 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li><code>#define</code> for variable and function aliases is replaced by <code>def</code>, e.g. <code>#define native_foo win32_foo</code> becomes <code>def native_foo = win32_foo;</code></li>
 <li>In-function <code>#if...#else..#endif</code> is replaced by <code>$if</code>, <code>#if...#elif...#endif</code> is replaced by <code>$switch</code>.</li>
 <li>For converting code into a string use <code>$stringify</code>.</li>
+<li>Macros for date, line etc are replaced by <code>$$DATE</code>, <code>$$FILE</code>, <code>$$FILEPATH</code>, <code>$$FUNC</code>, <code>$$LINE</code>, <code>$$MODULE</code>, <code>$$TIME</code>.</li>
 </ol>
 <h3 id="removed_4">Removed</h3>
 <ol>
@@ -479,7 +483,6 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li>Macros cannot be incomplete statements.</li>
 </ol>
 <h2 id="modules">Modules</h2>
-<h3 id="added_7">Added</h3>
 <ol>
 <li>Modules are defined using <code>module &lt;name&gt;</code>. Where name is on the form <code>foo::bar::baz</code></li>
 <li>Modules can be split into an unlimited number of module sections, each starting with the same module name declaration.</li>
@@ -494,6 +497,33 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li>Generic modules have a set of parameters after the module name <code>module arr(&lt;Type, LEN&gt;);</code></li>
 <li>Generic modules are not type checked until any of its types, functions or globals are instantiated.</li>
 </ol>
+<h2 id="contracts">Contracts</h2>
+<ol>
+<li>Doc comments (starting with <code>/**</code>) are parsed.</li>
+<li>The first part, up until the first <code>@</code> directive is ignored.</li>
+<li>The <code>@param</code> directive for pointer arguments may define usage constraints <code>[in]</code> <code>[out]</code> and <code>[inout]</code>.</li>
+<li>Pointer argument constraints may add a <code>&amp;</code> prefix to indicate that they may not be <code>null</code>, e.g. <code>[&amp;inout]</code>.</li>
+<li>Contracts may be attached to generic modules, functions and macros.</li>
+<li><code>@require</code> directives are evaluated given the arguments provided. Failing them may be a compile time or runtime error.</li>
+<li>The <code>@ensure</code> directive is evaluated at exit - if the return is a result and not an optional.</li>
+<li><code>return</code> can be used as a variable identifier inside of <code>@ensure</code>, and holds the return value.</li>
+<li><code>@return!</code> optionally lists the errors used. This will be checked at compile time.</li>
+<li><code>@checked</code> does a compile time check that the expression is valid, this is used with macros and generic modules.</li>
+<li><code>@pure</code> says that no writing to globals is allowed inside and only <code>@pure</code> functions may be called.</li>
+</ol>
+<h2 id="testing">Testing</h2>
+<ol>
+<li>Tests are indicated by <code>@test</code>.</li>
+<li>Marking a module section <code>@test</code> makes all functions inside of it implicitly tests.</li>
+<li>Tests are usually not compiled.</li>
+<li>Tests are instead only run by the compiler on request.</li>
+</ol>
+<h2 id="safe-fast">Safe / fast</h2>
+<p>Compilation has two modes: "safe" and "fast". Safe will insert checks for out-of-bounds access, null-pointer deref,
+shifting by negative numbers, division by zero, violation of contracts and asserts.</p>
+<p>Fast will assume all of those checks can be assumed to always pass. This means that unexpected behaviour may result
+from violating those checks. It is recommended to develop in "safe" mode.</p>
+<p>If debug symbols are available, C3 will produce a stack trace in safe mode where an error occurs.</p>
               
             </div>
           </div>
