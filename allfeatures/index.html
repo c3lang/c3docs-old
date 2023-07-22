@@ -103,31 +103,41 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#attributes">Attributes</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#statements">Statements</a>
+    <li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#added_4">Added</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#changed_3">Changed</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removed_4">Removed</a>
+    </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#compile-time-evaluation">Compile time evaluation</a>
+    <li class="toctree-l2"><a class="reference internal" href="#attributes">Attributes</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#statements">Statements</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#added_5">Added</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#changed_4">Changed</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#removed_4">Removed</a>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compile-time-evaluation">Compile time evaluation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#added_6">Added</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#changed_5">Changed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removed_5">Removed</a>
     </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#macros">Macros</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#added_6">Added</a>
+    <li class="toctree-l3"><a class="reference internal" href="#added_7">Added</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#removed_5">Removed</a>
+    <li class="toctree-l3"><a class="reference internal" href="#removed_6">Removed</a>
     </li>
         </ul>
     </li>
@@ -346,6 +356,7 @@
 <h3 id="changed_1">Changed</h3>
 <ol>
 <li><code>typedef</code> is replaced by <code>def</code> and has somewhat different syntax (e.g. <code>def MyTypeAlias = int;</code>).</li>
+<li>Function pointer syntax is prefix <code>fn</code> followed by a regular function declaration without the function name.</li>
 </ol>
 <h3 id="removed_2">Removed</h3>
 <ol>
@@ -354,6 +365,7 @@
 <li>Inline <code>typedef</code> is not allowed. <code>def</code> can only be used at the top level.</li>
 <li>Anonymous structs are not allowed.</li>
 <li>Type qualifiers are all removed, including <code>const</code>, <code>restrict</code>, <code>volatile</code></li>
+<li>Function pointers types <strong>cannot</strong> be used "raw", but must always be used through a type alias.</li>
 </ol>
 <h2 id="expressions">Expressions</h2>
 <h3 id="added_3">Added</h3>
@@ -374,6 +386,7 @@
 <li><code>!!</code> suffix panics if the value is an optional value.</li>
 <li><code>$defined(...)</code> returns true if the variable or type is defined.</li>
 <li><code>$checks(...)</code> returns true if the expressions and declarations inside type checks.</li>
+<li>Lambdas (anonymous functions) may be defined, they work just like functions and do not capture any state.</li>
 </ol>
 <h3 id="changed_2">Changed</h3>
 <ol>
@@ -386,6 +399,26 @@
 <h3 id="removed_3">Removed</h3>
 <ol>
 <li>The comma operator is removed.</li>
+</ol>
+<h2 id="functions">Functions</h2>
+<h3 id="added_4">Added</h3>
+<ol>
+<li>Functions may be invoked using named arguments, the name is the dot-prefixed parameter name, e.g. <code>foo(.name = a, .len = 2)</code>.</li>
+<li>Typed varargs are declared <code>Type... argument</code>, and will take 0 or more arguments of the given type.</li>
+<li>It is possible to "splat" an array or slice into the location of a typed vararg using <code>...</code>: <code>foo(a, b, ...list)</code></li>
+<li><code>any</code> varargs are declared <code>argument...</code>, it can take 0 or more arguments of any type which are implicitly converted to the <code>any</code> type.</li>
+<li>The function declaration may have <code>@inline</code> or <code>@noinline</code> as a default.</li>
+<li>Using <code>@inline</code> or <code>@noinline</code> on a function call expression will override the function default.</li>
+<li>Type methods are functions defined in the form <code>fn void Foo.my_method(Foo* foo) { ... }</code>, they can be invoked using dot syntax.</li>
+<li>Type methods may be attached to any type, even arrays and vectors.</li>
+</ol>
+<h3 id="changed_3">Changed</h3>
+<ol>
+<li>Function declarations use the <code>fn</code> prefix.</li>
+</ol>
+<h3 id="removed_4">Removed</h3>
+<ol>
+<li>Functions with C-style varargs may be called, and declared as external functions, but not used for C3 functions.</li>
 </ol>
 <h2 id="attributes">Attributes</h2>
 <p>C3 adds a long range of attributes in the form <code>@name(...)</code>. It is possible to create custom 
@@ -400,7 +433,7 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <code>@overlap</code>, <code>@priority</code>, <code>@private</code>, <code>@public</code>, 
 <code>@pure</code>, <code>@reflect</code>, <code>@section</code>, <code>@test</code>, <code>@used</code>, <code>@unused</code>.</p>
 <h2 id="statements">Statements</h2>
-<h3 id="added_4">Added</h3>
+<h3 id="added_5">Added</h3>
 <ol>
 <li>Match-style variant of the <code>switch</code> statement, allows each <code>case</code> to hold an expression to test.</li>
 <li>Switching over type with <code>typeid</code>.</li>
@@ -420,15 +453,17 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li><code>do</code> statements may omit <code>while</code>, behaving same as <code>while (0)</code></li>
 <li><code>if</code> may have a label. Labelled <code>if</code> may be exited using labelled break.</li>
 <li><code>asm</code> blocks for inline assembly. </li>
+<li>if-try statements allows you to run code where an expression is a result.</li>
+<li>if-catch statements runs code on fault. It can be used to implicitly unwrap variables.</li>
 </ol>
-<h3 id="changed_3">Changed</h3>
+<h3 id="changed_4">Changed</h3>
 <ol>
 <li>Switch cases will have implicit break, rather than implicit fallthrough.</li>
 <li><code>assert</code> is an actual statement and may take a string or a format + arguments.</li>
 <li><code>static_assert</code> is <code>$assert</code> and is a statement.</li>
 </ol>
 <h2 id="compile-time-evaluation">Compile time evaluation</h2>
-<h3 id="added_5">Added</h3>
+<h3 id="added_6">Added</h3>
 <ol>
 <li><code>@if(cond)</code> to conditionally include a struct/union field, a user-defined type etc.</li>
 <li>Compile time variables with <code>$</code> prefix e.g. <code>$foo</code>.</li>
@@ -449,7 +484,7 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li>Compile time constant values are always compile time folded for arithmetic operations and casts.</li>
 <li><code>$$FUNCTION</code> returns the current function as an identifier.</li>
 </ol>
-<h3 id="changed_4">Changed</h3>
+<h3 id="changed_5">Changed</h3>
 <ol>
 <li><code>#define</code> for constants is replaced by untyped constants, e.g. <code>#define SOME_CONSTANT 1</code> becomes <code>const SOME_CONSTANT = 1;</code>.</li>
 <li><code>#define</code> for variable and function aliases is replaced by <code>def</code>, e.g. <code>#define native_foo win32_foo</code> becomes <code>def native_foo = win32_foo;</code></li>
@@ -457,13 +492,13 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li>For converting code into a string use <code>$stringify</code>.</li>
 <li>Macros for date, line etc are replaced by <code>$$DATE</code>, <code>$$FILE</code>, <code>$$FILEPATH</code>, <code>$$FUNC</code>, <code>$$LINE</code>, <code>$$MODULE</code>, <code>$$TIME</code>.</li>
 </ol>
-<h3 id="removed_4">Removed</h3>
+<h3 id="removed_5">Removed</h3>
 <ol>
 <li>Top level <code>#if...#endif</code> does not have a counterpart. Use <code>@if</code> instead.</li>
 <li>No <code>#include</code> directives, <code>$include</code> will include text but isn't for the same use.</li>
 </ol>
 <h2 id="macros">Macros</h2>
-<h3 id="added_6">Added</h3>
+<h3 id="added_7">Added</h3>
 <ol>
 <li><code>macro</code> for defining macros.</li>
 <li>"Function-like" macros have no prefix and has only regular parameters or type parameters.</li>
@@ -477,7 +512,7 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li>Macros are inlined at the location where they are invoked.</li>
 <li>Unless resulting in a single constant, macros implicitly create a runtime scope.</li>
 </ol>
-<h3 id="removed_5">Removed</h3>
+<h3 id="removed_6">Removed</h3>
 <ol>
 <li>No <code>#define</code> macros.  </li>
 <li>Macros cannot be incomplete statements.</li>
