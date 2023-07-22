@@ -114,7 +114,7 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#inner">inner</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#kind">kind</a>
+    <li class="toctree-l4"><a class="reference internal" href="#kindof">kindof</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#len">len</a>
     </li>
@@ -316,9 +316,9 @@ int x = FooEnum.elements; // 2
 <li>Distinct -&gt; the underlying type.</li>
 </ul>
 <p>It is not defined for other types.</p>
-<h4 id="kind">kind</h4>
+<h4 id="kindof">kindof</h4>
 <p>Returns the underlying <code>TypeKind</code> as defined in std::core::types.</p>
-<pre><code>TypeKind kind = int.kind; // TypeKind.SIGNED_INT
+<pre><code>TypeKind kind = int.kindof; // TypeKind.SIGNED_INT
 </code></pre>
 <h4 id="len">len</h4>
 <p>Returns the length of the array.</p>

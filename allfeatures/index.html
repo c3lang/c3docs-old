@@ -91,6 +91,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#removed_2">Removed</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#introspection">Introspection</a>
+    </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#expressions">Expressions</a>
@@ -100,6 +102,8 @@
     <li class="toctree-l3"><a class="reference internal" href="#changed_2">Changed</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#removed_3">Removed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cast-changes">Cast changes</a>
     </li>
         </ul>
     </li>
@@ -115,31 +119,45 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#attributes">Attributes</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#statements">Statements</a>
+    <li class="toctree-l2"><a class="reference internal" href="#declarations">Declarations</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#added_5">Added</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#changed_4">Changed</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removed_5">Removed</a>
+    </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#compile-time-evaluation">Compile time evaluation</a>
+    <li class="toctree-l2"><a class="reference internal" href="#statements">Statements</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#added_6">Added</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#changed_5">Changed</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#removed_5">Removed</a>
+    <li class="toctree-l3"><a class="reference internal" href="#removed_6">Removed</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compile-time-evaluation">Compile time evaluation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#added_7">Added</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#changed_6">Changed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removed_7">Removed</a>
     </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#macros">Macros</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#added_7">Added</a>
+    <li class="toctree-l3"><a class="reference internal" href="#added_8">Added</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#removed_6">Removed</a>
+    <li class="toctree-l3"><a class="reference internal" href="#removed_8">Removed</a>
     </li>
         </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#features-provided-by-builtins">Features provided by builtins</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#modules">Modules</a>
     </li>
@@ -367,6 +385,11 @@
 <li>Type qualifiers are all removed, including <code>const</code>, <code>restrict</code>, <code>volatile</code></li>
 <li>Function pointers types <strong>cannot</strong> be used "raw", but must always be used through a type alias.</li>
 </ol>
+<h3 id="introspection">Introspection</h3>
+<p>Compile time type methods: <code>alignof</code>, <code>associated</code>, <code>elements</code>, <code>extnameof</code>, <code>inf</code>, <code>inner</code>, <code>kindof</code>, <code>len</code>,
+<code>max</code>, <code>membersof</code>, <code>min</code>, <code>nan</code>, <code>names</code>, <code>params</code>, <code>returns</code>, <code>sizeof</code>, <code>typeid</code>, <code>values</code>,
+<code>qnameof</code>.</p>
+<p>Runtime type methods: <code>inner</code>, <code>kind</code>, <code>len</code>, <code>names</code>, <code>sizeof</code>.</p>
 <h2 id="expressions">Expressions</h2>
 <h3 id="added_3">Added</h3>
 <ol>
@@ -387,7 +410,11 @@
 <li><code>$defined(...)</code> returns true if the variable or type is defined.</li>
 <li><code>$checks(...)</code> returns true if the expressions and declarations inside type checks.</li>
 <li>Lambdas (anonymous functions) may be defined, they work just like functions and do not capture any state.</li>
-<li>Simple bitstructs (only containing booleans) may be manipulated using bit operations <code>&amp; ^ |</code>.</li>
+<li>Simple bitstructs (only containing booleans) may be manipulated using bit operations <code>&amp; ^ | ~</code> and assignment.</li>
+<li>Structs may implicitly convert to their <code>inline</code> member if they have one.</li>
+<li>Pointers to arrays may implicitly convert to slices.</li>
+<li>Any pointer may implicitly convert to an <code>any</code> value with type being the pointee.</li>
+<li>Optional values will implicitly invoke "flatmap" on an expression it is a subexpression of.</li>
 </ol>
 <h3 id="changed_2">Changed</h3>
 <ol>
@@ -396,11 +423,14 @@
 <li>Well defined-evaluation order: left-to-right, assignment after expression evaluation.</li>
 <li><code>sizeof</code> is <code>$sizeof</code> and only works on expressions. Use <code>Type.sizeof</code> on types.</li>
 <li><code>alignof</code> is <code>$alignof</code> for expressions. Types use <code>Type.alignof</code>.</li>
+<li>Narrowing conversions are only allowed if all sub-expressions is as small or smaller than the type.</li>
+<li>Widening conversions are only allowed on simple expressions (i.e. most binary expressions and some unary may not be widened)</li>
 </ol>
 <h3 id="removed_3">Removed</h3>
 <ol>
 <li>The comma operator is removed.</li>
 </ol>
+<h3 id="cast-changes">Cast changes</h3>
 <h2 id="functions">Functions</h2>
 <h3 id="added_4">Added</h3>
 <ol>
@@ -412,6 +442,7 @@
 <li>Using <code>@inline</code> or <code>@noinline</code> on a function call expression will override the function default.</li>
 <li>Type methods are functions defined in the form <code>fn void Foo.my_method(Foo* foo) { ... }</code>, they can be invoked using dot syntax.</li>
 <li>Type methods may be attached to any type, even arrays and vectors.</li>
+<li>Error handling using optional return types.</li>
 </ol>
 <h3 id="changed_3">Changed</h3>
 <ol>
@@ -433,8 +464,27 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <code>@noreturn</code>, <code>@nostrip</code>, <code>@obfuscate</code>, <code>@operator</code>,
 <code>@overlap</code>, <code>@priority</code>, <code>@private</code>, <code>@public</code>, 
 <code>@pure</code>, <code>@reflect</code>, <code>@section</code>, <code>@test</code>, <code>@used</code>, <code>@unused</code>.</p>
-<h2 id="statements">Statements</h2>
+<h2 id="declarations">Declarations</h2>
 <h3 id="added_5">Added</h3>
+<ol>
+<li><code>var</code> declaration for type inferred variables in macros. E.g. <code>var a = some_value;</code></li>
+<li><code>var</code> declaration for new type variables in macros. E.g. <code>var $Type = int;</code></li>
+<li><code>var</code> declaration for compile time mutable variables in function and macros. E.g. <code>var $foo = 1;</code></li>
+<li><code>const</code> declarations may be untyped. Such constants are not stored in the resulting binary.</li>
+</ol>
+<h3 id="changed_4">Changed</h3>
+<ol>
+<li><code>tlocal</code> declares a variable to be thread local.</li>
+<li><code>static</code> top level declarations are replaced with <code>@local</code>. (<code>static</code> in functions is unchanged)</li>
+</ol>
+<h3 id="removed_5">Removed</h3>
+<ol>
+<li><code>restrict</code> removed.</li>
+<li><code>atomic</code> should be replaced by atomic load/store operations.</li>
+<li><code>volatile</code> should be replaced by volatile load/store operations.</li>
+</ol>
+<h2 id="statements">Statements</h2>
+<h3 id="added_6">Added</h3>
 <ol>
 <li>Match-style variant of the <code>switch</code> statement, allows each <code>case</code> to hold an expression to test.</li>
 <li>Switching over type with <code>typeid</code>.</li>
@@ -456,15 +506,20 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li><code>asm</code> blocks for inline assembly. </li>
 <li>if-try statements allows you to run code where an expression is a result.</li>
 <li>if-catch statements runs code on fault. It can be used to implicitly unwrap variables.</li>
+<li>Exhaustive switching on enums.</li>
 </ol>
-<h3 id="changed_4">Changed</h3>
+<h3 id="changed_5">Changed</h3>
 <ol>
 <li>Switch cases will have implicit break, rather than implicit fallthrough.</li>
 <li><code>assert</code> is an actual statement and may take a string or a format + arguments.</li>
 <li><code>static_assert</code> is <code>$assert</code> and is a statement.</li>
 </ol>
+<h3 id="removed_6">Removed</h3>
+<ol>
+<li><code>goto</code> removed, replaced by labelled break, continue and nextcase.</li>
+</ol>
 <h2 id="compile-time-evaluation">Compile time evaluation</h2>
-<h3 id="added_6">Added</h3>
+<h3 id="added_7">Added</h3>
 <ol>
 <li><code>@if(cond)</code> to conditionally include a struct/union field, a user-defined type etc.</li>
 <li>Compile time variables with <code>$</code> prefix e.g. <code>$foo</code>.</li>
@@ -485,7 +540,7 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li>Compile time constant values are always compile time folded for arithmetic operations and casts.</li>
 <li><code>$$FUNCTION</code> returns the current function as an identifier.</li>
 </ol>
-<h3 id="changed_5">Changed</h3>
+<h3 id="changed_6">Changed</h3>
 <ol>
 <li><code>#define</code> for constants is replaced by untyped constants, e.g. <code>#define SOME_CONSTANT 1</code> becomes <code>const SOME_CONSTANT = 1;</code>.</li>
 <li><code>#define</code> for variable and function aliases is replaced by <code>def</code>, e.g. <code>#define native_foo win32_foo</code> becomes <code>def native_foo = win32_foo;</code></li>
@@ -493,13 +548,13 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li>For converting code into a string use <code>$stringify</code>.</li>
 <li>Macros for date, line etc are replaced by <code>$$DATE</code>, <code>$$FILE</code>, <code>$$FILEPATH</code>, <code>$$FUNC</code>, <code>$$LINE</code>, <code>$$MODULE</code>, <code>$$TIME</code>.</li>
 </ol>
-<h3 id="removed_5">Removed</h3>
+<h3 id="removed_7">Removed</h3>
 <ol>
 <li>Top level <code>#if...#endif</code> does not have a counterpart. Use <code>@if</code> instead.</li>
 <li>No <code>#include</code> directives, <code>$include</code> will include text but isn't for the same use.</li>
 </ol>
 <h2 id="macros">Macros</h2>
-<h3 id="added_7">Added</h3>
+<h3 id="added_8">Added</h3>
 <ol>
 <li><code>macro</code> for defining macros.</li>
 <li>"Function-like" macros have no prefix and has only regular parameters or type parameters.</li>
@@ -513,10 +568,27 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li>Macros are inlined at the location where they are invoked.</li>
 <li>Unless resulting in a single constant, macros implicitly create a runtime scope.</li>
 </ol>
-<h3 id="removed_6">Removed</h3>
+<h3 id="removed_8">Removed</h3>
 <ol>
 <li>No <code>#define</code> macros.  </li>
 <li>Macros cannot be incomplete statements.</li>
+</ol>
+<h2 id="features-provided-by-builtins">Features provided by builtins</h2>
+<p>Some features are provided by builtins, and appears as normal functions and macros in the standard library
+but nonetheless provided unique functionality:</p>
+<ol>
+<li><code>@likely(...)</code> / <code>@unlikely(...)</code> on branches affects compilation optimization.</li>
+<li><code>@anycast(...)</code> casts an <code>any</code> with an optional result.</li>
+<li><code>unreachable(...)</code> marks a path as unreachable with a panic in safe mode.</li>
+<li><code>unsupported(...)</code> similar to unreachable but for functionality not implemented.</li>
+<li><code>@expect(...)</code> expect a certain value with an optional probability for the optimizer.</li>
+<li><code>@prefetch(...)</code> prefect a pointer.</li>
+<li><code>swizzle(...)</code> swizzles a vector.</li>
+<li><code>@volatile_load(...)</code> and <code>@volatile_store(...)</code> volatile load/store.</li>
+<li><code>@atomic_load(...)</code> and <code>@atomic_store(...)</code> atomic load/store.</li>
+<li><code>compare_exchange(...)</code> atomic compare exchange.</li>
+<li>Saturating add, sub, mul, shl on integers.</li>
+<li>Vector reduce operations: add, mul, and, or, xor, max, min.</li>
 </ol>
 <h2 id="modules">Modules</h2>
 <ol>
