@@ -113,6 +113,30 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compile-time-evaluation">Compile time evaluation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#added_5">Added</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#changed_4">Changed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removed_4">Removed</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#macros">Macros</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#added_6">Added</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removed_5">Removed</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#modules">Modules</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#added_7">Added</a>
+    </li>
+        </ul>
+    </li>
     </ul>
                     </li>
                 </ul>
@@ -315,6 +339,7 @@
 <li>Subtyping: using <code>inline</code> on a struct member allows a struct to be implicitly converted to this member type and use corresponding methods.</li>
 <li>Using <code>inline</code> on a distinct type allows it to be implicitly converted <em>to</em> its base type (but not vice versa).</li>
 <li>Types may add operator overloading to support <code>foreach</code> and subscript operations.</li>
+<li>Generic types through generic modules, using <code>(&lt; ... &gt;)</code> for the generic parameter list (e.g. <code>List(&lt;int&gt;) list;</code>).</li>
 </ol>
 <h3 id="changed_1">Changed</h3>
 <ol>
@@ -345,6 +370,8 @@
 <li>Array, vector and slice comparison: <code>==</code> can be used to make an element-wise comparison of two containers. </li>
 <li><code>?</code> suffix operator turns a fault into an optional value.</li>
 <li><code>!!</code> suffix panics if the value is an optional value.</li>
+<li><code>$defined(...)</code> returns true if the variable or type is defined.</li>
+<li><code>$checks(...)</code> returns true if the expressions and declarations inside type checks.</li>
 </ol>
 <h3 id="changed_2">Changed</h3>
 <ol>
@@ -352,6 +379,7 @@
 <li>Operator precedence of bit operations is higher than <code>+</code> and <code>-</code>.</li>
 <li>Well defined-evaluation order: left-to-right, assignment after expression evaluation.</li>
 <li><code>sizeof</code> is <code>$sizeof</code> and only works on expressions. Use <code>Type.sizeof</code> on types.</li>
+<li><code>alignof</code> is <code>$alignof</code> for expressions. Types use <code>Type.alignof</code>.</li>
 </ol>
 <h3 id="removed_3">Removed</h3>
 <ol>
@@ -396,6 +424,75 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li>Switch cases will have implicit break, rather than implicit fallthrough.</li>
 <li><code>assert</code> is an actual statement and may take a string or a format + arguments.</li>
 <li><code>static_assert</code> is <code>$assert</code> and is a statement.</li>
+</ol>
+<h2 id="compile-time-evaluation">Compile time evaluation</h2>
+<h3 id="added_5">Added</h3>
+<ol>
+<li><code>@if(cond)</code> to conditionally include a struct/union field, a user-defined type etc.</li>
+<li>Compile time variables with <code>$</code> prefix e.g. <code>$foo</code>.</li>
+<li><code>$if...$else...$endif</code> and <code>$switch...$endswitch</code> inside of functions to conditionally include code.</li>
+<li><code>$for</code> and <code>$foreach</code> to loop over compile time variables and data.</li>
+<li><code>$typeof</code> determines an expression type without evaluating it.</li>
+<li>Type properties may be accessed at compile time.</li>
+<li><code>$checks</code> determines if something may type check.</li>
+<li><code>$define</code> returns true if the variable, function or type exists.</li>
+<li><code>$error</code> emits an error if encountered.</li>
+<li><code>$embed</code> includes a file as binary data.</li>
+<li><code>$include</code> includes a file as text.</li>
+<li><code>$evaltype</code> takes a compile time string and turns it into a type.</li>
+<li><code>$eval</code> takes a string and turns it into an identifier.</li>
+<li><code>$extnameof</code> turns an identifier into its string external name.</li>
+<li><code>$nameof</code> turns an identifier into its local string name.</li>
+<li><code>$qnameof</code> turns an identifier into its local string name with the module prefixed.</li>
+<li>Compile time constant values are always compile time folded for arithmetic operations and casts.</li>
+</ol>
+<h3 id="changed_4">Changed</h3>
+<ol>
+<li><code>#define</code> for constants is replaced by untyped constants, e.g. <code>#define SOME_CONSTANT 1</code> becomes <code>const SOME_CONSTANT = 1;</code>.</li>
+<li><code>#define</code> for variable and function aliases is replaced by <code>def</code>, e.g. <code>#define native_foo win32_foo</code> becomes <code>def native_foo = win32_foo;</code></li>
+<li>In-function <code>#if...#else..#endif</code> is replaced by <code>$if</code>, <code>#if...#elif...#endif</code> is replaced by <code>$switch</code>.</li>
+<li>For converting code into a string use <code>$stringify</code>.</li>
+</ol>
+<h3 id="removed_4">Removed</h3>
+<ol>
+<li>Top level <code>#if...#endif</code> does not have a counterpart. Use <code>@if</code> instead.</li>
+<li>No <code>#include</code> directives, <code>$include</code> will include text but isn't for the same use.</li>
+</ol>
+<h2 id="macros">Macros</h2>
+<h3 id="added_6">Added</h3>
+<ol>
+<li><code>macro</code> for defining macros.</li>
+<li>"Function-like" macros have no prefix and has only regular parameters or type parameters.</li>
+<li>"At"-macros are prefixed with <code>@</code> and may also have compile time values, expression and ref parameters, and may have a trailing body.</li>
+<li>Type parameters have the prefix <code>$</code> and conform to the type naming standard ("$TypeFoo").</li>
+<li>"ref" parameters are declared using with a <code>&amp;</code> prefix operator. This is similar to C++ ref parameters.</li>
+<li>Expression parameters are unevaluated expressions, this is similar to arguments to <code>#define</code>.</li>
+<li>Compile time values have a <code>$</code> prefix and must contain compile time constant values.</li>
+<li>Any macro that evaluates to a constant result can be used as if it was the resulting constant.</li>
+<li>Macros may be recursively evaluated.</li>
+<li>Macros are inlined at the location where they are invoked.</li>
+<li>Unless resulting in a single constant, macros implicitly create a runtime scope.</li>
+</ol>
+<h3 id="removed_5">Removed</h3>
+<ol>
+<li>No <code>#define</code> macros.  </li>
+<li>Macros cannot be incomplete statements.</li>
+</ol>
+<h2 id="modules">Modules</h2>
+<h3 id="added_7">Added</h3>
+<ol>
+<li>Modules are defined using <code>module &lt;name&gt;</code>. Where name is on the form <code>foo::bar::baz</code></li>
+<li>Modules can be split into an unlimited number of module sections, each starting with the same module name declaration.</li>
+<li>The <code>import</code> statement imports a given module.</li>
+<li>Each module section has its own set of import statements.</li>
+<li>Importing a module gives access to the declarations that are <code>@public</code>.</li>
+<li>Declarations are default <code>@public</code>, but a module section may set a different default (e.g. <code>module my_module @private;</code>)</li>
+<li><code>@private</code> means the declaration is only visible in the module.</li>
+<li><code>@local</code> means only visible to the current module section.</li>
+<li>Imports are recursive. For example, <code>import my_lib</code> will implicitly also import <code>my_lib::net</code>.</li>
+<li>Multiple imports may be specified with the same <code>import</code>, e.g. <code>import std::net, std::io;</code>.</li>
+<li>Generic modules have a set of parameters after the module name <code>module arr(&lt;Type, LEN&gt;);</code></li>
+<li>Generic modules are not type checked until any of its types, functions or globals are instantiated.</li>
 </ol>
               
             </div>
