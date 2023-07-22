@@ -294,15 +294,20 @@ int x = Z();
 </code></pre>
 <h3 id="reference-arguments">Reference arguments</h3>
 <p>Use <code>&amp;</code> in front of a parameter to capture the variable and pass it by reference without having to explicitly use <code>&amp;</code> and pass a pointer. 
-(Note that in C++ this is allowed for normal functions, whereas for C3 it is only permitted with macros.)</p>
+(Note that in C++ this is allowed for normal functions, whereas for C3 it is only permitted with macros. Also, 
+in C3 the captured argument isn't automatically dereferenced)</p>
 <pre><code>// C
 #define M(x, y) x = 2 * (y);
+...
+M(x, 3);
 
 // C3
-macro m(int &amp;x, int y)
+macro m(&amp;x, y)
 {
-    x = 2 * y;
+    *x = 2 * y;
 }
+...
+m(x, 3);
 </code></pre>
 <h3 id="first-class-types">First class types</h3>
 <pre><code>// C
@@ -392,13 +397,13 @@ disable declarations. This makes the code easier to read, but at the cost of exp
 <code>@</code> is required on macros that use <code>#</code> and <code>&amp;</code> parameters.</p>
 <p>A basic swap:</p>
 <pre><code>/**
- * @checked a = b, b = a
+ * @checked *a = *b, *b = *a
  */
 macro void @swap(&amp;a, &amp;b)
 {
-    $typeof(a) temp = a;
-    a = b;
-    b = temp;
+    $typeof(*a) temp = *a;
+    *a = *b;
+    *b = temp;
 }
 </code></pre>
 <p>This expands on usage like this:</p>

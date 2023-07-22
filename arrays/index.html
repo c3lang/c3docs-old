@@ -334,7 +334,7 @@ int[] h = f[0..2];
 </code></pre>
 <h4 id="internals">Internals</h4>
 <p>Internally the layout of a slice is guaranteed to be <code>struct { &lt;type&gt;* ptr; usz len; }</code>.</p>
-<p>There is a built in struct <code>std::core::runtime::SubArrayContainer</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
+<p>There is a built-in struct <code>std::core::runtime::SubArrayContainer</code> which has the exact data layout of the fat array pointers. It is defined to be</p>
 <pre><code>struct SubArrayContainer
 {
     void* ptr;
