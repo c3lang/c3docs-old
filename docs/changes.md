@@ -1,7 +1,12 @@
 # Change log
 
+##### Revision 2023-07-22
+- Feature list.
+- Macro ref parameter update.
+- Abbreviated method first arg.
+
 ##### Revision 2023-07-09
-- Update with $embed information
+- Update with $embed information.
 
 ##### Revision 2023-07-07
 - Updated generics syntax and uses.
@@ -19,9 +24,9 @@
 - Updated with @if directive.
 
 ##### Revision 2023-06-03
-- Added specific compiletime page
-- Updated examples with references
-- variant -> any
+- Added specific compiletime page.
+- Updated examples with references.
+- variant -> any,
 
 ##### Revision 2023-06-05
 - Chapter on dynamic code.

@@ -448,3 +448,5 @@ C.
 - [Operator overloading](../operators)
 - Macro methods
 - [Static initialize and finalize functions](../functions)
+
+**For the full list of all new features** see the [feature list](../allfeatures).

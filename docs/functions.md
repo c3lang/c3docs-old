@@ -206,7 +206,7 @@ invoked using dot syntax:
     }
 
 
-Struct and unions will always take pointer, whereas enums take the enum value.
+The target object may be passed by value or by pointer:
 
     enum State
     {
@@ -223,13 +223,26 @@ Struct and unions will always take pointer, whereas enums take the enum value.
         }
     }
 
+### Implicit first parameters
 
+Because the type of the first method is known, it may be left out. To indicate a pointer `&` is used.
+
+    fn int Foo.test(&self) { ... }
+    // equivalent to
+    fn int Foo.test(Foo* self) { ... }
+
+    fn int Bar.test(self) { ... }
+    // equivalent to
+    fn int Bar.test(Bar self) { ... }
+
+It is customary to use `self` as the name of the first parameter, but it is not required.
+    
 ### Restrictions on methods
 
 - Methods on a struct/union may not have the same name as a member.
 - Methods only works on distinct, struct, union and enum types.
 - When taking a function pointer of a method, use the full name.
-- Using sub types, overlapping function names will be shadowed.
+- Using subtypes, overlapping function names will be shadowed.
 
 ## Contracts
 

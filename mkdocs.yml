@@ -7,6 +7,7 @@ nav:
     - Setup: 'setup.md'
     - Your first project: 'firstproject.md'
     - A quick primer on C3: 'primer.md'
+    - Feature list: 'allfeatures.md'
   - Documentation:
     - Changes from C: 'changesfromc.md'
     - Comparisons with other languages: 'compare.md'

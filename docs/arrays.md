@@ -119,7 +119,7 @@ For example:
 
 Internally the layout of a slice is guaranteed to be `struct { <type>* ptr; usz len; }`.
 
-There is a built in struct `std::core::runtime::SubArrayContainer` which has the exact data layout of the fat array pointers. It is defined to be
+There is a built-in struct `std::core::runtime::SubArrayContainer` which has the exact data layout of the fat array pointers. It is defined to be
 
     struct SubArrayContainer
     {
