@@ -74,11 +74,11 @@ This returns a typeid to an "inner" type. What this means is different for each 
 
 It is not defined for other types.
 
-#### kind
+#### kindof
 
 Returns the underlying `TypeKind` as defined in std::core::types.
 
-    TypeKind kind = int.kind; // TypeKind.SIGNED_INT
+    TypeKind kind = int.kindof; // TypeKind.SIGNED_INT
 
 #### len
 

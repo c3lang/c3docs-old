@@ -93,6 +93,14 @@ Changes relating to literals, identifiers etc.
 5. Type qualifiers are all removed, including `const`, `restrict`, `volatile`
 6. Function pointers types **cannot** be used "raw", but must always be used through a type alias.
 
+### Introspection
+
+Compile time type methods: `alignof`, `associated`, `elements`, `extnameof`, `inf`, `inner`, `kindof`, `len`,
+`max`, `membersof`, `min`, `nan`, `names`, `params`, `returns`, `sizeof`, `typeid`, `values`,
+`qnameof`.
+
+Runtime type methods: `inner`, `kind`, `len`, `names`, `sizeof`.
+
 ## Expressions
 
 ### Added
@@ -114,7 +122,11 @@ Changes relating to literals, identifiers etc.
 15. `$defined(...)` returns true if the variable or type is defined.
 16. `$checks(...)` returns true if the expressions and declarations inside type checks.
 17. Lambdas (anonymous functions) may be defined, they work just like functions and do not capture any state.
-18. Simple bitstructs (only containing booleans) may be manipulated using bit operations `& ^ |`.
+18. Simple bitstructs (only containing booleans) may be manipulated using bit operations `& ^ | ~` and assignment.
+19. Structs may implicitly convert to their `inline` member if they have one.
+20. Pointers to arrays may implicitly convert to slices.
+21. Any pointer may implicitly convert to an `any` value with type being the pointee.
+22. Optional values will implicitly invoke "flatmap" on an expression it is a subexpression of.
 
 ### Changed
 
@@ -123,10 +135,14 @@ Changes relating to literals, identifiers etc.
 3. Well defined-evaluation order: left-to-right, assignment after expression evaluation.
 4. `sizeof` is `$sizeof` and only works on expressions. Use `Type.sizeof` on types.
 5. `alignof` is `$alignof` for expressions. Types use `Type.alignof`.
+6. Narrowing conversions are only allowed if all sub-expressions is as small or smaller than the type.
+7. Widening conversions are only allowed on simple expressions (i.e. most binary expressions and some unary may not be widened)
 
 ### Removed
 
 1. The comma operator is removed.
+
+### Cast changes
 
 ## Functions
 
@@ -140,6 +156,7 @@ Changes relating to literals, identifiers etc.
 6. Using `@inline` or `@noinline` on a function call expression will override the function default.
 7. Type methods are functions defined in the form `fn void Foo.my_method(Foo* foo) { ... }`, they can be invoked using dot syntax.
 8. Type methods may be attached to any type, even arrays and vectors.
+9. Error handling using optional return types.
 
 ### Changed
 
@@ -163,6 +180,26 @@ The complete list: `@align`, `@bigendian`, `@builtin`,
 `@noreturn`, `@nostrip`, `@obfuscate`, `@operator`,
 `@overlap`, `@priority`, `@private`, `@public`, 
 `@pure`, `@reflect`, `@section`, `@test`, `@used`, `@unused`.
+
+## Declarations
+
+### Added
+
+1. `var` declaration for type inferred variables in macros. E.g. `var a = some_value;`
+2. `var` declaration for new type variables in macros. E.g. `var $Type = int;`
+3. `var` declaration for compile time mutable variables in function and macros. E.g. `var $foo = 1;`
+4. `const` declarations may be untyped. Such constants are not stored in the resulting binary.
+
+### Changed
+
+1. `tlocal` declares a variable to be thread local.
+2. `static` top level declarations are replaced with `@local`. (`static` in functions is unchanged)
+
+### Removed
+
+1. `restrict` removed.
+2. `atomic` should be replaced by atomic load/store operations.
+3. `volatile` should be replaced by volatile load/store operations.
 
 ## Statements
 
@@ -188,12 +225,17 @@ The complete list: `@align`, `@bigendian`, `@builtin`,
 18. `asm` blocks for inline assembly. 
 19. if-try statements allows you to run code where an expression is a result.
 20. if-catch statements runs code on fault. It can be used to implicitly unwrap variables.
+21. Exhaustive switching on enums.
 
 ### Changed
 
 1. Switch cases will have implicit break, rather than implicit fallthrough.
 2. `assert` is an actual statement and may take a string or a format + arguments.
 3. `static_assert` is `$assert` and is a statement.
+
+### Removed
+
+1. `goto` removed, replaced by labelled break, continue and nextcase.
 
 ## Compile time evaluation
 
@@ -251,6 +293,24 @@ The complete list: `@align`, `@bigendian`, `@builtin`,
 
 1. No `#define` macros.  
 2. Macros cannot be incomplete statements.
+
+## Features provided by builtins
+
+Some features are provided by builtins, and appears as normal functions and macros in the standard library
+but nonetheless provided unique functionality:
+
+1. `@likely(...)` / `@unlikely(...)` on branches affects compilation optimization.
+2. `@anycast(...)` casts an `any` with an optional result.
+3. `unreachable(...)` marks a path as unreachable with a panic in safe mode.
+4. `unsupported(...)` similar to unreachable but for functionality not implemented.
+5. `@expect(...)` expect a certain value with an optional probability for the optimizer.
+6. `@prefetch(...)` prefect a pointer.
+7. `swizzle(...)` swizzles a vector.
+8. `@volatile_load(...)` and `@volatile_store(...)` volatile load/store.
+9. `@atomic_load(...)` and `@atomic_store(...)` atomic load/store.
+10. `compare_exchange(...)` atomic compare exchange.
+11. Saturating add, sub, mul, shl on integers.
+12. Vector reduce operations: add, mul, and, or, xor, max, min.
 
 ## Modules
 
