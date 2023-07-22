@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Feature list - C3 Documentation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Feature list";
+    var mkdocs_page_input_path = "allfeatures.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> C3 Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">About C3</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Installing</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../setup/">Setup</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../firstproject/">Your first project</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../primer/">A quick primer on C3</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Feature list</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#symbols-and-literals">Symbols and literals</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#added">Added</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removed">Removed</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#built-in-types">Built-in types</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#added_1">Added</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#changed">Changed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removed_1">Removed</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#types">Types</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#added_2">Added</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#changed_1">Changed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removed_2">Removed</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#expressions">Expressions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#added_3">Added</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#changed_2">Changed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removed_3">Removed</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#attributes">Attributes</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#statements">Statements</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#added_4">Added</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#changed_3">Changed</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../changesfromc/">Changes from C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../compare/">Comparisons with other languages</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../modules/">Modules</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../statements/">Statements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../expressions/">Expressions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../variables/">Variables</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../compiletime/">Compile time evaluation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../macros/">Macros</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../dynamiccode/">Dynamic code</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../ideas/">More ideas</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../naming/">Naming rules</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../comments/">Comments & Docs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../attributes/">Attributes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../asm/">Inline asm</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../cinterop/">C Interop</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../syntax/">Grammar</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../sample/">More code examples</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../specification/">Specification</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Build system</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../buildintro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../project/">Project Structure</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../buildcommands/">Commands</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Development</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../contribute/">Contribute</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../changes/">Changes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../rejectedideas/">Rejected ideas</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">C3 Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Installing &raquo;</li>
+        
+      
+    
+    <li>Feature list</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="feature-summary">Feature summary</h1>
+<p>Here is a summary of <em>all</em> the features of C3 and changes from C</p>
+<h2 id="symbols-and-literals">Symbols and literals</h2>
+<p>Changes relating to literals, identifiers etc.</p>
+<h3 id="added">Added</h3>
+<ol>
+<li>0o prefix for octal.</li>
+<li>0b prefix for binary.</li>
+<li>Optional "_" as digit separator.</li>
+<li>Hexadecimal byte data, e.g <code>x"abcd"</code>.</li>
+<li>Base64 byte data, e.g. <code>b64"QzM="</code>.</li>
+<li>Type name restrictions (PascalCase).</li>
+<li>Variable and function name restrictions (must start with lower case letter).</li>
+<li>Constant name restrictions (no lower case).</li>
+<li>Character literals may be 2, 4, 8, 16 bytes long. (2cc, 4cc etc).</li>
+<li>Raw string literals between "`".</li>
+<li><code>\e</code> escape character.</li>
+<li>Source code must be UTF-8.</li>
+<li>Assumes <code>\n</code> for new row <code>\r</code> is stripped from source.</li>
+<li>Bit-width integer and float suffixes: u8/i8/u16/i16/... f32/f64/... </li>
+<li>The <code>null</code> literal is a pointer value of 0.</li>
+<li>The <code>true</code> and <code>false</code> are boolean constants true and false.</li>
+</ol>
+<h3 id="removed">Removed</h3>
+<ol>
+<li>Trigraphs / digraphs.</li>
+<li>0123-style octal.</li>
+<li><code>z</code>, <code>LL</code> and <code>ULL</code> suffixes.</li>
+</ol>
+<h2 id="built-in-types">Built-in types</h2>
+<h3 id="added_1">Added</h3>
+<ol>
+<li>Type declaration is left to right: <code>int[4]*[2] a;</code> instead of <code>int (*a[2])[4];</code> </li>
+<li>Simd vector types using <code>[&lt;&gt;]</code> syntax, e.g. <code>float[&lt;4&gt;]</code>, use <code>[&lt;*&gt;]</code> for inferred length.</li>
+<li>Slice type built in, using <code>[]</code> suffix, e.g. <code>int[]</code></li>
+<li>Distinct types, similar to a typedef but forms a new type. (Example: the <code>String</code> type is a distinct <code>char[]</code>)</li>
+<li>Built-in 128-bit integer on all platforms.</li>
+<li><code>char</code> is an unsigned 8-bit integer. <code>ichar</code> is its signed counterpart.</li>
+<li>Well-defined bitwidth for integer types: ichar/char (8 bits), short/ushort (16 bits), int/uint (32 bits), long/ulong (64 bits), int128/uint128 (128 bits)</li>
+<li>Pointer-sized <code>iptr</code> and <code>uptr</code> integers.</li>
+<li><code>isz</code> and <code>usz</code> integers corresponding to the <code>size_t</code> bitwidth.</li>
+<li>Optional types are formed using the <code>!</code> suffix.</li>
+<li><code>bool</code> is the boolean type.</li>
+<li><code>typeid</code> is a unique type identifier for a type, it can be used at runtime and compile time.</li>
+<li><code>any</code> contains a <code>typeid</code> and <code>void*</code> allowing it to act as a reference to any type of value.</li>
+<li><code>anyfault</code> holds any <code>fault</code> value (see below).</li>
+</ol>
+<h3 id="changed">Changed</h3>
+<ol>
+<li>Inferred array type uses <code>[*]</code> (e.g. <code>int[*] x = { 1, 2 };</code>).</li>
+<li>Flexible array member uses <code>[*]</code>.</li>
+</ol>
+<h3 id="removed_1">Removed</h3>
+<ol>
+<li>The spiral rule type declaration (see above).</li>
+<li>Complex types</li>
+<li>size_t, ptrdiff_t (see above).</li>
+<li>Array types do not decay.</li>
+</ol>
+<h2 id="types">Types</h2>
+<h3 id="added_2">Added</h3>
+<ol>
+<li><code>bitstruct</code> a struct with a container type allowing precise control over bit-layout, replacing bitfields and enum masks.</li>
+<li><code>fault</code> an enum type with unique values which are used together with optional.</li>
+<li>Vector types.</li>
+<li>Optional types.</li>
+<li><code>enum</code> allows a set of unique constants to be associated with each enum value.</li>
+<li>Compile time reflection and limited runtime reflection on types (see "Reflection")</li>
+<li>All types have a <code>typeid</code> property uniquely referring to that particular type.</li>
+<li>Distinct types, which are similar to aliases, but represent distinctly different types.</li>
+<li>Types may have methods. Methods can be added to any type, including built-in types.</li>
+<li>Subtyping: using <code>inline</code> on a struct member allows a struct to be implicitly converted to this member type and use corresponding methods.</li>
+<li>Using <code>inline</code> on a distinct type allows it to be implicitly converted <em>to</em> its base type (but not vice versa).</li>
+<li>Types may add operator overloading to support <code>foreach</code> and subscript operations.</li>
+</ol>
+<h3 id="changed_1">Changed</h3>
+<ol>
+<li><code>typedef</code> is replaced by <code>def</code> and has somewhat different syntax (e.g. <code>def MyTypeAlias = int;</code>).</li>
+</ol>
+<h3 id="removed_2">Removed</h3>
+<ol>
+<li>Enums, structs and unions no longer have distinct namespaces.</li>
+<li>Enum, struct and union declarations should not have a trailing ';'</li>
+<li>Inline <code>typedef</code> is not allowed. <code>def</code> can only be used at the top level.</li>
+<li>Anonymous structs are not allowed.</li>
+<li>Type qualifiers are all removed, including <code>const</code>, <code>restrict</code>, <code>volatile</code></li>
+</ol>
+<h2 id="expressions">Expressions</h2>
+<h3 id="added_3">Added</h3>
+<ol>
+<li>Expression block using <code>{| ... |}</code>. Somewhat similar to GCC statement expressions.</li>
+<li>Array initializers may use ranges. (e.g. <code>int[256] x = { [0..128] = 1 }</code>)</li>
+<li><code>?:</code> operator, returning the first value if it can be converted to a boolean true, otherwise the second value is returned.</li>
+<li>Orelse <code>??</code> returning the first value if it is a result, the second if the first value was an optional value.</li>
+<li>Rethrow <code>!</code> suffix operator with an implicit <code>return</code> the value if it was an optional value.</li>
+<li>Dynamic calls, allowing calls to be made on the <code>any</code> type dispatched using a dynamic mechanism.</li>
+<li>Create a slice using a range subscript (e.g. <code>a[4..8]</code> to form a slice from element 4 to element 8).</li>
+<li>Two range subscript methods: <code>[start..inclusive_end]</code> and <code>[start:length]</code>. Start, end and length may be omitted for default values.</li>
+<li>Indexing from end: slices, arrays and vectors may be indexed from the end using <code>^</code>. <code>^1</code> represents the last element. This works for ranges as well.</li>
+<li>Range assignment, assign a single value to an entire range e.g. <code>a[4..8] = 1;</code>.</li>
+<li>Slice assignment, copy one range to the other range e.g. <code>a[4..8] = b[8..12];</code>.</li>
+<li>Array, vector and slice comparison: <code>==</code> can be used to make an element-wise comparison of two containers. </li>
+<li><code>?</code> suffix operator turns a fault into an optional value.</li>
+<li><code>!!</code> suffix panics if the value is an optional value.</li>
+</ol>
+<h3 id="changed_2">Changed</h3>
+<ol>
+<li>Compound literals use <code>Type { ... }</code> rather than <code>(Type) { ... }</code></li>
+<li>Operator precedence of bit operations is higher than <code>+</code> and <code>-</code>.</li>
+<li>Well defined-evaluation order: left-to-right, assignment after expression evaluation.</li>
+<li><code>sizeof</code> is <code>$sizeof</code> and only works on expressions. Use <code>Type.sizeof</code> on types.</li>
+</ol>
+<h3 id="removed_3">Removed</h3>
+<ol>
+<li>The comma operator is removed.</li>
+</ol>
+<h2 id="attributes">Attributes</h2>
+<p>C3 adds a long range of attributes in the form <code>@name(...)</code>. It is possible to create custom 
+attribute groups using <code>def</code> (e.g. <code>def MyAttribute(usz align) = { @aligned(align) @weak };</code>) which
+groups certain attributes. Empty attribute groups are permitted.</p>
+<p>The complete list: <code>@align</code>, <code>@bigendian</code>, <code>@builtin</code>,
+<code>@callconv</code>, <code>@deprecated</code>, <code>@dynamic</code>, <code>@export</code>,
+<code>@extern</code>, <code>@if</code>, <code>@inline</code>, <code>@interface</code>,
+<code>@littleendian</code>, <code>@local</code>, <code>@maydiscard</code>,
+<code>@naked</code>, <code>@nodiscard</code>, <code>@noinit</code>,
+<code>@noreturn</code>, <code>@nostrip</code>, <code>@obfuscate</code>, <code>@operator</code>,
+<code>@overlap</code>, <code>@priority</code>, <code>@private</code>, <code>@public</code>, 
+<code>@pure</code>, <code>@reflect</code>, <code>@section</code>, <code>@test</code>, <code>@used</code>, <code>@unused</code>.</p>
+<h2 id="statements">Statements</h2>
+<h3 id="added_4">Added</h3>
+<ol>
+<li>Match-style variant of the <code>switch</code> statement, allows each <code>case</code> to hold an expression to test.</li>
+<li>Switching over type with <code>typeid</code>.</li>
+<li>Unpack <code>any</code> to the underlying type with an <code>any</code>-switch.</li>
+<li><code>nextcase</code> to fallthrough to the next case.</li>
+<li><code>nextcase &lt;expr&gt;</code> to jump to the case with the expression value (this may be an expression evaluated at runtime).</li>
+<li><code>nextcase default</code> to jump to the <code>default</code> clause.</li>
+<li>Labelled <code>while</code>/<code>do</code>/<code>for</code>/<code>foreach</code> to use with <code>break</code> <code>nextcase</code> and <code>continue</code>.</li>
+<li><code>foreach</code> to iterate over arrays, vectors, slices and user-defined containers using operator overloading.</li>
+<li><code>foreach_r</code> to iterate in reverse.</li>
+<li><code>foreach</code> / <code>foreach_r</code> may take the element by value or reference. The index may optionally be provided.</li>
+<li><code>$if</code>, <code>$switch</code>, <code>$for</code>, <code>$foreach</code> statements executing at compile time.</li>
+<li><code>$echo</code> printing a message at compile time.</li>
+<li><code>$assert</code> compile time assert.</li>
+<li><code>defer</code> statement to execute statements at scope exit.</li>
+<li><code>defer catch</code> and <code>defer try</code> similar to <code>defer</code> but executes only on optional exit or regular exit of scope respectively.</li>
+<li><code>do</code> statements may omit <code>while</code>, behaving same as <code>while (0)</code></li>
+<li><code>if</code> may have a label. Labelled <code>if</code> may be exited using labelled break.</li>
+<li><code>asm</code> blocks for inline assembly. </li>
+</ol>
+<h3 id="changed_3">Changed</h3>
+<ol>
+<li>Switch cases will have implicit break, rather than implicit fallthrough.</li>
+<li><code>assert</code> is an actual statement and may take a string or a format + arguments.</li>
+<li><code>static_assert</code> is <code>$assert</code> and is a statement.</li>
+</ol>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../changesfromc/" class="btn btn-neutral float-right" title="Changes from C">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../primer/" class="btn btn-neutral" title="A quick primer on C3"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../primer/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../changesfromc/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
