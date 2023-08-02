@@ -55,16 +55,21 @@ The macro capabilities of C3 reaches across several constructs: macros (prefixed
 ### Reference arguments
 
 Use `&` in front of a parameter to capture the variable and pass it by reference without having to explicitly use `&` and pass a pointer. 
-(Note that in C++ this is allowed for normal functions, whereas for C3 it is only permitted with macros.)
+(Note that in C++ this is allowed for normal functions, whereas for C3 it is only permitted with macros. Also, 
+in C3 the captured argument isn't automatically dereferenced)
 
     // C
     #define M(x, y) x = 2 * (y);
-    
+    ...
+    M(x, 3);
+
     // C3
-    macro m(int &x, int y)
+    macro m(&x, y)
     {
-        x = 2 * y;
+        *x = 2 * y;
     }
+    ...
+    m(x, 3);
 
 
 ### First class types
@@ -170,13 +175,13 @@ The parameters have different sigils: `$` means compile time evaluated (constant
 A basic swap:
 
     /**
-     * @checked a = b, b = a
+     * @checked *a = *b, *b = *a
      */
     macro void @swap(&a, &b)
     {
-        $typeof(a) temp = a;
-        a = b;
-        b = temp;
+        $typeof(*a) temp = *a;
+        *a = *b;
+        *b = temp;
     }
 
 This expands on usage like this:
@@ -234,9 +239,11 @@ Similar to regular *methods* a macro may also be associated with a particular ty
 
     struct Foo { ... }
     
-    macro Foo.generate(Foo *foo) { ... }
+    macro Foo.generate(&self) { ... }
     Foo f;
     f.generate();
+
+See the chapter on [functions](../functions) for more details.
 
 ## Capturing a trailing block
 

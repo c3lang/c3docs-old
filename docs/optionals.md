@@ -93,7 +93,7 @@ To assign it we have two options, `if-try` and implicit unwrap.
 
 ### If-try
 
-If-try tests an Optional and executes the "then" part if the value is contains a result.
+If-try tests an Optional and executes the "then" part if the value is a result.
 
     int! a = ...;
     int b;

@@ -37,6 +37,9 @@ Some details about the C3 module system:
 - Modules can be arbitrarily nested, e.g. `module foo::bar::baz;` to create the sub module baz in the sub module `bar` of the module `foo`.
 - Module names must be alphanumeric lower case letters plus the underscore character: `_`.
 - Module names are limited to 31 characters.
+- Modules may be spread across multiple files.
+- A single file may have multiple module declarations.
+- Each declaration of a distinct module is called a *module section*.
 
 ## Importing modules
 
@@ -230,8 +233,7 @@ fn void aBFunction() { ... }
 
 // File c.c3
 module c;
-import a;
-import b;
+import a, b;
 
 struct TheCStruct { ... }
 struct Bar { ... }
@@ -260,6 +262,32 @@ This means that the rule for the common case can be summarized as
 
 > Types are used without prefix; functions, variables, macros and constants are prefixed with the sub module name.
 
+
+## Module sections
+
+A single file may have multiple module declarations, even for the same module. This allows us to write
+for example:
+
+    // File foo.c3
+    module foo;
+    fn int hello_world()
+    {
+        return my_hello_world();
+    }
+    
+    module foo @private;
+    import std::io;         // The import is only visible in this section.
+    fn int my_hello_world() // @private by default
+    {
+        io::printn("Hello, world\n");
+        return 0;
+    }
+
+    module foo @test;
+    fn void test_hello() // @test by default
+    {
+        assert(hello_world() == 0);
+    }
 
 ## Versioning and dynamic inclusion
 

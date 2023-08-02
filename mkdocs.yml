@@ -7,6 +7,7 @@ nav:
     - Setup: 'setup.md'
     - Your first project: 'firstproject.md'
     - A quick primer on C3: 'primer.md'
+    - Feature list: 'allfeatures.md'
   - Documentation:
     - Changes from C: 'changesfromc.md'
     - Comparisons with other languages: 'compare.md'
@@ -33,7 +34,7 @@ nav:
     - Builtins: 'builtins.md'
     - Libraries: 'libraries.md'
     - Standard Library: 'standard_library.md'
-    - Crazy ideas: 'ideas.md'
+    - More ideas: 'ideas.md'
     - Naming rules: 'naming.md'
     - Comments & Docs: 'comments.md'
     - Attributes: 'attributes.md'

@@ -23,14 +23,30 @@ This defines an alias to function pointer type of a function that returns nothin
 ## Distinct types
 
 `def` may also be used to create distinct new types. Unlike type aliases,
-they do not implicitly convert to any other type.
+they do not implicitly convert to or from any other type.
+Literals will convert to the distinct types if they would convert to the underlying type.
 
     def Foo = distinct int;
-    Foo f = 0;
+    Foo f = 0; // Valid since 0 converts to an int.
     f = f + 1;
     int i = 1;
     // f = f + i Error!
     f = f + (Foo)i; // Valid
+
+## Distinct inline
+
+When interacting with various APIs it is sometimes desirable for distinct types to implicitly convert *to* 
+its base type, but not *from* that type.
+
+Behaviour here is analogous how structs may use `inline` to create struct subtypes.
+
+    def CString = distinct char*;
+    def ZString = distinct inline char*;
+    ...
+    CString abc = "abc";
+    ZString def = "def";
+    // char* from_abc = abc; // Error!
+    char* from_def = def; // Valid!
 
 ## Function and variable aliases
 
@@ -59,22 +75,22 @@ fn void test()
 
 ## Using `def` to create generic types, functions and variables
 
-Generic modules uses `def` to create aliases to parameterized types, functions 
+It is recommended to favour using `def` to create aliases for parameterized types, functions 
 and variables:
 
      import generic_foo;
 
      // Parameterized function aliases
-     def int_foo_call = generic_foo::foo_call<int>;
-     def double_foo_call = generic_foo::foo_call<double>;
+     def int_foo_call = generic_foo::foo_call(<int>);
+     def double_foo_call = generic_foo::foo_call(<double>);
   
      // Parameterized type aliases
-     def IntFoo = Foo<int>;
-     def DoubleFoo = Foo<double>;
+     def IntFoo = Foo(<int>);
+     def DoubleFoo = Foo(<double>);
 
      // Parameterized global aliases
-     def int_max_foo = generic_foo::max_foo<int>;
-     def double_max_foo = generic_foo::max_foo<double>;
+     def int_max_foo = generic_foo::max_foo(<int>);
+     def double_max_foo = generic_foo::max_foo(<double>);
 
 For more information, see the chapter on [generics](../generics).
 

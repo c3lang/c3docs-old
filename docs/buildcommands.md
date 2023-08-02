@@ -64,7 +64,7 @@ $ tree .
 
 Build the project in the current path. It doesn't matter where in the project structure you are. 
 
-The built in templates define two targets: `debug` (which is the default) and `release`.
+The built-in templates define two targets: `debug` (which is the default) and `release`.
 
 ## clean
 

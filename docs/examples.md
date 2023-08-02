@@ -527,7 +527,7 @@ Read more about compile time execution [here](../compiletime).
 Generic modules implements a generic system.
 
 ```
-module stack <Type>;
+module stack(<Type>);
 struct Stack
 {
     usz capacity;
@@ -561,8 +561,7 @@ fn bool Stack.empty(Stack* this)
 Testing it out:
 
 ```
-def IntStack = Stack<int>;
-def DoubleStack = Stack<double>;
+def IntStack = Stack(<int>);
 
 fn void test()
 {
@@ -574,7 +573,7 @@ fn void test()
     // Prints pop: 1
     io::printfn("pop: %d", stack.pop());
     
-    DoubleStack dstack;
+    Stack(<double>) dstack;
     dstack.push(2.3);
     dstack.push(3.141);
     dstack.push(1.1235);
