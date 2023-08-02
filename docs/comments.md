@@ -30,7 +30,7 @@ In the example above, the following is parsed as description: *"Here are the doc
 
 On top of that there are two annotations for the compiler: `@required foo > 4` which tells the compiler and a user of the function that a precondition is that `foo` must be greater than 4. It is also marked as @deprecated, which can be used to display warnings.
 
-Finally a custom annotation, "@mycustom" is added. The compiler is free to silently ignore such annotations, but can optionally emit warnings for them, it is otherwise ignored.
+Finally, a custom annotation, "@mycustom" is added. The compiler is free to silently ignore such annotations, but can optionally emit warnings for them, it is otherwise ignored.
  
 ### Available annotations
 

@@ -70,7 +70,7 @@ All signed integer arithmetics uses 2's complement.
 
 ##### Integer constants
 
-Integer constants are 1293832 or -918212. Without a suffix, suffix type is assumed to the signed integer of *arithmetic promotion width*. Adding the `u` suffix gives a unsigned integer of the same width. Use `ixx` and `uxx` – where `xx` is the bitwidth for typed integers, e.g. `1234u16`
+Integer constants are 1293832 or -918212. Without a suffix, suffix type is assumed to the signed integer of *arithmetic promotion width*. Adding the `u` suffix gives a unsigned integer of the same width. Use `ixx` and `uxx` – where `xx` is the bit width for typed integers, e.g. `1234u16`
 
 Integers may be written in decimal, but also
 
@@ -526,7 +526,7 @@ Bitstructs allows storing fields in a specific bit layout. A bitstruct may only 
 integer types and booleans, in most other respects it works like a struct.
 
 The main differences is that the bitstruct has a *backing type* and each field
-has a specific bit range. In addition it's not possible *to take the address* of a
+has a specific bit range. In addition, it's not possible *to take the address* of a
 bitstruct field.
 
     bitstruct Foo : char

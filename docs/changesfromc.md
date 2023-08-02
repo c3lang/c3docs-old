@@ -125,7 +125,7 @@ Empty `case` statements have implicit fall through in C3, otherwise the `nextcas
 
 In C global variables are implicitly zeroed out, but local variables aren't. In C3 local variables are zeroed out by default, but may be explicitly undefined to get the C behaviour.
 
-*Rationale: In the "zero-is-initialization" paradigm, zeroing variables, in particular structs, is very common. By offering zero initialization by default this avoids a whole class of vulnerabilites.
+*Rationale: In the "zero-is-initialization" paradigm, zeroing variables, in particular structs, is very common. By offering zero initialization by default this avoids a whole class of vulnerabilities.
 Another alternative that was considered for C3 was mandatory initialization,
 but this adds a lot of extra boilerplate. 
 C3 also offers a way to opt out of zero-initialization, so the change comes at no performance loss.*

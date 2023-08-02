@@ -22,7 +22,7 @@ Unlike C, fixed arrays do not decay into pointers, instead an `int[4]*` may be i
     foo(&x);
 
 
-When you want to initialize a fixed array without specififying the size, use the [*] array syntax:
+When you want to initialize a fixed array without specifying the size, use the [*] array syntax:
 
     int[3] a = { 1, 2, 3 };
     int[*] b = { 4, 5, 6 }; // Type inferred to be int[3]
@@ -44,7 +44,7 @@ The final type is the subarray `<type>[]`  e.g. `int[]`. A subarray is a view in
 
 ### Slicing arrays
 
-It's possible to use a range syntax to create subarrays from pointers, arrays, vararrays and other subarrays. The either use range syntax:
+It's possible to use a range syntax to create subarrays from pointers, arrays, vararrays and other subarrays. They either use range syntax:
 `arr[<start index>..<end index>]` (the end index is included in the final result) or start + len syntax: `arr[<start index> : len]`
 
     
