@@ -194,9 +194,9 @@
             <div class="section">
               
                 <h1 id="contracts">Contracts</h1>
-<p>Contracts are optional pre and post conditions checks that the compiler may use for optimization and runtime checks. Note that <em>compilers are not obliged to process pre and post conditions at all</em>. However, violating either pre or post conditions is considered undefined behaviour, so a compiler may optimize as if they always hold – even if a potential bug may cause them to be violated.</p>
+<p>Contracts are optional pre- and post-conditions checks that the compiler may use for optimization and runtime checks. Note that <em>compilers are not obliged to process pre- and post-conditions at all</em>. However, violating either pre- or post-conditions is considered undefined behaviour, so a compiler may optimize as if they always hold – even if a potential bug may cause them to be violated.</p>
 <h1 id="pre-conditions">Pre-conditions</h1>
-<p>Pre-conditions are usually used to validate incoming arguments. Each condition must be an expression that can be evaluated to a boolean. A pre condition use the <code>@require</code> annotation.</p>
+<p>Pre-conditions are usually used to validate incoming arguments. Each condition must be an expression that can be evaluated to a boolean. A pre-condition use the <code>@require</code> annotation.</p>
 <pre><code>/**
  * @require foo &gt; 0, foo &lt; 1000
  **/
@@ -302,7 +302,7 @@ fn void badFunc(int* i)
 }
 </code></pre>
 <h3 id="pure-in-detail">Pure in detail</h3>
-<p>The <code>pure</code> annotation allows a program to make assumtions in regards of how the function treats global variables. Unlike for <code>const</code>, a pure function is not allowed to call a function which is known to be impure.</p>
+<p>The <code>pure</code> annotation allows a program to make assumptions in regard to how the function treats global variables. Unlike for <code>const</code>, a pure function is not allowed to call a function which is known to be impure.</p>
 <p>However, just like for <code>const</code> the compiler might not detect whether the annotation is correct or not! This program might compile, but will behave strangely:</p>
 <pre><code>int i = 0;
 
@@ -347,7 +347,7 @@ fn void lyingFunc()
     badFunc(); // Error! Calling an impure function
 }
 </code></pre>
-<p>Consequently circumventing "pure" annotations is undefined behaviour.</p>
+<p>Consequently, circumventing "pure" annotations is undefined behaviour.</p>
 <h1 id="pre-conditions-for-macros">Pre conditions for macros</h1>
 <p>In order to check macros, it's often useful to use the builtin <code>$checks</code>
 function which returns true if the code inside would pass semantic checking.</p>

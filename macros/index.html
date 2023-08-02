@@ -390,7 +390,7 @@ macro fn check(#expr)
 <h2 id="top-level-evaluation">Top level evaluation</h2>
 <p>Script languages, and also upcoming languages like <em>Jai</em>, 
 usually have unbounded top level evaluation. 
-The flexibility of this style of meta programming has a trade off in making the code more challenging to understand. </p>
+The flexibility of this style of meta programming has a trade-off in making the code more challenging to understand. </p>
 <p>In C3, top level compile time evaluation is limited to <code>@if</code> attributes to conditionally enable or 
 disable declarations. This makes the code easier to read, but at the cost of expressive power.</p>
 <h2 id="macro-declarations">Macro declarations</h2>
@@ -534,7 +534,7 @@ macro squarePlusOne(x)
 <h2 id="macro-vaargs">Macro vaargs</h2>
 <p>Macros support the typed vaargs used by C3 functions: <code>macro void foo(int... args)</code> and <code>macro void bar(args...)</code> 
 but it also supports a unique set of macro vaargs that look like C style vaargs: <code>macro void baz(...)</code></p>
-<p>To access the arguments there is a family of $va-* built in functions to retrieve
+<p>To access the arguments there is a family of $va-* built-in functions to retrieve
 the arguments:</p>
 <pre><code>macro compile_time_sum(...)
 {

@@ -223,7 +223,7 @@ void bar(int foo)
 </code></pre>
 <p>In the example above, the following is parsed as description: <em>"Here are the docs."</em>, then there is a description associated with the <code>foo</code> parameter: <em>"The number of foos"</em>.</p>
 <p>On top of that there are two annotations for the compiler: <code>@required foo &gt; 4</code> which tells the compiler and a user of the function that a precondition is that <code>foo</code> must be greater than 4. It is also marked as @deprecated, which can be used to display warnings.</p>
-<p>Finally a custom annotation, "@mycustom" is added. The compiler is free to silently ignore such annotations, but can optionally emit warnings for them, it is otherwise ignored.</p>
+<p>Finally, a custom annotation, "@mycustom" is added. The compiler is free to silently ignore such annotations, but can optionally emit warnings for them, it is otherwise ignored.</p>
 <h3 id="available-annotations">Available annotations</h3>
 <table>
 <thead>

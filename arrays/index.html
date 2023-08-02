@@ -226,7 +226,7 @@ fn int foo(int *a) { ... }
 int x[3] = { 1, 2, 3 };
 foo(&amp;x);
 </code></pre>
-<p>When you want to initialize a fixed array without specififying the size, use the [*] array syntax:</p>
+<p>When you want to initialize a fixed array without specifying the size, use the [*] array syntax:</p>
 <pre><code>int[3] a = { 1, 2, 3 };
 int[*] b = { 4, 5, 6 }; // Type inferred to be int[3]
 </code></pre>
@@ -242,7 +242,7 @@ int* f = b; // Equivalent to e = &amp;a
 f = d; // implicit conversion ok.
 </code></pre>
 <h3 id="slicing-arrays">Slicing arrays</h3>
-<p>It's possible to use a range syntax to create subarrays from pointers, arrays, vararrays and other subarrays. The either use range syntax:
+<p>It's possible to use a range syntax to create subarrays from pointers, arrays, vararrays and other subarrays. They either use range syntax:
 <code>arr[&lt;start index&gt;..&lt;end index&gt;]</code> (the end index is included in the final result) or start + len syntax: <code>arr[&lt;start index&gt; : len]</code></p>
 <pre><code>int[5] a = { 1, 20, 50, 100, 200 };
 int[] b = a[0..4]; // The whole array as a slice.
