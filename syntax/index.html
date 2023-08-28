@@ -218,31 +218,33 @@ switch      true        try         union
 var         while
 </code></pre>
 <pre><code>$alignof    $assert     $case       $checks
-$default    $defined    $echo       $else
-$endfor     $endforeach $endif      $endswitch
-$eval       $evaltype   $error      $extnameof
-$for        $foreach    $if         $include
-$nameof     $offsetof   $qnameof    $sizeof
-$stringify  $switch     $typefrom   $typeof
-$vacount    $vatype     $vaconst    $varef
-$vaarg      $vaexpr     $vasplat
+$default    $defined    $echo       $exec
+$else       $endfor     $endforeach $endif      
+$endswitch  $eval       $evaltype   $error      
+$extnameof  $for        $foreach    $if         
+$include    $nameof     $offsetof   $qnameof    
+$sizeof     $stringify  $switch     $typefrom   
+$typeof     $vacount    $vatype     $vaconst    
+$varef      $vaarg      $vaexpr     $vasplat
 </code></pre>
 <p>The following attributes are built in:</p>
-<pre><code>@align      @bigendian  @builtin    @cdecl
-@deprecated @dynamic    @export     @extern
-@extname    @inline     @interface  @littleendian
-@local      @maydiscard @naked      @nodiscard
-@noinit     @noinline   @noreturn   @nostrip
-@obfuscate  @operator   @overlap    @packed
-@priority   @private    @public     @pure
-@reflect    @section    @stdcall    @test
-@unused     @used       @veccall    @wasm
-@weak       @winmain
+<pre><code>@align        @benchmark  @bigendian  @builtin
+@cdecl        @deprecated @dynamic    @export
+@extern       @extname    @inline     @interface
+@littleendian @local      @maydiscard @naked
+@nodiscard    @noinit     @noinline   @noreturn
+@nostrip      @obfuscate  @operator   @overlap
+@packed       @priority   @private    @public
+@pure         @reflect    @section    @stdcall
+@test         @unused     @used       @veccall
+@wasm         @weak       @winmain
 </code></pre>
 <p>The following constants are defined:</p>
-<pre><code>$$DATE      $$FILE      $$FILEPATH  $$FUNC
-$$FUNCTION  $$LINE      $$LINE_RAW  $$MODULE
-$$TIME      $$TEST_FNS  $$TEST_NAMES
+<pre><code>$$BENCHMARK_FNS  $$BENCHMARK_NAMES $$DATE
+$$FILE           $$FILEPATH        $$FUNC
+$$FUNCTION       $$LINE            $$LINE_RAW
+$$MODULE         $$TEST_FNS        $$TEST_NAMES
+$$TIME
 </code></pre>
 <h2 id="yacc-grammar">Yacc grammar</h2>
 <pre><code class="language-c">%{

@@ -163,6 +163,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#contracts">Contracts</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#benchmarking">Benchmarking</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#safe-fast">Safe / fast</a>
@@ -456,14 +458,14 @@
 <p>C3 adds a long range of attributes in the form <code>@name(...)</code>. It is possible to create custom 
 attribute groups using <code>def</code> (e.g. <code>def MyAttribute(usz align) = { @aligned(align) @weak };</code>) which
 groups certain attributes. Empty attribute groups are permitted.</p>
-<p>The complete list: <code>@align</code>, <code>@bigendian</code>, <code>@builtin</code>,
+<p>The complete list: <code>@align</code>, <code>@benchmark</code>, <code>@bigendian</code>, <code>@builtin</code>,
 <code>@callconv</code>, <code>@deprecated</code>, <code>@dynamic</code>, <code>@export</code>,
 <code>@extern</code>, <code>@if</code>, <code>@inline</code>, <code>@interface</code>,
-<code>@littleendian</code>, <code>@local</code>, <code>@maydiscard</code>,
-<code>@naked</code>, <code>@nodiscard</code>, <code>@noinit</code>,
-<code>@noreturn</code>, <code>@nostrip</code>, <code>@obfuscate</code>, <code>@operator</code>,
-<code>@overlap</code>, <code>@priority</code>, <code>@private</code>, <code>@public</code>, 
-<code>@pure</code>, <code>@reflect</code>, <code>@section</code>, <code>@test</code>, <code>@used</code>, <code>@unused</code>.</p>
+<code>@littleendian</code>, <code>@local</code>, <code>@maydiscard</code>, <code>@naked</code>,
+<code>@nodiscard</code>, <code>@noinit</code>, <code>@noreturn</code>, <code>@nostrip</code>,
+<code>@obfuscate</code>, <code>@operator</code>, <code>@overlap</code>, <code>@priority</code>,
+<code>@private</code>, <code>@public</code>, <code>@pure</code>, <code>@reflect</code>,
+<code>@section</code>, <code>@test</code>, <code>@used</code>, <code>@unused</code>.</p>
 <h2 id="declarations">Declarations</h2>
 <h3 id="added_5">Added</h3>
 <ol>
@@ -532,6 +534,7 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <li><code>$error</code> emits an error if encountered.</li>
 <li><code>$embed</code> includes a file as binary data.</li>
 <li><code>$include</code> includes a file as text.</li>
+<li><code>$exec</code> includes the output of a program as code.</li>
 <li><code>$evaltype</code> takes a compile time string and turns it into a type.</li>
 <li><code>$eval</code> takes a string and turns it into an identifier.</li>
 <li><code>$extnameof</code> turns an identifier into its string external name.</li>
@@ -618,6 +621,13 @@ but nonetheless provided unique functionality:</p>
 <li><code>@return!</code> optionally lists the errors used. This will be checked at compile time.</li>
 <li><code>@checked</code> does a compile time check that the expression is valid, this is used with macros and generic modules.</li>
 <li><code>@pure</code> says that no writing to globals is allowed inside and only <code>@pure</code> functions may be called.</li>
+</ol>
+<h2 id="benchmarking">Benchmarking</h2>
+<ol>
+<li>Benchmarks are indicated by <code>@benchmark</code>.</li>
+<li>Marking a module section <code>@benchmark</code> makes all functions inside of it implicitly benchmarks.</li>
+<li>Benchmarks are usually not compiled.</li>
+<li>Benchmarks are instead only run by the compiler on request.</li>
 </ol>
 <h2 id="testing">Testing</h2>
 <ol>

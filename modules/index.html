@@ -97,6 +97,12 @@
     <li class="toctree-l2"><a class="reference internal" href="#versioning-and-dynamic-inclusion">Versioning and dynamic inclusion</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#textual-includes">Textual includes</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#include">$include</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#exec">$exec</a>
+    </li>
+        </ul>
     </li>
     </ul>
                     </li>
@@ -510,6 +516,7 @@ fn void testme2()
 </code></pre>
 <p>This allows things like optionally loading dynamic libraries on the platforms where this is available.</p>
 <h2 id="textual-includes">Textual includes</h2>
+<h3 id="include">$include</h3>
 <p>It's sometimes useful to include an entire file, doing so employs the <code>$include</code> function.
 Includes are only valid at the top level.</p>
 <p>File <code>Foo.c3</code></p>
@@ -542,6 +549,23 @@ fn void test()
 }    
 </code></pre>
 <p>The include may use an absolute or relative path, the relative path is always relative to the source file in which the include appears.</p>
+<p>Note that to use it, the <strong>trust level</strong> of the compiler must be set to at least 2 with
+the -t option (i.e. use <code>-t2</code> or <code>-t3</code> from the command line).</p>
+<h3 id="exec">$exec</h3>
+<p>An alternative to <code>$include</code> is <code>$exec</code> which is similar to include, but instead includes the output of an external
+program as the included text.</p>
+<p>An example:</p>
+<pre><code class="language-c">import std::io;
+
+// On Linux or MacOS this will insert 'String a = &quot;Hello world!&quot;;'
+$exec(&quot;echo&quot;, &quot;String a = \\\&quot;Hello world!\\\&quot;\\;&quot;);
+
+fn void main()
+{
+    io::printn(a);
+}
+</code></pre>
+<p>Using <code>$exec</code> requires <strong>trust level 3</strong>, which is enabled with <code>-t3</code> from the command line.</p>
               
             </div>
           </div>

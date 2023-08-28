@@ -1682,6 +1682,10 @@ statements (<code>$if</code>, <code>$switch</code>,
 <td>fn, const, variables, user-defined types, struct member</td>
 </tr>
 <tr>
+<td>@benchmark</td>
+<td>module, fn</td>
+</tr>
+<tr>
 <td>@bigendian</td>
 <td>bitstruct only</td>
 </tr>
@@ -1847,6 +1851,8 @@ opt_generic_params ::= &quot;(&lt;&quot; generic_param (&quot;,&quot; generic_pa
 </code></pre>
 <p>Any visibility attribute defined in a <strong>module section</strong> will be the default visibility in all
 declarations in the section.</p>
+<p>If the <code>@benchmark</code> attribute is applied to the <strong>module section</strong> then all function declarations
+will implicitly have the <code>@benchmark</code> attribute.</p>
 <p>If the <code>@test</code> attribute is applied to the <strong>module section</strong> then all function declarations
 will implicitly have the <code>@test</code> attribute.</p>
               
