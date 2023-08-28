@@ -172,14 +172,14 @@ C3 adds a long range of attributes in the form `@name(...)`. It is possible to c
 attribute groups using `def` (e.g. `def MyAttribute(usz align) = { @aligned(align) @weak };`) which
 groups certain attributes. Empty attribute groups are permitted.
 
-The complete list: `@align`, `@bigendian`, `@builtin`,
+The complete list: `@align`, `@benchmark`, `@bigendian`, `@builtin`,
 `@callconv`, `@deprecated`, `@dynamic`, `@export`,
 `@extern`, `@if`, `@inline`, `@interface`,
-`@littleendian`, `@local`, `@maydiscard`,
-`@naked`, `@nodiscard`, `@noinit`,
-`@noreturn`, `@nostrip`, `@obfuscate`, `@operator`,
-`@overlap`, `@priority`, `@private`, `@public`, 
-`@pure`, `@reflect`, `@section`, `@test`, `@used`, `@unused`.
+`@littleendian`, `@local`, `@maydiscard`, `@naked`,
+`@nodiscard`, `@noinit`, `@noreturn`, `@nostrip`,
+`@obfuscate`, `@operator`, `@overlap`, `@priority`,
+`@private`, `@public`, `@pure`, `@reflect`,
+`@section`, `@test`, `@used`, `@unused`.
 
 ## Declarations
 
@@ -340,6 +340,13 @@ but nonetheless provided unique functionality:
 9. `@return!` optionally lists the errors used. This will be checked at compile time.
 10. `@checked` does a compile time check that the expression is valid, this is used with macros and generic modules.
 11. `@pure` says that no writing to globals is allowed inside and only `@pure` functions may be called.
+
+## Benchmarking
+
+1. Benchmarks are indicated by `@benchmark`.
+2. Marking a module section `@benchmark` makes all functions inside of it implicitly benchmarks.
+3. Benchmarks are usually not compiled.
+4. Benchmarks are instead only run by the compiler on request.
 
 ## Testing
 

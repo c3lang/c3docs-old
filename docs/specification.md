@@ -1535,13 +1535,14 @@ Attributes are modifiers attached to modules, variables, type declarations etc.
 | name          | used with                                                                         |
 |---------------|-----------------------------------------------------------------------------------|
 | @align        | fn, const, variables, user-defined types, struct member                           |
+| @benchmark    | module, fn                                                                        |
 | @bigendian    | bitstruct only                                                                    |
 | @builtin      | macro, fn, global, constant                                                       |
 | @callconv     | fn, call                                                                          |
 | @deprecated   | fn, macro, variables, constants, user-defined types, struct member                |
 | @dynamic      | fn                                                                                |
 | @export       | fn, globals, constants, struct, union, enum, fault                                |
-| @extern       | fn, globals, constants, user-defined types                                        |         
+| @extern       | fn, globals, constants, user-defined types                                        |
 | @if           | all except local variables and calls                                              |
 | @inline       | fn, call                                                                          |
 | @interface    | fn                                                                                |
@@ -1617,6 +1618,9 @@ opt_generic_params ::= "(<" generic_param ("," generic_param)* ">)"
 
 Any visibility attribute defined in a **module section** will be the default visibility in all
 declarations in the section.
+
+If the `@benchmark` attribute is applied to the **module section** then all function declarations
+will implicitly have the `@benchmark` attribute.
 
 If the `@test` attribute is applied to the **module section** then all function declarations
 will implicitly have the `@test` attribute.

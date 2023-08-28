@@ -7,6 +7,12 @@ name prefix.
 
 These can all safely be used by the user.
 
+#### $$BENCHMARK_NAMES
+An array of names of the benchmark functions.
+
+#### $$BENCHMARK_FNS
+An array of addresses to the benchmark functions.
+
 #### $$DATE
 The current date.
 
@@ -32,16 +38,8 @@ the line where the macro was included.
 #### $$MODULE
 The current module name.
 
-#### $$TEST_NAMES
-An array of names of the test functions.
-
-#### $$TEST_FNS
-An array of addresses to the test functions.
-
 #### $$TIME
 The current time.
-
-
 
 
 ## Builtin functions
