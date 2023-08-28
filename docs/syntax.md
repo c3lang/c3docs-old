@@ -26,14 +26,14 @@ var         while
 
 ```
 $alignof    $assert     $case       $checks
-$default    $defined    $echo       $else
-$endfor     $endforeach $endif      $endswitch
-$eval       $evaltype   $error      $extnameof
-$for        $foreach    $if         $include
-$nameof     $offsetof   $qnameof    $sizeof
-$stringify  $switch     $typefrom   $typeof
-$vacount    $vatype     $vaconst    $varef
-$vaarg      $vaexpr     $vasplat
+$default    $defined    $echo       $exec
+$else       $endfor     $endforeach $endif      
+$endswitch  $eval       $evaltype   $error      
+$extnameof  $for        $foreach    $if         
+$include    $nameof     $offsetof   $qnameof    
+$sizeof     $stringify  $switch     $typefrom   
+$typeof     $vacount    $vatype     $vaconst    
+$varef      $vaarg      $vaexpr     $vasplat
 ```
 
 The following attributes are built in:

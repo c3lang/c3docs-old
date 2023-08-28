@@ -354,6 +354,8 @@ This allows things like optionally loading dynamic libraries on the platforms wh
 
 ## Textual includes
 
+### $include
+
 It's sometimes useful to include an entire file, doing so employs the `$include` function.
 Includes are only valid at the top level.
 
@@ -396,5 +398,25 @@ fn void test()
 
 The include may use an absolute or relative path, the relative path is always relative to the source file in which the include appears.
 
+Note that to use it, the **trust level** of the compiler must be set to at least 2 with
+the -t option (i.e. use `-t2` or `-t3` from the command line).
 
+### $exec
 
+An alternative to `$include` is `$exec` which is similar to include, but instead includes the output of an external
+program as the included text.
+
+An example:
+```c
+import std::io;
+
+// On Linux or MacOS this will insert 'String a = "Hello world!";'
+$exec("echo", "String a = \\\"Hello world!\\\"\\;");
+
+fn void main()
+{
+	io::printn(a);
+}
+```
+
+Using `$exec` requires **trust level 3**, which is enabled with `-t3` from the command line.
