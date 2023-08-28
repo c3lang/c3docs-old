@@ -4,7 +4,7 @@ Here is an extremely brief (and not yet complete) overview.
 
 ## C
 
-As C3 is an evolution of C, the languages are quite similar. 
+As C3 is an evolution of C, the languages are quite similar.
 C3 adds features, but also removes a few.
 
 ##### In C3 but not in C
@@ -31,13 +31,13 @@ C3 adds features, but also removes a few.
 ## C++
 
 C++ is a complex object oriented "almost superset" of C. It tries to be everything to everyone,
-while squeezing this into a C syntax. The language is well known for its 
+while squeezing this into a C syntax. The language is well known for its
 many pitfalls and quirky corners – as well as its long compile times.
 
-C3 is in many ways different from C++ in the same way that C is different from C++, 
+C3 is in many ways different from C++ in the same way that C is different from C++,
 but the semantic macro system and the generics close the gap in terms of writing
 reusable generic code. The C3 module system and error handling is also very
-different from how C++ does things. 
+different from how C++ does things.
 
 ##### In C++ but not in C3
 
@@ -90,8 +90,8 @@ but they are not built in. Subarrays are the same as Rust's slices.
 Zig is a systems programming language with extensive compile time execution to
 enable polymorphic functions and parameterized types. It aims to be a C replacement.
 
-Compared to C3, Zig tries to be a completely new language in terms of syntax and feel. 
-C3 uses macros to a modest degree where it is more pervasive in Zig, and 
+Compared to C3, Zig tries to be a completely new language in terms of syntax and feel.
+C3 uses macros to a modest degree where it is more pervasive in Zig, and
 does not depart from C to the same degree. Like Rust, it features slices as a first
 class type. The standard library uses an explicit allocator to allow it to work
 with many different allocation strategies.
@@ -107,7 +107,6 @@ possible.
 - Different syntax and behaviour compared to C.
 - Structs define namespace.
 - Async primitives built in.
-- Built in unit tests.
 - Arbitrarily integer sizes.
 
 ##### In C3 but not in Zig
@@ -118,6 +117,7 @@ possible.
 - Optional contracts.
 - Familiar C syntax and behaviour.
 - Dynamic calls
+- Built in benchmarks.
 
 ## Jai
 
@@ -151,7 +151,7 @@ a simple language to learn. Superficially the syntax shares much with
 Jai, and some of Jai's features things – like an implicit context – also shows up
 in Odin. In contrast with both Jai and Zig, Odin uses only minimal compile time evaluation
 and instead only relies on parametric polymorphism to ensure reuse.
-It also contains conveniences, like maps and arrays built into 
+It also contains conveniences, like maps and arrays built into
 the language. For error handling it relies on Go style tuple returns.
 
 ##### In Odin but not in C3
@@ -169,10 +169,9 @@ the language. For error handling it relies on Go style tuple returns.
 - Optional contracts
 - Error handling support
 
-
 ## D
 
-D is a *huge* language. Where C++ is big, D provides all that C++ does and adds anything 
+D is a *huge* language. Where C++ is big, D provides all that C++ does and adds anything
 else you might think of. There is very little you can't do in D that isn't supported
 one way or the other. The most impressive thing is that D does this with fewer syntactic quirks than C++.
 

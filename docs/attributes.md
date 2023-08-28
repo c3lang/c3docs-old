@@ -8,6 +8,11 @@ Attributes are compile-time annotations on functions, types, global constants an
 
 This attribute sets the minimum alignment for a field or a variable.
 
+### `@benchmark` (fn)
+
+Marks the function as a benchmark function. Will be added to the list of benchmark functions when the benchmarks are run,
+otherwise the function will not be included in the compilation.
+
 ### `@bigendian` (bitstruct)
 
 Lays out the bits as if the data was stored in a big endian type, regardless of host system endianness.

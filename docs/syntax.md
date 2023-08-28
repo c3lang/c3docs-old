@@ -38,23 +38,25 @@ $vaarg      $vaexpr     $vasplat
 
 The following attributes are built in:
 ```
-@align      @bigendian  @builtin    @cdecl
-@deprecated @dynamic    @export     @extern
-@extname    @inline     @interface  @littleendian
-@local      @maydiscard @naked      @nodiscard
-@noinit     @noinline   @noreturn   @nostrip
-@obfuscate  @operator   @overlap    @packed
-@priority   @private    @public     @pure
-@reflect    @section    @stdcall    @test
-@unused     @used       @veccall    @wasm
-@weak       @winmain
+@align        @benchmark  @bigendian  @builtin
+@cdecl        @deprecated @dynamic    @export
+@extern       @extname    @inline     @interface
+@littleendian @local      @maydiscard @naked
+@nodiscard    @noinit     @noinline   @noreturn
+@nostrip      @obfuscate  @operator   @overlap
+@packed       @priority   @private    @public
+@pure         @reflect    @section    @stdcall
+@test         @unused     @used       @veccall
+@wasm         @weak       @winmain
 ```
 
 The following constants are defined:
 ```
-$$DATE      $$FILE      $$FILEPATH  $$FUNC
-$$FUNCTION  $$LINE      $$LINE_RAW  $$MODULE
-$$TIME      $$TEST_FNS  $$TEST_NAMES
+$$BENCHMARK_FNS  $$BENCHMARK_NAMES $$DATE
+$$FILE           $$FILEPATH        $$FUNC
+$$FUNCTION       $$LINE            $$LINE_RAW
+$$MODULE         $$TEST_FNS        $$TEST_NAMES
+$$TIME
 ```
 
 ## Yacc grammar
