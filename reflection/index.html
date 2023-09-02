@@ -106,6 +106,8 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#type-properties">Type properties</a>
         <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#alignof">alignof</a>
+    </li>
     <li class="toctree-l4"><a class="reference internal" href="#associated">associated</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#elements">elements</a>
@@ -128,6 +130,8 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#params">params</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#parentof">parentof</a>
+    </li>
     <li class="toctree-l4"><a class="reference internal" href="#returns">returns</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#sizeof">sizeof</a>
@@ -140,7 +144,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#compile-time-functions">Compile time functions</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#alignof">$alignof</a>
+    <li class="toctree-l3"><a class="reference internal" href="#alignof_1">$alignof</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#checks">$checks</a>
     </li>
@@ -266,11 +270,13 @@
 <h3 id="type-properties">Type properties</h3>
 <p>It is possible to access properties on the type itself:</p>
 <ul>
+<li><code>alignof</code></li>
 <li><code>associated</code></li>
 <li><code>elements</code></li>
+<li><code>extnameof</code></li>
 <li><code>inf</code></li>
 <li><code>inner</code></li>
-<li><code>kind</code></li>
+<li><code>kindof</code></li>
 <li><code>len</code></li>
 <li><code>max</code></li>
 <li><code>membersof</code></li>
@@ -278,11 +284,22 @@
 <li><code>nan</code></li>
 <li><code>names</code></li>
 <li><code>params</code></li>
+<li><code>parentof</code></li>
+<li><code>qnameof</code></li>
 <li><code>returns</code></li>
 <li><code>sizeof</code></li>
 <li><code>typeid</code></li>
 <li><code>values</code></li>
 </ul>
+<h4 id="alignof">alignof</h4>
+<p>Returns the alignment in bytes needed for the type.</p>
+<pre><code>struct Foo @align(8)
+{
+    int a;
+}
+
+uint a = Foo.alignof; // 8
+</code></pre>
 <h4 id="associated">associated</h4>
 <p><em>Only available for enums.</em>
 Returns an array containing the types of associated values if any.</p>
@@ -310,10 +327,10 @@ int x = FooEnum.elements; // 2
 <ul>
 <li>Array -&gt; the array base type.</li>
 <li>Bitstruct -&gt; underlying base type.</li>
+<li>Distinct -&gt; the underlying type.</li>
 <li>Enum -&gt; underlying enum base type.</li>
 <li>Pointer -&gt; the type being pointed to.</li>
 <li>Vector -&gt; the vector base type.</li>
-<li>Distinct -&gt; the underlying type.</li>
 </ul>
 <p>It is not defined for other types.</p>
 <h4 id="kindof">kindof</h4>
@@ -329,9 +346,9 @@ int x = FooEnum.elements; // 2
 <pre><code>ushort max_ushort = ushort.max; // 65535
 </code></pre>
 <h4 id="membersof">membersof</h4>
-<p><em>Only available for struct and union types.</em></p>
-<p>Returns an array containing the fields in a struct or enum. The
-elements have the <em>compile time only</em> type of <code>member_ref</code>, </p>
+<p><em>Only available for bitstruct, struct and union types.</em></p>
+<p>Returns an array containing the fields in a bitstruct, struct or union. The
+elements have the <em>compile time only</em> type of <code>member_ref</code>,</p>
 <pre><code>struct Baz
 {
     int x;
@@ -339,7 +356,7 @@ elements have the <em>compile time only</em> type of <code>member_ref</code>, </
 }
 String x = Baz.membersof[1].nameof; // "z"
 </code></pre>
-<p>A <code>member_ref</code> has properties <code>nameof</code>, <code>typeid</code>, <code>offsetof</code>, <code>alignof</code>, <code>kindof</code>, <code>sizeof</code> and <code>membersof</code>.</p>
+<p>A <code>member_ref</code> has properties <code>alignof</code>, <code>kindof</code>, <code>membersof</code>, <code>nameof</code>, <code>offsetof</code>, <code>sizeof</code> and <code>typeid</code>.</p>
 <h4 id="min">min</h4>
 <p>Returns the minimum value of the type (only valid for integer and float types).</p>
 <pre><code>ichar min_ichar = ichar.min; // -128
@@ -358,6 +375,21 @@ String[] x = FooEnum.names; // ["BAR", "BAZ"]
 Returns a list typeid for all parameters.</p>
 <pre><code>def TestFunc = fn int(int, double);
 String s = TestFunc.params[1].nameof; // "double"
+</code></pre>
+<h4 id="parentof">parentof</h4>
+<p><em>Only available for bitstruct and struct types.</em>
+Returns the typeid of the parent type.</p>
+<pre><code>struct Foo
+{
+    int a;
+}
+
+struct Bar
+{
+    inline Foo f;
+}
+
+String x = Bar.parentof.nameof; // "Foo"
 </code></pre>
 <h4 id="returns">returns</h4>
 <p><em>Only available for function types.</em>
@@ -398,7 +430,7 @@ String x = FooEnum.values[1].nameof; // "BAR"
 <li><code>$stringify</code></li>
 <li><code>$typeof</code></li>
 </ul>
-<h3 id="alignof">$alignof</h3>
+<h3 id="alignof_1">$alignof</h3>
 <p>Returns the alignment in bytes needed for the type or member.</p>
 <pre><code>module test::bar;
 
