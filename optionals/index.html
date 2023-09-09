@@ -126,7 +126,7 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#implicit-void-conversions">Implicit void! conversions</a>
+    <li class="toctree-l2"><a class="reference internal" href="#no-void-variables">No void! variables</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a>
         <ul>
@@ -400,11 +400,11 @@ if (catch a)
 int b = a;
 </code></pre>
 <h3 id="getting-the-fault-without-unwrapping">Getting the fault without unwrapping</h3>
-<p>If-catch is not necessary in order to get the underlying fault from any Optional. Instead the macro <code>@catchof</code> 
+<p>If-catch is not necessary in order to get the underlying fault from any Optional. Instead the macro <code>@catch</code> 
 may be used.</p>
 <pre><code>int! a = ...
 
-anyfault f = @catchof(a);
+anyfault f = @catch(a);
 
 if (!f)
 {
@@ -443,11 +443,11 @@ if (!f)
 </code></pre>
 <h3 id="testing-for-a-result-without-unwrapping">Testing for a result without unwrapping</h3>
 <p>The <code>@ok</code> macro will return <code>true</code> is an Optional is a result and <code>false</code>
-it is a fault. Functionally it is equivalent to <code>!@catchof</code></p>
+it is a fault. Functionally it is equivalent to <code>!@catch</code></p>
 <pre><code>int! a = ...
 
 bool was_ok = @ok(a);
-assert(was_ok == !@catchof(a));
+assert(was_ok == !@catch(a));
 </code></pre>
 <h2 id="fault-and-anyfault"><code>fault</code> and <code>anyfault</code></h2>
 <p>Faults are defined similar to simple enums:</p>
@@ -526,14 +526,14 @@ if (catch f = a)
 <p>The force unwrap operator <code>!!</code> allows us to express this similar to rethrow and or-else:</p>
 <pre><code>int a = foo_may_error()!!;
 </code></pre>
-<h2 id="implicit-void-conversions">Implicit void! conversions</h2>
-<p>The <code>void!</code> type has no possible representation as a variable. For this reason <code>void!</code> may
-only be a return type. However, <code>void!</code> will always implicitly convert into an <code>anyfault</code>:</p>
+<h2 id="no-void-variables">No void! variables</h2>
+<p>The <code>void!</code> type has no possible representation as a variable, and may
+only be a return type. To store the result of a <code>void!</code> function,
+one can use the <code>@catch</code> macro to convert the result to
+an <code>anyfault</code>:</p>
 <pre><code>fn void! test() { ... }
 
-anyfault f = test();
-// The above is has the same meaning as:
-anyfault g = @catchof(test());
+anyfault f = @catch(test());
 </code></pre>
 <h2 id="examples">Examples</h2>
 <h4 id="basic-usage-with-immediate-error-handling">Basic usage with immediate error handling</h4>
@@ -657,7 +657,7 @@ variable:</p>
 <pre><code>fn void test_catch()
 {
     int! i = get_something();
-    anyfault maybe_fault = @catchof(i);
+    anyfault maybe_fault = @catch(i);
     if (maybe_fault)
     {
         // Do something with the fault
