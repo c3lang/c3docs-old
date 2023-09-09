@@ -1,5 +1,9 @@
 # Change log
 
+##### Revision 2023-09-09
+- Removal of implicit void! -> anyfault conversion.
+- Change `@catchof` to `@catch`.
+
 ##### Revision 2023-07-22
 - Feature list.
 - Macro ref parameter update.

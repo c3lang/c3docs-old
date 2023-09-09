@@ -162,12 +162,12 @@ the variable becomes implicit unwrapped to its result type in that scope:
 
 ### Getting the fault without unwrapping
 
-If-catch is not necessary in order to get the underlying fault from any Optional. Instead the macro `@catchof` 
+If-catch is not necessary in order to get the underlying fault from any Optional. Instead the macro `@catch` 
 may be used.
 
     int! a = ...
 
-    anyfault f = @catchof(a);
+    anyfault f = @catch(a);
 
     if (!f)
     {
@@ -211,12 +211,12 @@ The above being equivalent to:
 ### Testing for a result without unwrapping
 
 The `@ok` macro will return `true` is an Optional is a result and `false`
-it is a fault. Functionally it is equivalent to `!@catchof`
+it is a fault. Functionally it is equivalent to `!@catch`
 
     int! a = ...
 
     bool was_ok = @ok(a);
-    assert(was_ok == !@catchof(a));
+    assert(was_ok == !@catch(a));
 
 ## `fault` and `anyfault`
 
@@ -312,16 +312,16 @@ The force unwrap operator `!!` allows us to express this similar to rethrow and 
 
     int a = foo_may_error()!!;
 
-## Implicit void! conversions
+## No void! variables
 
-The `void!` type has no possible representation as a variable. For this reason `void!` may
-only be a return type. However, `void!` will always implicitly convert into an `anyfault`:
+The `void!` type has no possible representation as a variable, and may
+only be a return type. To store the result of a `void!` function,
+one can use the `@catch` macro to convert the result to
+an `anyfault`:
 
     fn void! test() { ... }
 
-    anyfault f = test();
-    // The above is has the same meaning as:
-    anyfault g = @catchof(test()); 
+    anyfault f = @catch(test());
 
 ## Examples
 
@@ -473,7 +473,7 @@ fn void do_something_to_file()
     fn void test_catch()
     {
         int! i = get_something();
-        anyfault maybe_fault = @catchof(i);
+        anyfault maybe_fault = @catch(i);
         if (maybe_fault)
         {
             // Do something with the fault
