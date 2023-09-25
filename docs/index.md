@@ -12,7 +12,7 @@ Binaries are directly downloadable for the following platforms:
 
 - Windows x64 [download](https://github.com/c3lang/c3c/releases/download/latest/c3-windows.zip), [install instructions](https://github.com/c3lang/c3c#installing-on-windows-with-precompiled-binaries).
 - Debian x64 [download](https://github.com/c3lang/c3c/releases/download/latest/c3-linux.tar.gz), [install instructions](https://github.com/c3lang/c3c#installing-on-debian-with-precompiled-binaries).
-- MacOS x64 [download](https://github.com/c3lang/c3c/releases/download/untagged-6fcf1b0c7b17361947ce/c3-macos.zip), [install instructions](https://github.com/c3lang/c3c#installing-on-mac-with-precompiled-binaries).
+- MacOS x64 [download](https://github.com/c3lang/c3c/releases/download/latest/c3-macos.zip), [install instructions](https://github.com/c3lang/c3c#installing-on-mac-with-precompiled-binaries).
 
 Last updated: [Revision 2023-09-09](changes).
 
