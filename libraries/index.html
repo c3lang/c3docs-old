@@ -247,9 +247,9 @@ as well as any files in the target subdirectory for the current target. For stat
 typically a <code>.c3i</code> file (that is, a C3 file without any implementations) is provided, similar to
 how .h files are used in C.</p>
 <h3 id="additional-actions">Additional actions</h3>
-<p><code>"execs"</code>, which is available both at the top level and per-target, lists the scripts which will be
-invoked when a library is used. This requires running the compiler at <strong>trust level 3</strong> using the 
-<code>-t3</code> option.</p>
+<p><code>"exec"</code>, which is available both at the top level and per-target, lists the scripts which will be
+invoked when a library is used. This requires running the compiler at <strong>full trust level</strong> using the 
+<code>--trust=full</code> option.</p>
 <h2 id="how-to-automatically-export-libraries">How to – automatically – export libraries</h2>
 <p><em>This is not implemented yet, docs will materialize once it is finished</em></p>
               

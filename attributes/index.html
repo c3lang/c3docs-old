@@ -146,7 +146,11 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#extern-fn-global-const-enum-union-struct-fault">@extern (fn, global, const, enum, union, struct, fault)</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#finalizer-function">@finalizer (function)</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#if-all-declarations">@if (all declarations)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#init-function">@init (function)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#inline-fn-call">@inline (fn, call)</a>
     </li>
@@ -175,8 +179,6 @@
     <li class="toctree-l3"><a class="reference internal" href="#overlap-bitstruct">@overlap (bitstruct)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#packed-struct-union">@packed (struct, union)</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#priority-initializer-finalizer">@priority (initializer, finalizer)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#private-any-declaration">@private (any declaration)</a>
     </li>
@@ -294,9 +296,18 @@ The attribute takes an optional string value, which is the external name. This a
 added with that name.</p>
 <h3 id="extern-fn-global-const-enum-union-struct-fault"><code>@extern</code> (fn, global, const, enum, union, struct, fault)</h3>
 <p>Sets the external (linkage) name of this declaration.</p>
+<h3 id="finalizer-function"><code>@finalizer</code> (function)</h3>
+<p>Make this function run at shutdown. See <code>@init</code> for the optional priority. Note that running a
+finalizer is a "best effort" attempt by the OS. During abnormal termination it is not guaranteed to run.</p>
+<p>The function must be a void function taking no arguments.</p>
 <h3 id="if-all-declarations"><code>@if</code> (all declarations)</h3>
 <p>Conditionally includes the declaration in the compilation. It takes a constant compile time value argument, if this
 value is <code>true</code> then the declaration is retained, on false it is removed.</p>
+<h3 id="init-function"><code>@init</code> (function)</h3>
+<p>Make this function run at startup before main. It has an optional priority 1 - 65535, with lower
+being executed earlier. It is not recommended to use values less than 128 as they are generally
+reserved and using them may interfere with standard program initialization.</p>
+<p>The function must be a void function taking no arguments.</p>
 <h3 id="inline-fn-call"><code>@inline</code> (fn, call)</h3>
 <p>Declares a function to always be inlined or if placed on a call, that the call should be inlined.</p>
 <h3 id="interface-any-method"><code>@interface</code> (<code>any</code> method)</h3>
@@ -332,9 +343,6 @@ By implementing <code>[]</code> and <code>len</code>, <code>foreach</code> and <
 <h3 id="packed-struct-union"><code>@packed</code> (struct, union)</h3>
 <p>Causes all members to be packed as if they had alignment 1. The alignment of the struct/union is set to 1.
 This alignment can be overridden with <code>@align</code>.</p>
-<h3 id="priority-initializer-finalizer"><code>@priority</code> (initializer, finalizer)</h3>
-<p>This sets the priority of static initializers and finalizers, the lower the earlier. It is not recommended to use
-values less than 128 as they are generally reserved.</p>
 <h3 id="private-any-declaration"><code>@private</code> (any declaration)</h3>
 <p>Sets the visibility to "private", which means it is visible in the same module, but not from other modules.</p>
 <h3 id="pure-call"><code>@pure</code> (call)</h3>

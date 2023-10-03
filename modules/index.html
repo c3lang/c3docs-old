@@ -101,6 +101,10 @@
     <li class="toctree-l3"><a class="reference internal" href="#include">$include</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#exec">$exec</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#exec-scripting">$exec scripting</a>
+    </li>
+        </ul>
     </li>
         </ul>
     </li>
@@ -550,7 +554,7 @@ fn void test()
 </code></pre>
 <p>The include may use an absolute or relative path, the relative path is always relative to the source file in which the include appears.</p>
 <p>Note that to use it, the <strong>trust level</strong> of the compiler must be set to at least 2 with
-the -t option (i.e. use <code>-t2</code> or <code>-t3</code> from the command line).</p>
+the --trust option (i.e. use <code>--trust=include</code> or <code>--trust=full</code> from the command line).</p>
 <h3 id="exec">$exec</h3>
 <p>An alternative to <code>$include</code> is <code>$exec</code> which is similar to include, but instead includes the output of an external
 program as the included text.</p>
@@ -565,7 +569,23 @@ fn void main()
     io::printn(a);
 }
 </code></pre>
-<p>Using <code>$exec</code> requires <strong>trust level 3</strong>, which is enabled with <code>-t3</code> from the command line.</p>
+<p>Using <code>$exec</code> requires <strong>full trust level</strong>, which is enabled with <code>-trust=full</code> from the command line.</p>
+<p>'$exec' will by default run from the <code>/scripts</code> directory for projects, for non-project builds,
+the current directory is used as well.</p>
+<h4 id="exec-scripting">$exec scripting</h4>
+<p><code>$exec</code> allows a special scripting mode, where one or more C3 files are compiled on the fly and 
+run by <code>$exec</code>.</p>
+<pre><code class="language-c">import std::io;
+
+// Compile foo.c3 and bar.c3 in the /scripts directory, invoke the resulting binary
+// with the argument 'test'
+$exec(&quot;foo.c3;bar.c3&quot;, &quot;test&quot;);
+
+fn void main()
+{
+    ...
+}
+</code></pre>
               
             </div>
           </div>
