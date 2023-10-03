@@ -1,5 +1,9 @@
 # Change log
 
+##### Revision 2023-10-03
+- `exec` and `$exec`
+- change of `static initializer`
+
 ##### Revision 2023-09-09
 - Removal of implicit void! -> anyfault conversion.
 - Change `@catchof` to `@catch`.

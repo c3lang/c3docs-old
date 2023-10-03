@@ -14,7 +14,7 @@ Binaries are directly downloadable for the following platforms:
 - Debian x64 [download](https://github.com/c3lang/c3c/releases/download/latest/c3-linux.tar.gz), [install instructions](https://github.com/c3lang/c3c#installing-on-debian-with-precompiled-binaries).
 - MacOS x64 [download](https://github.com/c3lang/c3c/releases/download/latest/c3-macos.zip), [install instructions](https://github.com/c3lang/c3c#installing-on-mac-with-precompiled-binaries).
 
-Last updated: [Revision 2023-09-09](changes).
+Last updated: [Revision 2023-10-03](changes).
 
 ## Features
 

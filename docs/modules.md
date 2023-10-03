@@ -399,7 +399,7 @@ fn void test()
 The include may use an absolute or relative path, the relative path is always relative to the source file in which the include appears.
 
 Note that to use it, the **trust level** of the compiler must be set to at least 2 with
-the -t option (i.e. use `-t2` or `-t3` from the command line).
+the --trust option (i.e. use `--trust=include` or `--trust=full` from the command line).
 
 ### $exec
 
@@ -419,4 +419,25 @@ fn void main()
 }
 ```
 
-Using `$exec` requires **trust level 3**, which is enabled with `-t3` from the command line.
+Using `$exec` requires **full trust level**, which is enabled with `-trust=full` from the command line.
+
+'$exec' will by default run from the `/scripts` directory for projects, for non-project builds,
+the current directory is used as well.
+
+#### $exec scripting
+
+`$exec` allows a special scripting mode, where one or more C3 files are compiled on the fly and 
+run by `$exec`.
+
+```c
+import std::io;
+
+// Compile foo.c3 and bar.c3 in the /scripts directory, invoke the resulting binary
+// with the argument 'test'
+$exec("foo.c3;bar.c3", "test");
+
+fn void main()
+{
+	...
+}
+```

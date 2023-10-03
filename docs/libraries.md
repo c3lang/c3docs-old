@@ -55,9 +55,9 @@ how .h files are used in C.
 
 ### Additional actions
 
-`"execs"`, which is available both at the top level and per-target, lists the scripts which will be
-invoked when a library is used. This requires running the compiler at **trust level 3** using the 
-`-t3` option.
+`"exec"`, which is available both at the top level and per-target, lists the scripts which will be
+invoked when a library is used. This requires running the compiler at **full trust level** using the 
+`--trust=full` option.
 
 ## How to – automatically – export libraries
 

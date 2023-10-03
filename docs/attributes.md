@@ -46,10 +46,25 @@ added with that name.
 
 Sets the external (linkage) name of this declaration.
 
+### `@finalizer` (function)
+
+Make this function run at shutdown. See `@init` for the optional priority. Note that running a
+finalizer is a "best effort" attempt by the OS. During abnormal termination it is not guaranteed to run.
+
+The function must be a void function taking no arguments.
+
 ### `@if` (all declarations)
 
 Conditionally includes the declaration in the compilation. It takes a constant compile time value argument, if this
 value is `true` then the declaration is retained, on false it is removed.
+
+### `@init` (function)
+
+Make this function run at startup before main. It has an optional priority 1 - 65535, with lower
+being executed earlier. It is not recommended to use values less than 128 as they are generally
+reserved and using them may interfere with standard program initialization.
+
+The function must be a void function taking no arguments.
 
 ### `@inline` (fn, call)
 
@@ -113,11 +128,6 @@ Allows bitstruct fields to have overlapping bit ranges.
 
 Causes all members to be packed as if they had alignment 1. The alignment of the struct/union is set to 1.
 This alignment can be overridden with `@align`.
-
-### `@priority` (initializer, finalizer)
-
-This sets the priority of static initializers and finalizers, the lower the earlier. It is not recommended to use
-values less than 128 as they are generally reserved.
 
 ### `@private` (any declaration)
 
