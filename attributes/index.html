@@ -104,7 +104,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../dynamiccode/">Dynamic code</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../anyprotocols/">Any and protocols</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
@@ -140,8 +140,6 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#deprecated-types-fn-macro-global-const-member">@deprecated (types, fn, macro, global, const, member)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#dynamic-fn">@dynamic (fn)</a>
-    </li>
     <li class="toctree-l3"><a class="reference internal" href="#export-fn-global-const-enum-union-struct-fault">@export (fn, global, const, enum, union, struct, fault)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#extern-fn-global-const-enum-union-struct-fault">@extern (fn, global, const, enum, union, struct, fault)</a>
@@ -153,8 +151,6 @@
     <li class="toctree-l3"><a class="reference internal" href="#init-function">@init (function)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#inline-fn-call">@inline (fn, call)</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#interface-any-method">@interface (any method)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#littleendian-bitstruct">@littleendian (bitstruct)</a>
     </li>
@@ -287,9 +283,6 @@ Should be used sparingly.</p>
 Valid arguments are <code>veccall</code>, <code>ccall</code>, <code>stdcall</code>.</p>
 <h3 id="deprecated-types-fn-macro-global-const-member"><code>@deprecated</code> (types, fn, macro, global, const, member)</h3>
 <p>Marks the particular type, global, const or member as deprecated, making use trigger a warning.</p>
-<h3 id="dynamic-fn"><code>@dynamic</code> (fn)</h3>
-<p>Declares a function to be accessible through an <code>any</code> type. This requires that an <code>any</code> interface method with the
-same name has been declared.</p>
 <h3 id="export-fn-global-const-enum-union-struct-fault"><code>@export</code> (fn, global, const, enum, union, struct, fault)</h3>
 <p>Marks this declaration as an export, this ensures it is never removed and exposes it as public when linking.
 The attribute takes an optional string value, which is the external name. This acts as if <code>@extern</code> had been
@@ -310,9 +303,6 @@ reserved and using them may interfere with standard program initialization.</p>
 <p>The function must be a void function taking no arguments.</p>
 <h3 id="inline-fn-call"><code>@inline</code> (fn, call)</h3>
 <p>Declares a function to always be inlined or if placed on a call, that the call should be inlined.</p>
-<h3 id="interface-any-method"><code>@interface</code> (<code>any</code> method)</h3>
-<p>This attribute may only be used on an <code>any</code> method. The first argument must be <code>void*</code> rather than <code>any</code>. This method
-should also never have a body. It provides the prototype for methods declared with <code>@dynamic</code>.</p>
 <h3 id="littleendian-bitstruct"><code>@littleendian</code> (bitstruct)</h3>
 <p>Lays out the bits as if the data was stored in a little endian type, regardless of host system endianness.</p>
 <h3 id="local-any-declaration"><code>@local</code> (any declaration)</h3>

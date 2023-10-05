@@ -104,7 +104,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../dynamiccode/">Dynamic code</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../anyprotocols/">Any and protocols</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
@@ -254,7 +254,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#typeid-type">Typeid type</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#any-type">Any type</a>
+    <li class="toctree-l3"><a class="reference internal" href="#any-type">Any* type</a>
         <ul>
     <li class="toctree-l4"><a class="reference internal" href="#fields">Fields</a>
     </li>
@@ -1061,8 +1061,9 @@ alignment.</p>
 <h3 id="function-types">Function types</h3>
 <h3 id="typeid-type">Typeid type</h3>
 <p>The typeid is a pointer sized value which uniquely identifies a type.</p>
-<h3 id="any-type">Any type</h3>
-<p>The <code>any</code> type holds a pointer to a value and its corresponding <a href="#typeid-type">typeid</a>.</p>
+<h3 id="any-type">Any* type</h3>
+<p>The <code>any*</code> is a fat pointer (2 pointers wide) holding a pointer to a value and its corresponding <a href="#typeid-type">typeid</a>.
+It cannot be dereferenced.</p>
 <h4 id="fields">Fields</h4>
 <p><code>.ptr</code> returns a <code>void*</code> pointer to the underlying value <code>.type</code> returns the <a href="#typeid-type">typeid</a>
 of the underlying value.</p>
@@ -1492,13 +1493,13 @@ be evaluated in order after the cond expression has been evaluated (if it exists
    "true" when implicitly converted to boolean. A default statement will always be considered having the "true" result.</li>
 </ol>
 <h4 id="any-switch">Any-switch</h4>
-<p>If the cond expression is an <code>any</code> type, the switch is handled as if switching was done over the <code>type</code>
-field of the <code>any</code>. This field has the type of <a href="#typeid-type">typeid</a>, and the cases follows the rules
+<p>If the cond expression is an <code>any*</code> type, the switch is handled as if switching was done over the <code>type</code>
+field of the <code>any*</code>. This field has the type of <a href="#typeid-type">typeid</a>, and the cases follows the rules
 for <a href="#switching-over-typeid">switching over typeid</a>.</p>
 <p>If the cond expression is a variable, then this variable is implicitly converted to a pointer with
 the pointee type given by the case statement.</p>
 <p>Example:</p>
-<pre><code class="language-c">any a = abc();
+<pre><code class="language-c">any* a = abc();
 switch (a)
 {
     case int:

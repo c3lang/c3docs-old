@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Dynamic code - C3 Documentation</title>
+  <title>Any and protocols - C3 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Dynamic code";
-    var mkdocs_page_input_path = "dynamiccode.md";
+    var mkdocs_page_name = "Any and protocols";
+    var mkdocs_page_input_path = "anyprotocols.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -104,15 +104,17 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
                     </li>
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Dynamic code</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Any and protocols</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#working-with-the-type-of-any-at-runtime">Working with the type of any at runtime.</a>
+    <li class="toctree-l2"><a class="reference internal" href="#working-with-the-type-of-any-at-runtime">Working with the type of any* at runtime.</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#dynamic-calls">Dynamic calls</a>
+    <li class="toctree-l2"><a class="reference internal" href="#protocols">Protocols</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#defining-an-interface">Defining an interface</a>
+    <li class="toctree-l3"><a class="reference internal" href="#defining-a-protocol">Defining a protocol</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#implementing-the-interface">Implementing the interface</a>
+    <li class="toctree-l3"><a class="reference internal" href="#implementing-the-protocol">Implementing the protocol</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#referring-to-a-protocol-by-pointer">Referring to a protocol by pointer</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#calling-dynamic-methods">Calling dynamic methods</a>
     </li>
@@ -202,7 +204,7 @@
         
       
     
-    <li>Dynamic code</li>
+    <li>Any and protocols</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -213,10 +215,12 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="dynamic-code">Dynamic code</h1>
-<h2 id="working-with-the-type-of-any-at-runtime">Working with the type of <code>any</code> at runtime.</h2>
-<p>The <code>any</code> type is recommended for writing code that is polymorphic at runtime where macros are not appropriate.</p>
-<p>An <code>any</code> value can be created by assigning any pointer to it. You can then query the <code>any</code> type for the typeid of 
+                <h1 id="any-and-protocols">Any and protocols</h1>
+<h2 id="working-with-the-type-of-any-at-runtime">Working with the type of <code>any*</code> at runtime.</h2>
+<p>The <code>any*</code> type is recommended for writing code that is polymorphic at runtime where macros are not appropriate.
+It can be thought of as a typed <code>void*</code>. Note that it is a fat pointer and is two pointers wide (unlike <code>void*</code>).
+It cannot be dereferenced.</p>
+<p>An <code>any*</code> can be created by assigning any pointer to it. You can then query the <code>any*</code> type for the typeid of 
 the enclosed type (the type the pointer points to) using the <code>type</code> field.</p>
 <p>This allows switching over the typeid, either using a normal switch:</p>
 <pre><code>switch (my_any.typeid)
@@ -227,7 +231,7 @@ the enclosed type (the type the pointer points to) using the <code>type</code> f
         ...
 }
 </code></pre>
-<p>Or the special <code>any</code>-version of the switch:</p>
+<p>Or the special <code>any*</code>-version of the switch:</p>
 <pre><code>switch (my_any)
 {
     case Foo:
@@ -236,50 +240,61 @@ the enclosed type (the type the pointer points to) using the <code>type</code> f
         // my_any can be used as if it was Bar* here
 }
 </code></pre>
-<p>Sometimes one needs to manually construct an <code>any</code>, and it can be done similar to creating any struct type: <code>any { ptr, type }</code>
-will create an <code>any</code> pointing to <code>ptr</code> and with typeid <code>type</code>.</p>
+<p>Sometimes one needs to manually construct an any-pointer, which
+is typically done using the <code>any_make</code> function: <code>any_make(ptr, type)</code>
+will create an <code>any*</code> pointing to <code>ptr</code> and with typeid <code>type</code>.</p>
 <p>Since the runtime <code>typeid</code> is available, we can query for any runtime <code>typeid</code> property available
 at runtime, for example the size, e.g. <code>my_any.typeid.sizeof</code>. This allows us to do a lot of work
 on with the enclosed data without knowing the details of its type.</p>
 <p>For example, this would make a copy of the data and place it in the variable <code>any_copy</code>:</p>
 <pre><code>void* data = malloc(a.type.sizeof);
 mem::copy(data, a.ptr, a.type.sizeof);
-any any_copy = { data, a.type };
+any* any_copy = any_make(data, a.type);
 </code></pre>
-<h2 id="dynamic-calls">Dynamic calls</h2>
+<h2 id="protocols">Protocols</h2>
 <p>Most statically typed object-oriented languages implements extensibility using vtables. In C, and by extension
 C3, this is possible to emulate by passing around structs containing list of function pointers in addition to the data.</p>
 <p>While this is efficient and often the best solution, but it puts certain assumptions on the code and makes interfaces
 more challenging to evolve over time.</p>
 <p>As an alternative there are languages (such as Objective-C) which instead use message passing to dynamically typed
 objects, where the availability of a certain functionality may be queried at runtime.</p>
-<p>C3 provides this latter functionality over the <code>any</code> type using <code>@interface</code> and <code>@dynamic</code> annotations.</p>
-<h3 id="defining-an-interface">Defining an interface</h3>
-<p>The first step is to define an interface, this is done by defining an <code>any</code> method <em>without a body</em> annotated 
-<code>@interface</code>:</p>
-<pre><code>fn String any.myname(void*) @interface;
+<p>C3 provides this latter functionality over the <code>any*</code> type using <em>protocols</em>.</p>
+<h3 id="defining-a-protocol">Defining a protocol</h3>
+<p>The first step is to define a protocol:</p>
+<pre><code>protocol MyName
+{
+    fn String myname(&amp;self);
+}
 </code></pre>
-<p>Note how <code>void*</code> rather than <code>any</code> is the first parameter. Other than this, it is like any other method 
-declaration.</p>
-<h3 id="implementing-the-interface">Implementing the interface</h3>
-<p>After the interface is added, we can create methods that implement this interface.</p>
+<p>While <code>myname</code> will behave as a method, we declare it without type, and always with an inferred type using <code>&amp;self</code>.</p>
+<h3 id="implementing-the-protocol">Implementing the protocol</h3>
+<p>After the protocol is added, we can add methods that implement it:</p>
 <pre><code>struct Bob { int x; }
-fn String Bob.myname(Bob*) @dynamic { return "I am Bob!"; }
+fn String Bob.myname(Bob*) : MyName { return "I am Bob!"; }
 
-fn String int.myname(int*) @dynamic { return "I am int!"; }
+fn String int.myname(int*) : MyName { return "I am int!"; }
 </code></pre>
-<p>One of the interfaces available in the standard library is to_string. If we implemented it for our struct above
-it might look like this:</p>
-<pre><code>fn String Bob.to_string(Bob* bob, Allocator* using) @dynamic
+<p>One of the protocols available in the standard library is Printable, which contains <code>to_format</code> and <code>to_string</code>. 
+If we implemented it for our struct above it might look like this:</p>
+<pre><code>fn String Bob.to_string(Bob* bob, Allocator* using) : Printable
 {
     return string::printf("Bob(%d)", bob.x, .using = using);
 }
 </code></pre>
+<h3 id="referring-to-a-protocol-by-pointer">Referring to a protocol by pointer</h3>
+<p>A pointer to a protocol e.g. <code>MyName*</code> is can be cast back and forth to <code>any*</code>, but only types which 
+implement the protocol completely may implicitly be cast to the protocol pointer.</p>
+<p>So for example:</p>
+<pre><code>Bob b = { 1 };
+double d = 0.5;
+MyName* a = &amp;b; // Valid, Bob implements MyName.
+// MyName* c = &amp;d; // Error, double does not implement MyName.
+</code></pre>
 <h3 id="calling-dynamic-methods">Calling dynamic methods</h3>
-<p><code>@dynamic</code> methods are just like normal methods. If called directly, they are just normal function calls. The
-difference is that they may be invoked through <code>any</code>:</p>
+<p>Methods implementing protocols are like normal methods, and if called directly, they are just normal function calls. The
+difference is that they may be invoked through <code>any*</code>:</p>
 <p>An example helps illustrate the typical use:</p>
-<pre><code>fn void whoareyou(any a)
+<pre><code>fn void whoareyou(any* a)
 {
     // Query if the function exists
     if (!&amp;a.myname)
@@ -291,16 +306,24 @@ difference is that they may be invoked through <code>any</code>:</p>
     io::printn(a.myname());
 }
 </code></pre>
-<p>We first query if the method exists on the value wrapped by <code>any</code>. If it doesn't then we print
+<p>We first query if the method exists on the value wrapped by <code>any*</code>. If it doesn't then we print
 <code>"I don't know who I am."</code> otherwise we the value's <code>myname()</code> method and print it.</p>
-<p>We could use it like this:</p>
+<p>Rather than using the <code>any*</code> type, it's common to use the protocol instead. As with <em>any</em>, we always
+refer to it as a pointer:</p>
+<pre><code>fn void whoareyou2(MyName* a)
+{
+    ...
+}
+</code></pre>
+<p>If we pass a value which doesn't implement <code>Test</code> to this function it would be a compiler error.</p>
+<p>Here is another example, showing how the correct function will be called depending on type:</p>
 <pre><code>fn void main()
 {
     int i;
     double d;
     Bob bob;
 
-    any a = &amp;i; 
+    any* a = &amp;i; 
     whoareyou(a); // Prints "I am int!"
     a = &amp;d;
     whoareyou(a); // Prints "I don't know who I am."

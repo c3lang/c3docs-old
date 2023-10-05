@@ -110,7 +110,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#the-typeid-type">The typeid type</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#the-any-type">The any type</a>
+    <li class="toctree-l3"><a class="reference internal" href="#the-any-type">The any* type</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#array-types">Array types</a>
     </li>
@@ -180,7 +180,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../dynamiccode/">Dynamic code</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../anyprotocols/">Any and protocols</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
@@ -547,12 +547,12 @@ char* bar = &quot;\&quot;Say `hello`\&quot;&quot;;
 <h3 id="the-typeid-type">The <code>typeid</code> type</h3>
 <p>The <code>typeid</code> can hold a runtime identifier for a type. Using <code>&lt;typename&gt;.typeid</code> a type may be converted to its unique runtime id, 
 e.g. <code>typeid a = Foo.typeid;</code>. This value is pointer-sized.</p>
-<h3 id="the-any-type">The <code>any</code> type</h3>
+<h3 id="the-any-type">The <code>any*</code> type</h3>
 <p>C3 contains a built-in variant type, which is essentially struct containing a <code>typeid</code> plus a <code>void*</code> pointer to a value.
-It is possible to cast the any type to any pointer type, which will return <code>null</code> if the types don't match,
+It is possible to cast the any pointer to any pointer type, which will return <code>null</code> if the types don't match,
 or the pointer value otherwise.</p>
 <pre><code>int x;
-any y = &amp;x;
+any* y = &amp;x;
 double *z = (double*)y; // Returns null
 int* w = (int*)x; // Returns the pointer to x
 </code></pre>

@@ -210,7 +210,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../dynamiccode/">Dynamic code</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../anyprotocols/">Any and protocols</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
@@ -341,7 +341,7 @@
 <li>Optional types are formed using the <code>!</code> suffix.</li>
 <li><code>bool</code> is the boolean type.</li>
 <li><code>typeid</code> is a unique type identifier for a type, it can be used at runtime and compile time.</li>
-<li><code>any</code> contains a <code>typeid</code> and <code>void*</code> allowing it to act as a reference to any type of value.</li>
+<li><code>any*</code> contains a <code>typeid</code> and <code>void*</code> allowing it to act as a reference to any type of value.</li>
 <li><code>anyfault</code> holds any <code>fault</code> value (see below).</li>
 </ol>
 <h3 id="changed">Changed</h3>
@@ -400,7 +400,7 @@
 <li><code>?:</code> operator, returning the first value if it can be converted to a boolean true, otherwise the second value is returned.</li>
 <li>Orelse <code>??</code> returning the first value if it is a result, the second if the first value was an optional value.</li>
 <li>Rethrow <code>!</code> suffix operator with an implicit <code>return</code> the value if it was an optional value.</li>
-<li>Dynamic calls, allowing calls to be made on the <code>any</code> type dispatched using a dynamic mechanism.</li>
+<li>Dynamic calls, allowing calls to be made on the <code>any*</code> type dispatched using a dynamic mechanism.</li>
 <li>Create a slice using a range subscript (e.g. <code>a[4..8]</code> to form a slice from element 4 to element 8).</li>
 <li>Two range subscript methods: <code>[start..inclusive_end]</code> and <code>[start:length]</code>. Start, end and length may be omitted for default values.</li>
 <li>Indexing from end: slices, arrays and vectors may be indexed from the end using <code>^</code>. <code>^1</code> represents the last element. This works for ranges as well.</li>
@@ -415,7 +415,7 @@
 <li>Simple bitstructs (only containing booleans) may be manipulated using bit operations <code>&amp; ^ | ~</code> and assignment.</li>
 <li>Structs may implicitly convert to their <code>inline</code> member if they have one.</li>
 <li>Pointers to arrays may implicitly convert to slices.</li>
-<li>Any pointer may implicitly convert to an <code>any</code> value with type being the pointee.</li>
+<li>Any pointer may implicitly convert to an <code>any*</code> with type being the pointee.</li>
 <li>Optional values will implicitly invoke "flatmap" on an expression it is a subexpression of.</li>
 </ol>
 <h3 id="changed_2">Changed</h3>
@@ -439,7 +439,7 @@
 <li>Functions may be invoked using named arguments, the name is the dot-prefixed parameter name, e.g. <code>foo(.name = a, .len = 2)</code>.</li>
 <li>Typed varargs are declared <code>Type... argument</code>, and will take 0 or more arguments of the given type.</li>
 <li>It is possible to "splat" an array or slice into the location of a typed vararg using <code>...</code>: <code>foo(a, b, ...list)</code></li>
-<li><code>any</code> varargs are declared <code>argument...</code>, it can take 0 or more arguments of any type which are implicitly converted to the <code>any</code> type.</li>
+<li><code>any*</code> varargs are declared <code>argument...</code>, it can take 0 or more arguments of any type which are implicitly converted to the <code>any*</code> type.</li>
 <li>The function declaration may have <code>@inline</code> or <code>@noinline</code> as a default.</li>
 <li>Using <code>@inline</code> or <code>@noinline</code> on a function call expression will override the function default.</li>
 <li>Type methods are functions defined in the form <code>fn void Foo.my_method(Foo* foo) { ... }</code>, they can be invoked using dot syntax.</li>
@@ -490,7 +490,7 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 <ol>
 <li>Match-style variant of the <code>switch</code> statement, allows each <code>case</code> to hold an expression to test.</li>
 <li>Switching over type with <code>typeid</code>.</li>
-<li>Unpack <code>any</code> to the underlying type with an <code>any</code>-switch.</li>
+<li>Unpack <code>any*</code> to the underlying type with an <code>any</code>-switch.</li>
 <li><code>nextcase</code> to fallthrough to the next case.</li>
 <li><code>nextcase &lt;expr&gt;</code> to jump to the case with the expression value (this may be an expression evaluated at runtime).</li>
 <li><code>nextcase default</code> to jump to the <code>default</code> clause.</li>
@@ -581,7 +581,7 @@ groups certain attributes. Empty attribute groups are permitted.</p>
 but nonetheless provided unique functionality:</p>
 <ol>
 <li><code>@likely(...)</code> / <code>@unlikely(...)</code> on branches affects compilation optimization.</li>
-<li><code>@anycast(...)</code> casts an <code>any</code> with an optional result.</li>
+<li><code>@anycast(...)</code> casts an <code>any*</code> with an optional result.</li>
 <li><code>unreachable(...)</code> marks a path as unreachable with a panic in safe mode.</li>
 <li><code>unsupported(...)</code> similar to unreachable but for functionality not implemented.</li>
 <li><code>@expect(...)</code> expect a certain value with an optional probability for the optimizer.</li>

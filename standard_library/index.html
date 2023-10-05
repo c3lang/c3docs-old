@@ -104,7 +104,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../dynamiccode/">Dynamic code</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../anyprotocols/">Any and protocols</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
@@ -124,7 +124,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#void-swapa-b">void @swap(&amp;a, &amp;b)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#varcastany-v-type">varcast(any v, $Type)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#varcastany-v-type">varcast(any* v, $Type)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#void-unreachablestring-unreachable-statement-reached">void unreachable($string = "Unreachable statement reached.")</a>
     </li>
@@ -202,7 +202,7 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#kind_is_inttypekind-kind">kind_is_int(TypeKind kind)</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#any_to_intany-v-type">any_to_int(any v, $Type)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#any_to_intany-v-type">any_to_int(any* v, $Type)</a>
     </li>
         </ul>
     </li>
@@ -363,10 +363,10 @@ int b = 5;
 @swap(a, b);
 io::printfn(&quot;%d&quot;, a); // Prints 5
 </code></pre>
-<h3 id="varcastany-v-type">varcast(any v, $Type)</h3>
+<h3 id="varcastany-v-type">varcast(any* v, $Type)</h3>
 <p>Optionally cast the value <code>v</code> to type <code>$Type*</code> on failure returns <code>VarCastResult.TYPE_MISMATCH</code>.</p>
 <pre><code class="language-c">int b;
-any a = &amp;b;
+any* a = &amp;b;
 float*! c = varcast(a, float); // Will return TYPE_MISMATCH
 int*! d = varcast(a, int);     // Works!
 </code></pre>
@@ -560,10 +560,10 @@ return @clone(f);
 <h3 id="bool-is_equatable_valuevalue_1">bool is_equatable_value(value)</h3>
 <p>Return <code>true</code> if the value can be compared using the comparison macros.</p>
 <h3 id="kind_is_inttypekind-kind">kind_is_int(TypeKind kind)</h3>
-<h3 id="any_to_intany-v-type">any_to_int(any v, $Type)</h3>
+<h3 id="any_to_intany-v-type">any_to_int(any* v, $Type)</h3>
 <p>Returns an optional value of <code>$Type</code> if the any value losslessly
 may be converted into the given type. Returns a <code>ConversionResult</code> otherwise.</p>
-<pre><code class="language-c">any v = &amp;&amp;128;
+<pre><code class="language-c">any* v = &amp;&amp;128;
 short y = any_to_int(v, short)!!; // Works 
 ichar z = any_to_int(v, ichar)!!; // Panics VALUE_OUT_OF_RANGE
 </code></pre>
