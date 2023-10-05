@@ -20,13 +20,13 @@ int b = 5;
 io::printfn("%d", a); // Prints 5
 ```
 
-### varcast(any v, $Type)
+### varcast(any* v, $Type)
 
 Optionally cast the value `v` to type `$Type*` on failure returns `VarCastResult.TYPE_MISMATCH`.
 
 ```c
 int b;
-any a = &b;
+any* a = &b;
 float*! c = varcast(a, float); // Will return TYPE_MISMATCH
 int*! d = varcast(a, int);     // Works!
 ```
@@ -309,13 +309,13 @@ Return `true` if the value can be compared using the `equals` macro.
 Return `true` if the value can be compared using the comparison macros.
 
 ### kind_is_int(TypeKind kind)
-### any_to_int(any v, $Type)
+### any_to_int(any* v, $Type)
 
 Returns an optional value of `$Type` if the any value losslessly
 may be converted into the given type. Returns a `ConversionResult` otherwise.
 
 ```c
-any v = &&128;
+any* v = &&128;
 short y = any_to_int(v, short)!!; // Works 
 ichar z = any_to_int(v, ichar)!!; // Panics VALUE_OUT_OF_RANGE
 ```

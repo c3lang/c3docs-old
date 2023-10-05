@@ -31,11 +31,6 @@ Valid arguments are `veccall`, `ccall`, `stdcall`.
 
 Marks the particular type, global, const or member as deprecated, making use trigger a warning.
 
-### `@dynamic` (fn)
-
-Declares a function to be accessible through an `any` type. This requires that an `any` interface method with the
-same name has been declared.
-
 ### `@export` (fn, global, const, enum, union, struct, fault)
 
 Marks this declaration as an export, this ensures it is never removed and exposes it as public when linking.
@@ -69,11 +64,6 @@ The function must be a void function taking no arguments.
 ### `@inline` (fn, call)
 
 Declares a function to always be inlined or if placed on a call, that the call should be inlined.
-
-### `@interface` (`any` method)
-
-This attribute may only be used on an `any` method. The first argument must be `void*` rather than `any`. This method
-should also never have a body. It provides the prototype for methods declared with `@dynamic`.
 
 ### `@littleendian` (bitstruct)
 

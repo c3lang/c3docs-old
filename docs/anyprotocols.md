@@ -1,10 +1,12 @@
-# Dynamic code
+# Any and protocols
 
-## Working with the type of `any` at runtime.
+## Working with the type of `any*` at runtime.
 
-The `any` type is recommended for writing code that is polymorphic at runtime where macros are not appropriate.
+The `any*` type is recommended for writing code that is polymorphic at runtime where macros are not appropriate.
+It can be thought of as a typed `void*`. Note that it is a fat pointer and is two pointers wide (unlike `void*`).
+It cannot be dereferenced.
 
-An `any` value can be created by assigning any pointer to it. You can then query the `any` type for the typeid of 
+An `any*` can be created by assigning any pointer to it. You can then query the `any*` type for the typeid of 
 the enclosed type (the type the pointer points to) using the `type` field.
 
 This allows switching over the typeid, either using a normal switch:
@@ -17,7 +19,7 @@ This allows switching over the typeid, either using a normal switch:
             ...
     }
 
-Or the special `any`-version of the switch:
+Or the special `any*`-version of the switch:
 
     switch (my_any)
     {
@@ -27,8 +29,9 @@ Or the special `any`-version of the switch:
             // my_any can be used as if it was Bar* here
     }
 
-Sometimes one needs to manually construct an `any`, and it can be done similar to creating any struct type: `any { ptr, type }`
-will create an `any` pointing to `ptr` and with typeid `type`.
+Sometimes one needs to manually construct an any-pointer, which
+is typically done using the `any_make` function: `any_make(ptr, type)`
+will create an `any*` pointing to `ptr` and with typeid `type`.
 
 Since the runtime `typeid` is available, we can query for any runtime `typeid` property available
 at runtime, for example the size, e.g. `my_any.typeid.sizeof`. This allows us to do a lot of work
@@ -38,10 +41,10 @@ For example, this would make a copy of the data and place it in the variable `an
 
     void* data = malloc(a.type.sizeof);
 	mem::copy(data, a.ptr, a.type.sizeof);
-    any any_copy = { data, a.type };    
+    any* any_copy = any_make(data, a.type);    
 
 
-## Dynamic calls
+## Protocols
 
 Most statically typed object-oriented languages implements extensibility using vtables. In C, and by extension
 C3, this is possible to emulate by passing around structs containing list of function pointers in addition to the data.
@@ -52,43 +55,56 @@ more challenging to evolve over time.
 As an alternative there are languages (such as Objective-C) which instead use message passing to dynamically typed
 objects, where the availability of a certain functionality may be queried at runtime.
 
-C3 provides this latter functionality over the `any` type using `@interface` and `@dynamic` annotations.
+C3 provides this latter functionality over the `any*` type using *protocols*.
 
-### Defining an interface
+### Defining a protocol
 
-The first step is to define an interface, this is done by defining an `any` method *without a body* annotated 
-`@interface`:
+The first step is to define a protocol:
 
-    fn String any.myname(void*) @interface;
+    protocol MyName
+    {
+        fn String myname(&self);
+    }
 
-Note how `void*` rather than `any` is the first parameter. Other than this, it is like any other method 
-declaration.
+While `myname` will behave as a method, we declare it without type, and always with an inferred type using `&self`.
 
-### Implementing the interface
+### Implementing the protocol
 
-After the interface is added, we can create methods that implement this interface.
+After the protocol is added, we can add methods that implement it:
 
     struct Bob { int x; }
-    fn String Bob.myname(Bob*) @dynamic { return "I am Bob!"; }
+    fn String Bob.myname(Bob*) : MyName { return "I am Bob!"; }
 
-    fn String int.myname(int*) @dynamic { return "I am int!"; }
+    fn String int.myname(int*) : MyName { return "I am int!"; }
 
-One of the interfaces available in the standard library is to_string. If we implemented it for our struct above
-it might look like this:
+One of the protocols available in the standard library is Printable, which contains `to_format` and `to_string`. 
+If we implemented it for our struct above it might look like this:
 
-    fn String Bob.to_string(Bob* bob, Allocator* using) @dynamic
+    fn String Bob.to_string(Bob* bob, Allocator* using) : Printable
     {
         return string::printf("Bob(%d)", bob.x, .using = using);
     }
 
+### Referring to a protocol by pointer
+
+A pointer to a protocol e.g. `MyName*` is can be cast back and forth to `any*`, but only types which 
+implement the protocol completely may implicitly be cast to the protocol pointer.
+
+So for example:
+
+    Bob b = { 1 };
+    double d = 0.5;
+    MyName* a = &b; // Valid, Bob implements MyName.
+    // MyName* c = &d; // Error, double does not implement MyName.
+
 ### Calling dynamic methods
 
-`@dynamic` methods are just like normal methods. If called directly, they are just normal function calls. The
-difference is that they may be invoked through `any`:
+Methods implementing protocols are like normal methods, and if called directly, they are just normal function calls. The
+difference is that they may be invoked through `any*`:
 
 An example helps illustrate the typical use:
 
-    fn void whoareyou(any a)
+    fn void whoareyou(any* a)
     {
         // Query if the function exists
         if (!&a.myname)
@@ -100,10 +116,21 @@ An example helps illustrate the typical use:
         io::printn(a.myname());
     }
 
-We first query if the method exists on the value wrapped by `any`. If it doesn't then we print
+
+We first query if the method exists on the value wrapped by `any*`. If it doesn't then we print
 `"I don't know who I am."` otherwise we the value's `myname()` method and print it.
 
-We could use it like this:
+Rather than using the `any*` type, it's common to use the protocol instead. As with *any*, we always
+refer to it as a pointer:
+
+    fn void whoareyou2(MyName* a)
+    {
+        ...
+    }
+
+If we pass a value which doesn't implement `Test` to this function it would be a compiler error.
+
+Here is another example, showing how the correct function will be called depending on type:
 
     fn void main()
     {
@@ -111,7 +138,7 @@ We could use it like this:
         double d;
         Bob bob;
 
-        any a = &i; 
+        any* a = &i; 
 	    whoareyou(a); // Prints "I am int!"
 	    a = &d;
 	    whoareyou(a); // Prints "I don't know who I am."

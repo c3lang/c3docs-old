@@ -1,5 +1,9 @@
 # Change log
 
+##### Revision 2023-10-05
+- `protocol`
+- Update to `any*`
+
 ##### Revision 2023-10-03
 - `exec` and `$exec`
 - change of `static initializer`
