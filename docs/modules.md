@@ -108,7 +108,7 @@ To make a symbol only visible inside the module, use the `@private` attribute.
 
 In this example, the other modules can use the init() function after importing foo, but only files in the foo module can use open(), as it is specified as `private`.
 
-It's possible to further restrict visibility: `@local` works like `@private` except it's only visible in the 
+It's possible to further restrict visibility: `@local` works like `@private` except it's only visible in the
 local context.
 
     // File foo.c3
@@ -127,7 +127,7 @@ local context.
 ## Overriding symbol visibility rules
 
 By using `import <module> @public`, it's possible to access another module´s private symbols.
-Many other module systems have hierarchal visibility rules, but the `import @public` feature allows 
+Many other module systems have hierarchal visibility rules, but the `import @public` feature allows
 visibility to be manipulated in a more ad-hoc manner without imposing hard rules.
 
 For example, you may provide a library with two modules: "mylib::net" and "mylib::file" - which both use functions
@@ -136,28 +136,28 @@ to access this module's private functions and type. To an external user of the l
 does not seem to exist, but inside of your library you use it as a shared dependency.
 
 A simple example:
-    
+
     // File a.c3
     module a;
-    
+
     fn void a_function() @private { ... }
-    
+
     // File b.c3
     module b;
-    
+
     fn void b_function() @private { ... }
-    
+
     // File c.c3
     module c;
     import a;
     import b @public;
-    
-    fn void test() 
+
+    fn void test()
     {
       a::a_function(); // <-- error, a_function is private
       b::b_function(); // Allowed since import converted it to "public" in this context.
     }
-    
+
 
 *Note: `@local` visibility cannot be overridden using a "@public" import.*
 
@@ -197,9 +197,9 @@ A function or global prefixed `extern` will be assumed to be linked in later.
 An "extern" function may not have a body, and global variables are prohibited
 from having an init expression.
 
-The attribute `@export` explicitly marks a function as being exported when 
-creating a (static or dynamic) library. It has no particular effect when
-compiling as an executable.
+The attribute `@export` explicitly marks a function as being exported when
+creating a (static or dynamic) library. It can also change the linker name of
+the function.
 
 ## Using functions and types from other modules
 
@@ -247,14 +247,14 @@ fn void test()
     TheCStruct stC;
     // Name required to avoid ambiguity;
     b::Foo stBFoo;
-    // Will always pick the current module's 
+    // Will always pick the current module's
     // name.
     Bar bar;
     // Namespace required:
     a::aAFunction();
     b::aBFunction();
     // A local symbol does not require it:
-    aCFunction(); 
+    aCFunction();
 }
 ```
 
@@ -274,7 +274,7 @@ for example:
     {
         return my_hello_world();
     }
-    
+
     module foo @private;
     import std::io;         // The import is only visible in this section.
     fn int my_hello_world() // @private by default
@@ -319,15 +319,15 @@ Importing the dynamic library and setting the base version to 4.5 and minimum ve
         else
         {
             dynlib::do_someting_else();
-        }  
+        }
     }
 
-In this example the code would run `do_something` if available (that is, when the dynamic library is 4.0 or higher), or 
+In this example the code would run `do_something` if available (that is, when the dynamic library is 4.0 or higher), or
 fallback to `do_something_else` otherwise.
 
 If we tried to conditionally add something not available in the compilation itself, that is a compile time error:
 
-    if (@available(dynlib::do_another_thing))  
+    if (@available(dynlib::do_another_thing))
     {
         dynlib::do_another_thing(); // Error: This function is not available with 3.0
     }
@@ -366,17 +366,17 @@ module foo;
 
 $include("Foo.x");
 
-fn void test() 
+fn void test()
 {
     io::printf("%d", testX(2));
-}    
+}
 ```
 
 File `Foo.x`
 ```
-fn testX(int i) 
-{ 
-    return i + 1; 
+fn testX(int i)
+{
+    return i + 1;
 }
 ```
 
@@ -385,15 +385,15 @@ The result is as if `Foo.c3` contained the following:
 ```
 module foo;
 
-fn testX(int i) 
-{ 
-    return i + 1; 
+fn testX(int i)
+{
+    return i + 1;
 }
 
-fn void test() 
+fn void test()
 {
     io::printf("%d", testX(2));
-}    
+}
 ```
 
 The include may use an absolute or relative path, the relative path is always relative to the source file in which the include appears.
@@ -426,7 +426,7 @@ the current directory is used as well.
 
 #### $exec scripting
 
-`$exec` allows a special scripting mode, where one or more C3 files are compiled on the fly and 
+`$exec` allows a special scripting mode, where one or more C3 files are compiled on the fly and
 run by `$exec`.
 
 ```c
