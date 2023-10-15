@@ -304,8 +304,8 @@ Returns the same as `$nameof`, but with the full module name prepended.
     fn void test() { }
     int g = 1;
 
-    String a = $nameof(g); // => "abc::g"
-    String b = $nameof(test); // => "abc::test"
+    String a = $qnameof(g); // => "abc::g"
+    String b = $qnameof(test); // => "abc::test"
 
 ### $sizeof
 

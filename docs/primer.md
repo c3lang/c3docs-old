@@ -13,7 +13,7 @@ different syntax for declaring a named struct inside of a struct.
     typedef struct
     {
       int a;
-      struct 
+      struct
       {
         double x;
       } bar;
@@ -23,13 +23,13 @@ different syntax for declaring a named struct inside of a struct.
     struct Foo
     {
       int a;
-      struct bar 
+      struct bar
       {
         double x;
       }
     }
 
-Also, user defined types are used without a `struct`, `union` or `enum` keyword, as 
+Also, user defined types are used without a `struct`, `union` or `enum` keyword, as
 if the name was a C typedef.
 
 #### Arrays
@@ -38,7 +38,7 @@ Array sizes are written next to the type and arrays do not decay to pointers,
 you need to do it manually:
 
     // C
-    int x[2] = { 1, 2 }; 
+    int x[2] = { 1, 2 };
     int *y = x;
 
     // C3
@@ -54,12 +54,12 @@ You will probably prefer slices to pointers when passing data around:
     sortMyArray(x, 100);
     sortMyArray(y, 30);
     // Sort part of the array!
-    sortMyArray(z + 1, 10); 
+    sortMyArray(z + 1, 10);
 
     // C3
     int[100] x = ...;
     int[30] y = ...;
-    sortMyArray(&x); // Implicit conversion from int[100]* -> int[] 
+    sortMyArray(&x); // Implicit conversion from int[100]* -> int[]
     sortMyArray(&y); // Implicit conversion from int[30]* -> int[]
     sortMyArray(z[1..10]; // Inclusive ranges!
 
@@ -92,7 +92,7 @@ complement and signed overflow is wrapping. See more [here](../undefinedbehaviou
 #### Functions
 
 Functions are declared like C, but you need to put `fn` in front:
-   
+
     // C:
     int foo(Foo *b, int x, void *z) { ... }
 
@@ -111,12 +111,12 @@ access it from C3:
     ...
     puts("Hello world");
 
-Note that currently only the C standard library is automatically passed to the linker. 
-In order to link with other libraries, you either need to explicitly tell 
+Note that currently only the C standard library is automatically passed to the linker.
+In order to link with other libraries, you need to explicitly tell
 the compiler to link them.
 
 If you want to use a different identifier inside of your C3 code compared to
-the function or variable's external name – use the `@extern` attribute:
+the function or variable's external name, use the `@extern` attribute:
 
     extern fn int _puts(char* message) @extern("puts");
     ...
@@ -130,7 +130,7 @@ Name standards are enforced:
     // one lower case is a user defined type:
     Foo x;
     M____y y;
-    
+
     // Starting with lowercase is a variable or a function or a member name:
 
     x.myval = 1;
@@ -140,11 +140,11 @@ Name standards are enforced:
     // Only upper case is a constant or an enum value:
 
     const int FOOBAR = 123;
-    enum Test 
+    enum Test
     {
       STATE_A = 0,
       STATE_B = 2
-    }    
+    }
 
 #### Variable declaration
 
@@ -197,8 +197,8 @@ For convenience, assigning to a struct will infer the type even if it's not an i
 
     // C
     #define println puts
-    #define my_excellent_string my_string  
-    
+    #define my_excellent_string my_string
+
     char *my_string = "Party on";
     ...
     println(my_excellent_string);
@@ -206,7 +206,7 @@ For convenience, assigning to a struct will infer the type even if it's not an i
     // C3
     def println = puts;
     def my_excellent_string = my_string;
-    
+
     char* my_string = "Party on";
     ...
     println(my_excellent_string);
@@ -247,7 +247,7 @@ Declaring the module name is not mandatory, but if you leave it out the file nam
 as the module name. Imports are recursive.
 
     module otherlib::foo;
-    
+
     fn void test() { ... }
     struct FooStruct { ... }
 
@@ -264,7 +264,7 @@ as the module name. Imports are recursive.
 
 #### Comments
 
-The `/* */` comments are nesting 
+The `/* */` comments are nesting
 
 ```text
 /* This /* will all */ be commented out */
@@ -279,7 +279,7 @@ Qualifiers like `const` and `volatile` are removed, but `const` before a constan
 will make it treated as a compile time constant. The constant does not need to be typed.
 
     const A = false;
-    // Compile time 
+    // Compile time
     $if A:
       // This will not be compiled
     $else
@@ -295,7 +295,7 @@ to handle the cases when it is commonly used in C.
 
     // C
     Foo *foo = malloc(sizeof(Foo));
-    
+
     if (tryFoo(foo)) goto FAIL;
     if (modifyFoo(foo)) goto FAIL;
 
@@ -304,13 +304,13 @@ to handle the cases when it is commonly used in C.
 
     FAIL:
     free(foo);
-    return false; 
+    return false;
 
     // C3, direct translation:
-    do FAIL: 
+    do FAIL:
     {
         Foo *foo = malloc(sizeof(Foo));
-    
+
         if (tryFoo(foo)) break FAIL;
         if (modifyFoo(foo)) break FAIL;
 
@@ -318,8 +318,8 @@ to handle the cases when it is commonly used in C.
         return true;
     }
     free(foo);
-    return false; 
-        
+    return false;
+
     // C3, using defer:
     Foo *foo = malloc(Foo);
     defer free(foo);
@@ -330,9 +330,9 @@ to handle the cases when it is commonly used in C.
     return true;
 
 
-#### Changes in `switch` 
+#### Changes in `switch`
 
-`case` statements automatically break. Use `nextcase` to fallthrough to the 
+`case` statements automatically break. Use `nextcase` to fallthrough to the
 next statement, but empty case statements have implicit fallthrough:
 
     // C
@@ -381,7 +381,7 @@ Note that we can jump to an arbitrary case using C3:
         goto LABEL3;
       case 2:
         doTwo();
-        break; 
+        break;
       case 3:
     LABEL3:
         doThree();
@@ -409,8 +409,8 @@ Note that we can jump to an arbitrary case using C3:
 A bitstruct has an explicit container type, and each field has an exact bit range.
 
 ```c
-bitstruct Foo : short  
-{  
+bitstruct Foo : short
+{
     int a : 0..2; // Exact bit ranges, bits 0-2
     uint b : 3..6;
     MyEnum c : 7..13;
@@ -434,7 +434,7 @@ For more information see [the section on bitstructs](../types/#bitstructs).
 #### Other changes
 
 The following things are enhancements to C, that does not have a direct counterpart in
-C. 
+C.
 
 - [Expression blocks](../statements)
 - Defer
