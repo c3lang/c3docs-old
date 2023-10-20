@@ -14,7 +14,11 @@ Binaries are directly downloadable for the following platforms:
 - Debian x64 [download](https://github.com/c3lang/c3c/releases/download/latest/c3-linux.tar.gz), [install instructions](https://github.com/c3lang/c3c#installing-on-debian-with-precompiled-binaries).
 - MacOS x64 [download](https://github.com/c3lang/c3c/releases/download/latest/c3-macos.zip), [install instructions](https://github.com/c3lang/c3c#installing-on-mac-with-precompiled-binaries).
 
-Last updated: [Revision 2023-10-05](changes).
+Official forums: 
+1. Discord: invite link: https://discord.gg/qN76R87
+2. Discourse: https://c3lang.discourse.group
+
+Last updated: [Revision 2023-10-20](changes).
 
 ## Features
 
@@ -43,4 +47,4 @@ Last updated: [Revision 2023-10-05](changes).
 
 #### Thank yous
 
-Special thank yous to: Bas van der Berg (Author of [C2](http://www.c2lang.org)), Jon Goodwin (Author of [Cone](http://cone.jondgoodwin.com)) and Andrey Penechko (Author of [Vox](https://github.com/MrSmith33/vox)).
+Special thank-yous to: Bas van der Berg (Author of [C2](http://www.c2lang.org)), Jon Goodwin (Author of [Cone](http://cone.jondgoodwin.com)) and Andrey Penechko (Author of [Vox](https://github.com/MrSmith33/vox)).

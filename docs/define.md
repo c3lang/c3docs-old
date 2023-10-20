@@ -22,11 +22,11 @@ This defines an alias to function pointer type of a function that returns nothin
 
 ## Distinct types
 
-`def` may also be used to create distinct new types. Unlike type aliases,
+Similar to `def` aliases are `distinct` which create distinct new types. Unlike type aliases,
 they do not implicitly convert to or from any other type.
 Literals will convert to the distinct types if they would convert to the underlying type.
 
-    def Foo = distinct int;
+    distinct Foo = distinct int;
     Foo f = 0; // Valid since 0 converts to an int.
     f = f + 1;
     int i = 1;
@@ -40,8 +40,8 @@ its base type, but not *from* that type.
 
 Behaviour here is analogous how structs may use `inline` to create struct subtypes.
 
-    def CString = distinct char*;
-    def ZString = distinct inline char*;
+    distinct CString = char*;
+    distinct ZString = inline char*;
     ...
     CString abc = "abc";
     ZString def = "def";

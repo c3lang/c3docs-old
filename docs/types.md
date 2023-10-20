@@ -279,11 +279,11 @@ and parameter names are not taken into account when determining function pointer
 
 ### Distinct types
 
-Distinct types is a kind of def which creates a new type that has the same properties as the original type
-but is - as the name suggests - distinct from it. It cannot implicitly convert into the other type. A distinct type
-is created by adding `distinct` before the type name in a "def": `def <typename> = distinct <type>`
+Distinct types is a kind of type alias which creates a new type that has the same properties as the original type
+but is - as the name suggests - distinct from it. It cannot implicitly convert into the other type using the syntax 
+`distict <name> = <type>`
 
-    def MyId = distinct int;
+    distinct MyId = int;
     fn void* get_by_id(MyId id) { ... }
 
     fn void test(MyId id)
@@ -294,6 +294,27 @@ is created by adding `distinct` before the type name in a "def": `def <typename>
       // void* val3 = get_by_id(a); // ERROR expected a MyId
       void* val4 = get_by_id((MyId)a); // Works
       // a = id; // ERROR can't assign 'MyId' to 'int'
+    }
+
+#### Inline distinct
+
+Using `inline` in the `distinct` declaration allows a distinct type to implicitly convert to its underlying type:
+
+    distinct Abc = int;
+    distinct Bcd = inline int;
+
+    fn void test()
+    {
+        Abc a = 1;
+        Bcd b = 1;
+
+        // int i = a; Error: Abc cannot be implicitly converted to 'int'
+        int i = b; // This is valid
+
+        // However, 'inline' does not allow implicit conversion from 
+        // the inline type to the distinct type:
+        // a = i; Error: Can't implicitly convert 'int' to 'Abc'
+        // b = i; Error: Can't implicitly convert 'int' to 'Bcd'
     }
 
 ### Generic types

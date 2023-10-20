@@ -1,5 +1,10 @@
 # Change log
 
+##### Revision 2023-10-20
+- `protocol` => `interface`
+- Overall update to reflection docs.
+- Updates to distinct.
+
 ##### Revision 2023-10-05
 - `protocol`
 - Update to `any*`
