@@ -19,7 +19,7 @@
   <script>
     // Current page data
     var mkdocs_page_name = "Any and protocols";
-    var mkdocs_page_input_path = "anyprotocols.md";
+    var mkdocs_page_input_path = "anyinterfaces.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -108,15 +108,19 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#working-with-the-type-of-any-at-runtime">Working with the type of any* at runtime.</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#protocols">Protocols</a>
+    <li class="toctree-l2"><a class="reference internal" href="#interfaces">Interfaces</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#defining-a-protocol">Defining a protocol</a>
+    <li class="toctree-l3"><a class="reference internal" href="#defining-an-interface">Defining an interface</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#implementing-the-protocol">Implementing the protocol</a>
+    <li class="toctree-l3"><a class="reference internal" href="#implementing-the-interface">Implementing the interface</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#referring-to-a-protocol-by-pointer">Referring to a protocol by pointer</a>
+    <li class="toctree-l3"><a class="reference internal" href="#dynamic-methods">"@dynamic" methods</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#referring-to-an-interface-by-pointer">Referring to an interface by pointer</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#calling-dynamic-methods">Calling dynamic methods</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#reflection-invocation">Reflection invocation</a>
     </li>
         </ul>
     </li>
@@ -215,7 +219,7 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="any-and-protocols">Any and protocols</h1>
+                <h1 id="any-and-interfaces">Any and interfaces</h1>
 <h2 id="working-with-the-type-of-any-at-runtime">Working with the type of <code>any*</code> at runtime.</h2>
 <p>The <code>any*</code> type is recommended for writing code that is polymorphic at runtime where macros are not appropriate.
 It can be thought of as a typed <code>void*</code>. Note that it is a fat pointer and is two pointers wide (unlike <code>void*</code>).
@@ -251,50 +255,107 @@ on with the enclosed data without knowing the details of its type.</p>
 mem::copy(data, a.ptr, a.type.sizeof);
 any* any_copy = any_make(data, a.type);
 </code></pre>
-<h2 id="protocols">Protocols</h2>
+<h2 id="interfaces">Interfaces</h2>
 <p>Most statically typed object-oriented languages implements extensibility using vtables. In C, and by extension
 C3, this is possible to emulate by passing around structs containing list of function pointers in addition to the data.</p>
 <p>While this is efficient and often the best solution, but it puts certain assumptions on the code and makes interfaces
 more challenging to evolve over time.</p>
 <p>As an alternative there are languages (such as Objective-C) which instead use message passing to dynamically typed
 objects, where the availability of a certain functionality may be queried at runtime.</p>
-<p>C3 provides this latter functionality over the <code>any*</code> type using <em>protocols</em>.</p>
-<h3 id="defining-a-protocol">Defining a protocol</h3>
-<p>The first step is to define a protocol:</p>
-<pre><code>protocol MyName
+<p>C3 provides this latter functionality over the <code>any*</code> type using <em>interfaces</em>.</p>
+<h3 id="defining-an-interface">Defining an interface</h3>
+<p>The first step is to define an interface:</p>
+<pre><code>interface MyName
 {
-    fn String myname(&amp;self);
+    fn String myname();
 }
 </code></pre>
-<p>While <code>myname</code> will behave as a method, we declare it without type, and always with an inferred type using <code>&amp;self</code>.</p>
-<h3 id="implementing-the-protocol">Implementing the protocol</h3>
-<p>After the protocol is added, we can add methods that implement it:</p>
-<pre><code>struct Bob { int x; }
-fn String Bob.myname(Bob*) : MyName { return "I am Bob!"; }
+<p>While <code>myname</code> will behave as a method, we declare it without type. Note here that unlike normal methods we leave
+out the first "self", argument.</p>
+<h3 id="implementing-the-interface">Implementing the interface</h3>
+<p>To declare that a type implements an interface, add it after the type name:</p>
+<pre><code>struct Baz (MyName) 
+{ 
+    int x; 
+}
 
-fn String int.myname(int*) : MyName { return "I am int!"; }
-</code></pre>
-<p>One of the protocols available in the standard library is Printable, which contains <code>to_format</code> and <code>to_string</code>. 
-If we implemented it for our struct above it might look like this:</p>
-<pre><code>fn String Bob.to_string(Bob* bob, Allocator* using) : Printable
-{
-    return string::printf("Bob(%d)", bob.x, .using = using);
+// Note how the first argument differs from the interface.
+fn String Baz.myname(Baz* self) @dynamic 
+{ 
+    return "I am Baz!"; 
 }
 </code></pre>
-<h3 id="referring-to-a-protocol-by-pointer">Referring to a protocol by pointer</h3>
-<p>A pointer to a protocol e.g. <code>MyName*</code> is can be cast back and forth to <code>any*</code>, but only types which 
-implement the protocol completely may implicitly be cast to the protocol pointer.</p>
+<p>If a type declares an interface but does not implement its methods, then that is compile time error. However,
+methods marked <code>@optional</code> does not need to be implemented:</p>
+<pre><code>protocol VeryOptional
+{
+    fn void test();
+    fn void do_something(int x, void* ptr) @optional;
+}
+
+struct Foo (VeryOptional)
+{
+    int z;
+}
+
+fn void Foo.test(&amp;self) { }
+</code></pre>
+<p>This example is would compile, despite not implementing both functions, as the second method is marked <code>@optional</code>.</p>
+<p>A type may implement multiple interfaces, by placing them all inside of <code>()</code> e.g. <code>struct Foo (VeryOptional, MyName) { ... }</code></p>
+<p>A limitation is that only user-defined types may declare they are implementing interfaces. To make existing types
+implement interfaces is possible but does not provide compile time checks.</p>
+<p>One of the interfaces available in the standard library is Printable, which contains <code>to_format</code> and <code>to_string</code>.
+If we implemented it for our struct above it might look like this:</p>
+<pre><code>fn String Baz.to_string(Baz* baz, Allocator* using) @dynamic
+{
+    return string::printf("Baz(%d)", baz.x, .using = using);
+}
+</code></pre>
+<h3 id="dynamic-methods">"@dynamic" methods</h3>
+<p>A method must be declared <code>@dynamic</code> to implement an interface, but a method may also be declared <code>@dynamic</code> <em>without</em>
+the type declaring it implements a particular interface. For example, this allows us to write:</p>
+<pre><code>// This will make "int" satisfy the MyName interface
+fn String int.myname(int*) @dynamic
+{ 
+    return "I am int!"; 
+}
+</code></pre>
+<p><code>@dynamic</code> methods have their reference retained in the runtime code and can also be searched for at runtime and invoked
+from the <code>any</code> type.</p>
+<h3 id="referring-to-an-interface-by-pointer">Referring to an interface by pointer</h3>
+<p>A pointer to an interface e.g. <code>MyName*</code> is can be cast back and forth to <code>any*</code>, but only types which 
+implement the interface completely may implicitly be cast to the interface pointer.</p>
 <p>So for example:</p>
 <pre><code>Bob b = { 1 };
 double d = 0.5;
-MyName* a = &amp;b; // Valid, Bob implements MyName.
-// MyName* c = &amp;d; // Error, double does not implement MyName.
+int i = 3;
+MyName* a = &amp;b;          // Valid, Bob implements MyName.
+// MyName* c = &amp;d;       // Error, double does not implement MyName.
+MyName* c = (MyName*)&amp;d; // Would break at runtime as double doesn't implement MyName
+// MyName* z = &amp;i;       // Error, implicit conversion because int doesn't explicitly implement it.
+MyName* z = (MyName*)&amp;i; // Explicit conversion works and is safe at runtime if int implements "myname"
 </code></pre>
 <h3 id="calling-dynamic-methods">Calling dynamic methods</h3>
-<p>Methods implementing protocols are like normal methods, and if called directly, they are just normal function calls. The
-difference is that they may be invoked through <code>any*</code>:</p>
-<p>An example helps illustrate the typical use:</p>
-<pre><code>fn void whoareyou(any* a)
+<p>Methods implementing interfaces are like normal methods, and if called directly, they are just normal function calls. The
+difference is that they may be invoked through the interface:</p>
+<pre><code>fn void whoareyou(MyName* a)
+{
+    io::printn(a.myname());
+}
+</code></pre>
+<p>If we have an optional method we should first check that it is implemented:</p>
+<pre><code>fn void do_something(VeryOptional* z)
+{
+    if (&amp;z.do_something)
+    {
+        z.do_something(1, null);
+    }
+}
+</code></pre>
+<p>We first query if the method exists on the value. If it does we actually run it.</p>
+<p>Here is another example, showing how the correct function will be called depending on type, checking
+for methods on an <code>any*</code>:</p>
+<pre><code>fn void whoareyou2(any* a)
 {
     // Query if the function exists
     if (!&amp;a.myname)
@@ -303,34 +364,42 @@ difference is that they may be invoked through <code>any*</code>:</p>
         return;
     }
     // Dynamically call the function
-    io::printn(a.myname());
+    io::printn(((MyName*)a).myname());
 }
-</code></pre>
-<p>We first query if the method exists on the value wrapped by <code>any*</code>. If it doesn't then we print
-<code>"I don't know who I am."</code> otherwise we the value's <code>myname()</code> method and print it.</p>
-<p>Rather than using the <code>any*</code> type, it's common to use the protocol instead. As with <em>any</em>, we always
-refer to it as a pointer:</p>
-<pre><code>fn void whoareyou2(MyName* a)
-{
-    ...
-}
-</code></pre>
-<p>If we pass a value which doesn't implement <code>Test</code> to this function it would be a compiler error.</p>
-<p>Here is another example, showing how the correct function will be called depending on type:</p>
-<pre><code>fn void main()
+
+fn void main()
 {
     int i;
     double d;
     Bob bob;
 
     any* a = &amp;i; 
-    whoareyou(a); // Prints "I am int!"
+    whoareyou2(a); // Prints "I am int!"
     a = &amp;d;
-    whoareyou(a); // Prints "I don't know who I am."
+    whoareyou2(a); // Prints "I don't know who I am."
     a = &amp;bob;
-    whoareyou(a); // Prints "I am Bob!"
+    whoareyou2(a); // Prints "I am Bob!"
 }
 </code></pre>
+<h3 id="reflection-invocation">Reflection invocation</h3>
+<p><em>This functionality is not yet implemented and may see syntax changes</em></p>
+<p>It is possible to retrieve any <code>@dynamic</code> function by name and invoke it:</p>
+<pre><code>def VoidMethodFn = fn void(void*);
+
+fn void* int.test_something(&amp;self) @dynamic
+{
+    io::printfn("Testing: %d", *self);
+}
+
+fn void main()
+{
+    int z = 321;
+    any* a = &amp;z;
+    VoidMethodFn test_func = a.reflect("test_something");
+    test_func(a); // Will print "Testing: 321"
+}
+</code></pre>
+<p>This feature allows methods to be linked up at runtime.</p>
 <h2 id="variable-argument-functions-with-implicit-any">Variable argument functions with implicit <code>any</code></h2>
 <p>Regular typed varargs are of a single type, e.g. <code>fn void abc(int x, double... args)</code>.
 In order to take variable functions that are of multiple types, <code>any</code> may be used. 

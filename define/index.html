@@ -118,7 +118,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../anyprotocols/">Any and protocols</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../anyinterfaces/">Any and protocols</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
@@ -221,10 +221,10 @@ def Numbers = int[10];
 cb(10, false);
 </code></pre>
 <h2 id="distinct-types">Distinct types</h2>
-<p><code>def</code> may also be used to create distinct new types. Unlike type aliases,
+<p>Similar to <code>def</code> aliases are <code>distinct</code> which create distinct new types. Unlike type aliases,
 they do not implicitly convert to or from any other type.
 Literals will convert to the distinct types if they would convert to the underlying type.</p>
-<pre><code>def Foo = distinct int;
+<pre><code>distinct Foo = distinct int;
 Foo f = 0; // Valid since 0 converts to an int.
 f = f + 1;
 int i = 1;
@@ -235,8 +235,8 @@ f = f + (Foo)i; // Valid
 <p>When interacting with various APIs it is sometimes desirable for distinct types to implicitly convert <em>to</em> 
 its base type, but not <em>from</em> that type.</p>
 <p>Behaviour here is analogous how structs may use <code>inline</code> to create struct subtypes.</p>
-<pre><code>def CString = distinct char*;
-def ZString = distinct inline char*;
+<pre><code>distinct CString = char*;
+distinct ZString = inline char*;
 ...
 CString abc = "abc";
 ZString def = "def";

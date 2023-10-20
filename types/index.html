@@ -125,6 +125,10 @@
     <li class="toctree-l3"><a class="reference internal" href="#function-pointer-types">Function pointer types</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#distinct-types">Distinct types</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#inline-distinct">Inline distinct</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#generic-types">Generic types</a>
     </li>
@@ -180,7 +184,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../anyprotocols/">Any and protocols</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../anyinterfaces/">Any and protocols</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
                     </li>
@@ -627,10 +631,10 @@ fn void main()
 }
 </code></pre>
 <h3 id="distinct-types">Distinct types</h3>
-<p>Distinct types is a kind of def which creates a new type that has the same properties as the original type
-but is - as the name suggests - distinct from it. It cannot implicitly convert into the other type. A distinct type
-is created by adding <code>distinct</code> before the type name in a "def": <code>def &lt;typename&gt; = distinct &lt;type&gt;</code></p>
-<pre><code>def MyId = distinct int;
+<p>Distinct types is a kind of type alias which creates a new type that has the same properties as the original type
+but is - as the name suggests - distinct from it. It cannot implicitly convert into the other type using the syntax 
+<code>distict &lt;name&gt; = &lt;type&gt;</code></p>
+<pre><code>distinct MyId = int;
 fn void* get_by_id(MyId id) { ... }
 
 fn void test(MyId id)
@@ -641,6 +645,25 @@ fn void test(MyId id)
   // void* val3 = get_by_id(a); // ERROR expected a MyId
   void* val4 = get_by_id((MyId)a); // Works
   // a = id; // ERROR can't assign 'MyId' to 'int'
+}
+</code></pre>
+<h4 id="inline-distinct">Inline distinct</h4>
+<p>Using <code>inline</code> in the <code>distinct</code> declaration allows a distinct type to implicitly convert to its underlying type:</p>
+<pre><code>distinct Abc = int;
+distinct Bcd = inline int;
+
+fn void test()
+{
+    Abc a = 1;
+    Bcd b = 1;
+
+    // int i = a; Error: Abc cannot be implicitly converted to 'int'
+    int i = b; // This is valid
+
+    // However, 'inline' does not allow implicit conversion from 
+    // the inline type to the distinct type:
+    // a = i; Error: Can't implicitly convert 'int' to 'Abc'
+    // b = i; Error: Can't implicitly convert 'int' to 'Bcd'
 }
 </code></pre>
 <h3 id="generic-types">Generic types</h3>
