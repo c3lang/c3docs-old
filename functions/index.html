@@ -522,31 +522,31 @@ fn void main()
 </code></pre>
 <h2 id="static-initializer-and-finalizers">Static initializer and finalizers</h2>
 <p>It is sometimes useful to run code at startup and shutdown. Static initializers and finalizers
-are special functions that are run at startup and shutdown respectively:</p>
-<pre><code>static initialize
+are regular functions annotated with <code>@init</code> and <code>@finalizer</code> that are run at startup and shutdown respectively:</p>
+<pre><code>fn void run_at_startup() @init
 {
     // Run at startup
     some_function.init(512);
 }
 
-static finalize
+fn void run_at_shutdown() @finalizer
 {
     some_thing.shutdown();
 }
 </code></pre>
-<p>Note that invoking <code>static finalize</code> is an best effort attempt by the OS and may not
+<p>Note that invoking <code>@finalizer</code> is an best effort attempt by the OS and may not
 be called during abnormal shutdown.</p>
 <h3 id="changing-priority-of-static-initializers-and-finalizers">Changing priority of static initializers and finalizers</h3>
-<p>It is possible to use the attribute <code>@priority(&lt;priority&gt;)</code> to set the actual priority. It is recommended
+<p>It is possible to provide an argument to the attributes to set the actual priority. It is recommended
 that programs use a priority of 1024 or higher. The higher the value, the later it
 will be called. The lowest priority is 65535.</p>
 <pre><code>// Print "Hello World" at startup.
 
-static initialize @priority(3000)
+fn void start_world @init(3000)
 {
     io::printn("World");
 }
-static initialize @priority(2000)
+fn void start_hellp @init(2000)
 {
     io::print("Hello ");
 }
