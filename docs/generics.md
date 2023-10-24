@@ -48,7 +48,8 @@ Just like for macros, optional constraints may be added to improve compile error
 
 ```
 /**
- * @require $checks(TypeA a = (TypeB)1 + (TypeC)1)
+ * @require $assignable(1, TypeB) && $assignable(1, TypeC)
+ * @require $assignable((TypeB)1, TypeA) && $assignable((TypeC)1, TypeA)
  */ 
 module vector(<TypeA, TypeB, TypeC>);
 
@@ -60,6 +61,6 @@ def testFunction = vector::testFunc(<Bar, float, int>);
 
 // This would give the error 
 // --> Parameter(s) failed validation: 
-//     @require "$checks(TypeA a = (TypeB)1 + (TypeC)1)" violated.
+//     @require "$assignable((TypeB)1, TypeA) && $assignable((TypeC)1, TypeA)" violated.
 ```
 

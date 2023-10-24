@@ -231,9 +231,6 @@ from the initializer. See the chapter on [arrays](../arrays).
 Vectors use `[<size>]` after the type, e.g. `float[<3>]`, with the restriction that vectors may only form out
 of integers, floats and booleans. Similar to arrays, wildcard can be used to infer the size of a vector: `int[<*>] a = { 1, 2 }`.
 
-*Note: C3 will support scaled vectors using the syntax `float[<>]`, but this is currently not implemented.*
-
-
 ## Types created using `def`
 
 ### "typedef"

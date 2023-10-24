@@ -16,6 +16,7 @@ nav:
     - Types: 'types.md'
     - Define: 'define.md'
     - Arrays: 'arrays.md'
+    - Vectors: 'vectors.md'
     - Functions: 'functions.md'
     - Statements: 'statements.md'
     - Expressions: 'expressions.md'

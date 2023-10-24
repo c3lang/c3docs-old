@@ -146,15 +146,15 @@ Consequently, circumventing "pure" annotations is undefined behaviour.
 
 # Pre conditions for macros
 
-In order to check macros, it's often useful to use the builtin `$checks`
+In order to check macros, it's often useful to use the builtin `$defined`
 function which returns true if the code inside would pass semantic checking.
 
 
 ```
 /**
- * @require $checks(resource.open()) `Expected resource to have an "open" function`
+ * @require $and($defined(resource.open), $defined(resource.open()) `Expected resource to have an "open" function`
  * @require resource != nil
- * @require $checks(void *x = resource.open())
+ * @require $assignable(resource.open(), void*)
  **/
 macro openResource(resource)
 {

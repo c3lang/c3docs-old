@@ -231,23 +231,17 @@ Returns the alignment in bytes needed for the type or member.
     $alignof(Foo);   // => returns 8 on 64 bit
     $alignof(g);     // => returns 4
 
-### $checks
-
-Returns true if the expression can be parsed and analysed, false otherwise.
-
-    int a;
-    typeid b;
-    bool x = $checks(a + a); // x = true
-    bool y = $checks(b + b); // y = false
-
-This function can be very useful when checking macro arguments.
-
 ### $defined
 
-Returns true if the expression inside is defined.
+Returns true if the expression inside is defined and all sub expressions are valid.
 
-    $defined(Foo.x); // => returns true
-    $defined(Foo.z); // => returns false
+    $defined(Foo.x);     // => returns true
+    $defined(Foo.z);     // => returns false
+    int[2] abc;
+    $defined(abc.len);   // => returns true
+    $defined(abc.len()); // => returns false
+    $defined((int)abc);  // => returns false
+    // $defined(abc.len() + 1)  would be an error
 
 ### $eval
 

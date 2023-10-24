@@ -43,7 +43,6 @@ Finally, a custom annotation, "@mycustom" is added. The compiler is free to sile
 | @deprecated | `@deprecated <optional description>` |
 | @require    |     `@require <expr1>, <expr2>, ...` |
 | @ensure     |     `@ensure <expre1>, <expr2>, ...` |
-| @pure       |                              `@pure` |    
-| @checked    |     `@checked <expr1>, <expr2>, ...` |
+| @pure       |                              `@pure` |
     
 See [contracts](../contracts) for information regarding `@require`, `@ensure`, `@const`, `@pure`, `@checked`.

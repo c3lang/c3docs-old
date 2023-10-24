@@ -78,6 +78,7 @@ Changes relating to literals, identifiers etc.
 11. Using `inline` on a distinct type allows it to be implicitly converted *to* its base type (but not vice versa).
 12. Types may add operator overloading to support `foreach` and subscript operations.
 13. Generic types through generic modules, using `(< ... >)` for the generic parameter list (e.g. `List(<int>) list;`).
+14. Interface types, `any*` types which allows dynamic invocation of methods.
 
 ### Changed
 
@@ -97,7 +98,7 @@ Changes relating to literals, identifiers etc.
 
 Compile time type methods: `alignof`, `associated`, `elements`, `extnameof`, `inf`, `inner`, `kindof`, `len`,
 `max`, `membersof`, `min`, `nan`, `names`, `params`, `returns`, `sizeof`, `typeid`, `values`,
-`qnameof`.
+`qnameof`, `is_eq`, `is_ordered`.
 
 Runtime type methods: `inner`, `kind`, `len`, `names`, `sizeof`.
 
@@ -110,7 +111,7 @@ Runtime type methods: `inner`, `kind`, `len`, `names`, `sizeof`.
 3. `?:` operator, returning the first value if it can be converted to a boolean true, otherwise the second value is returned.
 4. Orelse `??` returning the first value if it is a result, the second if the first value was an optional value.
 5. Rethrow `!` suffix operator with an implicit `return` the value if it was an optional value.
-6. Dynamic calls, allowing calls to be made on the `any*` type dispatched using a dynamic mechanism.
+6. Dynamic calls, allowing calls to be made on the `any*` and interfaces dispatched using a dynamic mechanism.
 7. Create a slice using a range subscript (e.g. `a[4..8]` to form a slice from element 4 to element 8).
 8. Two range subscript methods: `[start..inclusive_end]` and `[start:length]`. Start, end and length may be omitted for default values.
 9. Indexing from end: slices, arrays and vectors may be indexed from the end using `^`. `^1` represents the last element. This works for ranges as well.
@@ -119,14 +120,15 @@ Runtime type methods: `inner`, `kind`, `len`, `names`, `sizeof`.
 12. Array, vector and slice comparison: `==` can be used to make an element-wise comparison of two containers. 
 13. `?` suffix operator turns a fault into an optional value.
 14. `!!` suffix panics if the value is an optional value.
-15. `$defined(...)` returns true if the variable or type is defined.
-16. `$checks(...)` returns true if the expressions and declarations inside type checks.
+15. `$defined(...)` returns true if the last expression is defined (sub-expressions must be valid).
+16. `$and(...)` `$or(...)` perform compile time `&&` and `||` without semantically checking any elements after the first false/true respectively.
 17. Lambdas (anonymous functions) may be defined, they work just like functions and do not capture any state.
 18. Simple bitstructs (only containing booleans) may be manipulated using bit operations `& ^ | ~` and assignment.
 19. Structs may implicitly convert to their `inline` member if they have one.
 20. Pointers to arrays may implicitly convert to slices.
 21. Any pointer may implicitly convert to an `any*` with type being the pointee.
 22. Optional values will implicitly invoke "flatmap" on an expression it is a subexpression of.
+23. Swizzling for arrays and vectors.
 
 ### Changed
 
@@ -339,8 +341,7 @@ but nonetheless provided unique functionality:
 7. The `@ensure` directive is evaluated at exit - if the return is a result and not an optional.
 8. `return` can be used as a variable identifier inside of `@ensure`, and holds the return value.
 9. `@return!` optionally lists the errors used. This will be checked at compile time.
-10. `@checked` does a compile time check that the expression is valid, this is used with macros and generic modules.
-11. `@pure` says that no writing to globals is allowed inside and only `@pure` functions may be called.
+10. `@pure` says that no writing to globals is allowed inside and only `@pure` functions may be called.
 
 ## Benchmarking
 

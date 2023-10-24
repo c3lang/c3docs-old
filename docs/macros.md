@@ -175,7 +175,7 @@ The parameters have different sigils: `$` means compile time evaluated (constant
 A basic swap:
 
     /**
-     * @checked *a = *b, *b = *a
+     * @checked $assignable(*a, $typeof(*b)) && $assignable(*b, $typeof(*a))
      */
     macro void @swap(&a, &b)
     {
@@ -257,7 +257,7 @@ Here's an example to illustrate its use:
      * A macro looping through a list of values, executing the body once
      * every pass.
      *
-     * @checked { int i = a.len; value2 = a[i]; }
+     * @require $defined(a.len) && $defined(a[0])
      **/
     macro @foreach(a; @body(index, value))
     {

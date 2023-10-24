@@ -427,7 +427,7 @@ Improve macro errors with preconditions:
 ```
 /**
  * @param x "value to square"
- * @require $checks(x * x >= 0) "cannot multiply"
+ * @require types::is_numeric($typeof(x)) "cannot multiply"
  **/
 macro square(x)
 {
@@ -586,25 +586,33 @@ Read more about generic modules [here](../generics)
 
 ##### Dynamic calls
 
-Runtime dynamic dispatch through the `any` type is possible for methods marked `@dynamic`:
+Runtime dynamic dispatch through interfaces:
 
     import std::io;
 
     // Define a dynamic interface
-    fn String any.myname(void*) @interface;
+    interface MyName
+    {
+        fn String myname();
+    }
     
-    struct Bob { int x; }
+    struct Bob (MyName) { int x; }
+
+    // Required implementation as Bob implements MyName
     fn String Bob.myname(Bob*) @dynamic { return "I am Bob!"; }
+    
+    // Ad hoc implementation
     fn String int.myname(int*) @dynamic { return "I am int!"; }
 
-    fn void whoareyou(any a)
+    fn void whoareyou(any* a)
     {
-        if (!&a.myname)
+        MyName* b = (MyName*)a;
+        if (!&b.myname)
         {
             io::printn("I don't know who I am.");
             return;
         }
-        io::printn(a.myname());
+        io::printn(b.myname());
     }
 
     fn void main()
@@ -613,7 +621,7 @@ Runtime dynamic dispatch through the `any` type is possible for methods marked `
         double d = 1.0;
         Bob bob;
 
-	    any a = &i;
+	    any* a = &i;
 	    whoareyou(a);
 	    a = &d;
 	    whoareyou(a);
@@ -621,4 +629,4 @@ Runtime dynamic dispatch through the `any` type is possible for methods marked `
 	    whoareyou(a);
     }
 
-Read more about dynamic calls [here](../dynamiccode).
+Read more about dynamic calls [here](../anyinterfaces).

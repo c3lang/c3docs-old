@@ -1,5 +1,11 @@
 # Change log
 
+##### Revision 2023-10-24
+- Removal of `$checks` and `@checked`
+- Additional chapter on vectors.
+- Addition of `$and`/`$or`.
+- Added `is_eq` and `is_ordered` type properties.
+
 ##### Revision 2023-10-20
 - `protocol` => `interface`
 - Overall update to reflection docs.

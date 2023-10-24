@@ -175,7 +175,7 @@ short       ushort      char
 isz         usz         float16
 float128
 
-$assert     $case       $checks
+$and        $assert     $case       
 $default    $echo       $else       
 $error      $endfor     $endforeach 
 $endif      $endswitch  $for        

@@ -116,7 +116,7 @@ possible.
 - C ABI compatibility by default.
 - Optional contracts.
 - Familiar C syntax and behaviour.
-- Dynamic calls
+- Dynamic interfaces.
 - Built in benchmarks.
 
 ## Jai
@@ -124,7 +124,7 @@ possible.
 Jai is a programming language aimed at high performance game programming.
 It has an extensive compile time meta programming functionality, even
 to the point of being able to run programs at compile time. It also
-has compile time polymorphism, a powerful macro system and uses 
+has compile-time polymorphism, a powerful macro system and uses 
 an implicit context system to switch allocation schemes.
 
 ##### In Jai but not in C3
@@ -133,16 +133,16 @@ an implicit context system to switch allocation schemes.
 - Jai's compile time execution is the build system.
 - Different syntax and behaviour compared to C.
 - More powerful macro system than C3.
-- Implicit constructors
+- Implicit constructors.
 
 ##### In C3 but not in Jai
 
-- Module system
-- Integrated build system
-- Optional contracts
-- Familiar C syntax and behaviour
-- Fairly small language
-- Dynamic calls
+- Module system.
+- Integrated build system.
+- Optional contracts.
+- Familiar C syntax and behaviour.
+- Fairly small language.
+- Dynamic interfaces.
 
 ## Odin
 
@@ -156,32 +156,35 @@ the language. For error handling it relies on Go style tuple returns.
 
 ##### In Odin but not in C3
 
-- Different syntax and behaviour compared to C
-- Ad hoc parametric polymorphism
-- Tuple returns
-- A rich built in set of types
+- Different syntax and behaviour compared to C.
+- Ad hoc parametric polymorphism.
+- Tuple returns.
+- A rich built in set of types.
 
 ##### In C3 but not in Odin
 
-- Familiar C syntax and behaviour
-- Semantic macros
-- Value methods
-- Optional contracts
-- Error handling support
+- Familiar C syntax and behaviour.
+- Semantic macros.
+- Value methods.
+- Optional contracts.
+- Error handling support.
+- Dynamic interfaces.
 
 ## D
 
-D is a *huge* language. Where C++ is big, D provides all that C++ does and adds anything
-else you might think of. There is very little you can't do in D that isn't supported
-one way or the other. The most impressive thing is that D does this with fewer syntactic quirks than C++.
+D is an incredibly extensive language, it covers anything C++ does and adds much more.
+D manages this with much fewer syntactic quirks than C++. It is a strong,
+feature-rich language.
 
 ##### In D but not in C3
 
-- Objects and classes
-- RAII
-- Exceptions
-... and a huge amount of features ...
+- Objects and classes.
+- RAII.
+- Exceptions.
+- Optional GC.
+
+*+ Many, many more features.* 
 
 ##### In C3 but not in D
 
-- Small language that provides what you need and not more
+- Fairly small language.

@@ -18,7 +18,7 @@ Official forums:
 1. Discord: invite link: https://discord.gg/qN76R87
 2. Discourse: https://c3lang.discourse.group
 
-Last updated: [Revision 2023-10-20](changes).
+Last updated: [Revision 2023-10-24](changes).
 
 ## Features
 
