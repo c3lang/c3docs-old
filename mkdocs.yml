@@ -28,7 +28,7 @@ nav:
     - Macros: 'macros.md'
     - Reflection: 'reflection.md'
     - Operator overloading: 'operators.md'
-    - Any and protocols: 'anyinterfaces.md'
+    - Any and interfaces: 'anyinterfaces.md'
     - Undefined behaviour: 'undefinedbehaviour.md'
     - Conversions: 'conversion.md'
     - Precedence: 'precedence.md'
