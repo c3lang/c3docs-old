@@ -188,6 +188,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../vectors/">Vectors</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../statements/">Statements</a>
@@ -372,6 +374,7 @@
 <li>Using <code>inline</code> on a distinct type allows it to be implicitly converted <em>to</em> its base type (but not vice versa).</li>
 <li>Types may add operator overloading to support <code>foreach</code> and subscript operations.</li>
 <li>Generic types through generic modules, using <code>(&lt; ... &gt;)</code> for the generic parameter list (e.g. <code>List(&lt;int&gt;) list;</code>).</li>
+<li>Interface types, <code>any*</code> types which allows dynamic invocation of methods.</li>
 </ol>
 <h3 id="changed_1">Changed</h3>
 <ol>
@@ -390,7 +393,7 @@
 <h3 id="introspection">Introspection</h3>
 <p>Compile time type methods: <code>alignof</code>, <code>associated</code>, <code>elements</code>, <code>extnameof</code>, <code>inf</code>, <code>inner</code>, <code>kindof</code>, <code>len</code>,
 <code>max</code>, <code>membersof</code>, <code>min</code>, <code>nan</code>, <code>names</code>, <code>params</code>, <code>returns</code>, <code>sizeof</code>, <code>typeid</code>, <code>values</code>,
-<code>qnameof</code>.</p>
+<code>qnameof</code>, <code>is_eq</code>, <code>is_ordered</code>.</p>
 <p>Runtime type methods: <code>inner</code>, <code>kind</code>, <code>len</code>, <code>names</code>, <code>sizeof</code>.</p>
 <h2 id="expressions">Expressions</h2>
 <h3 id="added_3">Added</h3>
@@ -400,7 +403,7 @@
 <li><code>?:</code> operator, returning the first value if it can be converted to a boolean true, otherwise the second value is returned.</li>
 <li>Orelse <code>??</code> returning the first value if it is a result, the second if the first value was an optional value.</li>
 <li>Rethrow <code>!</code> suffix operator with an implicit <code>return</code> the value if it was an optional value.</li>
-<li>Dynamic calls, allowing calls to be made on the <code>any*</code> type dispatched using a dynamic mechanism.</li>
+<li>Dynamic calls, allowing calls to be made on the <code>any*</code> and interfaces dispatched using a dynamic mechanism.</li>
 <li>Create a slice using a range subscript (e.g. <code>a[4..8]</code> to form a slice from element 4 to element 8).</li>
 <li>Two range subscript methods: <code>[start..inclusive_end]</code> and <code>[start:length]</code>. Start, end and length may be omitted for default values.</li>
 <li>Indexing from end: slices, arrays and vectors may be indexed from the end using <code>^</code>. <code>^1</code> represents the last element. This works for ranges as well.</li>
@@ -409,14 +412,15 @@
 <li>Array, vector and slice comparison: <code>==</code> can be used to make an element-wise comparison of two containers. </li>
 <li><code>?</code> suffix operator turns a fault into an optional value.</li>
 <li><code>!!</code> suffix panics if the value is an optional value.</li>
-<li><code>$defined(...)</code> returns true if the variable or type is defined.</li>
-<li><code>$checks(...)</code> returns true if the expressions and declarations inside type checks.</li>
+<li><code>$defined(...)</code> returns true if the last expression is defined (sub-expressions must be valid).</li>
+<li><code>$and(...)</code> <code>$or(...)</code> perform compile time <code>&amp;&amp;</code> and <code>||</code> without semantically checking any elements after the first false/true respectively.</li>
 <li>Lambdas (anonymous functions) may be defined, they work just like functions and do not capture any state.</li>
 <li>Simple bitstructs (only containing booleans) may be manipulated using bit operations <code>&amp; ^ | ~</code> and assignment.</li>
 <li>Structs may implicitly convert to their <code>inline</code> member if they have one.</li>
 <li>Pointers to arrays may implicitly convert to slices.</li>
 <li>Any pointer may implicitly convert to an <code>any*</code> with type being the pointee.</li>
 <li>Optional values will implicitly invoke "flatmap" on an expression it is a subexpression of.</li>
+<li>Swizzling for arrays and vectors.</li>
 </ol>
 <h3 id="changed_2">Changed</h3>
 <ol>
@@ -619,7 +623,6 @@ but nonetheless provided unique functionality:</p>
 <li>The <code>@ensure</code> directive is evaluated at exit - if the return is a result and not an optional.</li>
 <li><code>return</code> can be used as a variable identifier inside of <code>@ensure</code>, and holds the return value.</li>
 <li><code>@return!</code> optionally lists the errors used. This will be checked at compile time.</li>
-<li><code>@checked</code> does a compile time check that the expression is valid, this is used with macros and generic modules.</li>
 <li><code>@pure</code> says that no writing to globals is allowed inside and only <code>@pure</code> functions may be called.</li>
 </ol>
 <h2 id="benchmarking">Benchmarking</h2>

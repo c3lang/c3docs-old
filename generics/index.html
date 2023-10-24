@@ -82,6 +82,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../vectors/">Vectors</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../statements/">Statements</a>
@@ -230,7 +232,8 @@ foo_test::test(&lt;int, double&gt;)(1.0, &amp;g);
 </code></pre>
 <p>Just like for macros, optional constraints may be added to improve compile errors:</p>
 <pre><code>/**
- * @require $checks(TypeA a = (TypeB)1 + (TypeC)1)
+ * @require $assignable(1, TypeB) &amp;&amp; $assignable(1, TypeC)
+ * @require $assignable((TypeB)1, TypeA) &amp;&amp; $assignable((TypeC)1, TypeA)
  */ 
 module vector(&lt;TypeA, TypeB, TypeC&gt;);
 
@@ -240,7 +243,7 @@ module vector(&lt;TypeA, TypeB, TypeC&gt;);
 
 // This would give the error 
 // --&gt; Parameter(s) failed validation: 
-//     @require &quot;$checks(TypeA a = (TypeB)1 + (TypeC)1)&quot; violated.
+//     @require &quot;$assignable((TypeB)1, TypeA) &amp;&amp; $assignable((TypeC)1, TypeA)&quot; violated.
 </code></pre>
               
             </div>

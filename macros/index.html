@@ -82,6 +82,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../vectors/">Vectors</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../statements/">Statements</a>
@@ -399,7 +401,7 @@ disable declarations. This makes the code easier to read, but at the cost of exp
 <code>@</code> is required on macros that use <code>#</code> and <code>&amp;</code> parameters.</p>
 <p>A basic swap:</p>
 <pre><code>/**
- * @checked *a = *b, *b = *a
+ * @checked $assignable(*a, $typeof(*b)) &amp;&amp; $assignable(*b, $typeof(*a))
  */
 macro void @swap(&amp;a, &amp;b)
 {
@@ -472,7 +474,7 @@ f.generate();
  * A macro looping through a list of values, executing the body once
  * every pass.
  *
- * @checked { int i = a.len; value2 = a[i]; }
+ * @require $defined(a.len) &amp;&amp; $defined(a[0])
  **/
 macro @foreach(a; @body(index, value))
 {

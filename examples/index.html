@@ -84,6 +84,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../vectors/">Vectors</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../statements/">Statements</a>
@@ -571,7 +573,7 @@ fn int test2()
 <p>Improve macro errors with preconditions:</p>
 <pre><code>/**
  * @param x &quot;value to square&quot;
- * @require $checks(x * x &gt;= 0) &quot;cannot multiply&quot;
+ * @require types::is_numeric($typeof(x)) &quot;cannot multiply&quot;
  **/
 macro square(x)
 {

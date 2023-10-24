@@ -82,6 +82,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../vectors/">Vectors</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../statements/">Statements</a>
@@ -145,8 +147,6 @@
     <li class="toctree-l3"><a class="reference internal" href="#compile-time-functions">Compile time functions</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#alignof_1">$alignof</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#checks">$checks</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#defined">$defined</a>
     </li>
@@ -446,18 +446,15 @@ $alignof(Foo.y); // =&gt; returns 8 on 64 bit
 $alignof(Foo);   // =&gt; returns 8 on 64 bit
 $alignof(g);     // =&gt; returns 4
 </code></pre>
-<h3 id="checks">$checks</h3>
-<p>Returns true if the expression can be parsed and analysed, false otherwise.</p>
-<pre><code>int a;
-typeid b;
-bool x = $checks(a + a); // x = true
-bool y = $checks(b + b); // y = false
-</code></pre>
-<p>This function can be very useful when checking macro arguments.</p>
 <h3 id="defined">$defined</h3>
-<p>Returns true if the expression inside is defined.</p>
-<pre><code>$defined(Foo.x); // =&gt; returns true
-$defined(Foo.z); // =&gt; returns false
+<p>Returns true if the expression inside is defined and all sub expressions are valid.</p>
+<pre><code>$defined(Foo.x);     // =&gt; returns true
+$defined(Foo.z);     // =&gt; returns false
+int[2] abc;
+$defined(abc.len);   // =&gt; returns true
+$defined(abc.len()); // =&gt; returns false
+$defined((int)abc);  // =&gt; returns false
+// $defined(abc.len() + 1)  would be an error
 </code></pre>
 <h3 id="eval">$eval</h3>
 <p>Converts a compile time string with the corresponding variable:</p>

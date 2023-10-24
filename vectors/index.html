@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>More code examples - C3 Documentation</title>
+  <title>Vectors - C3 Documentation</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../css/theme.css" />
@@ -18,8 +18,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "More code examples";
-    var mkdocs_page_input_path = "sample.md";
+    var mkdocs_page_name = "Vectors";
+    var mkdocs_page_input_path = "vectors.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -82,7 +82,21 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../vectors/">Vectors</a>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Vectors</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#arithmetics-on-vectors">Arithmetics on vectors</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#scalar-values">Scalar values</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#additional-operations">Additional operations</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#swizzling">Swizzling</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#array-like-operations">Array-like operations</a>
+    </li>
+    </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
                     </li>
@@ -134,9 +148,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../syntax/">Grammar</a>
                     </li>
-                    <li class="toctree-l1 current"><a class="reference internal current" href="./">More code examples</a>
-    <ul class="current">
-    </ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../sample/">More code examples</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../specification/">Specification</a>
                     </li>
@@ -184,7 +196,7 @@
         
       
     
-    <li>More code examples</li>
+    <li>Vectors</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -195,288 +207,54 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="sample">Sample</h1>
-<p>Here is a bit of code manually converted to C3 from C.</p>
-<pre><code>const uint OFFSET = 8;
-const uint BIN_COUNT = 9;
-const uint BIN_MAX_IDX = BIN_COUNT - 1;
-const uint OVERHEAD = Footer.sizeof + Node.sizeof;
-const usz MIN_WILDERNESS = 0x2000;
-const usz MAX_WILDERNESS = 0x1000000;
-const usz HEAP_INIT_SIZE = 0x10000;
-const usz HEAP_MAX_SIZE = 0xF0000;
-const usz HEAP_MIN_SIZE = 0x10000;
-const uint MIN_ALLOC_SZ = 4;
-
-struct Node
-{
-    uint hole;
-    uint size;
-    Node* next;
-    Node* prev;
-}
-
-struct Footer
-{
-    Node *header;
-}
-
-struct Bin
-{
-    Node* head;
-}
-
-struct Heap
-{
-    uptr start;
-    uptr end;
-    Bin*[BIN_COUNT] bins;
-}
-
-
-/**
- * @require heap != null, start &gt; 0
- */
-fn void Heap.init(Heap* heap, uptr start)
-{
-    Node* init_region = (Node*)start;
-    init_region.hole = 1;
-    init_region.size = HEAP_INIT_SIZE - Node.sizeof - Footer.sizeof;
-
-    init_region.createFoot();
-
-    heap.bins[get_bin_index(init_region.size)].addNode(init_region);
-
-    heap.start = start;
-    heap.end = start + HEAP_INIT_SIZE;
-}
-
-fn void* Heap.alloc(Heap* heap, uint size)
-{
-    uint index = get_bin_index(size);
-    Bin* temp = (Bin*)heap.bins[index];
-    Node* found = temp.getBestFit(size);
-
-    while (!found)
-    {
-        temp = heap.bins[++index];
-        found = temp.getBestFit(size);
-    }
-
-    if ((found.size - size) &gt; (OVERHEAD + MIN_ALLOC_SZ))
-    {
-        Node* split = (Node*)((char*)found + Node.sizeof + Footer.sizeof) + size;
-        split.size = found.size - size - (uint)Node.sizeof - (uint)Footer.sizeof;
-        split.hole = 1;
-
-        split.createFoot();
-
-        uint new_idx = get_bin_index(split.size);
-
-        heap.bins[new_idx].addNode(split);
-
-        found.size = size;
-        found.createFoot();
-    }
-
-    found.hole = 0;
-    heap.bins[index].removeNode(found);
-
-    Node* wild = heap.getWilderness();
-    if (wild.size &lt; MIN_WILDERNESS)
-    {
-        if (!heap.expand(0x1000)) return null;
-    }
-    else if (wild.size &gt; MAX_WILDERNESS)
-    {
-        heap.contract(0x1000);
-    }
-
-    found.prev = null;
-    found.next = null;
-    return &amp;found.next;
-}
-
-/**
- * @require p != null
- */
-fn void Heap.free(Heap* heap, void *p)
-{
-    Bin* list;
-    Footer* new_foot, old_foot;
-
-    Node* head = (Node*)((char*)p - OFFSET);
-    if (head == (Node*)((uptr)heap.start))
-    {
-        head.hole = 1;
-        heap.bins[get_bin_index(head.size)].addNode(head);
-        return;
-    }
-
-    Node* next = (Node*)((char*)head.getFoot() + Footer.sizeof);
-    Footer* f = (Footer*)((char*)(head) - Footer.sizeof);
-    Node* prev = f.header;
-
-    if (prev.hole)
-    {
-        list = heap.bins[get_bin_index(prev.size)];
-        list.removeNode(prev);
-
-        prev.size += OVERHEAD + head.size;
-        new_foot = head.getFoot();
-        new_foot.header = prev;
-
-        head = prev;
-    }
-
-    if (next.hole)
-    {
-        list = heap.bins[get_bin_index(next.size)];
-        list.removeNode(next);
-
-        head.size += OVERHEAD + next.size;
-
-        old_foot = next.getFoot();
-        old_foot.header = null;
-        next.size = 0;
-        next.hole = 0;
-
-        new_foot = head.getFoot();
-        new_foot.header = head;
-    }
-
-    head.hole = 1;
-    heap.bins[get_bin_index(head.size)].addNode(head);
-}
-
-fn uint Heap.expand(Heap* heap, usz sz)
-{
-    return 0;
-}
-
-fn void Heap.contract(Heap* heap, usz sz)
-{
-    return;
-}
-
-fn uint get_bin_index(usz sz)
-{
-    uint index = 0;
-    sz = sz &lt; 4 ? 4 : sz;
-
-    while (sz &gt;&gt;= 1) index++;
-    index -= 2;
-
-    if (index &gt; BIN_MAX_IDX) index = BIN_MAX_IDX;
-    return index;
-}
-
-fn void Node.createFoot(Node* head)
-{
-    Footer* foot = head.getFoot();
-    foot.header = head;
-}
-
-fn Footer* Node.getFoot(Node* node)
-{
-    return (Footer*)((char*)node + Node.sizeof + node.size);
-}
-
-fn Node* Heap.getWilderness(Heap* heap)
-{
-    Footer* wild_foot = (Footer*)((char*)heap.end - Footer.sizeof);
-    return wild_foot.header;
-}
-
-fn void Bin.removeNode(Bin* bin, Node* node)
-{
-    if (!bin.head) return;
-    if (bin.head == node)
-    {
-        bin.head = bin.head.next;
-        return;
-    }
-
-    Node* temp = bin.head.next;
-    while (temp)
-    {
-        if (temp == node)
-        {
-            if (!temp.next)
-            {
-                temp.prev.next = null;
-            }
-            else
-            {
-                temp.prev.next = temp.next;
-                temp.next.prev = temp.prev;
-            }
-            return;
-        }
-        temp = temp.next;
-    }
-}
-
-fn void Bin.addNode(Bin* bin, Node* node)
-{
-    node.next = null;
-    node.prev = null;
-
-    Node* temp = bin.head;
-
-    if (!bin.head)
-    {
-        bin.head = node;
-        return;
-    }
-
-    Node* current = bin.head;
-    Node* previous = null;
-
-    while (current != null &amp;&amp; current.size &lt;= node.size)
-    {
-        previous = current;
-        current = current.next;
-    }
-
-    if (!current)
-    {
-        previous.next = node;
-        node.prev = previous;
-    }
-    else
-    {
-        if (previous)
-        {
-            node.next = current;
-            previous.next = node;
-
-            node.prev = previous;
-            current.prev = node;
-        }
-        else
-        {
-            node.next = bin.head;
-            bin.head.prev = node;
-            bin.head = node;
-        }
-    }
-}
-
-fn Node* Bin.getBestFit(Bin* bin, usz size)
-{
-    if (!bin.head) return null;
-
-    Node* temp = bin.head;
-
-    while (temp)
-    {
-        if (temp.size &gt;= size) return temp;
-        temp = temp.next;
-    }
-    return null;
-}
+                <h1 id="vectors">Vectors</h1>
+<p>Vectors - where possible - based on underlying hardware vector implementations. A vector is similar to an array, but 
+with additional functionality. The restriction is that a vector may only consist of elements that are numerical
+types, boolean or pointers.</p>
+<p>A vector is declared similar to an array but uses <code>[&lt;&gt;]</code> rather than <code>[]</code>, e.g. <code>int[&lt;4&gt;]</code>.</p>
+<h2 id="arithmetics-on-vectors">Arithmetics on vectors</h2>
+<p>Vectors support all arithmetics and other operations supported by its underlying type. The operations are
+always performed elementwise.</p>
+<pre><code>int[&lt;2&gt;] a = { 23, 11 };
+int[&lt;2&gt;] b = { 2, 1 };
+int[&lt;2&gt;] c = a * b;     // c = { 46, 11 }
 </code></pre>
+<p>For integer and boolean types, bit operations such as <code>^ | &amp; &lt;&lt; &gt;&gt;</code> are available, and for pointers, pointer arithmetic
+is supported.</p>
+<h3 id="scalar-values">Scalar values</h3>
+<p>Scalar values will implicitly widen to vectors when used with vectors:</p>
+<pre><code>int[&lt;2&gt;] d = { 21, 14 };
+int[&lt;2&gt;] e = d / 7;      // e = { 3, 2 }
+int[&lt;2&gt;] f = 4;          // f = { 4, 4 }
+</code></pre>
+<h2 id="additional-operations">Additional operations</h2>
+<p>The <code>std::math</code> module contains a wealth of additional operations available on vectors using dot-method syntax:</p>
+<ul>
+<li><code>.sum()</code> - sum all vector elements.</li>
+<li><code>.product()</code> - multiply all vector elements.</li>
+<li><code>.max()</code> - get the maximum element.</li>
+<li><code>.min()</code> - get the minimum element.</li>
+<li><code>.dot(other)</code> - return the dot product with the other vector.</li>
+<li><code>.length(other)</code> - return the square root of the dot product.</li>
+<li><code>.distance(other)</code> - return the length of the difference of the two vectors.</li>
+<li><code>.normalize()</code> - return a normalized vector.</li>
+<li><code>.comp_lt(other)</code> - return a boolean vector with a component wise "&lt;" </li>
+<li><code>.comp_le(other)</code> - return a boolean vector with a component wise "&lt;="  </li>
+<li><code>.comp_eq(other)</code> - return a boolean vector with a component wise "=="  </li>
+<li><code>.comp_gt(other)</code> - return a boolean vector with a component wise "&gt;"  </li>
+<li><code>.comp_ge(other)</code> - return a boolean vector with a component wise "&gt;="  </li>
+<li><code>.comp_ne(other)</code> - return a boolean vector with a component wise "!="  </li>
+</ul>
+<p>Dot methods available for scalar values, such as <code>ceil</code>, <code>fma</code> etc are in general also available for vectors.</p>
+<h2 id="swizzling">Swizzling</h2>
+<p>Swizzling using dot notation is supported, using x, y, z, w:</p>
+<pre><code>int[&lt;3&gt;] a = { 11, 22, 33 };
+int[&lt;4&gt;] b = a.xxzx;         // b = { 11, 11, 33, 11 }
+int c = b.w;                 // c = 11;
+</code></pre>
+<h2 id="array-like-operations">Array-like operations</h2>
+<p>Like arrays, it's possible to make slices and iterate over vectors. It should be noted that the storage alignment of
+vectors are often different from arrays, which should be taken into account when storing them in vectors.</p>
               
             </div>
           </div>
@@ -484,10 +262,10 @@ fn Node* Bin.getBestFit(Bin* bin, usz size)
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../specification/" class="btn btn-neutral float-right" title="Specification">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../functions/" class="btn btn-neutral float-right" title="Functions">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../syntax/" class="btn btn-neutral" title="Grammar"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../arrays/" class="btn btn-neutral" title="Arrays"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -513,10 +291,10 @@ fn Node* Bin.getBestFit(Bin* bin, usz size)
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../syntax/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../arrays/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../specification/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../functions/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

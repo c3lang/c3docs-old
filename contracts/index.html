@@ -82,6 +82,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../vectors/">Vectors</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../statements/">Statements</a>
@@ -349,12 +351,12 @@ fn void lyingFunc()
 </code></pre>
 <p>Consequently, circumventing "pure" annotations is undefined behaviour.</p>
 <h1 id="pre-conditions-for-macros">Pre conditions for macros</h1>
-<p>In order to check macros, it's often useful to use the builtin <code>$checks</code>
+<p>In order to check macros, it's often useful to use the builtin <code>$defined</code>
 function which returns true if the code inside would pass semantic checking.</p>
 <pre><code>/**
- * @require $checks(resource.open()) `Expected resource to have an &quot;open&quot; function`
+ * @require $and($defined(resource.open), $defined(resource.open()) `Expected resource to have an &quot;open&quot; function`
  * @require resource != nil
- * @require $checks(void *x = resource.open())
+ * @require $assignable(resource.open(), void*)
  **/
 macro openResource(resource)
 {
