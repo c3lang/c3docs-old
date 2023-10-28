@@ -240,7 +240,7 @@ different syntax for declaring a named struct inside of a struct.</p>
 typedef struct
 {
   int a;
-  struct 
+  struct
   {
     double x;
   } bar;
@@ -250,19 +250,19 @@ typedef struct
 struct Foo
 {
   int a;
-  struct bar 
+  struct bar
   {
     double x;
   }
 }
 </code></pre>
-<p>Also, user defined types are used without a <code>struct</code>, <code>union</code> or <code>enum</code> keyword, as 
+<p>Also, user defined types are used without a <code>struct</code>, <code>union</code> or <code>enum</code> keyword, as
 if the name was a C typedef.</p>
 <h4 id="arrays">Arrays</h4>
 <p>Array sizes are written next to the type and arrays do not decay to pointers,
 you need to do it manually:</p>
 <pre><code>// C
-int x[2] = { 1, 2 }; 
+int x[2] = { 1, 2 };
 int *y = x;
 
 // C3
@@ -282,7 +282,7 @@ sortMyArray(z + 1, 10);
 // C3
 int[100] x = ...;
 int[30] y = ...;
-sortMyArray(&amp;x); // Implicit conversion from int[100]* -&gt; int[] 
+sortMyArray(&amp;x); // Implicit conversion from int[100]* -&gt; int[]
 sortMyArray(&amp;y); // Implicit conversion from int[30]* -&gt; int[]
 sortMyArray(z[1..10]; // Inclusive ranges!
 </code></pre>
@@ -324,11 +324,11 @@ extern fn int puts(char*);
 ...
 puts("Hello world");
 </code></pre>
-<p>Note that currently only the C standard library is automatically passed to the linker. 
-In order to link with other libraries, you either need to explicitly tell 
+<p>Note that currently only the C standard library is automatically passed to the linker.
+In order to link with other libraries, you need to explicitly tell
 the compiler to link them.</p>
 <p>If you want to use a different identifier inside of your C3 code compared to
-the function or variable's external name – use the <code>@extern</code> attribute:</p>
+the function or variable's external name, use the <code>@extern</code> attribute:</p>
 <pre><code>extern fn int _puts(char* message) @extern("puts");
 ...
 _puts("Hello world"); // &lt;- calls the puts function in libc
@@ -349,7 +349,7 @@ fn void fooBar(int x) { ... }
 // Only upper case is a constant or an enum value:
 
 const int FOOBAR = 123;
-enum Test 
+enum Test
 {
   STATE_A = 0,
   STATE_B = 2
@@ -456,7 +456,7 @@ fn void myCheck()
 }
 </code></pre>
 <h4 id="comments">Comments</h4>
-<p>The <code>/* */</code> comments are nesting </p>
+<p>The <code>/* */</code> comments are nesting</p>
 <pre><code class="language-text">/* This /* will all */ be commented out */
 </code></pre>
 <p>Note that doc comments, starting with <code>/**</code> has special rules for parsing it, and is
@@ -465,7 +465,7 @@ not considered a regular comment. See <a href="../contracts">contracts</a> for m
 <p>Qualifiers like <code>const</code> and <code>volatile</code> are removed, but <code>const</code> before a constant
 will make it treated as a compile time constant. The constant does not need to be typed.</p>
 <pre><code>const A = false;
-// Compile time 
+// Compile time
 $if A:
   // This will not be compiled
 $else
@@ -490,7 +490,7 @@ free(foo);
 return false;
 
 // C3, direct translation:
-do FAIL: 
+do FAIL:
 {
     Foo *foo = malloc(sizeof(Foo));
 
@@ -513,7 +513,7 @@ if (modifyFoo(foo)) return false;
 return true;
 </code></pre>
 <h4 id="changes-in-switch">Changes in <code>switch</code></h4>
-<p><code>case</code> statements automatically break. Use <code>nextcase</code> to fallthrough to the 
+<p><code>case</code> statements automatically break. Use <code>nextcase</code> to fallthrough to the
 next statement, but empty case statements have implicit fallthrough:</p>
 <pre><code>// C
 switch (a)
@@ -560,7 +560,7 @@ switch (a)
     goto LABEL3;
   case 2:
     doTwo();
-    break; 
+    break;
   case 3:
 LABEL3:
     doThree();
@@ -585,8 +585,8 @@ switch (a)
 </code></pre>
 <h4 id="bitfields-are-replace-by-explicit-bitstructs">Bitfields are replace by explicit bitstructs</h4>
 <p>A bitstruct has an explicit container type, and each field has an exact bit range.</p>
-<pre><code class="language-c">bitstruct Foo : short  
-{  
+<pre><code class="language-c">bitstruct Foo : short
+{
     int a : 0..2; // Exact bit ranges, bits 0-2
     uint b : 3..6;
     MyEnum c : 7..13;
@@ -604,7 +604,7 @@ it is the same except the ranges are left out:</p>
 <p>For more information see <a href="../types/#bitstructs">the section on bitstructs</a>.</p>
 <h4 id="other-changes">Other changes</h4>
 <p>The following things are enhancements to C, that does not have a direct counterpart in
-C. </p>
+C.</p>
 <ul>
 <li><a href="../statements">Expression blocks</a></li>
 <li>Defer</li>

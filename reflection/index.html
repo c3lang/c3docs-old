@@ -504,8 +504,8 @@ $offsetof(z.y); // =&gt; returns 8 on 64 bit, 4 on 32 bit
 fn void test() { }
 int g = 1;
 
-String a = $nameof(g); // =&gt; "abc::g"
-String b = $nameof(test); // =&gt; "abc::test"
+String a = $qnameof(g); // =&gt; "abc::g"
+String b = $qnameof(test); // =&gt; "abc::test"
 </code></pre>
 <h3 id="sizeof_1">$sizeof</h3>
 <p>This is used on a value to determine the allocation size needed. <code>$sizeof(a)</code> is equivalent
