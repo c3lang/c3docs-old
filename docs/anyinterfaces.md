@@ -43,6 +43,27 @@ For example, this would make a copy of the data and place it in the variable `an
 	mem::copy(data, a.ptr, a.type.sizeof);
     any* any_copy = any_make(data, a.type);    
 
+## Variable argument functions with implicit `any`
+
+Regular typed varargs are of a single type, e.g. `fn void abc(int x, double... args)`.
+In order to take variable functions that are of multiple types, `any` may be used.
+There are two variants:
+
+### Explicit `any` vararg functions
+
+This type of function has a format like `fn void vaargfn(int x, any... args)`. Because only
+pointers may be passed to an `any`, the arguments must explicitly be pointers (e.g. `vaargfn(2, &b, &&3.0)`).
+
+While explicit, this may be somewhat less user-friendly than implicit vararg functions:
+
+### Implicit `any` vararg functions
+
+The implicit `any` vararg function has instead a format like `fn void vaanyfn(int x, args...)`.
+Calling this function will implicitly cause taking the pointer of the values (so for
+example in the call `vaanyfn(2, b, 3.0)`, what is actually passed are `&b` and `&&3.0`).
+
+Because this passes values implicitly by reference, care must be taken *not* to mutate any
+values passed in this manner. Doing so would very likely break user expectations.
 
 ## Interfaces
 
@@ -218,24 +239,3 @@ It is possible to retrieve any `@dynamic` function by name and invoke it:
 
 This feature allows methods to be linked up at runtime.
 
-## Variable argument functions with implicit `any`
-
-Regular typed varargs are of a single type, e.g. `fn void abc(int x, double... args)`.
-In order to take variable functions that are of multiple types, `any` may be used. 
-There are two variants:
-
-### Explicit `any` vararg functions
-
-This type of function has a format like `fn void vaargfn(int x, any... args)`. Because only
-pointers may be passed to an `any`, the arguments must explicitly be pointers (e.g. `vaargfn(2, &b, &&3.0)`).
-
-While explicit, this may be somewhat less user-friendly than implicit vararg functions:
-
-### Implicit `any` vararg functions
-
-The implicit `any` vararg function has instead a format like `fn void vaanyfn(int x, args...)`.
-Calling this function will implicitly cause taking the pointer of the values (so for
-example in the call `vaanyfn(2, b, 3.0)`, what is actually passed are `&b` and `&&3.0`).
-
-Because this passes values implicitly by reference, care must be taken *not* to mutate any
-values passed in this manner. Doing so would very likely break user expectations.

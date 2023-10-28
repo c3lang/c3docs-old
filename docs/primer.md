@@ -447,6 +447,7 @@ C.
 - [Reflection](../reflection)
 - [Operator overloading](../operators)
 - Macro methods
-- [Static initialize and finalize functions](../functions)
+- [Static initialize and finalize functions](../functions#static-initializer-and-finalizers)
+- [Dynamic interfaces](../anyinterfaces)
 
 **For the full list of all new features** see the [feature list](../allfeatures).
