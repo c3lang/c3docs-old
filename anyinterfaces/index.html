@@ -303,7 +303,7 @@ fn String Baz.myname(Baz* self) @dynamic
 </code></pre>
 <p>If a type declares an interface but does not implement its methods, then that is compile time error. However,
 methods marked <code>@optional</code> does not need to be implemented:</p>
-<pre><code>protocol VeryOptional
+<pre><code>interface VeryOptional
 {
     fn void test();
     fn void do_something(int x, void* ptr) @optional;
