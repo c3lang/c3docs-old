@@ -108,7 +108,7 @@ To declare that a type implements an interface, add it after the type name:
 If a type declares an interface but does not implement its methods, then that is compile time error. However,
 methods marked `@optional` does not need to be implemented:
 
-    protocol VeryOptional
+    interface VeryOptional
     {
         fn void test();
         fn void do_something(int x, void* ptr) @optional;
