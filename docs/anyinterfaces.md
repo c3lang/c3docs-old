@@ -128,10 +128,10 @@ A type may implement multiple interfaces, by placing them all inside of `()` e.g
 A limitation is that only user-defined types may declare they are implementing interfaces. To make existing types
 implement interfaces is possible but does not provide compile time checks.
 
-One of the interfaces available in the standard library is Printable, which contains `to_format` and `to_string`.
+One of the interfaces available in the standard library is Printable, which contains `to_format` and `to_new_string`.
 If we implemented it for our struct above it might look like this:
 
-    fn String Baz.to_string(Baz* baz, Allocator* using) @dynamic
+    fn String Baz.to_new_string(Baz* baz, Allocator* using) @dynamic
     {
         return string::printf("Baz(%d)", baz.x, .using = using);
     }

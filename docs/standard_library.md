@@ -128,7 +128,7 @@ int[<16>]*! data3 = malloc_aligned(16 * int.sizeof), 128);
 char* data2 = malloc(8, .using = my_allocator);  
 ```
 
-### malloc($Type), malloc($Type, usz elements)
+### new($Type), new_array($Type, usz elements)
 
 The first form allocates a single element of $Type, returning the pointer,
 the second form allocates a slice with `elements` number of elements, returning
@@ -136,14 +136,8 @@ a subarray of the given length. Elements are not initialized.
 
 ```c
 int* int = malloc(int);
-int[] ints = malloc(int, 100); // Allocated int[100] on the heap.
+int[] ints = new_array(int, 100); // Allocated int[100] on the heap.
 ```
-
-`malloc_checked` has the same two additional forms as `malloc` but the
-return is optional.
-
-Both `malloc` variants has the same optional `using` parameter, but also 
-supports `end_padding` to provide extra allocation space after the regular allocation.
 
 ```c
 struct Abc
@@ -156,7 +150,7 @@ struct Abc
 
 // Allocate a "Type" but add "data_len" bytes
 // for the flexible array member "data":
-Type* t = malloc(Abc, .end_padding = data_len);
+Type* t = new(Abc, .end_padding = data_len);
 ```
 
 
@@ -337,7 +331,7 @@ moving the output pointer 1 or 2 steps.
 Regular printf functionality: `%s`, `%x`, `%d`, `%f` and `%p` are supported.
 Will also print enums and vectors.
 
-### usz! DString.printf(DString* str, String format, args...) @maydiscard
+### usz! DString.appendf(DString* str, String format, args...) @maydiscard
 Same as printf but on dynamic strings.
 
 ### usz! File.printf(File file, String format, args...) @maydiscard

@@ -107,7 +107,7 @@ possible.
 - Different syntax and behaviour compared to C.
 - Structs define namespace.
 - Async primitives built in.
-- Arbitrarily integer sizes.
+- Arbitrary integer sizes.
 
 ##### In C3 but not in Zig
 
