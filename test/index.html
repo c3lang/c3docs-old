@@ -211,7 +211,7 @@ fn double test_list_on_heap(int len)
     return sum;
 }
 </code></pre>
-<p>We can use <code>list.init(len)</code> if we have some default length in mind, 
+<p>We can use <code>list.init_new(len)</code> if we have some default length in mind, 
 otherwise it's not necessary.</p>
 <h2 id="use-a-generic-list-allocated-with-the-temp-allocator">Use a generic List allocated with the temp allocator</h2>
 <p>Here we instead use the temp allocator to allocate and manage memory.
@@ -222,7 +222,7 @@ inside of the body block.</p>
     @pool()
     {
         DoubleList list;
-        list.tinit();   // Init using the temp allocator
+        list.init_temp();   // Init using the temp allocator
         for (int i = 0; i &lt; len; i++)
         {
             list.push(i + 1.0);

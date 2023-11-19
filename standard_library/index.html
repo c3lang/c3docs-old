@@ -152,7 +152,7 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#malloc-malloc_checked-malloc_aligned">malloc, malloc_checked, malloc_aligned</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#malloctype-malloctype-usz-elements">malloc($Type), malloc($Type, usz elements)</a>
+    <li class="toctree-l3"><a class="reference internal" href="#newtype-new_arraytype-usz-elements">new($Type), new_array($Type, usz elements)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#calloc-calloc_checked-calloc_aligned">calloc, calloc_checked, calloc_aligned</a>
     </li>
@@ -220,7 +220,7 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#usz-printfstring-format-args-maydiscard">usz! printf(String format, args...) @maydiscard</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#usz-dstringprintfdstring-str-string-format-args-maydiscard">usz! DString.printf(DString* str, String format, args...) @maydiscard</a>
+    <li class="toctree-l3"><a class="reference internal" href="#usz-dstringappendfdstring-str-string-format-args-maydiscard">usz! DString.appendf(DString* str, String format, args...) @maydiscard</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#usz-fileprintffile-file-string-format-args-maydiscard">usz! File.printf(File file, String format, args...) @maydiscard</a>
     </li>
@@ -449,17 +449,13 @@ char*! data2 = malloc_checked(8);
 int[&lt;16&gt;]*! data3 = malloc_aligned(16 * int.sizeof), 128);
 char* data2 = malloc(8, .using = my_allocator);  
 </code></pre>
-<h3 id="malloctype-malloctype-usz-elements">malloc($Type), malloc($Type, usz elements)</h3>
+<h3 id="newtype-new_arraytype-usz-elements">new($Type), new_array($Type, usz elements)</h3>
 <p>The first form allocates a single element of $Type, returning the pointer,
 the second form allocates a slice with <code>elements</code> number of elements, returning
 a subarray of the given length. Elements are not initialized.</p>
 <pre><code class="language-c">int* int = malloc(int);
-int[] ints = malloc(int, 100); // Allocated int[100] on the heap.
+int[] ints = new_array(int, 100); // Allocated int[100] on the heap.
 </code></pre>
-<p><code>malloc_checked</code> has the same two additional forms as <code>malloc</code> but the
-return is optional.</p>
-<p>Both <code>malloc</code> variants has the same optional <code>using</code> parameter, but also 
-supports <code>end_padding</code> to provide extra allocation space after the regular allocation.</p>
 <pre><code class="language-c">struct Abc
 {
     int header;
@@ -470,7 +466,7 @@ supports <code>end_padding</code> to provide extra allocation space after the re
 
 // Allocate a &quot;Type&quot; but add &quot;data_len&quot; bytes
 // for the flexible array member &quot;data&quot;:
-Type* t = malloc(Abc, .end_padding = data_len);
+Type* t = new(Abc, .end_padding = data_len);
 </code></pre>
 <h3 id="calloc-calloc_checked-calloc_aligned">calloc, calloc_checked, calloc_aligned</h3>
 <p>Identical to the <code>malloc</code> variants, except the data is guaranteed to be zeroed out.</p>
@@ -581,7 +577,7 @@ moving the output pointer 1 or 2 steps.</p>
 <h3 id="usz-printfstring-format-args-maydiscard">usz! printf(String format, args...) @maydiscard</h3>
 <p>Regular printf functionality: <code>%s</code>, <code>%x</code>, <code>%d</code>, <code>%f</code> and <code>%p</code> are supported.
 Will also print enums and vectors.</p>
-<h3 id="usz-dstringprintfdstring-str-string-format-args-maydiscard">usz! DString.printf(DString* str, String format, args...) @maydiscard</h3>
+<h3 id="usz-dstringappendfdstring-str-string-format-args-maydiscard">usz! DString.appendf(DString* str, String format, args...) @maydiscard</h3>
 <p>Same as printf but on dynamic strings.</p>
 <h3 id="usz-fileprintffile-file-string-format-args-maydiscard">usz! File.printf(File file, String format, args...) @maydiscard</h3>
 <p>Same as printf but on files.</p>
