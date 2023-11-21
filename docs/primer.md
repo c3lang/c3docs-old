@@ -451,3 +451,5 @@ C.
 - [Dynamic interfaces](../anyinterfaces)
 
 **For the full list of all new features** see the [feature list](../allfeatures).
+
+Finally, the [FAQ](../faq) answers many questions you might have as you start out.

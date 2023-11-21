@@ -12,6 +12,7 @@ nav:
     - Changes from C: 'changesfromc.md'
     - Comparisons with other languages: 'compare.md'
     - Examples: 'examples.md'
+    - FAQ: 'faq.md'
     - Modules: 'modules.md'
     - Types: 'types.md'
     - Define: 'define.md'

@@ -15,6 +15,7 @@ Binaries are directly downloadable for the following platforms:
 - MacOS x64 [download](https://github.com/c3lang/c3c/releases/download/latest/c3-macos.zip), [install instructions](https://github.com/c3lang/c3c#installing-on-mac-with-precompiled-binaries).
 
 Official forums: 
+
 1. Discord: invite link: https://discord.gg/qN76R87
 2. Discourse: https://c3lang.discourse.group
 
