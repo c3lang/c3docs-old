@@ -30,7 +30,7 @@ functionality to writing to streams in various ways. Useful streams can
 be found in the `stream` sub folder.
 
 Also of interest could be `std::net` for sockets. `std::threads` for
-platform independent threads, `time` for dates and timers, `std::libc` for
+platform independent threads, `std::time` for dates and timers, `std::libc` for
 invoking libc functions. `std::os` for working with OS specific code and
 `std::math` for math functions and vector methods.
 
@@ -170,7 +170,7 @@ work.
 indicate its actual external name. For example, the function `int *ABC(void *x)` could be declared in the C3 code as
 `extern fn int* abc(void* x) @extern("ABC")`.
 
-There are many examples of this in the std::os modules.
+There are many examples of this in the `std::os` modules.
 
 ## Patterns
 
