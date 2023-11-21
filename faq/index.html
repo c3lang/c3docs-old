@@ -236,7 +236,7 @@ and the <code>HashMap</code> in <code>std::collections::map</code> are very freq
 functionality to writing to streams in various ways. Useful streams can
 be found in the <code>stream</code> sub folder.</p>
 <p>Also of interest could be <code>std::net</code> for sockets. <code>std::threads</code> for
-platform independent threads, <code>time</code> for dates and timers, <code>std::libc</code> for
+platform independent threads, <code>std::time</code> for dates and timers, <code>std::libc</code> for
 invoking libc functions. <code>std::os</code> for working with OS specific code and
 <code>std::math</code> for math functions and vector methods.</p>
 <p><strong>Q:</strong> How do strings work?</p>
@@ -342,7 +342,7 @@ work.</p>
 <p><strong>A:</strong> In this case you need to give the function a C3-compatible name and then use the <code>@extern</code> attribute to 
 indicate its actual external name. For example, the function <code>int *ABC(void *x)</code> could be declared in the C3 code as
 <code>extern fn int* abc(void* x) @extern("ABC")</code>.</p>
-<p>There are many examples of this in the std::os modules.</p>
+<p>There are many examples of this in the <code>std::os</code> modules.</p>
 <h2 id="patterns">Patterns</h2>
 <p><strong>Q:</strong> When do I put functionality in method and when is it a free function?</p>
 <p><strong>A:</strong> In the C3 standard library, free functions are preferred unless the function is only acting on the particular
