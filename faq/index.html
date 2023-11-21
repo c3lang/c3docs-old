@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>FAQ - C3 Documentation</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "FAQ";
+    var mkdocs_page_input_path = "faq.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/rust.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/ebnf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bnf.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> C3 Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">About C3</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Installing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../setup/">Setup</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../firstproject/">Your first project</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../primer/">A quick primer on C3</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../allfeatures/">Feature list</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../changesfromc/">Changes from C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../compare/">Comparisons with other languages</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">FAQ</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#standard-library">Standard library</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#language-features">Language features</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#memory-management">Memory management</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#interfacing-with-c-code">Interfacing with C code</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#patterns">Patterns</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#syntax-language-design">Syntax &amp; Language design</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../modules/">Modules</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../types/">Types</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../define/">Define</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../arrays/">Arrays</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../vectors/">Vectors</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../functions/">Functions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../statements/">Statements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../expressions/">Expressions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../variables/">Variables</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../optionals/">Optionals and error handling</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../compiletime/">Compile time evaluation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../contracts/">Contracts</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../generics/">Generics</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../macros/">Macros</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../reflection/">Reflection</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../operators/">Operator overloading</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../anyinterfaces/">Any and interfaces</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../undefinedbehaviour/">Undefined behaviour</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../conversion/">Conversions</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../precedence/">Precedence</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../builtins/">Builtins</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../libraries/">Libraries</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../standard_library/">Standard Library</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../ideas/">More ideas</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../naming/">Naming rules</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../comments/">Comments & Docs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../attributes/">Attributes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../asm/">Inline asm</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../cinterop/">C Interop</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../syntax/">Grammar</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../sample/">More code examples</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../specification/">Specification</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Build system</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../buildintro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../project/">Project Structure</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../buildcommands/">Commands</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Development</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../contribute/">Contribute</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../changes/">Changes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../rejectedideas/">Rejected ideas</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">C3 Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Documentation &raquo;</li>
+        
+      
+    
+    <li>FAQ</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
+<h2 id="standard-library">Standard library</h2>
+<p><strong>Q:</strong> What are the most fundamental modules in the standard library?</p>
+<p><strong>A:</strong> By default C3 will implicitly import anything in <code>std::core</code> into
+your files. It contains string functions, allocators and conveniences for
+doing type introspection. The latter is in particular useful when writing
+contracts for macros:</p>
+<ul>
+<li><code>std::core::array</code> functions for working with arrays.</li>
+<li><code>std::core::builtin</code> contains functions that are to be used without a module
+  prefix, <code>unreachable()</code>, <code>bitcast()</code>, <code>@catch()</code> and <code>@ok()</code>
+  are especially important.</li>
+<li><code>std::core::cinterop</code> contains types which will match the C types on the platform.</li>
+<li><code>std::core::dstring</code> Has the dynamic string type.</li>
+<li><code>std::core::mem</code> contains <code>malloc</code> etc, as well as functions for atomic
+  and volatile load / store.</li>
+<li><code>std::core::string</code> has all string functionality, including conversions,
+  splitting and searching strings.</li>
+</ul>
+<p>Aside from the <code>std::core</code> module, <code>std::collections</code> is important as it
+holds various containers. Of those the generic <code>List</code> type in <code>std::collections::list</code>
+and the <code>HashMap</code> in <code>std::collections::map</code> are very frequently used.</p>
+<p>IO is a must, and <code>std::io</code> contains <code>std::io::file</code> for working with files,
+<code>std::io::path</code> for working with paths. <code>std::io</code> itself contains
+functionality to writing to streams in various ways. Useful streams can
+be found in the <code>stream</code> sub folder.</p>
+<p>Also of interest could be <code>std::net</code> for sockets. <code>std::threads</code> for
+platform independent threads, <code>time</code> for dates and timers, <code>std::libc</code> for
+invoking libc functions. <code>std::os</code> for working with OS specific code and
+<code>std::math</code> for math functions and vector methods.</p>
+<p><strong>Q:</strong> How do strings work?</p>
+<p><strong>A:</strong> C3 defines a native string type <code>String</code>, which is a distinct <code>char[]</code>. Because
+<code>char[]</code> is essentially a pointer + length, some care has to be taken to
+ensure that the pointer is properly managed.</p>
+<p>For dynamic strings, or as a string builder, use <code>DString</code>. To get a String from
+a DString you can either get a <em>view</em> using <code>str_view()</code> or make a copy using <code>copy_str()</code>.
+In the former case, the String may become invalid if DString is then mutated.</p>
+<p><code>ZString</code> is a distinct zero terminated <code>char*</code>. It is used to model zero-terminated
+strings like in C. It is mostly useful interfacing with C.</p>
+<p><code>WString</code> is a <code>Char16*</code>, useful on those platforms, like Win32, where this
+is the common unicode format. Like ZString, it is mostly useful when interfacing
+with C.</p>
+<h2 id="language-features">Language features</h2>
+<p><strong>Q:</strong> How do I use slices?</p>
+<p><strong>A:</strong> Slices are typically preferred in any situation where one in C would pass
+a pointer + length. It is a struct containing a pointer + a length.</p>
+<p>Given an array, pointer or another slice you use either <code>[start..end]</code>
+or <code>[start:len]</code> to create it:</p>
+<pre><code>int[100] a;
+int[] b = a[3..6]; // Or a[3:4]
+b[0] = 1;          // Same as a[3] = 1
+</code></pre>
+<p>You can also just pass a pointer to an array:</p>
+<pre><code>b = &amp;a; // Same as b = a[0..99];
+</code></pre>
+<p>The start and/or end may be omitted:</p>
+<pre><code>a[..6]; // a[0..6]
+a[1..]; // a[1..99]
+a[..];  // a[0..99];
+</code></pre>
+<p>It is possible to use ranges to assign:</p>
+<pre><code>a[1..2] = 5;         // Assign 5 to a[1] and a[2]
+a[1..3] = a[11..13]; // Copy 11-13 to 1-3
+</code></pre>
+<p>It is important to remember that the <em>lifetime</em> of a slice is the same
+as the lifetime of its underlying pointer:</p>
+<pre><code>fn int[] buggy_code()
+{
+    int[3] a;
+    int[] b = a[0..1];
+    return b; // returning a pointer to a!
+}
+</code></pre>
+<p><strong>Q:</strong> What are vectors?</p>
+<p><strong>A:</strong> Vectors are similar to arrays, but declared with <code>[&lt; &gt;]</code> rather than <code>[ ]</code>, the element type may also only
+be of integer, float, bool or pointer types. Vectors are backed by SIMD types on supported platforms. Arithmetics
+available on the element type is available on the vector and is done element wise:</p>
+<pre><code>int[&lt;2&gt;] pos = { 1, 3 };
+int[&lt;2&gt;] speed = { 5, 7 };
+pos += speed;              // pos is now { 6, 10 }
+</code></pre>
+<p>Swizzling is also supported:</p>
+<pre><code>int[&lt;3&gt;] test = pos.yxx;    // test is now { 10, 6, 6 }
+</code></pre>
+<p>Any scalar value will be expanded to the vector size:</p>
+<pre><code>// Same as speed = speed * { 2, 2 }    
+speed = speed * 2;
+</code></pre>
+<h2 id="memory-management">Memory management</h2>
+<p><strong>Q:</strong> How do I work with memory?</p>
+<p><strong>A:</strong> There is <code>malloc</code>, <code>calloc</code> and <code>free</code> just like in C. The main difference is that these will invoke whatever
+the current heap allocator is, which does not need to be the allocator provided by libc. You can get the current heap
+allocator using <code>mem::heap()</code> and do allocations directly. There is also a temporary allocator.</p>
+<p><strong>Q:</strong> How does the temporary allocator work?</p>
+<p><strong>A:</strong> The temporary allocator is a kind of stack allocator. <code>talloc</code>, <code>tcalloc</code> and <code>trealloc</code> correspond to
+<code>malloc</code>, <code>calloc</code> and <code>realloc</code>. There is no <code>free</code>, as temporary allocations are free when pool of temporary
+objects are released. You use the <code>@pool()</code> macro to create a temporary allocation scope. When execution exits
+this scope, the temporary objects are all freed:</p>
+<pre><code>@pool()
+{
+    void* some_mem = talloc(128);
+    foo(some_mem);
+}; 
+// Temporary allocations are automatically freed here.
+</code></pre>
+<p><strong>Q:</strong> How can I return a temporarily allocated object from inside a temporary allocation scope?</p>
+<p><strong>A:</strong> You need to pass in a copy of the temp allocator <em>outside</em> of <code>@pool</code> and allocate explicitly
+using that allocator. In addition, you need to pass this temp allocator to <code>@pool</code> to make the
+new temp allocator aware of the external temp allocator:</p>
+<pre><code>// Store the temp allocator
+Allocator* temp = mem::temp();
+@pool(temp)
+{
+    // Note, 'mem::temp() != temp' here!
+    void* some_mem = talloc(128);
+    // Allocate this on the external temp allocator
+    Foo* foo = temp.new(Foo); 
+    foo.z = foo(some_mem);
+    // Now "some_mem" will be released,
+    // but the memory pointed to by "foo" is still valid.
+    return foo;
+};
+</code></pre>
+<h2 id="interfacing-with-c-code">Interfacing with C code</h2>
+<p><strong>Q:</strong> How do I call a C function from C3?</p>
+<p><strong>A:</strong> Just copy the C function definition and prefix it with <code>external</code> (and don't forget the <code>fn</code> as well). </p>
+<p>Imagine for example that you have the function <code>double test(int a, void* b)</code>. To call it from C3 just declare
+<code>extern fn double test(int a, void* b)</code> in the C3 code.</p>
+<p><strong>Q:</strong> My C function / global has a name that doesn't conform to the C3 name requirements, just <code>extern fn</code> doesn't 
+work.</p>
+<p><strong>A:</strong> In this case you need to give the function a C3-compatible name and then use the <code>@extern</code> attribute to 
+indicate its actual external name. For example, the function <code>int *ABC(void *x)</code> could be declared in the C3 code as
+<code>extern fn int* abc(void* x) @extern("ABC")</code>.</p>
+<p>There are many examples of this in the std::os modules.</p>
+<h2 id="patterns">Patterns</h2>
+<p><strong>Q:</strong> When do I put functionality in method and when is it a free function?</p>
+<p><strong>A:</strong> In the C3 standard library, free functions are preferred unless the function is only acting on the particular
+type. Some exceptions exist, but prefer things like <code>io::fprintf(file, "Hello %s", name)</code> over 
+<code>file.fprintf("Hello %s", name)</code>. The former also has the advantage that it's easier to extend to work with many
+types.</p>
+<p><strong>Q:</strong> Are there any naming conventions in the standard library what one should know about?</p>
+<p><strong>A:</strong> Yes. A function or method with <code>new</code> in the name will in general do one or more allocations and can take an
+optional allocator. A function or method with <code>temp</code> in the name will usually allocate using the temp allocator. 
+The method <code>free</code> will free all memory associated with a type. <code>destroy</code> is similar to <code>free</code> but also indicates
+that other resources (such as file handles) are released. In some cases <code>close</code> is used instead of <code>destroy</code>.</p>
+<p>Function and variable names use <code>snake_case</code> (all lower case with <code>_</code> separating words).</p>
+<h2 id="syntax-language-design">Syntax &amp; Language design</h2>
+<p><strong>Q:</strong> Why does C3 require that types start with upper case but functions with lower case?</p>
+<p><strong>A:</strong> C grammar is ambiguous. Usually compilers implement either the so-called lexer hack, but other methods
+exist as well, such as delayed parsing. It is also possible to make it unambiguous using infinite lookahead.</p>
+<p>However, all of those methods makes it much harder for tools to search the source code accurately. By making
+the naming convention part of the grammar, C3 is straightforward to parse with a single token lookahead.</p>
+<p><strong>Q:</strong> Why are there no closures and only non-capturing lambdas?</p>
+<p><strong>A:</strong> With closures, life-time management of captured variables become important to track. This can become
+arbitrarily complex, and without RAII or any other memory management technique it is fairly difficult to
+make code safe. Non-capturing lambdas on the other hand are fairly safe.</p>
+<p><strong>Q:</strong> Why is it called C3 and not something better?</p>
+<p><strong>A:</strong> Naming a programming language isn't easy. Most programming languages have pretty bad names, and
+while C3 isn't the best, no real better alternative has come along.</p>
+<p><strong>Q:</strong> Why are there no static methods?</p>
+<p><strong>A:</strong> Static methods creates a tension between free functions in modules and functions namespaced by the type.
+Java for example, resolves this by not having free functions at all. C3 solves it by not having static methods (nor
+static variables). Consequently more functions becomes part of the module rather than the type.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../modules/" class="btn btn-neutral float-right" title="Modules">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../examples/" class="btn btn-neutral" title="Examples"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../examples/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../modules/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
