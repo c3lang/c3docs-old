@@ -84,7 +84,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#fixed-arrays-do-not-decay-and-have-copy-semantics">Fixed arrays do not decay and have copy semantics</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#removal-of-multiple-declaration-syntax">Removal of multiple declaration syntax</a>
+    <li class="toctree-l2"><a class="reference internal" href="#removal-of-multiple-declaration-syntax-with-initialization">Removal of multiple declaration syntax with initialization</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#integer-promotions-rules-and-safe-signed-unsigned-comparisons">Integer promotions rules and safe signed-unsigned comparisons</a>
     </li>
@@ -265,10 +265,11 @@ int* d = &amp;a; // Valid implicit conversion
 int* e = b; // Valid implicit conversion
 int[3] f = a; // Copy by value!
 </code></pre>
-<h5 id="removal-of-multiple-declaration-syntax">Removal of multiple declaration syntax</h5>
-<p>Only a single declaration is allowed per statement in C3:</p>
-<pre><code>int i, j; // ERROR
-int a;    // Fine
+<h5 id="removal-of-multiple-declaration-syntax-with-initialization">Removal of multiple declaration syntax with initialization</h5>
+<p>Only a single declaration with initialization is allowed per statement in C3:</p>
+<pre><code>int i, j = 1; // ERROR
+int a = 1;    // Ok
+int b, c;     // Ok
 </code></pre>
 <p>In conditionals, a special form of multiple declarations are allowed but each must then provide its type:</p>
 <pre><code>for (int i = 0, int j = 1; i &lt; 10; i++, j++) { ... }
