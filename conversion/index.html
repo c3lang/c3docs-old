@@ -319,11 +319,10 @@ if the expression is a primary expression, or a unary operation on a primary exp
 <pre><code>int a = ...
 short b = ...
 char c = ...
-long d = ~a; // Valid - simple expression.
+long d = a; // Valid - simple expression.
 int e = (int)(d + (a + b)); // Error
 int f = (int)(d + ~b); // Valid
 long g = a + b; // Valid
-long h = a + (b + c); // Error
 </code></pre>
 <p>As a rule of thumb, if there are more than one possible conversion an explicit cast is needed.</p>
 <p>Example:</p>
