@@ -355,6 +355,27 @@ optional allocator. A function or method with <code>temp</code> in the name will
 The method <code>free</code> will free all memory associated with a type. <code>destroy</code> is similar to <code>free</code> but also indicates
 that other resources (such as file handles) are released. In some cases <code>close</code> is used instead of <code>destroy</code>.</p>
 <p>Function and variable names use <code>snake_case</code> (all lower case with <code>_</code> separating words).</p>
+<p><strong>Q:</strong> How do I create overloaded methods?</p>
+<p><strong>A:</strong> This can be achieved with macro methods.</p>
+<p>Imagine you have two methods:</p>
+<pre><code>fn void Obj.func1(&amp;self, String... args) @private {} // varargs variant
+fn void Obj.func2(&amp;self, Foo* pf) @private {} // Foo pointer variant
+</code></pre>
+<p>We can now create a macro method on <code>Obj</code> which compiles to different calls depending on arguments:</p>
+<pre><code>// The macro must be vararg, since the functions take different amount of arguments
+macro void Obj.func(&amp;self, ...)
+{
+    // Does it have a single argument of type 'Foo*'?
+    $if $vacount == 1 &amp;&amp; @typeis($vaarg(0), Foo*):
+        // If so, dispatch to func2
+        return self.func2($vaarg(0));
+    $else
+        // Otherwise, dispatch all varargs to func1 
+        return self.func1($vasplat());
+    $endif
+}
+</code></pre>
+<p>The above would make it possible to use both <code>obj.func("Abc", "Def")</code> and <code>obj.func(&amp;my_foo)</code>.</p>
 <h2 id="syntax-language-design">Syntax &amp; Language design</h2>
 <p><strong>Q:</strong> Why does C3 require that types start with upper case but functions with lower case?</p>
 <p><strong>A:</strong> C grammar is ambiguous. Usually compilers implement either the so-called lexer hack, but other methods
