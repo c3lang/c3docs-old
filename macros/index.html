@@ -543,7 +543,7 @@ the arguments:</p>
 <pre><code>macro compile_time_sum(...)
 {
    var $x = 0;
-   $for (var $i = 0; $i &lt; $vacount(); $i++)
+   $for (var $i = 0; $i &lt; $vacount; $i++)
        $x += $vaconst($i);
    $endfor
    return $x;
