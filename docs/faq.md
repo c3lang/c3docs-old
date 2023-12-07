@@ -190,7 +190,31 @@ that other resources (such as file handles) are released. In some cases `close` 
 
 Function and variable names use `snake_case` (all lower case with `_` separating words).
 
+**Q:** How do I create overloaded methods?
 
+**A:** This can be achieved with macro methods.
+
+Imagine you have two methods:
+
+    fn void Obj.func1(&self, String... args) @private {} // varargs variant
+    fn void Obj.func2(&self, Foo* pf) @private {} // Foo pointer variant
+
+We can now create a macro method on `Obj` which compiles to different calls depending on arguments:
+
+    // The macro must be vararg, since the functions take different amount of arguments
+    macro void Obj.func(&self, ...)
+    {
+        // Does it have a single argument of type 'Foo*'?
+        $if $vacount == 1 && @typeis($vaarg(0), Foo*):
+            // If so, dispatch to func2
+            return self.func2($vaarg(0));
+        $else
+            // Otherwise, dispatch all varargs to func1 
+            return self.func1($vasplat());
+        $endif
+    }
+
+The above would make it possible to use both `obj.func("Abc", "Def")` and `obj.func(&my_foo)`.
 
 ## Syntax & Language design
 

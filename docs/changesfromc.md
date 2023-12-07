@@ -55,13 +55,14 @@ int* e = b; // Valid implicit conversion
 int[3] f = a; // Copy by value!
 ```
 
-##### Removal of multiple declaration syntax
+##### Removal of multiple declaration syntax with initialization
 
-Only a single declaration is allowed per statement in C3:
+Only a single declaration with initialization is allowed per statement in C3:
 
 ```
-int i, j; // ERROR
-int a;    // Fine
+int i, j = 1; // ERROR
+int a = 1;    // Ok
+int b, c;     // Ok
 ```
 
 In conditionals, a special form of multiple declarations are allowed but each must then provide its type:

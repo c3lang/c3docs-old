@@ -68,11 +68,10 @@ For assignment, special rules hold. For an assignment to a binary expression, *i
     int a = ...
     short b = ...
     char c = ...
-    long d = ~a; // Valid - simple expression.
+    long d = a; // Valid - simple expression.
     int e = (int)(d + (a + b)); // Error
     int f = (int)(d + ~b); // Valid
     long g = a + b; // Valid
-    long h = a + (b + c); // Error
 
 As a rule of thumb, if there are more than one possible conversion an explicit cast is needed.
 
@@ -88,8 +87,6 @@ Example:
     
     // Possible intention 3
     long h = (long)a + ((long)b + (long)c);
-
-
 
 ## Maximum type
 
