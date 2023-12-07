@@ -569,7 +569,7 @@ evaluate the expression multiple times, this corresponds to <code>#</code> param
 e.g. <code>$vatype(2) a = 2</code> </p>
 <h3 id="varef">$varef</h3>
 <p>Returns the argument as an lvalue. This corresponds to <code>&amp;myref</code> style parameters,
-e.g. <code>$varef(1) = 123</code>.</p>
+e.g. <code>*$varef(1) = 123</code>.</p>
 <h3 id="vasplat">$vasplat</h3>
 <p><code>$vasplat</code> allows you to paste the varargs in the call into another call. For example,
 if the macro was called with values <code>"foo"</code> and <code>1</code>, the code <code>foo($vasplat())</code>, would become <code>foo("foo", 1)</code>.
