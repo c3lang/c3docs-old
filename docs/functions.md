@@ -356,11 +356,11 @@ will be called. The lowest priority is 65535.
 
     // Print "Hello World" at startup.
  
-    fn void start_world @init(3000)
+    fn void start_world() @init(3000)
     {
         io::printn("World");
     }
-    fn void start_hello @init(2000)
+    fn void start_hello() @init(2000)
     {
         io::print("Hello ");
     }
