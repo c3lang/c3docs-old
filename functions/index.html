@@ -546,11 +546,11 @@ that programs use a priority of 1024 or higher. The higher the value, the later 
 will be called. The lowest priority is 65535.</p>
 <pre><code>// Print "Hello World" at startup.
 
-fn void start_world @init(3000)
+fn void start_world() @init(3000)
 {
     io::printn("World");
 }
-fn void start_hello @init(2000)
+fn void start_hello() @init(2000)
 {
     io::print("Hello ");
 }
