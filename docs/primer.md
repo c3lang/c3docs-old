@@ -148,14 +148,14 @@ Name standards are enforced:
 
 #### Variable declaration
 
-Declaring more than one variable at a time is not allowed:
+Multiple declarations together with initialization isn't allowed in C3:
 
     // C
-    int a, b; // Not allowed in C3
+    int a, b = 4; // Not allowed in C3
 
     // C3
     int a;
-    int b;
+    int b = 4;
 
 In C3, variables are always zero initialized, unless you explicitly opt out using `@noinit`:
 
