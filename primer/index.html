@@ -514,6 +514,8 @@ if (modifyFoo(foo)) return false;
 
 return true;
 </code></pre>
+<p>It is also possible to use <code>switch</code> together with <code>nextcase</code> to achieve jumps to arbitrary case
+labels, which essentially works like <code>goto</code>.</p>
 <h4 id="changes-in-switch">Changes in <code>switch</code></h4>
 <p><code>case</code> statements automatically break. Use <code>nextcase</code> to fallthrough to the
 next statement, but empty case statements have implicit fallthrough:</p>
