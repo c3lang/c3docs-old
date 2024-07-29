@@ -172,6 +172,22 @@ indicate its actual external name. For example, the function `int *ABC(void *x)`
 
 There are many examples of this in the `std::os` modules.
 
+**Q:** How do I link to external c libraries via the project.json?
+
+**A:** Add the `linked-libraries` and `linker-search-paths` properties to your `project.json`
+
+```json
+{
+  "linked-libraries": [
+    "glfw3",
+    "Gdi32"
+  ],
+  "linker-search-paths": [
+    "lib/windows-x64"
+  ]
+}
+```
+
 ## Patterns
 
 **Q:** When do I put functionality in method and when is it a free function?
